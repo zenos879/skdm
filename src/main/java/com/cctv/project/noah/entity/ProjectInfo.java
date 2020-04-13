@@ -1,5 +1,7 @@
 package com.cctv.project.noah.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,11 +13,13 @@ public class ProjectInfo implements Serializable {
     /**
      * 项目id
      */
+    @Excel(name = "项目ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Integer projectId;
 
     /**
      * 项目名称
      */
+    @Excel(name = "项目名称")
     private String projectName;
 
     /**
@@ -26,11 +30,13 @@ public class ProjectInfo implements Serializable {
     /**
      * 部门名称
      */
+    @Excel(name = "部门名称")
     private String departmentName;
 
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     private Date createTime;
 
     private static final long serialVersionUID = 1L;

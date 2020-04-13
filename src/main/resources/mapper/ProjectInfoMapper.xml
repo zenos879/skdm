@@ -99,6 +99,58 @@
     from project_info
     where project_id = #{projectId,jdbcType=INTEGER}
   </select>
+  <select id="selectBySelective" parameterType="com.cctv.project.noah.entity.ProjectInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from project_info
+    <where>
+      <if test="projectName != null">
+       AND project_name = #{projectName,jdbcType=VARCHAR}
+      </if>
+      <if test="departmentId != null">
+        AND department_id = #{departmentId,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  <select id="selectList" parameterType="com.cctv.project.noah.entity.ProjectInfo" resultMap="BaseResultMap">
+    select
+    p.project_id projectId,
+    p.project_name projectName,
+    p.department_id departmentId,
+    p.create_time createTime,
+    d.department_name departmentName
+    from project_info p INNER JOIN department_info d
+    where d.department_id = p.department_id
+      <if test="projectId != null">
+        AND project_id = #{projectId,jdbcType=INTEGER}
+      </if>
+      <if test="projectName != null">
+        AND project_name = #{projectName,jdbcType=VARCHAR}
+      </if>
+      <if test="departmentId != null">
+        AND department_id = #{departmentId,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+  </select>
+  <select id="selectByIds"  resultMap="BaseResultMap">
+    select
+    p.project_id projectId,
+    p.project_name projectName,
+    p.department_id departmentId,
+    p.create_time createTime,
+    d.department_name departmentName
+    from project_info p INNER JOIN department_info d
+    where d.department_id = p.department_id and p.project_id in
+    <foreach collection="array" item="id"  open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from project_info
     where project_id = #{projectId,jdbcType=INTEGER}
@@ -140,6 +192,14 @@
       </if>
     </trim>
   </insert>
+  <!-- 批量插入生成的兑换码 -->
+  <insert id ="insertBatch" keyColumn="project_id" keyProperty="projectId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into project_info (project_name, department_id, create_time)
+    values
+    <foreach collection ="list" item="bean" index= "index" separator =",">
+      (#{bean.projectName,jdbcType=VARCHAR}, #{bean.departmentId,jdbcType=INTEGER}, #{bean.createTime,jdbcType=TIMESTAMP})
+    </foreach >
+  </insert >
   <select id="countByExample" parameterType="com.cctv.project.noah.entity.ProjectInfoExample" resultType="java.lang.Long">
     select count(*) from project_info
     <if test="_parameter != null">

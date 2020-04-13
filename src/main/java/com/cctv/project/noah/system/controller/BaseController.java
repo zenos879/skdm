@@ -1,5 +1,6 @@
 package com.cctv.project.noah.system.controller;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.PageDomain;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
@@ -104,6 +105,24 @@ public class BaseController {
         return rspData;
     }
 
+    /**
+     * 返回响应结果
+     * @param rows
+     * @param msg
+     * @return
+     */
+    protected AjaxResult toAjax(int rows, String msg) {
+        return rows > 0 ? success(msg) : error(msg);
+    }
+
+    /**
+     *
+     * @param result
+     * @return
+     */
+    protected AjaxResult toAjax(Result result) {
+        return toAjax(result.getCode(),result.getInfo());
+    }
     /**
      * 响应返回结果
      *

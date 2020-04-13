@@ -16,9 +16,17 @@ public interface ProjectInfoMapper {
 
     int insertSelective(ProjectInfo record);
 
+    int insertBatch(List<ProjectInfo> records);
+
     List<ProjectInfo> selectByExample(ProjectInfoExample example);
 
     ProjectInfo selectByPrimaryKey(Integer projectId);
+
+    List<ProjectInfo> selectBySelective(ProjectInfo projectInfo);
+
+    List<ProjectInfo> selectList(ProjectInfo projectInfo);
+
+    List<ProjectInfo> selectByIds(String[] ids);
 
     int updateByExampleSelective(@Param("record") ProjectInfo record, @Param("example") ProjectInfoExample example);
 
