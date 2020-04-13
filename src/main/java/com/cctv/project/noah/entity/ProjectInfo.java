@@ -24,11 +24,24 @@ public class ProjectInfo implements Serializable {
     private Integer departmentId;
 
     /**
+     * 部门名称
+     */
+    private String departmentName;
+
+    /**
      * 创建时间
      */
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
     public Integer getProjectId() {
         return projectId;
