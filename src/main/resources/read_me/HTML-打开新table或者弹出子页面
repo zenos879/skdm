@@ -1,0 +1,35 @@
+    $.operate.add();	id（数据ID）	添加信息
+    $.operate.addTab();	id（数据ID）	添加信息（选项卡方式）
+    $.operate.addFull();	id（数据ID）	添加信息 全屏
+    $.operate.addUrl();	id（数据ID）	添加访问地址
+    $.operate.edit();	id（数据ID）	修改信息
+    $.operate.editTab();	id（数据ID）	修改信息（选项卡方式）
+    $.operate.editFull();	id（数据ID）	修改信息 全屏
+封装好
+    $.modal.icon	            type（图标类型）	                显示图标
+    $.modal.msg	c               ontent（内容）, type（图标类型）	消息提示
+    $.modal.msgError();	        content（内容）	                错误消息
+    $.modal.msgSuccess();	    content（内容）	                成功消息
+    $.modal.msgWarning();	    content（内容）	                警告消息
+    $.modal.alert	            content（内容）, type（图标类型）	消息提示
+    $.modal.msgReload	        msg（消息）, type（图标类型）	    消息提示并刷新父窗体
+    $.modal.alertError();	    content（内容）	                错误提示
+    $.modal.alertSuccess();	    content（内容）	                成功提示
+    $.modal.alertWarning();	    content（内容）	                警告提示
+    $.modal.close();	        无	                            关闭窗体
+    $.modal.closeAll	        无	                            关闭全部窗体
+    $.modal.confirm();	        content（内容）, callBack（回调函数）	确认窗体
+    $.modal.open();	            title, url, width, height, callBack（回调函数）	弹出层指定宽度
+    $.modal.openOptions();	    options（选项参数）	弹出层指定参数选项
+    $.modal.openFull();	        title, url, width, height	    弹出层全屏
+    $.modal.openTab();	        title（标题）, url（地址）         选卡页方式打开
+    $.modal.parentTab();	    title（标题）, url（地址）	        选卡页同一页签打开
+    $.modal.closeTab();	        dataId（地址）	                关闭选项卡
+    $.modal.disable	            无	                            禁用按钮
+    $.modal.enable	            无	                            启用按钮
+    $.modal.loading();	        message（提示消息）	            打开遮罩层
+    $.modal.closeLoading();	    无	                            关闭遮罩层
+    $.modal.reload();	        无	                            重新加载
+手动
+    弹出层使用 layui-UI
+    文档地址 https://www.layui.com/doc/modules/layer.html

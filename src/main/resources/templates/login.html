@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Noah | 登录</title>
+
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet">
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div>
+
+            <h1 class="logo-name">Noah</h1>
+
+        </div>
+        <h3>欢迎使用Noah</h3>
+        <form class="m-t" role="form" method="post" id="commentForm">
+            <div class="form-group" style="position: relative">
+                <input name="username" type="text" class="form-control" placeholder="用户名" required="">
+            </div>
+            <div class="form-group" style="position: relative">
+                <input name="password" type="password" class="form-control" placeholder="密码" required="">
+            </div>
+
+            <div class="form-group" style="text-align: left">
+                <div style="position: relative;width: 60%;display: inline-block">
+                    <input name="validateCode" type="text" class="form-control" placeholder="验证码" required="">
+                </div>
+
+                <img th:src="@{/captcha(type=${captchaType})}" title="点击更换验证码" onclick="refresh(this)" class="form-control" style="width: 35%;display: inline;float: right;padding: 0px;" />
+            </div>
+
+            <button class="btn btn-primary btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录</button>
+
+            <!--                <a href="#"><small>忘记密码?</small></a>-->
+            <!--                <p class="text-muted text-center"><small>还没有账号?</small></p>-->
+            <!--                <a class="btn btn-sm btn-white btn-block" href="register.html">创建一个帐户</a>-->
+        </form>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script th:src="@{/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+<script th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+
+<script th:src="@{/ruoyi/js/ry-ui.js}"></script>
+<script th:src="@{/js/plugins/blockUI/jquery.blockUI.js}"></script>
+<script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+    var captchaType = [[${captchaType}]];
+    $(function(){
+        $("#commentForm").validate();
+
+    });
+    function refresh(img){
+        $(img).attr("src",ctx+"captcha?type="+captchaType+"&time="+new Date().getTime());
+    }
+    jQuery.validator.setDefaults({
+        debug: true
+    });
+    $.validator.setDefaults({
+        submitHandler: function(form) { login() }
+    });
+
+
+
+    function login() {
+        //$.modal.loading($("#btnSubmit").data("loading"));
+        var username = $.common.trim($("input[name='username']").val());
+        var password = $.common.trim($("input[name='password']").val());
+        var validateCode = $("input[name='validateCode']").val();
+        // var rememberMe = $("input[name='rememberme']").is(':checked');
+        $.ajax({
+            type: "post",
+            url: ctx + "login",
+            data: {
+                "username": username,
+                "password": password,
+                "validateCode" : validateCode,
+                "rememberMe": false
+            },
+            success: function(r) {
+                if (r.code == 0) {
+                    location.href = ctx + 'system/main';
+                } else {
+                    $.modal.closeLoading();
+                    $('.imgcode').click();
+                    $(".code").val("");
+                    $.modal.msg(r.msg);
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+
+</html>

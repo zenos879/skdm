@@ -1,0 +1,13 @@
+前段使用 bootstrap-table实现的表格样式+分页栏
+后段使用Mybatis+PageHelper实现的分页
+PageHelper是Mybatis的一款分页插件，利用ThreadLocal实现分页功能。PageHelper先是根据你即将发出的SQL命令获取count值(也就是数据总量)，然后获取当前线程上的线程变量进行分页操作。
+1。使用aop获取controller方法中分页的相关请求数据PageBean
+2。将PageBean保存在线程变量中
+3。使用aop拦截dao方法，调用PageHelper的分页方法（使用两次aop是因为PageHelper只会对即将执行的SQL语句进行分页，假设你要分页的数据是第二顺序执行，这时候则会导致第一顺序执行的SQL语句被分页，而第二顺序执行的SQL语句相反）
+
+
+
+1.PageInterceptor
+@Intercepts生命 该拦截器为Mybatis插件
+@Signature method = "query" 拦截所有查询方法
+--参考 MybatisShowSQLInterceptor

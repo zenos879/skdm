@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.system.mapper.DictDataMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.system.entity.DictData">
+    <id column="dict_code" jdbcType="BIGINT" property="dictCode" />
+    <result column="dict_sort" jdbcType="INTEGER" property="dictSort" />
+    <result column="dict_label" jdbcType="VARCHAR" property="dictLabel" />
+    <result column="dict_value" jdbcType="VARCHAR" property="dictValue" />
+    <result column="dict_type" jdbcType="VARCHAR" property="dictType" />
+    <result column="css_class" jdbcType="VARCHAR" property="cssClass" />
+    <result column="list_class" jdbcType="VARCHAR" property="listClass" />
+    <result column="is_default" jdbcType="CHAR" property="isDefault" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, 
+    `status`, create_by, create_time, update_by, update_time, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_dict_data
+    where dict_code = #{dictCode,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_dict_data
+    where dict_code = #{dictCode,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cctv.project.noah.system.entity.DictData">
+    insert into sys_dict_data (dict_code, dict_sort, dict_label, 
+      dict_value, dict_type, css_class, 
+      list_class, is_default, `status`, 
+      create_by, create_time, update_by, 
+      update_time, remark)
+    values (#{dictCode,jdbcType=BIGINT}, #{dictSort,jdbcType=INTEGER}, #{dictLabel,jdbcType=VARCHAR}, 
+      #{dictValue,jdbcType=VARCHAR}, #{dictType,jdbcType=VARCHAR}, #{cssClass,jdbcType=VARCHAR}, 
+      #{listClass,jdbcType=VARCHAR}, #{isDefault,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cctv.project.noah.system.entity.DictData">
+    insert into sys_dict_data
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dictCode != null">
+        dict_code,
+      </if>
+      <if test="dictSort != null">
+        dict_sort,
+      </if>
+      <if test="dictLabel != null">
+        dict_label,
+      </if>
+      <if test="dictValue != null">
+        dict_value,
+      </if>
+      <if test="dictType != null">
+        dict_type,
+      </if>
+      <if test="cssClass != null">
+        css_class,
+      </if>
+      <if test="listClass != null">
+        list_class,
+      </if>
+      <if test="isDefault != null">
+        is_default,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dictCode != null">
+        #{dictCode,jdbcType=BIGINT},
+      </if>
+      <if test="dictSort != null">
+        #{dictSort,jdbcType=INTEGER},
+      </if>
+      <if test="dictLabel != null">
+        #{dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null">
+        #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictType != null">
+        #{dictType,jdbcType=VARCHAR},
+      </if>
+      <if test="cssClass != null">
+        #{cssClass,jdbcType=VARCHAR},
+      </if>
+      <if test="listClass != null">
+        #{listClass,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.system.entity.DictData">
+    update sys_dict_data
+    <set>
+      <if test="dictSort != null">
+        dict_sort = #{dictSort,jdbcType=INTEGER},
+      </if>
+      <if test="dictLabel != null">
+        dict_label = #{dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null">
+        dict_value = #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictType != null">
+        dict_type = #{dictType,jdbcType=VARCHAR},
+      </if>
+      <if test="cssClass != null">
+        css_class = #{cssClass,jdbcType=VARCHAR},
+      </if>
+      <if test="listClass != null">
+        list_class = #{listClass,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        is_default = #{isDefault,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dict_code = #{dictCode,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.system.entity.DictData">
+    update sys_dict_data
+    set dict_sort = #{dictSort,jdbcType=INTEGER},
+      dict_label = #{dictLabel,jdbcType=VARCHAR},
+      dict_value = #{dictValue,jdbcType=VARCHAR},
+      dict_type = #{dictType,jdbcType=VARCHAR},
+      css_class = #{cssClass,jdbcType=VARCHAR},
+      list_class = #{listClass,jdbcType=VARCHAR},
+      is_default = #{isDefault,jdbcType=CHAR},
+      `status` = #{status,jdbcType=CHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where dict_code = #{dictCode,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectDictDataByType" parameterType="com.cctv.project.noah.system.entity.DictData" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_dict_data
+    where status = '0' and dict_type = #{dictType} order by dict_sort asc
+  </select>
+
+  <select id="selectDictLabel" resultType="String">
+		select dict_label from sys_dict_data
+		where dict_type = #{dictType} and dict_value = #{dictValue}
+  </select>
+
+  <select id="countDictDataByType" resultType="Integer">
+	    select count(1) from sys_dict_data where dict_type=#{dictType}
+	</select>
+
+  <update id="updateDictDataType" parameterType="String">
+ 		update sys_dict_data set dict_type = #{newDictType} where dict_type = #{oldDictType}
+	</update>
+
+
+  <select id="selectDictDataList" parameterType="com.cctv.project.noah.system.entity.DictData" resultMap="BaseResultMap">
+    select dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark
+    from sys_dict_data
+    <where>
+      <if test="dictType != null and dictType != ''">
+        AND dict_type = #{dictType}
+      </if>
+      <if test="dictLabel != null and dictLabel != ''">
+        AND dict_label like concat('%', #{dictLabel}, '%')
+      </if>
+      <if test="status != null and status != ''">
+        AND status = #{status}
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertDictData" parameterType="com.cctv.project.noah.system.entity.DictData">
+    insert into sys_dict_data(
+    <if test="dictSort != null and dictSort != ''">dict_sort,</if>
+    <if test="dictLabel != null and dictLabel != ''">dict_label,</if>
+    <if test="dictValue != null and dictValue != ''">dict_value,</if>
+    <if test="dictType != null and dictType != ''">dict_type,</if>
+    <if test="cssClass != null and cssClass != ''">css_class,</if>
+    <if test="listClass != null and listClass != ''">list_class,</if>
+    <if test="isDefault != null and isDefault != ''">is_default,</if>
+    <if test="status != null">status,</if>
+    <if test="remark != null and remark != ''">remark,</if>
+    <if test="createBy != null and createBy != ''">create_by,</if>
+    create_time
+    )values(
+    <if test="dictSort != null and dictSort != ''">#{dictSort},</if>
+    <if test="dictLabel != null and dictLabel != ''">#{dictLabel},</if>
+    <if test="dictValue != null and dictValue != ''">#{dictValue},</if>
+    <if test="dictType != null and dictType != ''">#{dictType},</if>
+    <if test="cssClass != null and cssClass != ''">#{cssClass},</if>
+    <if test="listClass != null and listClass != ''">#{listClass},</if>
+    <if test="isDefault != null and isDefault != ''">#{isDefault},</if>
+    <if test="status != null">#{status},</if>
+    <if test="remark != null and remark != ''">#{remark},</if>
+    <if test="createBy != null and createBy != ''">#{createBy},</if>
+    sysdate()
+    )
+  </insert>
+
+  <select id="selectDictDataById" parameterType="Long" resultMap="BaseResultMap">
+    select dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark
+    from sys_dict_data
+    where dict_code = #{dictCode}
+  </select>
+
+  <update id="updateDictData" parameterType="com.cctv.project.noah.system.entity.DictData">
+    update sys_dict_data
+    <set>
+      <if test="dictSort != null and dictSort != ''">dict_sort = #{dictSort},</if>
+      <if test="dictLabel != null and dictLabel != ''">dict_label = #{dictLabel},</if>
+      <if test="dictValue != null and dictValue != ''">dict_value = #{dictValue},</if>
+      <if test="dictType != null and dictType != ''">dict_type = #{dictType},</if>
+      <if test="cssClass != null">css_class = #{cssClass},</if>
+      <if test="listClass != null">list_class = #{listClass},</if>
+      <if test="isDefault != null and isDefault != ''">is_default = #{isDefault},</if>
+      <if test="status != null">status = #{status},</if>
+      <if test="remark != null">remark = #{remark},</if>
+      <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+      update_time = sysdate()
+    </set>
+    where dict_code = #{dictCode}
+  </update>
+
+
+  <delete id="deleteDictDataByIds" parameterType="String">
+    delete from sys_dict_data where dict_code in
+    <foreach collection="array" item="dictCode" open="(" separator="," close=")">
+      #{dictCode}
+    </foreach>
+  </delete>
+
+</mapper>

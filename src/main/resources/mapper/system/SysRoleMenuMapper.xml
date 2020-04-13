@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.system.mapper.SysRoleMenuMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.system.entity.SysRoleMenu">
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from sys_role_menu
+    where role_id = #{roleId,jdbcType=BIGINT}
+      and menu_id = #{menuId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cctv.project.noah.system.entity.SysRoleMenu">
+    insert into sys_role_menu (role_id, menu_id)
+    values (#{roleId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cctv.project.noah.system.entity.SysRoleMenu">
+    insert into sys_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="menuId != null">
+        menu_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="menuId != null">
+        #{menuId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+
+  <insert id="batchRoleMenu">
+    insert into sys_role_menu(role_id, menu_id) values
+    <foreach item="item" index="index" collection="list" separator=",">
+      (#{item.roleId},#{item.menuId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteRoleMenuByRoleId" parameterType="Long">
+		delete from sys_role_menu where role_id=#{roleId}
+    </delete>
+
+  <delete id="deleteRoleByIds" parameterType="Long">
+    update sys_role set del_flag = '2' where role_id in
+    <foreach collection="array" item="roleId" open="(" separator="," close=")">
+      #{roleId}
+    </foreach>
+  </delete>
+
+  <select id="countUserRoleByRoleId" resultType="Integer">
+	    select count(1) from sys_user_role where role_id=#{roleId}
+  </select>
+
+
+  <delete id="deleteUserRoleInfo" parameterType="SysUserRole">
+      delete from sys_user_role where user_id=#{userId} and role_id=#{roleId}
+  </delete>
+
+  <delete id="deleteUserRoleInfos">
+    delete from sys_user_role where role_id=#{roleId} and user_id in
+    <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+      #{userId}
+    </foreach>
+  </delete>
+
+
+</mapper>

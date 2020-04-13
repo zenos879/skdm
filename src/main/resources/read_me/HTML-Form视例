@@ -1,0 +1,25 @@
+    如未特殊著名 均适用bootstrap 插件 例如 bootstrap-select
+input
+    <input name="userName" placeholder="请输入学生年龄" class="form-control" type="text" maxlength="3" number="true" required>
+select
+    <select name="jobGroup" class="form-control m-b" th:with="type=${@dict.getType('sys_job_group')}">
+        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+    </select>
+单选
+    <div class="radio-box" th:each="dict : ${@dict.getType('sys_yes_no')}">
+        <input type="radio" th:id="${dict.dictCode}" name="configType" th:value="${dict.dictValue}" th:checked="${dict.default}">
+        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+    </div>
+日期时间
+    文档：https://www.layui.com/doc/modules/laydate.html
+    注：如需全量替换UI样式请替换原有样式，如需单独修改某一个页面 请单独引入CSS/JS
+    <input type="text" class="time-input form-control" id="startTime" placeholder="毕业时间" name="params[beginTime]"/>
+多选
+    <label th:each="role:${roles}" class="check-box">
+        <input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:disabled="${role.status == '1'}">
+    </label>
+开关
+    <label class="toggle-switch switch-solid">
+        <input type="checkbox" id="status" checked>
+        <span></span>
+    </label>

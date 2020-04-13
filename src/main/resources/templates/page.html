@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="fixed-table-pagination" th:fragment="page">
+    <div class="fixed-table-pagination" style="display: block;">
+        <div class="pull-left pagination-detail">
+            <span class="pagination-info" th:text="'第 '+${(pageInfo.pageNum-1)*pageInfo.pageSize+1}+' 到 '+${pageInfo.pageNum*pageInfo.pageSize}+ ' 条，共 '+${pageInfo.total}+'条记录'">第 1 到 100 条，共  100 条记录。</span>
+            <span class="page-list">
+            <span class="btn-group dropup">
+                <button type="button" class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="page-size">10</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li class="active">
+                        <a href="javascript:void(0)"th>10</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">25</a>
+                    </li>
+                </ul>
+            </span> 条记录每页</span>
+        </div>
+        <div class="pull-right pagination">
+            <ul class="pagination pagination-outline">
+                    <li class="page-pre"><a href="javascript:pageUp()">‹</a></li>
+                <li th:each="i:${#numbers.sequence(1,pageInfo.pages)}" class="page-number" th:classappend="${i==pageInfo.pageNum?'active':''}">
+                    <a href="javascript:void(0)" th:onclick="toPage([[${i}]]);" th:text="${i}">X</a>
+                </li>
+                <li class="page-next"><a href="javascript:pageDow()">›</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        var prePage = [[${pageInfo.prePage}]];
+        var nextPage = [[${pageInfo.nextPage}]];
+        var pageSize = [[${pageInfo.pageSize}]];
+        var pages = [[${pageInfo.pages}]];
+        function pageUp(){
+            if(prePage<=0){
+                prePage=pages;
+            }
+            submitForm(prePage,pageSize);
+        }
+
+        function pageDow(){
+            if(nextPage==0){
+                nextPage=1;
+            }
+            submitForm(nextPage,pageSize);
+        }
+
+        function toPage(num){
+            submitForm(num,pageSize);
+        }
+
+        function updatePageSize(pageSize){
+            submitForm(1,pageSize);
+        }
+
+        function submitForm(num,size){
+            var form = document.getElementsByTagName('form')[0];
+            var pageNum = document.createElement("input");
+            pageNum.setAttribute("name","pageNum");
+            pageNum.setAttribute("type","hidden");
+            pageNum.setAttribute("value",num);
+            var pageSize = document.createElement("input");
+            pageSize.setAttribute("name","pageSize");
+            pageSize.setAttribute("type","hidden");
+            pageSize.setAttribute("value",size);
+            //var pageNum = "<input type='hidden' name='pageNum' value='"+num+"'>";
+            //var pageSize = "<input type='hidden' name='pageSize' value='"+size+"'>";
+            form.appendChild(pageNum);
+            form.appendChild(pageSize);
+            console.log(form);
+            form.submit();
+
+        }
+    </script>
+</div>
+</body>
+</html>

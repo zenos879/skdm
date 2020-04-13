@@ -1,0 +1,149 @@
+<!-- 通用CSS -->
+<head th:fragment=header(title)>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title th:text="${title}"></title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet">
+
+    <!-- bootstrap-table 表格插件样式 -->
+    <link th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet">
+</head>
+
+
+
+<div th:fragment="ztree-css">
+    <link th:href="@{/css/plugins/jquery-ztree/zTreeStyle.css}" rel="stylesheet"/>
+</div>
+
+<div th:fragment="ztree-js">
+    <script th:src="@{/js/plugins/jquery-ztree/jquery.ztree.all-3.5.js}"></script>
+</div>
+
+<!-- bootstrap-select下拉框插件 -->
+<div th:fragment="bootstrap-select-css">
+    <link th:href="@{/css/plugins/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="bootstrap-select-js">
+    <script th:src="@{/js/plugins/bootstrap-select/bootstrap-select.js}"></script>
+</div>
+
+
+<!-- bootstrap-select下拉框插件 -->
+<div th:fragment="jquery-jsonview-css">
+    <link th:href="@{/other_plugin/jsonview/jquery.jsonview.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="jquery-jsonview-js">
+    <script th:src="@{/other_plugin/jsonview/jquery.jsonview.js}"></script>
+</div>
+
+
+
+<!-- datetimepicker日期和时间插件 -->
+<div th:fragment="datetimepicker-css">
+    <link th:href="@{/ajax/libs/datapicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="datetimepicker-js">
+    <script th:src="@{/ajax/libs/datapicker/bootstrap-datetimepicker.min.js}"></script>
+</div>
+
+
+<!-- select2下拉框插件 -->
+<div th:fragment="select2-css">
+    <link th:href="@{/other_plugin/select2/select2.min.css}" rel="stylesheet"/>
+    <link th:href="@{/other_plugin/select2/select2-bootstrap.css}" rel="stylesheet"/>
+</div>
+<div th:fragment="select2-js">
+    <script th:src="@{/other_plugin/select2/select2.min.js}"></script>
+</div>
+
+<!-- typeahead -->
+<div th:fragment="typeahead-js">
+    <script th:src="@{/other_plugin/typehead/bootstrap3-typeahead.min.js}"></script>
+</div>
+
+<!-- typeahead -->
+<div th:fragment="typeahead-css">
+    <link th:href="@{/other_plugin/typehead/typeaheadjs.css}" rel="stylesheet"/>
+</div>
+
+<div th:fragment="codemirror-css">
+    <link rel="stylesheet" th:href="@{/other_plugin/codemirror/codemirror.css}" />
+    <link rel="stylesheet" th:href="@{/other_plugin/codemirror/ambiance.css}" />
+    <link rel="stylesheet" th:href="@{/other_plugin/codemirror/fold/foldgutter.css}" />
+    <link rel="stylesheet" th:href="@{/other_plugin/codemirror/dialog/dialog.css}" />
+    <link rel="stylesheet" th:href="@{/other_plugin/codemirror/search/matchesonscrollbar.css}" />
+
+</div>
+<div th:fragment="codemirror-js">
+    <script th:src="@{/other_plugin/codemirror/codemirror.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/mode/nginx/nginx.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/dialog/dialog.js}" ></script>
+
+    <script th:src="@{/other_plugin/codemirror/fold/foldcode.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/fold/foldgutter.js}" ></script>
+
+    <script th:src="@{/other_plugin/codemirror/edit/matchbrackets.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/selection/active-line.js}" ></script>
+
+
+
+    <script th:src="@{/other_plugin/codemirror/search/searchcursor.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/search/search.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/scroll/annotatescrollbar.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/search/matchesonscrollbar.js}" ></script>
+    <script th:src="@{/other_plugin/codemirror/search/jump-to-line.js}" ></script>
+
+
+</div>
+
+<!-- 通用JS -->
+<div th:fragment="footer">
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/jquery-2.1.1.js}"></script>
+    <script th:src="@{/js/bootstrap.3.3.6.min.js}"></script>
+
+    <!-- bootstrap-table 表格插件 -->
+    <script th:src="@{/js/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.js}"></script>
+
+    <!-- jquery-validate 表单验证插件 -->
+    <script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+    <script th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+    <script th:src="@{/js/plugins/validate/jquery.validate.extend.js}"></script>
+
+    <!-- jquery-validate 表单树插件 -->
+    <script th:src="@{/js/plugins/bootstrap-treetable/bootstrap-treetable.js}"></script>
+
+    <!-- jquery-export 表格导出插件 -->
+    <script th:src="@{/js/plugins/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
+    <script th:src="@{/js/plugins/bootstrap-table/extensions/export/tableExport.js}"></script>
+    <!-- 遮罩层 -->
+    <script th:src="@{/js/plugins/blockUI/jquery.blockUI.js}"></script>
+    <script th:src="@{/js/plugins/iCheck/icheck.min.js}"></script>
+    <script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+    <script th:src="@{/js/plugins/layui/layui.js}"></script>
+    <script th:src="@{/ruoyi/js/common.js}"></script>
+
+    <script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+    <script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+    <script th:src="@{/js/jquery.contextMenu.min.js}"></script>
+    <script th:src="@{/ruoyi/js/ry-ui.js}"></script>
+    <script th:src="@{/js/inspinia.js}"></script>
+    <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+</div>
+
+<!-- 表格拖拽插件 -->
+<div th:fragment="bootstrap-table-reorder-js">
+    <script th:src="@{/other_plugin/reorder/bootstrap-table-reorder.js}"></script>
+    <script th:src="@{/other_plugin/reorder/jquery.tablednd.js}"></script>
+</div>

@@ -1,0 +1,10 @@
+前段验证框架使用Jquery-Validate
+文档地址 https://jqueryvalidation.org/documentation/
+        https://www.runoob.com/jquery/jquery-plugin-validate.html
+
+例子：<input name="userName" placeholder="请输入用户名称" class="form-control" type="text"
+ maxlength="30" required>
+required 必填
+maxlength 最大长度
+
+

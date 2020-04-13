@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.system.mapper.SysUserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.system.entity.SysUserRole">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from sys_user_role
+    where user_id = #{userId,jdbcType=BIGINT}
+      and role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cctv.project.noah.system.entity.SysUserRole">
+    insert into sys_user_role (user_id, role_id)
+    values (#{userId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cctv.project.noah.system.entity.SysUserRole">
+    insert into sys_user_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="batchUserRole">
+    insert into sys_user_role(user_id, role_id) values
+    <foreach item="item" index="index" collection="list" separator=",">
+      (#{item.userId},#{item.roleId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteUserRoleByUserId" parameterType="Long">
+		delete from sys_user_role where user_id=#{userId}
+	</delete>
+</mapper>
