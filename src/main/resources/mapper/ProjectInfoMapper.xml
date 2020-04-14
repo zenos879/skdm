@@ -117,10 +117,10 @@
   </select>
   <select id="selectList" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" resultMap="BaseResultMap">
     select
-    p.project_id projectId,
-    p.project_name projectName,
-    p.department_id departmentId,
-    p.create_time createTime,
+    p.project_id project_id,
+    p.project_name project_name,
+    p.department_id department_id,
+    p.create_time create_time,
     d.department_name departmentName
     from project_info p INNER JOIN department_info d
     where d.department_id = p.department_id
@@ -139,10 +139,10 @@
   </select>
   <select id="selectByIds"  resultMap="BaseResultMap">
     select
-    p.project_id projectId,
-    p.project_name projectName,
-    p.department_id departmentId,
-    p.create_time createTime,
+    p.project_id project_id,
+    p.project_name project_name,
+    p.department_id department_id,
+    p.create_time create_time,
     d.department_name departmentName
     from project_info p INNER JOIN department_info d
     where d.department_id = p.department_id and p.project_id in
@@ -192,7 +192,7 @@
       </if>
     </trim>
   </insert>
-  <!-- 批量插入生成的兑换码 -->
+
   <insert id ="insertBatch" keyColumn="project_id" keyProperty="projectId" parameterType="java.util.List" useGeneratedKeys="true">
     insert into project_info (project_name, department_id, create_time)
     values

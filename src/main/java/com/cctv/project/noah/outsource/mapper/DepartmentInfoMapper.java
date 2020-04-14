@@ -20,6 +20,9 @@ public interface DepartmentInfoMapper {
 
     List<DepartmentInfo> selectByExample(DepartmentInfoExample example);
 
+    List<DepartmentInfo> selectBySelective(DepartmentInfo departmentInfo);
+
+
     DepartmentInfo selectByPrimaryKey(Integer departmentId);
 
     DepartmentInfo selectByName(String departmentName);

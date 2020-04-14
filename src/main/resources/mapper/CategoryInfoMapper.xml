@@ -98,6 +98,28 @@
     from category_info
     where category_id = #{categoryId,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category_info
+    where category_name = #{categoryName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category_info
+    <where>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="creareTime != null">
+        creare_time = #{creareTime,jdbcType=TIMESTAMP},
+      </if>
+    </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from category_info
     where category_id = #{categoryId,jdbcType=INTEGER}

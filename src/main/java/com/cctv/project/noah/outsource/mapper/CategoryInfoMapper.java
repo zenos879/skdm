@@ -18,7 +18,13 @@ public interface CategoryInfoMapper {
 
     List<CategoryInfo> selectByExample(CategoryInfoExample example);
 
+    List<CategoryInfo> selectBySelective(CategoryInfo categoryInfo);
+
+    CategoryInfo selectByName(String name);
+
     CategoryInfo selectByPrimaryKey(Integer categoryId);
+
+
 
     int updateByExampleSelective(@Param("record") CategoryInfo record, @Param("example") CategoryInfoExample example);
 

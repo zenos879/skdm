@@ -16,9 +16,17 @@ public interface PostInfoMapper {
 
     int insertSelective(PostInfo record);
 
+    int insertBatch(List<PostInfo> record);
+
     List<PostInfo> selectByExample(PostInfoExample example);
 
+    List<PostInfo> selectList(PostInfo postInfo);
+
+    List<PostInfo> selectByIds(String[] ids);
+
     PostInfo selectByPrimaryKey(Integer postId);
+
+
 
     int updateByExampleSelective(@Param("record") PostInfo record, @Param("example") PostInfoExample example);
 
