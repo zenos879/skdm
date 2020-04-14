@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.ProjectInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.ProjectInfo">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.ProjectInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.ProjectInfo">
     <id column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="project_name" jdbcType="VARCHAR" property="projectName" />
     <result column="department_id" jdbcType="INTEGER" property="departmentId" />
@@ -68,7 +68,7 @@
   <sql id="Base_Column_List">
     project_id, project_name, department_id, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.ProjectInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -99,7 +99,7 @@
     from project_info
     where project_id = #{projectId,jdbcType=INTEGER}
   </select>
-  <select id="selectBySelective" parameterType="com.cctv.project.noah.entity.ProjectInfo" resultMap="BaseResultMap">
+  <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from project_info
@@ -115,7 +115,7 @@
       </if>
     </where>
   </select>
-  <select id="selectList" parameterType="com.cctv.project.noah.entity.ProjectInfo" resultMap="BaseResultMap">
+  <select id="selectList" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" resultMap="BaseResultMap">
     select
     p.project_id projectId,
     p.project_name projectName,
@@ -155,19 +155,19 @@
     delete from project_info
     where project_id = #{projectId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.ProjectInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfoExample">
     delete from project_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.entity.ProjectInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" useGeneratedKeys="true">
     insert into project_info (project_name, department_id, create_time
       )
     values (#{projectName,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.entity.ProjectInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" useGeneratedKeys="true">
     insert into project_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="projectName != null">
@@ -200,7 +200,7 @@
       (#{bean.projectName,jdbcType=VARCHAR}, #{bean.departmentId,jdbcType=INTEGER}, #{bean.createTime,jdbcType=TIMESTAMP})
     </foreach >
   </insert >
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.ProjectInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfoExample" resultType="java.lang.Long">
     select count(*) from project_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -236,7 +236,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.ProjectInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo">
     update project_info
     <set>
       <if test="projectName != null">
@@ -251,7 +251,7 @@
     </set>
     where project_id = #{projectId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.ProjectInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo">
     update project_info
     set project_name = #{projectName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=INTEGER},

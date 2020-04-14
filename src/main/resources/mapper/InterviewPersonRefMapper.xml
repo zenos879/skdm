@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.InterviewPersonRefMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.InterviewPersonRef">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.InterviewPersonRefMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="candidate_id" jdbcType="INTEGER" property="candidateId" />
@@ -79,7 +79,7 @@
     auto_id, order_no, candidate_id, is_interview, notify_date, interview_date, is_pass, 
     is_reject, is_replace, reason, arrive_date, leave_date, leave_reason, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.InterviewPersonRefExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRefExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -114,13 +114,13 @@
     delete from interview_person_ref
     where auto_id = #{autoId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.InterviewPersonRefExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRefExample">
     delete from interview_person_ref
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.InterviewPersonRef" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef" useGeneratedKeys="true">
     insert into interview_person_ref (order_no, candidate_id, is_interview, 
       notify_date, interview_date, is_pass, 
       is_reject, is_replace, reason, 
@@ -132,7 +132,7 @@
       #{arriveDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE}, #{leaveReason,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.InterviewPersonRef" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef" useGeneratedKeys="true">
     insert into interview_person_ref
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderNo != null">
@@ -217,7 +217,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.InterviewPersonRefExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRefExample" resultType="java.lang.Long">
     select count(*) from interview_person_ref
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -293,7 +293,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.InterviewPersonRef">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     update interview_person_ref
     <set>
       <if test="orderNo != null">
@@ -338,7 +338,7 @@
     </set>
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.InterviewPersonRef">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     update interview_person_ref
     set order_no = #{orderNo,jdbcType=VARCHAR},
       candidate_id = #{candidateId,jdbcType=INTEGER},

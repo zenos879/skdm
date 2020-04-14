@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.DepartmentInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.DepartmentInfo">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.DepartmentInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.DepartmentInfo">
     <id column="department_id" jdbcType="INTEGER" property="departmentId" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -67,7 +67,7 @@
   <sql id="Base_Column_List">
     department_id, department_name, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.DepartmentInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -108,17 +108,17 @@
     delete from department_info
     where department_id = #{departmentId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.DepartmentInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfoExample">
     delete from department_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="department_id" keyProperty="departmentId" parameterType="com.cctv.project.noah.entity.DepartmentInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="department_id" keyProperty="departmentId" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfo" useGeneratedKeys="true">
     insert into department_info (department_name, create_time)
     values (#{departmentName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="department_id" keyProperty="departmentId" parameterType="com.cctv.project.noah.entity.DepartmentInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="department_id" keyProperty="departmentId" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfo" useGeneratedKeys="true">
     insert into department_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="departmentName != null">
@@ -137,7 +137,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.DepartmentInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfoExample" resultType="java.lang.Long">
     select count(*) from department_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -169,7 +169,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.DepartmentInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfo">
     update department_info
     <set>
       <if test="departmentName != null">
@@ -181,7 +181,7 @@
     </set>
     where department_id = #{departmentId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.DepartmentInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfo">
     update department_info
     set department_name = #{departmentName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}

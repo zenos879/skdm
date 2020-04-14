@@ -1,8 +1,7 @@
 package com.cctv.project.noah.outsource.controller;
 
 
-import com.cctv.project.noah.ShiroUtils;
-import com.cctv.project.noah.entity.ProjectInfo;
+import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
@@ -10,9 +9,7 @@ import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
-import com.cctv.project.noah.system.entity.SysUser;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 
 @Controller
 @RequestMapping("/outsource/projectInfo")

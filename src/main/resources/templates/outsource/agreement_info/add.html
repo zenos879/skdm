@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('添加合同数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-agreementinfo-add">
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
+                <div class="col-sm-7">
+                    <input name="agreementNo" id="agreementNo" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                <div class="col-sm-7">
+                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同开始时间：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="agreementStart" placeholder="开始时间"
+                           name="agreementStart" required/>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同结束时间：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="datetime-input form-control" id="agreementEnd" placeholder="结束时间"
+                           name="agreementEnd" required/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    $(function () {
+        $("#agreementStart").change(function () {
+            checkDateTime("agreementStart");
+        })
+        $("#agreementEnd").change(function () {
+            checkDateTime("agreementEnd");
+        })
+    });
+    function checkDateTime(dateTimeId) {
+        var val = $("#" + dateTimeId).val();
+        // 验证全是数字
+        var num = /^[0-9]{13}/;
+        // 验证【2017-01-01】格式
+        var reDate = /^(\d{4})(-)(\d{2})(-)(\d{2})$/;
+        // 验证【2012-01-31 09:00:22】格式
+        var reDateTime = /^(?:19|20)[0-9][0-9]-(?:(?:0[1-9])|(?:1[0-2]))-(?:(?:[0-2][1-9])|(?:[1-3][0-1])) (?:(?:[0-2][0-3])|(?:[0-1][0-9])):[0-5][0-9]:[0-5][0-9]$/;
+        if (!num.test(val) && !reDate.test(val) && !reDateTime.test(val)) {
+            alert('请选择时间或按照正确格式输入时间：\n' +
+                '【yyyy-MM-dd】格式，例【2012-08-01】;\n' +
+                '【13位毫秒值】格式，例【1343795460000】;\n' +
+                '【yyyy-MM-dd HH:mm:ss】格式，例【2012-08-01 12:31:00】;');
+            $("#" + dateTimeId).val('');
+        } else {
+            if (val.length === 10) {
+                val = val + ' 00:00:00';
+            } else if (val.length === 13){
+                var dt = new Date(val);
+                val = format(dt, 'yyyy-MM-dd HH:mm:ss');
+            }
+            $("#" + dateTimeId).val(val);
+        }
+    }
+    var prefix = ctx + "/outsource/agreementInfo";
+    // $("#form-livechannel-add").validate({
+    //     onkeyup: false,
+    //     focusCleanup: true,
+    //     rules:{
+    //         channelName:{
+    //             remote: {
+    //                 url: prefix + "/checkLiveChannelUnique",
+    //                 type: "post",
+    //                 dataType: "json",
+    //                 data: {
+    //                     channelName : function() {
+    //                         return $.common.trim($("#channelName").val());
+    //                     },
+    //                     client : function () {
+    //                         return $.common.trim($("#client").val());
+    //                     }
+    //                 },
+    //                 dataFilter: function(data, type) {
+    //                     return $.validate.unique(data);
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     messages: {
+    //         "channelName": {
+    //             remote: "频道已经存在"
+    //         }
+    //     },
+    // });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-agreementinfo-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.PersonInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.PersonInfo">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.PersonInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.PersonInfo">
     <id column="candidate_id" jdbcType="INTEGER" property="candidateId" />
     <result column="candidate_name" jdbcType="VARCHAR" property="candidateName" />
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
@@ -69,7 +69,7 @@
   <sql id="Base_Column_List">
     candidate_id, candidate_name, id_card, phone, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.PersonInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.PersonInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -104,19 +104,19 @@
     delete from person_info
     where candidate_id = #{candidateId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.PersonInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.PersonInfoExample">
     delete from person_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="candidate_id" keyProperty="candidateId" parameterType="com.cctv.project.noah.entity.PersonInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="candidate_id" keyProperty="candidateId" parameterType="com.cctv.project.noah.outsource.entity.PersonInfo" useGeneratedKeys="true">
     insert into person_info (candidate_name, id_card, phone, 
       create_time)
     values (#{candidateName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="candidate_id" keyProperty="candidateId" parameterType="com.cctv.project.noah.entity.PersonInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="candidate_id" keyProperty="candidateId" parameterType="com.cctv.project.noah.outsource.entity.PersonInfo" useGeneratedKeys="true">
     insert into person_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="candidateName != null">
@@ -147,7 +147,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.PersonInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.PersonInfoExample" resultType="java.lang.Long">
     select count(*) from person_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -187,7 +187,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.PersonInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.PersonInfo">
     update person_info
     <set>
       <if test="candidateName != null">
@@ -205,7 +205,7 @@
     </set>
     where candidate_id = #{candidateId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.PersonInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.PersonInfo">
     update person_info
     set candidate_name = #{candidateName,jdbcType=VARCHAR},
       id_card = #{idCard,jdbcType=VARCHAR},

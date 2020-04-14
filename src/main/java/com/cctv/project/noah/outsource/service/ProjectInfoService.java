@@ -1,7 +1,6 @@
 package com.cctv.project.noah.outsource.service;
 
-import com.cctv.project.noah.entity.ProjectInfo;
-import org.springframework.stereotype.Service;
+import com.cctv.project.noah.outsource.entity.ProjectInfo;
 
 import java.util.List;
 

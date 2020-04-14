@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="generator.ReviewInfoDao">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.ReviewInfo">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.ReviewInfo">
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
     <result column="post_id" jdbcType="INTEGER" property="postId" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     auto_id, purchase_no, post_id, project_id, post_count, review_date, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.ReviewInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -106,13 +106,13 @@
     delete from review_info
     where auto_id = #{autoId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.ReviewInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfoExample">
     delete from review_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.ReviewInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" useGeneratedKeys="true">
     insert into review_info (purchase_no, post_id, project_id, 
       post_count, review_date, create_time
       )
@@ -120,7 +120,7 @@
       #{postCount,jdbcType=INTEGER}, #{reviewDate,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.ReviewInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" useGeneratedKeys="true">
     insert into review_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="purchaseNo != null">
@@ -163,7 +163,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.ReviewInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfoExample" resultType="java.lang.Long">
     select count(*) from review_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -211,7 +211,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.ReviewInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo">
     update review_info
     <set>
       <if test="purchaseNo != null">
@@ -235,7 +235,7 @@
     </set>
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.ReviewInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo">
     update review_info
     set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       post_id = #{postId,jdbcType=INTEGER},

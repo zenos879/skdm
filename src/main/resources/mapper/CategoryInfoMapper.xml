@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.CategoryInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.CategoryInfo">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.CategoryInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.CategoryInfo">
     <id column="category_id" jdbcType="INTEGER" property="categoryId" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="creare_time" jdbcType="TIMESTAMP" property="creareTime" />
@@ -67,7 +67,7 @@
   <sql id="Base_Column_List">
     category_id, category_name, creare_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.CategoryInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -102,17 +102,17 @@
     delete from category_info
     where category_id = #{categoryId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.CategoryInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfoExample">
     delete from category_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="category_id" keyProperty="categoryId" parameterType="com.cctv.project.noah.entity.CategoryInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="category_id" keyProperty="categoryId" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo" useGeneratedKeys="true">
     insert into category_info (category_name, creare_time)
     values (#{categoryName,jdbcType=VARCHAR}, #{creareTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="category_id" keyProperty="categoryId" parameterType="com.cctv.project.noah.entity.CategoryInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="category_id" keyProperty="categoryId" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo" useGeneratedKeys="true">
     insert into category_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="categoryName != null">
@@ -131,7 +131,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.CategoryInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfoExample" resultType="java.lang.Long">
     select count(*) from category_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -163,7 +163,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.CategoryInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo">
     update category_info
     <set>
       <if test="categoryName != null">
@@ -175,7 +175,7 @@
     </set>
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.CategoryInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo">
     update category_info
     set category_name = #{categoryName,jdbcType=VARCHAR},
       creare_time = #{creareTime,jdbcType=TIMESTAMP}

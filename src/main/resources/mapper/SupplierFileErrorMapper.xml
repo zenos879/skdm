@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.SupplierFileErrorMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.SupplierFileError">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.SupplierFileErrorMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.SupplierFileError">
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="purchar_no" jdbcType="VARCHAR" property="purcharNo" />
     <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     auto_id, purchar_no, supplier_id, file_error, remark, happen_date, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.SupplierFileErrorExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileErrorExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -106,13 +106,13 @@
     delete from supplier_file_error
     where auto_id = #{autoId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.SupplierFileErrorExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileErrorExample">
     delete from supplier_file_error
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.SupplierFileError" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileError" useGeneratedKeys="true">
     insert into supplier_file_error (purchar_no, supplier_id, file_error, 
       remark, happen_date, create_time
       )
@@ -120,7 +120,7 @@
       #{remark,jdbcType=VARCHAR}, #{happenDate,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.SupplierFileError" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileError" useGeneratedKeys="true">
     insert into supplier_file_error
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="purcharNo != null">
@@ -163,7 +163,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.SupplierFileErrorExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileErrorExample" resultType="java.lang.Long">
     select count(*) from supplier_file_error
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -211,7 +211,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.SupplierFileError">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileError">
     update supplier_file_error
     <set>
       <if test="purcharNo != null">
@@ -235,7 +235,7 @@
     </set>
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.SupplierFileError">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.SupplierFileError">
     update supplier_file_error
     set purchar_no = #{purcharNo,jdbcType=VARCHAR},
       supplier_id = #{supplierId,jdbcType=INTEGER},

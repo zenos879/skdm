@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.AttendanceMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.Attendance">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.AttendanceMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.Attendance">
     <id column="auto_id" jdbcType="BIGINT" property="autoId" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="candidate_id" jdbcType="INTEGER" property="candidateId" />
@@ -79,7 +79,7 @@
     leave_date, remark, is_reject, serve_days_expect, serve_days_actual, instead_candidate_id, 
     create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.AttendanceExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.AttendanceExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -114,13 +114,13 @@
     delete from attendance
     where auto_id = #{autoId,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.AttendanceExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.AttendanceExample">
     delete from attendance
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.Attendance" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.Attendance" useGeneratedKeys="true">
     insert into attendance (order_no, candidate_id, statistics_year, 
       statistics_month, arrive_date, leave_date, 
       remark, is_reject, serve_days_expect, 
@@ -132,7 +132,7 @@
       #{serveDaysActual,jdbcType=REAL}, #{insteadCandidateId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.entity.Attendance" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.Attendance" useGeneratedKeys="true">
     insert into attendance
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderNo != null">
@@ -211,7 +211,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.AttendanceExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.AttendanceExample" resultType="java.lang.Long">
     select count(*) from attendance
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -283,7 +283,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.Attendance">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.Attendance">
     update attendance
     <set>
       <if test="orderNo != null">
@@ -325,7 +325,7 @@
     </set>
     where auto_id = #{autoId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.Attendance">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.Attendance">
     update attendance
     set order_no = #{orderNo,jdbcType=VARCHAR},
       candidate_id = #{candidateId,jdbcType=INTEGER},

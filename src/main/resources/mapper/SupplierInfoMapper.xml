@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.SupplierInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.SupplierInfo">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.SupplierInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.SupplierInfo">
     <id column="supplier_id" jdbcType="INTEGER" property="supplierId" />
     <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
@@ -72,7 +72,7 @@
     supplier_id, supplier_name, contact_name, contact_tel, contact_email, is_subsidiary, 
     create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.SupplierInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -107,13 +107,13 @@
     delete from supplier_info
     where supplier_id = #{supplierId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.SupplierInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfoExample">
     delete from supplier_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="supplier_id" keyProperty="supplierId" parameterType="com.cctv.project.noah.entity.SupplierInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="supplier_id" keyProperty="supplierId" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfo" useGeneratedKeys="true">
     insert into supplier_info (supplier_name, contact_name, contact_tel, 
       contact_email, is_subsidiary, create_time
       )
@@ -121,7 +121,7 @@
       #{contactEmail,jdbcType=VARCHAR}, #{isSubsidiary,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="supplier_id" keyProperty="supplierId" parameterType="com.cctv.project.noah.entity.SupplierInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="supplier_id" keyProperty="supplierId" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfo" useGeneratedKeys="true">
     insert into supplier_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="supplierName != null">
@@ -164,7 +164,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.SupplierInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfoExample" resultType="java.lang.Long">
     select count(*) from supplier_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -212,7 +212,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.SupplierInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfo">
     update supplier_info
     <set>
       <if test="supplierName != null">
@@ -236,7 +236,7 @@
     </set>
     where supplier_id = #{supplierId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.SupplierInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfo">
     update supplier_info
     set supplier_name = #{supplierName,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},

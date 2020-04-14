@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同数据')" />
+</head>
+<body class="gray-bg">
+    <!-- 主体内容开始 -->
+    <div class="container-div">
+        <!-- 第一行 -->
+        <div class="row">
+            <!-- clo-sm-12 为占用12个栅栏 一行为12个栅栏 search-collapse可折叠样式 -->
+            <div class="col-sm-12 search-collapse">
+                <form id="agreementinfo-form">
+                    <!-- 表单开始 -->
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                合同编号：<input type="text" name="agreementNo" id="agreementNo" autocomplete="off"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 表单结束 -->
+                </form>
+            </div>
+            <!-- table开始 -->
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" >
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+            <!-- table结束 -->
+        </div>
+    </div>
+    <!-- 主体内容结束 -->
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var client = [[${@dict.getType('client')}]];
+    var isProtect = [[${@dict.getType('is_protect')}]];
+
+    $(function(){
+
+        queryList();
+    });
+
+    function queryList() {
+
+        var prefix = ctx + "outsource/agreementinfo";
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            sortName: "id",
+            sortOrder: "desc",
+            modalName: "合同号",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'agreement',
+                    title: '合同ID',
+                    visible: false
+                },
+                {
+                    field: 'agreementNo',
+                    title: '合同号'
+                },
+                {
+                    field: 'supplierName',
+                    title: '供应商名称'
+                },
+                {
+                    field: 'agreementStart',
+                    title: '合同开始时间',
+                    sortable: true
+                },
+                {
+                    field: 'agreementEnd',
+                    title: '合同结束时间',
+                    align: 'center',
+                    sortable: true
+                }]
+        };
+        $.table.init(options);
+    }
+
+</script>
+</body>
+</html>

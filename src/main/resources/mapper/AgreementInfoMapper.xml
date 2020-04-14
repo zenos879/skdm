@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.mapper.AgreementInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.entity.AgreementInfo">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.AgreementInfoMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.AgreementInfo">
     <id column="agreement_id" jdbcType="INTEGER" property="agreementId" />
     <result column="agreement_no" jdbcType="VARCHAR" property="agreementNo" />
     <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
@@ -70,7 +70,7 @@
   <sql id="Base_Column_List">
     agreement_id, agreement_no, supplier_id, agreement_start, agreement_end, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.entity.AgreementInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -105,19 +105,19 @@
     delete from agreement_info
     where agreement_id = #{agreementId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.entity.AgreementInfoExample">
+  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample">
     delete from agreement_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.entity.AgreementInfo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo" useGeneratedKeys="true">
     insert into agreement_info (agreement_no, supplier_id, agreement_start, 
       agreement_end, create_time)
     values (#{agreementNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{agreementStart,jdbcType=DATE}, 
       #{agreementEnd,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.entity.AgreementInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo" useGeneratedKeys="true">
     insert into agreement_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="agreementNo != null">
@@ -154,7 +154,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.entity.AgreementInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample" resultType="java.lang.Long">
     select count(*) from agreement_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -198,7 +198,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.entity.AgreementInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo">
     update agreement_info
     <set>
       <if test="agreementNo != null">
@@ -219,7 +219,7 @@
     </set>
     where agreement_id = #{agreementId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.entity.AgreementInfo">
+  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo">
     update agreement_info
     set agreement_no = #{agreementNo,jdbcType=VARCHAR},
       supplier_id = #{supplierId,jdbcType=INTEGER},
