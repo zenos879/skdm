@@ -4,7 +4,9 @@ import com.cctv.project.noah.entity.DepartmentInfo;
 import com.cctv.project.noah.entity.DepartmentInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface DepartmentInfoMapper {
     long countByExample(DepartmentInfoExample example);
 

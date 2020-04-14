@@ -4,7 +4,9 @@ import com.cctv.project.noah.entity.ProjectInfo;
 import com.cctv.project.noah.entity.ProjectInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface ProjectInfoMapper {
     long countByExample(ProjectInfoExample example);
 

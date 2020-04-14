@@ -9,10 +9,12 @@ import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@Service("projectInfoService")
 public class ProjectInfoServiceImpl implements ProjectInfoService {
 
     @Autowired
