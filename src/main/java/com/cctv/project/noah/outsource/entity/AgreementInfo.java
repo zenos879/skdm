@@ -1,5 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +19,7 @@ public class AgreementInfo implements Serializable {
     /**
      * 合同号
      */
+    @Excel(name = "合同编号", cellType = Excel.ColumnType.NUMERIC)
     private String agreementNo;
 
     /**
@@ -26,16 +30,21 @@ public class AgreementInfo implements Serializable {
     /**
      * 供应商名称
      */
+    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
     private String supplierName;
 
     /**
      * 合同开始日期
      */
+    @Excel(name = "合同开始日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date agreementStart;
 
     /**
      * 合同结束日期
      */
+    @Excel(name = "合同结束日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date agreementEnd;
 
     /**
