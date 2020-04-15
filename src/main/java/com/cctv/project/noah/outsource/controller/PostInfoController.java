@@ -1,7 +1,9 @@
 package com.cctv.project.noah.outsource.controller;
 
 
+import com.cctv.project.noah.outsource.entity.PostInfo;
 import com.cctv.project.noah.outsource.entity.ProjectInfo;
+import com.cctv.project.noah.outsource.service.PostInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
@@ -18,17 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-
-/**
- * @author
- */
 @Controller
-@RequestMapping("/outsource/projectInfo")
-public class ProjectInfoController extends BaseController {
-    private String prefix = "outsource/projectInfo";
+@RequestMapping("/outsource/postInfo")
+public class PostInfoController extends BaseController {
+    private String prefix = "outsource/postInfo";
 
     @Autowired
-    ProjectInfoService projectInfoService;
+    PostInfoService postInfoService;
 
     /** 页面跳转 */
     @GetMapping()
@@ -43,70 +41,70 @@ public class ProjectInfoController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("projectId",id);
+        model.addAttribute("postId",id);
         return prefix+"/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ProjectInfo projectInfo){
+    public TableDataInfo list(PostInfo postInfo){
         startPage();
-        return getDataTable(projectInfoService.selectList(projectInfo));
+        return getDataTable(postInfoService.selectList(postInfo));
     }
 
     @PostMapping("/edit")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(ProjectInfo projectInfo){
-        Result result = projectInfoService.updateBySelective(projectInfo);
+    @Log(title = "岗位数据", businessType = BusinessType.UPDATE)
+    public AjaxResult edit(PostInfo postInfo){
+        Result result = postInfoService.updateBySelective(postInfo);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(ProjectInfo projectInfo){
-        Result result = projectInfoService.insertBySelective(projectInfo);
+    @Log(title = "岗位数据", businessType = BusinessType.INSERT)
+    public AjaxResult add(PostInfo postInfo){
+        Result result = postInfoService.insertBySelective(postInfo);
         return toAjax(result);
     }
 
     @PostMapping("/export")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(ProjectInfo projectInfo,String ids){
-        ExcelUtil<ProjectInfo> util = new ExcelUtil<ProjectInfo>(ProjectInfo.class);
-        List<ProjectInfo> list;
+    @Log(title = "岗位数据", businessType = BusinessType.EXPORT)
+    public AjaxResult export(PostInfo postInfo, String ids){
+        ExcelUtil<PostInfo> util = new ExcelUtil<PostInfo>(PostInfo.class);
+        List<PostInfo> list;
         if (ids !=null){
-            list = projectInfoService.selectByIds(ids);
+            list = postInfoService.selectByIds(ids);
         }else {
-            list = projectInfoService.selectList(projectInfo);
+            list = postInfoService.selectList(postInfo);
         }
-        return util.exportExcel(list, "项目数据");
+        return util.exportExcel(list, "岗位数据");
     }
 
 
     @ResponseBody
     @PostMapping("/importData")
-    @Log(title = "项目数据", businessType = BusinessType.IMPORT)
+    @Log(title = "岗位数据", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<ProjectInfo> util = new ExcelUtil<ProjectInfo>(ProjectInfo.class);
-        List<ProjectInfo> projectInfos = util.importExcel(file.getInputStream());
-        Result result = projectInfoService.importProjectInfo(projectInfos);
+        ExcelUtil<PostInfo> util = new ExcelUtil<PostInfo>(PostInfo.class);
+        List<PostInfo> postInfos = util.importExcel(file.getInputStream());
+        Result result = postInfoService.importPostInfo(postInfos);
         return toAjax(result);
     }
 
     @ResponseBody
     @GetMapping("/importTemplate")
     public AjaxResult importTemplate() {
-        ExcelUtil<ProjectInfo> util = new ExcelUtil<ProjectInfo>(ProjectInfo.class);
-        return util.importTemplateExcel("项目数据");
+        ExcelUtil<PostInfo> util = new ExcelUtil<PostInfo>(PostInfo.class);
+        return util.importTemplateExcel("岗位数据");
     }
 
     @RequestMapping("/remove")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.DELETE)
+    @Log(title = "岗位数据", businessType = BusinessType.DELETE)
     public AjaxResult remove(String ids){
-        return toAjax(projectInfoService.deleteByIds(ids));
+        return toAjax(postInfoService.deleteByIds(ids));
     }
 
 

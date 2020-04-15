@@ -14,4 +14,8 @@ public interface ProjectInfoService {
     Result insertBySelective(ProjectInfo projectInfo);
 
     Result importProjectInfo(List<ProjectInfo> projectInfos);
+
+    ProjectInfo selectByPrimaryKey(Integer projectId);
+
+    Result deleteByIds(String ids);
 }

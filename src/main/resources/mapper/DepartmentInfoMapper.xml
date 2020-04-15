@@ -98,7 +98,24 @@
     from department_info
     where department_id = #{departmentId,jdbcType=INTEGER}
   </select>
-  <select id="selectByName" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+  <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.DepartmentInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from department_info
+    <where>
+      <if test="departmentId != null">
+        AND department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentName != null">
+        AND department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        AND create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </where>
+  </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from department_info

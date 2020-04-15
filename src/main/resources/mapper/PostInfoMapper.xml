@@ -99,6 +99,48 @@
     from post_info
     where post_id = #{postId,jdbcType=INTEGER}
   </select>
+  <select id="selectList" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" resultMap="BaseResultMap">
+    select
+    p.post_id post_id,
+    p.post_name post_name,
+    p.category_id category_id,
+    p.create_time create_time,
+    cate.category_name categoryName
+    from post_info p INNER JOIN category_info cate
+    where c.category_id = p.category_id
+    <if test="postId != null">
+      AND post_id = #{postId,jdbcType=INTEGER}
+    </if>
+    <if test="postName != null">
+      AND post_name = #{postName,jdbcType=VARCHAR}
+    </if>
+    <if test="categoryId != null">
+      AND category_id = #{categoryId,jdbcType=INTEGER}
+    </if>
+    <if test="createTime != null">
+      AND create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+  <select id="selectByIds" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" resultMap="BaseResultMap">
+    select
+    p.post_id post_id,
+    p.post_name post_name,
+    p.category_id category_id,
+    p.create_time create_time,
+    cate.category_name categoryName
+    from post_info p INNER JOIN category_info cate
+    where c.category_id = p.category_id and p.post_id in
+    <foreach collection="array" item="id"  open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+  <insert id ="insertBatch" keyColumn="post_id" keyProperty="postId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into post_info (post_name, category_id, create_time)
+    values
+    <foreach collection ="list" item="bean" index= "index" separator =",">
+      (#{bean.postName,jdbcType=VARCHAR}, #{bean.categoryId,jdbcType=INTEGER}, #{bean.createTime,jdbcType=TIMESTAMP})
+    </foreach >
+  </insert >
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from post_info
     where post_id = #{postId,jdbcType=INTEGER}

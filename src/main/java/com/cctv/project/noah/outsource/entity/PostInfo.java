@@ -1,5 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,11 +14,13 @@ public class PostInfo implements Serializable {
     /**
      * 岗位id
      */
+    @Excel(name = "岗位ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Integer postId;
 
     /**
      * 岗位名称
      */
+    @Excel(name = "岗位名称")
     private String postName;
 
     /**
@@ -24,11 +29,27 @@ public class PostInfo implements Serializable {
     private Integer categoryId;
 
     /**
+     * 岗位分类名称
+     */
+    @Excel(name = "岗位分类")
+    private String categoryName;
+
+    /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
     public Integer getPostId() {
         return postId;
