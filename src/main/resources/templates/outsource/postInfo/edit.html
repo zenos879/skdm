@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改项目')" />
+    <th:block th:include="include :: header('修改岗位')" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-project-edit" th:with="command = ${@projectInfoService.selectByPrimaryKey(projectId)}">
-            <input type="hidden" name="projectId" th:value="${command.getProjectId()}">
-            <h4 class="form-header h4">项目信息</h4>
+        <form class="form-horizontal m" id="form-post-edit" th:with="command = ${@postInfoService.selectByPrimaryKey(postId)}">
+            <input type="hidden" name="postId" th:value="${command.getPostId()}">
+            <h4 class="form-header h4">岗位信息</h4>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目名称：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
                         <div class="col-sm-8">
-                            <input name="projectName" id="projectName" placeholder="请输入项目名称" th:value="${command.getProjectName()}" class="form-control" type="text" maxlength="20" required>
+                            <input name="postName" id="postName" placeholder="请输入项目名称" th:value="${command.getPostName()}" class="form-control" type="text" maxlength="20" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>部门名称：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位分类：</label>
                         <div class="col-sm-8">
-                            <select name="departmentId" id="departmentId" class="form-control" th:with="departs=${@departmentInfoService.selectAll()}">
-                                <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}" th:selected="${command.getDepartmentId() == depart.departmentId}"></option>
+                            <select name="categoryId" id="categoryId" class="form-control" th:with="cates=${@categoryInfoService.selectAll()}">
+                                <option th:each="cate : ${cates}" th:text="${cate.categoryName}" th:value="${cate.categoryId}" th:selected="${command.getCategoryId() == cate.getCategoryId()}"></option>
                             </select>
                         </div>
                     </div>
@@ -32,16 +32,16 @@
     </div>
     <th:block th:include="include :: footer" />
     <script type="text/javascript">
-        var prefix = ctx + "outsource/projectInfo";
+        var prefix = ctx + "outsource/postInfo";
 
-        $("#form-project-edit").validate({
+        $("#form-post-edit").validate({
             onkeyup: false,
             focusCleanup: true,
         });
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-project-edit').serialize());
+                $.operate.save(prefix + "/edit", $('#form-post-edit').serialize());
             }
         }
     </script>

@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Date;
  * post_info
  * @author 
  */
-public class PostInfo implements Serializable {
+public class PostInfo extends BaseEntity implements Serializable {
     /**
      * 岗位id
      */
