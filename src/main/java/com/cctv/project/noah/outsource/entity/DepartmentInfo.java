@@ -1,5 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,20 +11,24 @@ import java.util.Date;
  * department_info
  * @author 
  */
-public class DepartmentInfo implements Serializable {
+public class DepartmentInfo extends BaseEntity implements Serializable {
     /**
      * 部门id
      */
+    @Excel(name = "部门ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Integer departmentId;
 
     /**
      * 部门名称
      */
+    @Excel(name = "部门名称")
     private String departmentName;
 
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private static final long serialVersionUID = 1L;

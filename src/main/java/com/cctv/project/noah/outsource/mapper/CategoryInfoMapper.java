@@ -20,6 +20,8 @@ public interface CategoryInfoMapper {
 
     List<CategoryInfo> selectBySelective(CategoryInfo categoryInfo);
 
+    List<CategoryInfo> selectByIds(String[] ids);
+
     CategoryInfo selectByName(String name);
 
     CategoryInfo selectByPrimaryKey(Integer categoryId);

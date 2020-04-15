@@ -22,6 +22,7 @@ public interface DepartmentInfoMapper {
 
     List<DepartmentInfo> selectBySelective(DepartmentInfo departmentInfo);
 
+    List<DepartmentInfo> selectByIds(String[] ids);
 
     DepartmentInfo selectByPrimaryKey(Integer departmentId);
 

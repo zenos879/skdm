@@ -1,5 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,21 +11,25 @@ import java.util.Date;
  * category_info
  * @author 
  */
-public class CategoryInfo implements Serializable {
+public class CategoryInfo extends BaseEntity implements Serializable {
     /**
      * 岗位分类id
      */
+    @Excel(name = "岗位分类ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Integer categoryId;
 
     /**
      * 岗位分类名称：开发，测试，运维
      */
+    @Excel(name = "岗位分类名称")
     private String categoryName;
 
     /**
      * 创建时间
      */
-    private Date creareTime;
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,12 +49,12 @@ public class CategoryInfo implements Serializable {
         this.categoryName = categoryName;
     }
 
-    public Date getCreareTime() {
-        return creareTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreareTime(Date creareTime) {
-        this.creareTime = creareTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override
@@ -63,7 +71,7 @@ public class CategoryInfo implements Serializable {
         CategoryInfo other = (CategoryInfo) that;
         return (this.getCategoryId() == null ? other.getCategoryId() == null : this.getCategoryId().equals(other.getCategoryId()))
             && (this.getCategoryName() == null ? other.getCategoryName() == null : this.getCategoryName().equals(other.getCategoryName()))
-            && (this.getCreareTime() == null ? other.getCreareTime() == null : this.getCreareTime().equals(other.getCreareTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
@@ -72,7 +80,7 @@ public class CategoryInfo implements Serializable {
         int result = 1;
         result = prime * result + ((getCategoryId() == null) ? 0 : getCategoryId().hashCode());
         result = prime * result + ((getCategoryName() == null) ? 0 : getCategoryName().hashCode());
-        result = prime * result + ((getCreareTime() == null) ? 0 : getCreareTime().hashCode());
+        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
     }
 
@@ -84,7 +92,7 @@ public class CategoryInfo implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", categoryId=").append(categoryId);
         sb.append(", categoryName=").append(categoryName);
-        sb.append(", creareTime=").append(creareTime);
+        sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
