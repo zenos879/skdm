@@ -75,7 +75,7 @@ public class AgreementInfoController extends BaseController {
     @ResponseBody
     @Log(title = "项目数据", businessType = BusinessType.EXPORT)
     public AjaxResult export(AgreementInfo projectInfo,String ids){
-        ExcelUtil<AgreementInfo> util = new ExcelUtil<AgreementInfo>(AgreementInfo.class);
+        ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         List<AgreementInfo> list;
         if (ids != null){
             list = agreementInfoService.selectByIds(ids);
@@ -90,7 +90,7 @@ public class AgreementInfoController extends BaseController {
     @PostMapping("/importData")
     @Log(title = "项目数据", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<AgreementInfo> util = new ExcelUtil<AgreementInfo>(AgreementInfo.class);
+        ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         List<AgreementInfo> agreementInfos = util.importExcel(file.getInputStream());
         Result result = agreementInfoService.importAgreementInfo(agreementInfos);
         return toAjax(result);

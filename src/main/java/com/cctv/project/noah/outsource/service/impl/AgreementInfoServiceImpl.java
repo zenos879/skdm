@@ -2,6 +2,7 @@ package com.cctv.project.noah.outsource.service.impl;
 
 import com.cctv.project.noah.outsource.entity.AgreementInfo;
 import com.cctv.project.noah.outsource.entity.AgreementInfoExample;
+import com.cctv.project.noah.outsource.entity.DepartmentInfo;
 import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.mapper.AgreementInfoMapper;
 import com.cctv.project.noah.outsource.service.AgreementInfoService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("agreementInfoService")
@@ -39,18 +41,12 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         // 插入时，先判断供应商是否存在
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        // 不存在，提示先新增供应商
         if (supplierInfo == null){
-            // 不存在，先新增供应商
-            supplierInfo.setSupplierName(supplierName);
-            int insert = supplierInfoService.insert(supplierInfo);
-            if (insert < 1){
-                result.setCode(0);
-                result.setInfo("供应商新增失败，请重试！");
-                return result;
-            }
+            result.setCode(0);
+            result.setInfo("供应商不存在，请先完善供应商信息！");
+            return result;
         }
-        // 重新获取
-        supplierInfo = supplierInfoService.selectByName(supplierName);
         record.setSupplierId(supplierInfo.getSupplierId());
         int insert = agreementInfoMapper.insert(record);
         if (insert < 0){
@@ -126,30 +122,66 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     public Result updateByPrimaryKey(AgreementInfo record) {
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        // 不存在，提示先新增供应商
+        if (supplierInfo == null){
+            Result result = new Result();
+            result.setCode(0);
+            result.setInfo("供应商不存在，请先完善供应商信息！");
+            return result;
+        }
         record.setSupplierId(supplierInfo.getSupplierId());
         int i = agreementInfoMapper.updateByPrimaryKey(record);
         return new Result(i);
     }
 
+    /**
+     * 判断合同编号是否存在
+     * @param agreementNo
+     * @return
+     */
+    private boolean selectBeanByNum(String agreementNo){
+        AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
+        AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
+        criteria.andAgreementNoEqualTo(agreementNo);
+        List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
+        if (agreementInfos.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public Result importAgreementInfo(List<AgreementInfo> agreementInfos) {
+        int count = 0;
         for (int i = 0; i < agreementInfos.size(); i++) {
             AgreementInfo agreementInfo = agreementInfos.get(i);
             if (agreementInfo.getAgreementNo() == null) {
                 return new Result(0,"第"+(i+2)+"行的合同编号为空!");
             }
-//            if (agreementInfo.getDepartmentName() == null) {
-//                return new Result(0,"第"+(i+2)+"行的部门名称为空!");
-//            }
-//            DepartmentInfo departmentInfo = departmentInfoMapper.selectByName(agreementInfo.getDepartmentName());
-//            if (departmentInfo == null) {
-//                return new Result(0,"第"+(i+2)+"行的部门不存在!");
-//            }
-//            agreementInfo.setDepartmentId(departmentInfo.getDepartmentId());
-//            agreementInfo.setCreateTime(new Date());
+            if (agreementInfo.getSupplierName() == null) {
+                return new Result(0,"第"+(i+2)+"行的供应商名称为空!");
+            }
+            SupplierInfo supplierInfo = supplierInfoService.selectByName(agreementInfo.getSupplierName());
+            if (supplierInfo == null) {
+                return new Result(0,"第"+(i+2)+"行的供应商【" + supplierInfo.getSupplierName() + "】不存在!");
+            }
+            if (agreementInfo.getAgreementStart() == null) {
+                return new Result(0,"第"+(i+2)+"行的合同开始日期不存在!");
+            }
+            if (agreementInfo.getAgreementEnd() == null) {
+                return new Result(0,"第"+(i+2)+"行的合同结束日期不存在!");
+            }
+            agreementInfo.setSupplierId(supplierInfo.getSupplierId());
+            agreementInfo.setCreateTime(new Date());
+            String agreementNo = agreementInfo.getAgreementNo();
+            boolean b = selectBeanByNum(agreementNo);
+            if (b){
+                agreementInfoMapper.updateByPrimaryKeySelective(agreementInfo);
+            } else {
+                agreementInfoMapper.insertSelective(agreementInfo);
+            }
+            count = i;
         }
-//        int i = agreementInfoMapper.insertBatch(projectInfos);
-//        return new Result(i);
-        return null;
+        return new Result(count);
     }
 }
