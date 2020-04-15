@@ -4,7 +4,9 @@ import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.entity.SupplierInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface SupplierInfoMapper {
     long countByExample(SupplierInfoExample example);
 

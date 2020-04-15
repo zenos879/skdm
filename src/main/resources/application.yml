@@ -22,3 +22,6 @@ mybatis:
   type-aliases-package: com.cctv.project.noah.**.entity
 server:
   port: 8080
+
+noah:
+  profile: classpath:/templates/

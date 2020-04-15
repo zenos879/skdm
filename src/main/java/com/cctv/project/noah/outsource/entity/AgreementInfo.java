@@ -1,5 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,11 +33,13 @@ public class AgreementInfo implements Serializable {
     /**
      * 合同开始日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date agreementStart;
 
     /**
      * 合同结束日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date agreementEnd;
 
     /**

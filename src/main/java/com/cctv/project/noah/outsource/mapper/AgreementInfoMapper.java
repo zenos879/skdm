@@ -4,7 +4,9 @@ import com.cctv.project.noah.outsource.entity.AgreementInfo;
 import com.cctv.project.noah.outsource.entity.AgreementInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface AgreementInfoMapper {
     long countByExample(AgreementInfoExample example);
 

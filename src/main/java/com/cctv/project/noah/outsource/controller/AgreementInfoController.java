@@ -1,8 +1,8 @@
 package com.cctv.project.noah.outsource.controller;
 
 
-import com.cctv.project.noah.outsource.entity.ProjectInfo;
-import com.cctv.project.noah.outsource.service.ProjectInfoService;
+import com.cctv.project.noah.outsource.entity.AgreementInfo;
+import com.cctv.project.noah.outsource.service.AgreementInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
@@ -22,20 +22,20 @@ import java.util.List;
 
 
 /**
- * @author
+ * @author HuberyYan
  */
 @Controller
-@RequestMapping("/outsource/projectInfo")
-public class ProjectInfoController extends BaseController {
-    private String prefix = "outsource/projectInfo";
+@RequestMapping("/outsource/agreementinfo")
+public class AgreementInfoController extends BaseController {
+    private String prefix = "outsource/agreement_info";
 
     @Autowired
-    ProjectInfoService projectInfoService;
+    AgreementInfoService agreementInfoService;
 
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/page";
+        return prefix + "/agreementinfo";
     }
 
     @GetMapping("/add")
@@ -50,37 +50,37 @@ public class ProjectInfoController extends BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(ProjectInfo projectInfo){
+    public TableDataInfo list(AgreementInfo projectInfo){
         startPage();
-        return getDataTable(projectInfoService.selectList(projectInfo));
+        return getDataTable(agreementInfoService.selectList(projectInfo));
     }
 
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "项目数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(ProjectInfo projectInfo){
-        Result result = projectInfoService.updateBySelective(projectInfo);
+    public AjaxResult edit(AgreementInfo projectInfo){
+        Result result = agreementInfoService.updateByPrimaryKeySelective(projectInfo);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "项目数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(ProjectInfo projectInfo){
-        Result result = projectInfoService.insertBySelective(projectInfo);
+    public AjaxResult add(AgreementInfo projectInfo){
+        Result result = agreementInfoService.insertSelective(projectInfo);
         return toAjax(result);
     }
 
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "项目数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(ProjectInfo projectInfo,String ids){
-        ExcelUtil<ProjectInfo> util = new ExcelUtil<ProjectInfo>(ProjectInfo.class);
-        List<ProjectInfo> list;
-        if (ids !=null){
-            list = projectInfoService.selectByIds(ids);
+    public AjaxResult export(AgreementInfo projectInfo,String ids){
+        ExcelUtil<AgreementInfo> util = new ExcelUtil<AgreementInfo>(AgreementInfo.class);
+        List<AgreementInfo> list;
+        if (ids != null){
+            list = agreementInfoService.selectByIds(ids);
         }else {
-            list = projectInfoService.selectList(projectInfo);
+            list = agreementInfoService.selectList(projectInfo);
         }
         return util.exportExcel(list, "项目数据");
     }
@@ -90,17 +90,17 @@ public class ProjectInfoController extends BaseController {
     @PostMapping("/importData")
     @Log(title = "项目数据", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<ProjectInfo> util = new ExcelUtil<ProjectInfo>(ProjectInfo.class);
-        List<ProjectInfo> projectInfos = util.importExcel(file.getInputStream());
-        Result result = projectInfoService.importProjectInfo(projectInfos);
+        ExcelUtil<AgreementInfo> util = new ExcelUtil<AgreementInfo>(AgreementInfo.class);
+        List<AgreementInfo> agreementInfos = util.importExcel(file.getInputStream());
+        Result result = agreementInfoService.importAgreementInfo(agreementInfos);
         return toAjax(result);
     }
 
     @ResponseBody
     @GetMapping("/importTemplate")
     public AjaxResult importTemplate() {
-        ExcelUtil<ProjectInfo> util = new ExcelUtil<ProjectInfo>(ProjectInfo.class);
-        return util.importTemplateExcel("项目数据");
+        ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
+        return util.importTemplateExcel("合同数据");
     }
 
 
