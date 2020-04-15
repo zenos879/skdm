@@ -1,5 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,15 +20,24 @@ public class SupplierBid implements Serializable {
      */
     private Integer supplierId;
 
+    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    private String supplierName;
+
     /**
      * 合同id
      */
     private Integer agreementId;
 
+    @Excel(name = "合同号", cellType = Excel.ColumnType.NUMERIC)
+    private String agreementNo;
+
     /**
      * 岗位id
      */
     private Integer postId;
+
+    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
+    private String postName;
 
     /**
      * 竞标价钱
@@ -136,5 +147,29 @@ public class SupplierBid implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getAgreementNo() {
+        return agreementNo;
+    }
+
+    public void setAgreementNo(String agreementNo) {
+        this.agreementNo = agreementNo;
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

@@ -6,6 +6,7 @@ import com.cctv.project.noah.outsource.entity.DepartmentInfo;
 import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.mapper.AgreementInfoMapper;
 import com.cctv.project.noah.outsource.service.AgreementInfoService;
+import com.cctv.project.noah.outsource.service.GeneralUtils;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.SupplierInfoService;
 import org.apache.commons.lang3.StringUtils;
@@ -88,13 +89,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     public List<AgreementInfo> selectByIds(String ids) {
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
-        String[] split = ids.split(",");
-        List<Integer> idList = new ArrayList<>();
-        for (int i = 0; i < split.length; i++) {
-            String idStr = split[i];
-            Integer id = Integer.getInteger(idStr);
-            idList.add(id);
-        }
+        List<Integer> idList = GeneralUtils.strArrToList(ids);
         criteria.andAgreementIdIn(idList);
         return agreementInfoMapper.selectByExample(agreementInfoExample);
     }
