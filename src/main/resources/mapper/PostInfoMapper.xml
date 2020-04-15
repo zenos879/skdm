@@ -107,18 +107,21 @@
     p.create_time create_time,
     cate.category_name categoryName
     from post_info p INNER JOIN category_info cate
-    where c.category_id = p.category_id
+    where cate.category_id = p.category_id
     <if test="postId != null">
       AND post_id = #{postId,jdbcType=INTEGER}
     </if>
-    <if test="postName != null">
+    <if test="postName != null and postName != ''">
       AND post_name = #{postName,jdbcType=VARCHAR}
     </if>
     <if test="categoryId != null">
-      AND category_id = #{categoryId,jdbcType=INTEGER}
+      AND cate.category_id = #{categoryId,jdbcType=INTEGER}
     </if>
-    <if test="createTime != null">
-      AND create_time = #{createTime,jdbcType=TIMESTAMP}
+    <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+      AND date_format(p.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+    </if>
+    <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+      AND date_format(p.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
     </if>
   </select>
   <select id="selectByIds" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" resultMap="BaseResultMap">
@@ -129,7 +132,7 @@
     p.create_time create_time,
     cate.category_name categoryName
     from post_info p INNER JOIN category_info cate
-    where c.category_id = p.category_id and p.post_id in
+    where cate.category_id = p.category_id and p.post_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
     </foreach>
@@ -160,7 +163,7 @@
   <insert id="insertSelective" keyColumn="post_id" keyProperty="postId" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" useGeneratedKeys="true">
     insert into post_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="postName != null">
+      <if test="postName != null and postName != ''">
         post_name,
       </if>
       <if test="categoryId != null">
@@ -171,7 +174,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="postName != null">
+      <if test="postName != null and postName != ''">
         #{postName,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">
@@ -221,7 +224,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.PostInfo">
     update post_info
     <set>
-      <if test="postName != null">
+      <if test="postName != null and postName != ''">
         post_name = #{postName,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">

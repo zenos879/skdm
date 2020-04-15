@@ -47,6 +47,11 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (postInfoDb == null){
             return new Result(0,"无法修改不存在的岗位！");
         }
+        if (postInfoDb.getPostName().equals(postInfo.getPostName()) &&
+            postInfoDb.getCategoryId() == postInfo.getCategoryId()
+        ){
+            return new Result(0,"修改必须与之前不同！");
+        }
         int i = postInfoMapper.updateByPrimaryKeySelective(postInfo);
         return new Result(i);
     }
@@ -58,9 +63,20 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (postInfo.getCategoryId() == null) {
             return new Result(0,"岗位分类不能为空！");
         }
+        List<PostInfo> postInfos = postInfoMapper.selectList(postInfo);
+        if (postInfos.size()!=0){
+            for (PostInfo info : postInfos) {
+                if (info.getPostName().equals(postInfo.getPostName()) &&
+                        info.getCategoryId() == postInfo.getCategoryId()
+                ){
+                    return new Result(0,"此岗位已存在！");
+                }
+            }
+        }
         postInfo.setCreateTime(new Date());
         int i = postInfoMapper.insertSelective(postInfo);
         return new Result(i);
+
     }
 
     @Override
@@ -80,7 +96,14 @@ public class PostInfoServiceImpl implements PostInfoService {
             postInfo.setCategoryId(categoryInfo.getCategoryId());
             postInfo.setCreateTime(new Date());
         }
-        int i = postInfoMapper.insertBatch(postInfos);
+        int i = 0;
+        for (PostInfo postInfo : postInfos) {
+            Result result = insertBySelective(postInfo);
+            if (result.code<1){
+                return result;
+            }
+            i++;
+        }
         int size = postInfos.size();
         return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
     }

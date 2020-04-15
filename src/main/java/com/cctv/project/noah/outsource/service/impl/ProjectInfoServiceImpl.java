@@ -43,6 +43,11 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectInfoDb == null){
             return new Result(0,"无法修改不存在的项目！");
         }
+        if (projectInfoDb.getProjectName() .equals(projectInfo.getProjectName()) &&
+            projectInfoDb.getDepartmentId() == projectInfo.getDepartmentId()
+        ){
+            return new Result(0,"修改必须与之前不同！");
+        }
         int i = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
         return new Result(i);
     }
@@ -53,6 +58,14 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         }
         if (projectInfo.getProjectName() == null) {
             return new Result(0,"项目名称不能为null！");
+        }
+        List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
+        for (ProjectInfo info : projectInfos) {
+            if (info.getProjectName() .equals(projectInfo.getProjectName()) &&
+                    info.getDepartmentId() == projectInfo.getDepartmentId()
+            ){
+                return new Result(0,"此项目已存在！");
+            }
         }
         projectInfo.setCreateTime(new Date());
         int i = projectInfoMapper.insertSelective(projectInfo);
@@ -76,7 +89,14 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             projectInfo.setDepartmentId(departmentInfo.getDepartmentId());
             projectInfo.setCreateTime(new Date());
         }
-        int i = projectInfoMapper.insertBatch(projectInfos);
+        int i = 0;
+        for (ProjectInfo projectInfo : projectInfos) {
+            Result result = insertBySelective(projectInfo);
+            if (result.code<1){
+                return result;
+            }
+            i++;
+        }
         int size = projectInfos.size();
         return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
     }

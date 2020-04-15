@@ -104,7 +104,7 @@
     <include refid="Base_Column_List" />
     from project_info
     <where>
-      <if test="projectName != null">
+      <if test="projectName != null and projectName != ''">
        AND project_name = #{projectName,jdbcType=VARCHAR}
       </if>
       <if test="departmentId != null">
@@ -127,15 +127,18 @@
       <if test="projectId != null">
         AND project_id = #{projectId,jdbcType=INTEGER}
       </if>
-      <if test="projectName != null">
+      <if test="projectName != null and projectName != ''">
         AND project_name = #{projectName,jdbcType=VARCHAR}
       </if>
       <if test="departmentId != null">
-        AND department_id = #{departmentId,jdbcType=INTEGER}
+        AND p.department_id = #{departmentId,jdbcType=INTEGER}
       </if>
-      <if test="createTime != null">
-        AND create_time = #{createTime,jdbcType=TIMESTAMP}
-      </if>
+    <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+      AND date_format(p.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+    </if>
+    <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+      AND date_format(p.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+    </if>
   </select>
   <select id="selectByIds"  resultMap="BaseResultMap">
     select
@@ -170,7 +173,7 @@
   <insert id="insertSelective" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" useGeneratedKeys="true">
     insert into project_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="projectName != null">
+      <if test="projectName != null and projectName !=''">
         project_name,
       </if>
       <if test="departmentId != null">
@@ -181,7 +184,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="projectName != null">
+      <if test="projectName != null and projectName != ''">
         #{projectName,jdbcType=VARCHAR},
       </if>
       <if test="departmentId != null">
@@ -239,7 +242,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo">
     update project_info
     <set>
-      <if test="projectName != null">
+      <if test="projectName != null and projectName != ''">
         project_name = #{projectName,jdbcType=VARCHAR},
       </if>
       <if test="departmentId != null">

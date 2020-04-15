@@ -9,20 +9,24 @@
 		<div class="container-div">
 			<div class="row">
 				<div class="col-sm-12 search-collapse">
-					<form id="user-form">
-						<input type="hidden" id="deptId" name="deptId">
-		                <input type="hidden" id="parentId" name="parentId">
+					<form id="project-form">
+
 						<div class="select-list">
 							<ul>
 								<li>
-									项目名称：<input type="text" name="loginName"/>
+									项目名称：<input type="text" name="projectName"/>
 								</li>
 								<li>
-									部门名称：<input type="text" name="phonenumber"/>
+									部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
+										<option value="">全部</option>
+										<option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}"></option>
+									</select>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
 									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+									<span>-</span>
+									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
 								</li>
 								<li>
 									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
