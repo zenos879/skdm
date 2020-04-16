@@ -3,12 +3,15 @@ package com.cctv.project.noah.outsource.service;
 import com.cctv.project.noah.outsource.entity.SupplierBid;
 import java.util.List;
 
+
 public interface SupplierBidService {
     int deleteByExample(SupplierBid record);
 
     int deleteByPrimaryKey(Integer autoId);
 
-    int insert(SupplierBid record);
+    Result deleteByIds(String ids);
+
+    Result insert(SupplierBid record);
 
     Result insertSelective(SupplierBid record);
 
@@ -20,7 +23,7 @@ public interface SupplierBidService {
 
     Result updateByPrimaryKeySelective(SupplierBid record);
 
-    int updateByPrimaryKey(SupplierBid record);
+    Result updateByPrimaryKey(SupplierBid record);
 
     Result importSupplierBid(List<SupplierBid> records);
 }

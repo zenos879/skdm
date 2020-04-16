@@ -1,14 +1,10 @@
 package com.cctv.project.noah.outsource.service;
 
 import com.cctv.project.noah.outsource.entity.AgreementInfo;
-import com.cctv.project.noah.outsource.entity.AgreementInfoExample;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public interface AgreementInfoService {
-    int deleteByExample(AgreementInfoExample example);
+    int deleteByExample(AgreementInfo record);
 
     int deleteByPrimaryKey(Integer agreementId);
 
@@ -22,6 +18,8 @@ public interface AgreementInfoService {
 
     AgreementInfo selectByPrimaryKey(Integer agreementId);
 
+    AgreementInfo selectByNum(String num);
+
     List<AgreementInfo> selectByIds(String ids);
 
     Result updateByPrimaryKeySelective(AgreementInfo record);
@@ -29,5 +27,4 @@ public interface AgreementInfoService {
     Result updateByPrimaryKey(AgreementInfo record);
 
     Result importAgreementInfo(List<AgreementInfo> agreementInfos);
-
 }

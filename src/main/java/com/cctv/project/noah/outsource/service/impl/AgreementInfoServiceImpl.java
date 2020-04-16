@@ -25,8 +25,11 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     SupplierInfoService supplierInfoService;
 
     @Override
-    public int deleteByExample(AgreementInfoExample example) {
-        return agreementInfoMapper.deleteByExample(example);
+    public int deleteByExample(AgreementInfo record) {
+        AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
+        AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
+        // todo 扩展方法，根据自定义条件删除
+        return agreementInfoMapper.deleteByExample(agreementInfoExample);
     }
 
     @Override
@@ -94,6 +97,17 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         // 补全
         completionSupplierName(agreementInfo);
         return agreementInfo;
+    }
+
+    @Override
+    public AgreementInfo selectByNum(String num) {
+        AgreementInfo agreementInfo = new AgreementInfo();
+        agreementInfo.setAgreementNo(num);
+        List<AgreementInfo> agreementInfos = selectList(agreementInfo);
+        if (agreementInfos.size() > 0){
+            return agreementInfos.get(0);
+        }
+        return null;
     }
 
     @Override

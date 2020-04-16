@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('添加合同数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-supplierbid-add">
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                <div class="col-sm-7">
+                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
+                <div class="col-sm-7">
+                    <input name="agreementNo" id="agreementNo" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
+                <div class="col-sm-7">
+                    <input name="postName" id="postName" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>竞标价钱：</label>
+                <div class="col-sm-7">
+                    <input name="bidPrice" id="bidPrice" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "/outsource/supplierbid";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-supplierbid-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

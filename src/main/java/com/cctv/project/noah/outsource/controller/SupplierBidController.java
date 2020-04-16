@@ -12,10 +12,8 @@ import com.cctv.project.noah.system.enmus.BusinessType;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,9 +23,9 @@ import java.util.List;
  * @author HuberyYan
  */
 @Controller
-@RequestMapping("/outsource/supplierbid")
+@RequestMapping("/outsource/supplierBid")
 public class SupplierBidController extends BaseController {
-    private String prefix = "outsource/supplierbid";
+    private String prefix = "outsource/supplierBid";
 
     @Autowired
     SupplierBidService supplierBidService;
@@ -35,7 +33,7 @@ public class SupplierBidController extends BaseController {
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/supplierbid";
+        return prefix + "/supplierBid";
     }
 
     @GetMapping("/add")
@@ -43,8 +41,10 @@ public class SupplierBidController extends BaseController {
         return prefix+"/add";
     }
 
-    @GetMapping("/edit")
-    public String edit(){
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model){
+        SupplierBid supplierBid = supplierBidService.selectByPrimaryKey(id);
+        model.addAttribute("SupplierBid", supplierBid);
         return prefix+"/edit";
     }
 
@@ -102,6 +102,14 @@ public class SupplierBidController extends BaseController {
         ExcelUtil<SupplierBid> util = new ExcelUtil<>(SupplierBid.class);
         return util.importTemplateExcel("供应商竞标数据");
     }
+
+    @RequestMapping("/remove")
+    @ResponseBody
+    @Log(title = "项目数据", businessType = BusinessType.DELETE)
+    public AjaxResult remove(String ids){
+        return toAjax(supplierBidService.deleteByIds(ids));
+    }
+
 
 
 }
