@@ -117,7 +117,8 @@
         AND department_id = #{departmentId,jdbcType=INTEGER}
       </if>
       <if test="departmentName != null and departmentName != ''">
-        AND department_name = #{departmentName,jdbcType=VARCHAR}
+        AND department_name like concat('%', #{departmentName}, '%')
+
       </if>
       <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
         AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
