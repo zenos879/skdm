@@ -36,7 +36,12 @@ public class PostInfoServiceImpl implements PostInfoService {
     public List<PostInfo> selectByIds(String ids){
         return postInfoMapper.selectByIds(ids.split(","));
     }
-
+    @Override
+    public PostInfo selectByName(String name){
+        PostInfo postInfo_sel = new PostInfo();
+        postInfo_sel.setPostName(name);
+        return postInfoMapper.selectList(postInfo_sel).get(0);
+    }
     @Override
     public Result updateBySelective(PostInfo postInfo){
         Integer postId = postInfo.getPostId();
