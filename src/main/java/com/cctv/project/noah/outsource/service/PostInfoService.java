@@ -13,6 +13,8 @@ public interface PostInfoService {
 
     List<PostInfo> selectByIds(String ids);
 
+    PostInfo selectByName(String name);
+
     Result updateBySelective(PostInfo postInfo);
 
     Result insertBySelective(PostInfo postInfo);
