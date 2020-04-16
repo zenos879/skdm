@@ -65,7 +65,7 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
         if (departmentInfos.size()!=0){
             for (DepartmentInfo info : departmentInfos) {
                 if (info.getDepartmentName().equals(departmentInfo.getDepartmentName())){
-                    return new Result(0,"此部门已存在！");
+                    return new Result(0,"此部门已存在！",true);
                 }
             }
         }
@@ -85,15 +85,23 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
             departmentInfo.setCreateTime(new Date());
         }
         int i = 0;
+        StringBuffer warning = new StringBuffer();
         for (DepartmentInfo departmentInfo : departmentInfos) {
             Result result = insertBySelective(departmentInfo);
+            if (result.warning){
+                warning.append("第").append(i+2).append("行的").append(departmentInfo.getDepartmentName()).append("未插入，原因是：<")
+                        .append(result.info).append("></br>");
+                continue;
+            }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+">");
+                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
             i++;
         }
+
         int size = departmentInfos.size();
-        return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
+        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
+        return new Result(i,warning.toString());
     }
     @Override
     public DepartmentInfo selectByPrimaryKey(Integer id){

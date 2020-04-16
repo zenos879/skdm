@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('部门数据列表')" />
+	<th:block th:include="include :: header('供应商数据列表')" />
 	<th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
@@ -13,7 +13,22 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									部门名称：<input type="text" name="departmentName"/>
+									供应商名称：<input type="text" name="supplierName"/>
+								</li>
+								<li>
+									联系人：<input type="text" name="contactName"/>
+								</li>
+								<li>
+									联系电话：<input type="text" name="contactTel"/>
+								</li>
+								<li>
+									联系邮箱：<input type="text" name="contactEmail"/>
+								</li>
+								<li>
+									是否是附属公司：<select name="isSubsidiary" th:with="type=${@dict.getType('isSubsidiary')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
@@ -55,8 +70,8 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
 	<script th:inline="javascript">
-		var prefix = ctx + "outsource/departmentInfo";
-
+		var prefix = ctx + "outsource/supplierInfo";
+		var isSubsidiary = [[${@dict.getType('isSubsidiary')}]];
 		$(function() {
 		    queryUserList();
 		});
@@ -72,20 +87,42 @@
 		        importTemplateUrl: prefix + "/importTemplate",
 		        sortName: "createTime",
 		        sortOrder: "desc",
-		        modalName: "部门数据",
+		        modalName: "供应商数据",
 		        columns: [{
 		        	checkbox:true
 				},
 		        {
-		            field: 'departmentId',
-		            title: '部门ID',
+		            field: 'supplierId',
+		            title: '供应商ID',
 					sortable: true
 		        },
 		        {
-		            field: 'departmentName',
-		            title: '部门名称',
+		            field: 'supplierName',
+		            title: '供应商名称',
 		            sortable: true
 		        },
+				{
+					field: 'contactName',
+					title: '联系人',
+					sortable: true
+				},
+				{
+					field: 'contactTel',
+					title: '联系电话',
+					sortable: true
+				},
+				{
+					field: 'contactEmail',
+					title: '联系邮箱',
+					sortable: true
+				},{
+					field: 'isSubsidiary',
+					title: '是否是附属公司',
+					sortable: true,
+					formatter:function(value,row,index){
+						return $.table.selectDictLabel(isSubsidiary, value);
+					}
+				},
 		        {
 		            field: 'createTime',
 		            title: '创建时间',
@@ -96,8 +133,8 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		                var actions = [];
-		                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.departmentId + '\')"><i class="fa fa-edit"></i>修改</a> ');
-		                actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="_delete(\'' + row.departmentId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.supplierId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="_delete(\'' + row.supplierId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                return actions.join('');
 		            }
 		        }]
@@ -105,7 +142,7 @@
 		    $.table.init(options);
 		}
 		function _delete(id) {
-			$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？删除此信息会将与其相关的项目信息删除！", function() {
+			$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？删除此信息会将与其相关的信息删除！", function() {
 				var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
 				if($.table._option.type == table_type.bootstrapTreeTable) {
 					$.operate.get(url);

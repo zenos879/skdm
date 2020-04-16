@@ -1,5 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,40 +11,48 @@ import java.util.Date;
  * supplier_info
  * @author 
  */
-public class SupplierInfo implements Serializable {
+public class SupplierInfo extends BaseEntity implements Serializable {
     /**
      * 供应商id 
      */
+    @Excel(name = "供应商ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Integer supplierId;
 
     /**
      * 供应商名称
      */
+    @Excel(name = "供应商名称")
     private String supplierName;
 
     /**
      * 联系人
      */
+    @Excel(name = "联系人")
     private String contactName;
 
     /**
      * 联系电话
      */
+    @Excel(name = "联系电话")
     private String contactTel;
 
     /**
      * 联系邮箱
      */
+    @Excel(name = "联系邮箱")
     private String contactEmail;
 
     /**
      * 是否是附属公司
      */
-    private Byte isSubsidiary;
+    @Excel(name = "是否是附属公司",cellType = Excel.ColumnType.NUMERIC)
+    private Integer isSubsidiary;
 
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
@@ -85,11 +97,11 @@ public class SupplierInfo implements Serializable {
         this.contactEmail = contactEmail;
     }
 
-    public Byte getIsSubsidiary() {
+    public Integer getIsSubsidiary() {
         return isSubsidiary;
     }
 
-    public void setIsSubsidiary(Byte isSubsidiary) {
+    public void setIsSubsidiary(Integer isSubsidiary) {
         this.isSubsidiary = isSubsidiary;
     }
 
@@ -113,29 +125,29 @@ public class SupplierInfo implements Serializable {
             return false;
         }
         SupplierInfo other = (SupplierInfo) that;
-        return (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getSupplierName() == null ? other.getSupplierName() == null : this.getSupplierName().equals(other.getSupplierName()))
+        return
+//                (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+            (this.getSupplierName() == null ? other.getSupplierName() == null : this.getSupplierName().equals(other.getSupplierName()))
             && (this.getContactName() == null ? other.getContactName() == null : this.getContactName().equals(other.getContactName()))
             && (this.getContactTel() == null ? other.getContactTel() == null : this.getContactTel().equals(other.getContactTel()))
             && (this.getContactEmail() == null ? other.getContactEmail() == null : this.getContactEmail().equals(other.getContactEmail()))
-            && (this.getIsSubsidiary() == null ? other.getIsSubsidiary() == null : this.getIsSubsidiary().equals(other.getIsSubsidiary()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getIsSubsidiary() == null ? other.getIsSubsidiary() == null : this.getIsSubsidiary().equals(other.getIsSubsidiary()));
+//            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
+//        result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
         result = prime * result + ((getSupplierName() == null) ? 0 : getSupplierName().hashCode());
         result = prime * result + ((getContactName() == null) ? 0 : getContactName().hashCode());
         result = prime * result + ((getContactTel() == null) ? 0 : getContactTel().hashCode());
         result = prime * result + ((getContactEmail() == null) ? 0 : getContactEmail().hashCode());
         result = prime * result + ((getIsSubsidiary() == null) ? 0 : getIsSubsidiary().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+//        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
     }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

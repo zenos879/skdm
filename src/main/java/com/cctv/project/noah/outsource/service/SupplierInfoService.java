@@ -8,26 +8,25 @@ import java.util.List;
 
 @Service
 public interface SupplierInfoService {
-    int deleteByExample(SupplierInfoExample example);
-
-    int deleteByPrimaryKey(Integer agreementId);
 
     int insert(SupplierInfo record);
 
-    Result insertSelective(SupplierInfo record);
-
-    List<SupplierInfo> selectList(SupplierInfo supplierInfo);
-
     SupplierInfo selectByPrimaryKey(Integer supplierId);
+
+    List<SupplierInfo> selectAll();
+
+    List<SupplierInfo> selectBySelective(SupplierInfo supplierInfo);
 
     List<SupplierInfo> selectByIds(String ids);
 
     SupplierInfo selectByName(String name);
 
-    Result updateByPrimaryKeySelective(SupplierInfo record);
 
-    int updateByPrimaryKey(SupplierInfo record);
+    Result updateBySelective(SupplierInfo supplierInfo);
 
-    Result importSupplierInfo(List<SupplierInfo> supplierInfos);
+    Result insertBySelective(SupplierInfo supplierInfo);
 
+    Result importPostInfo(List<SupplierInfo> supplierInfos);
+
+    Result deleteByIds(String ids);
 }

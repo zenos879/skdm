@@ -74,7 +74,7 @@ public class PostInfoServiceImpl implements PostInfoService {
                 if (info.getPostName().equals(postInfo.getPostName()) &&
                         info.getCategoryId() == postInfo.getCategoryId()
                 ){
-                    return new Result(0,"此岗位已存在！");
+                    return new Result(0,"此岗位已存在！",true);
                 }
             }
         }
@@ -102,15 +102,22 @@ public class PostInfoServiceImpl implements PostInfoService {
             postInfo.setCreateTime(new Date());
         }
         int i = 0;
+        StringBuffer warning = new StringBuffer();
         for (PostInfo postInfo : postInfos) {
             Result result = insertBySelective(postInfo);
+            if (result.warning){
+                warning.append("第").append(i+2).append("行的").append(postInfo.getPostName()).append("未插入，原因是：<")
+                        .append(result.info).append("></br>");
+                continue;
+            }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+">");
+                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
             i++;
         }
         int size = postInfos.size();
-        return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
+        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
+        return new Result(i,warning.toString());
     }
     @Override
     public PostInfo selectByPrimaryKey(Integer projectId){

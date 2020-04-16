@@ -64,7 +64,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             if (info.getProjectName() .equals(projectInfo.getProjectName()) &&
                     info.getDepartmentId() == projectInfo.getDepartmentId()
             ){
-                return new Result(0,"此项目已存在！");
+                return new Result(0,"此项目已存在！",true);
             }
         }
         projectInfo.setCreateTime(new Date());
@@ -90,15 +90,24 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             projectInfo.setCreateTime(new Date());
         }
         int i = 0;
+        StringBuffer warning = new StringBuffer();
         for (ProjectInfo projectInfo : projectInfos) {
             Result result = insertBySelective(projectInfo);
-            if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+">");
+            if (result.warning){
+                warning.append("第").append(i+2).append("行的").append(projectInfo.getProjectName()).append("未插入，原因是：<")
+                        .append(result.info).append("></br>");
+                continue;
             }
+            if (result.code<1){
+                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
+            }
+
             i++;
         }
+
         int size = projectInfos.size();
-        return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
+        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行</br>");
+        return new Result(i,warning.toString());
     }
     @Override
     public ProjectInfo selectByPrimaryKey(Integer projectId){
