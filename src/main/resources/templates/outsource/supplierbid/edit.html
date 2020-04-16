@@ -5,7 +5,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-agreementinfo-edit" th:object="${agreementinfo}">
+    <form class="form-horizontal m" id="form-supplierbid-edit" th:object="${supplierbid}">
         <input type="hidden" name="id" id="livebackChannelId" th:field="*{id}">
         <div class="col-sm-11">
             <div class="form-group">
@@ -47,7 +47,7 @@
 </div>
 <th:block th:include="include :: footer" />
 <script type="text/javascript">
-    var prefix = ctx + "/outsource/agreementInfo";
+    var prefix = ctx + "/outsource/supplierbid";
 
     // $("#form-liveback-edit").validate({
     //     onkeyup: false,
@@ -76,7 +76,7 @@
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-agreementinfo-edit').serialize());
+            $.operate.save(prefix + "/edit", $('#form-supplierbid-edit').serialize());
         }
     }
 </script>

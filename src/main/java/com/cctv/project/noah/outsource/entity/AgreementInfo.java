@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * agreement_info
+ * agreementInfo
  * @author 
  */
 public class AgreementInfo implements Serializable {

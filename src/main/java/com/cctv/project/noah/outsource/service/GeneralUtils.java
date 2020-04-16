@@ -16,8 +16,8 @@ public class GeneralUtils {
         List<Integer> idList = new ArrayList<>();
         for (int i = 0; i < split.length; i++) {
             String idStr = split[i];
-            Integer id = Integer.getInteger(idStr);
-            idList.add(id);
+            Integer integer = Integer.valueOf(idStr);
+            idList.add(integer);
         }
         return idList;
     }

@@ -12,10 +12,8 @@ import com.cctv.project.noah.system.enmus.BusinessType;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,9 +23,9 @@ import java.util.List;
  * @author HuberyYan
  */
 @Controller
-@RequestMapping("/outsource/agreementinfo")
+@RequestMapping("/outsource/agreementInfo")
 public class AgreementInfoController extends BaseController {
-    private String prefix = "outsource/agreement_info";
+    private String prefix = "outsource/agreementInfo";
 
     @Autowired
     AgreementInfoService agreementInfoService;
@@ -35,7 +33,7 @@ public class AgreementInfoController extends BaseController {
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/agreementinfo";
+        return prefix + "/agreementInfo";
     }
 
     @GetMapping("/add")
@@ -43,8 +41,10 @@ public class AgreementInfoController extends BaseController {
         return prefix+"/add";
     }
 
-    @GetMapping("/edit")
-    public String edit(){
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model){
+        AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(id);
+        model.addAttribute("agreementInfo", agreementInfo);
         return prefix+"/edit";
     }
 
@@ -57,7 +57,7 @@ public class AgreementInfoController extends BaseController {
 
     @PostMapping("/edit")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.UPDATE)
+    @Log(title = "合同数据", businessType = BusinessType.UPDATE)
     public AjaxResult edit(AgreementInfo projectInfo){
         Result result = agreementInfoService.updateByPrimaryKeySelective(projectInfo);
         return toAjax(result);
@@ -65,7 +65,7 @@ public class AgreementInfoController extends BaseController {
 
     @PostMapping("/add")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.INSERT)
+    @Log(title = "合同数据", businessType = BusinessType.INSERT)
     public AjaxResult add(AgreementInfo projectInfo){
         Result result = agreementInfoService.insertSelective(projectInfo);
         return toAjax(result);
@@ -73,7 +73,7 @@ public class AgreementInfoController extends BaseController {
 
     @PostMapping("/export")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.EXPORT)
+    @Log(title = "合同数据", businessType = BusinessType.EXPORT)
     public AjaxResult export(AgreementInfo projectInfo,String ids){
         ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         List<AgreementInfo> list;
@@ -82,13 +82,13 @@ public class AgreementInfoController extends BaseController {
         }else {
             list = agreementInfoService.selectList(projectInfo);
         }
-        return util.exportExcel(list, "项目数据");
+        return util.exportExcel(list, "合同数据");
     }
 
 
     @ResponseBody
     @PostMapping("/importData")
-    @Log(title = "项目数据", businessType = BusinessType.IMPORT)
+    @Log(title = "合同数据", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         List<AgreementInfo> agreementInfos = util.importExcel(file.getInputStream());
@@ -102,6 +102,14 @@ public class AgreementInfoController extends BaseController {
         ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         return util.importTemplateExcel("合同数据");
     }
+
+    @RequestMapping("/remove")
+    @ResponseBody
+    @Log(title = "项目数据", businessType = BusinessType.DELETE)
+    public AjaxResult remove(String ids){
+        return toAjax(agreementInfoService.deleteByIds(ids));
+    }
+
 
 
 }

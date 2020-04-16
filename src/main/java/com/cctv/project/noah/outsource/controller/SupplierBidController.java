@@ -25,9 +25,9 @@ import java.util.List;
  * @author HuberyYan
  */
 @Controller
-@RequestMapping("/outsource/agreementinfo")
+@RequestMapping("/outsource/supplierbid")
 public class SupplierBidController extends BaseController {
-    private String prefix = "outsource/agreement_info";
+    private String prefix = "outsource/supplierbid";
 
     @Autowired
     SupplierBidService supplierBidService;
@@ -35,7 +35,7 @@ public class SupplierBidController extends BaseController {
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/agreementinfo";
+        return prefix + "/supplierbid";
     }
 
     @GetMapping("/add")
@@ -57,42 +57,42 @@ public class SupplierBidController extends BaseController {
 
     @PostMapping("/edit")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(SupplierBid projectInfo){
-        Result result = supplierBidService.updateByPrimaryKeySelective(projectInfo);
+    @Log(title = "供应商竞标数据", businessType = BusinessType.UPDATE)
+    public AjaxResult edit(SupplierBid supplierBid){
+        Result result = supplierBidService.updateByPrimaryKeySelective(supplierBid);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(SupplierBid projectInfo){
-        Result result = supplierBidService.insertSelective(projectInfo);
+    @Log(title = "供应商竞标数据", businessType = BusinessType.INSERT)
+    public AjaxResult add(SupplierBid supplierBid){
+        Result result = supplierBidService.insertSelective(supplierBid);
         return toAjax(result);
     }
 
     @PostMapping("/export")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(SupplierBid projectInfo,String ids){
+    @Log(title = "供应商竞标数据", businessType = BusinessType.EXPORT)
+    public AjaxResult export(SupplierBid supplierBid,String ids){
         ExcelUtil<SupplierBid> util = new ExcelUtil<>(SupplierBid.class);
         List<SupplierBid> list;
         if (ids != null){
             list = supplierBidService.selectByIds(ids);
         }else {
-            list = supplierBidService.selectList(projectInfo);
+            list = supplierBidService.selectList(supplierBid);
         }
-        return util.exportExcel(list, "项目数据");
+        return util.exportExcel(list, "供应商竞标数据");
     }
 
 
     @ResponseBody
     @PostMapping("/importData")
-    @Log(title = "项目数据", businessType = BusinessType.IMPORT)
+    @Log(title = "供应商竞标数据", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<SupplierBid> util = new ExcelUtil<>(SupplierBid.class);
-        List<SupplierBid> agreementInfos = util.importExcel(file.getInputStream());
-        Result result = supplierBidService.importSupplierBid(agreementInfos);
+        List<SupplierBid> supplierBids = util.importExcel(file.getInputStream());
+        Result result = supplierBidService.importSupplierBid(supplierBids);
         return toAjax(result);
     }
 
@@ -100,7 +100,7 @@ public class SupplierBidController extends BaseController {
     @GetMapping("/importTemplate")
     public AjaxResult importTemplate() {
         ExcelUtil<SupplierBid> util = new ExcelUtil<>(SupplierBid.class);
-        return util.importTemplateExcel("合同数据");
+        return util.importTemplateExcel("供应商竞标数据");
     }
 
 

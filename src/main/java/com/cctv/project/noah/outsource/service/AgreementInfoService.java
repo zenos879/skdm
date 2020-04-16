@@ -12,6 +12,8 @@ public interface AgreementInfoService {
 
     int deleteByPrimaryKey(Integer agreementId);
 
+    Result deleteByIds(String ids);
+
     Result insert(AgreementInfo record);
 
     Result insertSelective(AgreementInfo record);
