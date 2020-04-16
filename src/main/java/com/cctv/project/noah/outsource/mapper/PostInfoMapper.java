@@ -12,6 +12,8 @@ public interface PostInfoMapper {
 
     int deleteByPrimaryKey(Integer postId);
 
+    int deleteByCategroyId(Integer categroyId);
+
     int insert(PostInfo record);
 
     int insertSelective(PostInfo record);
@@ -23,6 +25,8 @@ public interface PostInfoMapper {
     List<PostInfo> selectList(PostInfo postInfo);
 
     List<PostInfo> selectByIds(String[] ids);
+
+    List<PostInfo> selectByCategroyId(Integer categroyId);
 
     PostInfo selectByPrimaryKey(Integer postId);
 

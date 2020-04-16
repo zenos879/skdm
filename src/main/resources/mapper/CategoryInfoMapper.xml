@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.CategoryInfo">
     <id column="category_id" jdbcType="INTEGER" property="categoryId" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
-    <result column="creare_time" jdbcType="TIMESTAMP" property="creareTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    category_id, category_name, creare_time
+    category_id, category_name, create_time
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfoExample" resultMap="BaseResultMap">
     select
@@ -110,15 +110,27 @@
     from category_info
     <where>
       <if test="categoryId != null">
-        category_id = #{categoryId,jdbcType=INTEGER},
+        AND category_id = #{categoryId,jdbcType=INTEGER}
       </if>
-      <if test="categoryName != null">
-        category_name = #{categoryName,jdbcType=VARCHAR},
+      <if test="categoryName != null and categoryName != ''">
+        AND category_name like concat('%', #{categoryName}, '%')
       </if>
-      <if test="creareTime != null">
-        creare_time = #{creareTime,jdbcType=TIMESTAMP},
+      <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+        AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+      </if>
+      <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+        AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
       </if>
     </where>
+  </select>
+  <select id="selectByIds" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category_info
+    where category_id in
+    <foreach collection="array" item="id"  open="(" separator="," close=")">
+      #{id}
+    </foreach>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from category_info
@@ -131,25 +143,25 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="category_id" keyProperty="categoryId" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo" useGeneratedKeys="true">
-    insert into category_info (category_name, creare_time)
-    values (#{categoryName,jdbcType=VARCHAR}, #{creareTime,jdbcType=TIMESTAMP})
+    insert into category_info (category_name, create_time)
+    values (#{categoryName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="category_id" keyProperty="categoryId" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo" useGeneratedKeys="true">
     insert into category_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="categoryName != null">
+      <if test="categoryName != null and categoryName != ''">
         category_name,
       </if>
-      <if test="creareTime != null">
-        creare_time,
+      <if test="createTime != null">
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="categoryName != null">
+      <if test="categoryName != null and categoryName != ''">
         #{categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="creareTime != null">
-        #{creareTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -168,8 +180,8 @@
       <if test="record.categoryName != null">
         category_name = #{record.categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="record.creareTime != null">
-        creare_time = #{record.creareTime,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -180,7 +192,7 @@
     update category_info
     set category_id = #{record.categoryId,jdbcType=INTEGER},
       category_name = #{record.categoryName,jdbcType=VARCHAR},
-      creare_time = #{record.creareTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -188,11 +200,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo">
     update category_info
     <set>
-      <if test="categoryName != null">
+      <if test="categoryName != null and categoryName != ''">
         category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="creareTime != null">
-        creare_time = #{creareTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where category_id = #{categoryId,jdbcType=INTEGER}
@@ -200,7 +212,7 @@
   <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.CategoryInfo">
     update category_info
     set category_name = #{categoryName,jdbcType=VARCHAR},
-      creare_time = #{creareTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
 </mapper>

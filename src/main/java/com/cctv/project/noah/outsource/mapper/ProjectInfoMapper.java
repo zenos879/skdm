@@ -14,6 +14,8 @@ public interface ProjectInfoMapper {
 
     int deleteByPrimaryKey(Integer projectId);
 
+    int deleteByDepartmentId(Integer departmentId);
+
     int insert(ProjectInfo record);
 
     int insertSelective(ProjectInfo record);

@@ -100,7 +100,7 @@ public class PostInfoServiceImpl implements PostInfoService {
         for (PostInfo postInfo : postInfos) {
             Result result = insertBySelective(postInfo);
             if (result.code<1){
-                return result;
+                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+">");
             }
             i++;
         }

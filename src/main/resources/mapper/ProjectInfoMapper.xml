@@ -128,7 +128,8 @@
         AND project_id = #{projectId,jdbcType=INTEGER}
       </if>
       <if test="projectName != null and projectName != ''">
-        AND project_name = #{projectName,jdbcType=VARCHAR}
+        AND project_name like concat('%', #{projectName}, '%')
+
       </if>
       <if test="departmentId != null">
         AND p.department_id = #{departmentId,jdbcType=INTEGER}
@@ -157,6 +158,10 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from project_info
     where project_id = #{projectId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByDepartmentId" parameterType="java.lang.Integer">
+    delete from project_info
+    where department_id = #{departmentId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfoExample">
     delete from project_info
