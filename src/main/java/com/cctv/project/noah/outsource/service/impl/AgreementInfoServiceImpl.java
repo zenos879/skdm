@@ -2,7 +2,6 @@ package com.cctv.project.noah.outsource.service.impl;
 
 import com.cctv.project.noah.outsource.entity.AgreementInfo;
 import com.cctv.project.noah.outsource.entity.AgreementInfoExample;
-import com.cctv.project.noah.outsource.entity.DepartmentInfo;
 import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.mapper.AgreementInfoMapper;
 import com.cctv.project.noah.outsource.service.AgreementInfoService;
@@ -13,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +32,16 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     @Override
     public int deleteByPrimaryKey(Integer agreementId) {
         return agreementInfoMapper.deleteByPrimaryKey(agreementId);
+    }
+
+    @Override
+    public Result deleteByIds(String ids) {
+        AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
+        AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
+        List<Integer> idList = GeneralUtils.strArrToList(ids);
+        criteria.andAgreementIdIn(idList);
+        int i = agreementInfoMapper.deleteByExample(agreementInfoExample);
+        return new Result(i);
     }
 
     @Override
@@ -82,7 +90,10 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     @Override
     public AgreementInfo selectByPrimaryKey(Integer agreementId) {
-        return agreementInfoMapper.selectByPrimaryKey(agreementId);
+        AgreementInfo agreementInfo = agreementInfoMapper.selectByPrimaryKey(agreementId);
+        // 补全
+        completionSupplierName(agreementInfo);
+        return agreementInfo;
     }
 
     @Override
@@ -91,7 +102,25 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
         List<Integer> idList = GeneralUtils.strArrToList(ids);
         criteria.andAgreementIdIn(idList);
-        return agreementInfoMapper.selectByExample(agreementInfoExample);
+        List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
+        // 补全
+        for (int i = 0; i < agreementInfos.size(); i++) {
+            AgreementInfo agreementInfo = agreementInfos.get(i);
+            completionSupplierName(agreementInfo);
+        }
+        return agreementInfos;
+    }
+
+    /**
+     * 数据库查询结果，补全供应商名称
+     * @param agreementInfo
+     * @return
+     */
+    private AgreementInfo completionSupplierName(AgreementInfo agreementInfo){
+        Integer supplierId = agreementInfo.getSupplierId();
+        SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
+        agreementInfo.setSupplierName(supplierInfo.getSupplierName());
+        return agreementInfo;
     }
 
     /**

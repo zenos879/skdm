@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * supplier_bid
+ * supplierbid
  * @author 
  */
 public class SupplierBid implements Serializable {
