@@ -84,9 +84,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         }
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         for (AgreementInfo info : agreementInfos) {
-            Integer supplierId = info.getSupplierId();
-            SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-            info.setSupplierName(supplierInfo.getSupplierName());
+            completionSupplierName(info);
         }
         return agreementInfos;
     }
@@ -144,8 +142,21 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
      */
     @Override
     public Result updateByPrimaryKeySelective(AgreementInfo record) {
+        Result result = new Result();
+        Integer agreementId = record.getAgreementId();
+        if (agreementId == 0){
+            result.setCode(0);
+            result.setInfo("主键不存在，不能更新！");
+            return result;
+        }
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        // 不存在，提示先新增供应商
+        if (supplierInfo == null){
+            result.setCode(0);
+            result.setInfo("供应商不存在，请先完善供应商信息！");
+            return result;
+        }
         record.setSupplierId(supplierInfo.getSupplierId());
         int i = agreementInfoMapper.updateByPrimaryKeySelective(record);
         return new Result(i);
@@ -158,18 +169,18 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
      */
     @Override
     public Result updateByPrimaryKey(AgreementInfo record) {
-        String supplierName = record.getSupplierName();
-        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
-        // 不存在，提示先新增供应商
-        if (supplierInfo == null){
-            Result result = new Result();
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先完善供应商信息！");
-            return result;
-        }
-        record.setSupplierId(supplierInfo.getSupplierId());
-        int i = agreementInfoMapper.updateByPrimaryKey(record);
-        return new Result(i);
+//        String supplierName = record.getSupplierName();
+//        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+//        // 不存在，提示先新增供应商
+//        if (supplierInfo == null){
+//            Result result = new Result();
+//            result.setCode(0);
+//            result.setInfo("供应商不存在，请先完善供应商信息！");
+//            return result;
+//        }
+//        record.setSupplierId(supplierInfo.getSupplierId());
+//        int i = agreementInfoMapper.updateByPrimaryKey(record);
+        return new Result();
     }
 
     /**
@@ -201,7 +212,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             }
             SupplierInfo supplierInfo = supplierInfoService.selectByName(agreementInfo.getSupplierName());
             if (supplierInfo == null) {
-                return new Result(0,"第"+(i+2)+"行的供应商【" + supplierInfo.getSupplierName() + "】不存在!");
+                return new Result(0,"第"+(i+2)+"行的供应商【" + agreementInfo.getSupplierName() + "】不存在!");
             }
             if (agreementInfo.getAgreementStart() == null) {
                 return new Result(0,"第"+(i+2)+"行的合同开始日期不存在!");

@@ -33,7 +33,7 @@ public class SupplierBidController extends BaseController {
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/supplierBid";
+        return prefix + "/supplierbid";
     }
 
     @GetMapping("/add")
