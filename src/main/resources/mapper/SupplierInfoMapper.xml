@@ -116,30 +116,33 @@
     select
     <include refid="Base_Column_List" />
     from supplier_info
-    <if test="supplierId != null">
-      and supplier_id = #{supplierId,jdbcType=INTEGER}
-    </if>
-    <if test="supplierName != null and supplierName != ''">
-      and supplier_name like concat('%', #{supplierName}, '%')
-    </if>
-    <if test="contactName != null and contactName != ''">
-      and contact_name like concat('%', #{contactName}, '%')
-    </if>
-    <if test="contactTel != null and contactTel != ''">
-      and contact_tel like concat('%', #{contactTel}, '%')
-    </if>
-    <if test="contactEmail != null and contactEmail != ''">
-      and contact_email like concat('%', #{contactEmail}, '%')
-    </if>
-    <if test="isSubsidiary != null and isSubsidiary != ''">
-      and is_subsidiary = #{isSubsidiary,jdbcType=TINYINT}
-    </if>
-    <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-      AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-    </if>
-    <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-      AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-    </if>
+    <where>
+      <if test="supplierId != null">
+        and supplier_id = #{supplierId,jdbcType=INTEGER}
+      </if>
+      <if test="supplierName != null and supplierName != ''">
+        and supplier_name like concat('%', #{supplierName}, '%')
+      </if>
+      <if test="contactName != null and contactName != ''">
+        and contact_name like concat('%', #{contactName}, '%')
+      </if>
+      <if test="contactTel != null and contactTel != ''">
+        and contact_tel like concat('%', #{contactTel}, '%')
+      </if>
+      <if test="contactEmail != null and contactEmail != ''">
+        and contact_email like concat('%', #{contactEmail}, '%')
+      </if>
+      <if test="isSubsidiary != null and isSubsidiary != ''">
+        and is_subsidiary = #{isSubsidiary,jdbcType=TINYINT}
+      </if>
+      <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+        AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+      </if>
+      <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+        AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+      </if>
+    </where>
+
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from supplier_info

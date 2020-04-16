@@ -61,7 +61,7 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
         if (categoryInfos.size()!=0){
             for (CategoryInfo info : categoryInfos) {
                 if (info.getCategoryName().equals(categoryInfo.getCategoryName())){
-                    return new Result(0,"此岗位分类已存在！");
+                    return new Result(0,"此岗位分类已存在！",true);
                 }
             }
         }
@@ -81,15 +81,22 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
             categoryInfo.setCreateTime(new Date());
         }
         int i = 0;
+        StringBuffer warning = new StringBuffer();
         for (CategoryInfo categoryInfo : categoryInfos) {
             Result result = insertBySelective(categoryInfo);
+            if (result.warning){
+                warning.append("第").append(i+2).append("行的").append(categoryInfo.getCategoryName()).append("未插入，原因是：<")
+                        .append(result.info).append("></br>");
+                continue;
+            }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+">");
+                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
             i++;
         }
         int size = categoryInfos.size();
-        return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
+        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
+        return new Result(i,warning.toString());
     }
     @Override
     public CategoryInfo selectByPrimaryKey(Integer id){

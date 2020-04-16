@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Date;
  * supplier_info
  * @author 
  */
-public class SupplierInfo implements Serializable {
+public class SupplierInfo extends BaseEntity implements Serializable {
     /**
      * 供应商id 
      */
@@ -44,8 +45,8 @@ public class SupplierInfo implements Serializable {
     /**
      * 是否是附属公司
      */
-    @Excel(name = "是否是附属公司")
-    private Byte isSubsidiary;
+    @Excel(name = "是否是附属公司",cellType = Excel.ColumnType.NUMERIC)
+    private Integer isSubsidiary;
 
     /**
      * 创建时间
@@ -96,11 +97,11 @@ public class SupplierInfo implements Serializable {
         this.contactEmail = contactEmail;
     }
 
-    public Byte getIsSubsidiary() {
+    public Integer getIsSubsidiary() {
         return isSubsidiary;
     }
 
-    public void setIsSubsidiary(Byte isSubsidiary) {
+    public void setIsSubsidiary(Integer isSubsidiary) {
         this.isSubsidiary = isSubsidiary;
     }
 

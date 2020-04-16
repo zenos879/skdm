@@ -1,9 +1,11 @@
 package com.cctv.project.noah.outsource.service;
 
 public class Result {
-
+    //1：成功  0：失败  2：警告
     public Integer code;
     public String info;
+    // true 警告  false 不警告
+    public Boolean warning = false;
 
     public Result() {
     }
@@ -13,6 +15,12 @@ public class Result {
         this.info = info;
     }
 
+    public Result(Integer code, String info, Boolean warning) {
+        this.code = code;
+        this.info = info;
+        this.warning = warning;
+    }
+
     public Result(Integer code) {
         this.code = code;
         if (code == 0){
@@ -20,6 +28,14 @@ public class Result {
         }else {
             this.info = "操作成功！";
         }
+    }
+
+    public Boolean getWarning() {
+        return warning;
+    }
+
+    public void setWarning(Boolean warning) {
+        this.warning = warning;
     }
 
     public Integer getCode() {

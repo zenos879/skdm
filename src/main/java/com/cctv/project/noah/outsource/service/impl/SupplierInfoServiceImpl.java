@@ -85,7 +85,7 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
         if (supplierInfos.size()!=0){
             for (SupplierInfo info : supplierInfos) {
                 if (info.getSupplierName().equals(supplierInfo.getSupplierName())){
-                    return new Result(0,"此供应商已存在！");
+                    return new Result(0,"此供应商已存在！",true);
                 }
             }
         }
@@ -108,15 +108,22 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
             supplierInfo.setCreateTime(new Date());
         }
         int i = 0;
+        StringBuffer warning = new StringBuffer();
         for (SupplierInfo supplierInfo : supplierInfos) {
             Result result = insertBySelective(supplierInfo);
+            if (result.warning){
+                warning.append("第").append(i+2).append("行的").append(supplierInfo.getSupplierName()).append("未插入，原因是：<")
+                        .append(result.info).append("></br>");
+                continue;
+            }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+">");
+                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
             i++;
         }
         int size = supplierInfos.size();
-        return new Result(i,"插入成功了"+i+"行，失败了"+(size-i)+"行");
+        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
+        return new Result(i,warning.toString());
     }
     @Override
     public Result deleteByIds(String ids) {
