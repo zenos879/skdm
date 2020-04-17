@@ -39,6 +39,9 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectId == null) {
             return new Result(0,"id为null,无法修改！");
         }
+        if (StringUtils.isEmpty(projectInfo.getProjectName())) {
+            return new Result(0,"项目名称不能为null！");
+        }
         ProjectInfo projectInfoDb = projectInfoMapper.selectByPrimaryKey(projectId);
         if (projectInfoDb == null){
             return new Result(0,"无法修改不存在的项目！");
@@ -53,10 +56,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
     @Override
     public Result insertBySelective(ProjectInfo projectInfo){
-        if (projectInfo.getDepartmentId() == null) {
-            return new Result(0,"部门不能为null！");
-        }
-        if (projectInfo.getProjectName() == null) {
+        if (StringUtils.isEmpty(projectInfo.getProjectName())) {
             return new Result(0,"项目名称不能为null！");
         }
         List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);

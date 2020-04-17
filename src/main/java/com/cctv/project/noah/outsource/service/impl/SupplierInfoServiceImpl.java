@@ -7,6 +7,7 @@ import com.cctv.project.noah.outsource.mapper.SupplierInfoMapper;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.SupplierInfoService;
 import com.cctv.project.noah.system.core.domain.text.Convert;
+import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,12 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
         if (supplierId == null) {
             return new Result(0,"id为空,无法修改！");
         }
+        if (StringUtils.isEmpty(supplierInfo.getSupplierName())) {
+            return new Result(0,"供应商名称不能为空！");
+        }
+        if (supplierInfo.getIsSubsidiary() == null) {
+            return new Result(0,"是否附属公司不能为null！");
+        }
         SupplierInfo supplierInfoDb = supplierInfoMapper.selectByPrimaryKey(supplierId);
         if (supplierInfoDb == null){
             return new Result(0,"无法修改不存在的供应商！");
@@ -75,7 +82,7 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
     }
     @Override
     public Result insertBySelective(SupplierInfo supplierInfo){
-        if (supplierInfo.getSupplierName() == null) {
+        if (StringUtils.isEmpty(supplierInfo.getSupplierName())) {
             return new Result(0,"供应商名称不能为空！");
         }
         if (supplierInfo.getIsSubsidiary() == null) {

@@ -6,6 +6,7 @@
     <result column="project_name" jdbcType="VARCHAR" property="projectName" />
     <result column="department_id" jdbcType="INTEGER" property="departmentId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    project_id, project_name, department_id, create_time
+    project_id, project_name, department_id, create_time,status
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfoExample" resultMap="BaseResultMap">
     select
@@ -97,7 +98,7 @@
     select 
     <include refid="Base_Column_List" />
     from project_info
-    where project_id = #{projectId,jdbcType=INTEGER}
+    where project_id = #{projectId,jdbcType=INTEGER} and status = 1
   </select>
   <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" resultMap="BaseResultMap">
     select
@@ -114,6 +115,7 @@
         AND create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
     </where>
+    and status = 1
   </select>
   <select id="selectList" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" resultMap="BaseResultMap">
     select
@@ -122,8 +124,9 @@
     p.department_id department_id,
     p.create_time create_time,
     d.department_name departmentName
+    d.status departmentStatus
     from project_info p INNER JOIN department_info d
-    where d.department_id = p.department_id
+    where d.department_id = p.department_id and p.status = 1
       <if test="projectId != null">
         AND project_id = #{projectId,jdbcType=INTEGER}
       </if>
@@ -148,19 +151,26 @@
     p.department_id department_id,
     p.create_time create_time,
     d.department_name departmentName
+    d.status departmentStatus
     from project_info p INNER JOIN department_info d
-    where d.department_id = p.department_id and p.project_id in
+    where d.department_id = p.department_id and p.status = 1 and p.project_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
     </foreach>
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from project_info
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+--     delete from project_info
+--     where project_id = #{projectId,jdbcType=INTEGER}
+    update project_info
+    set status = 0
     where project_id = #{projectId,jdbcType=INTEGER}
-  </delete>
+  </update>
   <delete id="deleteByDepartmentId" parameterType="java.lang.Integer">
-    delete from project_info
+--     delete from project_info
+--     where department_id = #{departmentId,jdbcType=INTEGER}
+    update project_info
+    set status = 0
     where department_id = #{departmentId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfoExample">

@@ -13,6 +13,7 @@ import com.cctv.project.noah.outsource.service.PostInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.text.Convert;
+import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Autowired
     CategoryInfoMapper categoryInfoMapper;
 
+    public List<PostInfo> selectAll(){
+        return postInfoMapper.selectList(new PostInfo());
+    }
     @Override
     public List<PostInfo> selectList(PostInfo postInfo){
         return postInfoMapper.selectList(postInfo);
@@ -48,8 +52,14 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (postId == null) {
             return new Result(0,"id为空,无法修改！");
         }
+        if (StringUtils.isEmpty(postInfo.getPostName())) {
+            return new Result(0,"岗位名称不能为空！");
+        }
+        if (postInfo.getCategoryId() == null) {
+            return new Result(0,"岗位分类不能为空！");
+        }
         PostInfo postInfoDb = postInfoMapper.selectByPrimaryKey(postId);
-        if (postInfoDb == null){
+        if (postInfoDb == null || postInfoDb.getStatus() == 0){
             return new Result(0,"无法修改不存在的岗位！");
         }
         if (postInfoDb.getPostName().equals(postInfo.getPostName()) &&
@@ -62,7 +72,7 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
     @Override
     public Result insertBySelective(PostInfo postInfo){
-        if (postInfo.getPostName() == null) {
+        if (StringUtils.isEmpty(postInfo.getPostName())) {
             return new Result(0,"岗位名称不能为空！");
         }
         if (postInfo.getCategoryId() == null) {

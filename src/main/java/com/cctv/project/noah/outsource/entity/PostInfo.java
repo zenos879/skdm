@@ -35,6 +35,9 @@ public class PostInfo extends BaseEntity implements Serializable {
     @Excel(name = "岗位分类")
     private String categoryName;
 
+
+    private Integer categoryStatus;
+
     /**
      * 创建时间
      */
@@ -42,7 +45,26 @@ public class PostInfo extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    private Integer status;
+
     private static final long serialVersionUID = 1L;
+
+
+    public Integer getCategoryStatus() {
+        return categoryStatus;
+    }
+
+    public void setCategoryStatus(Integer categoryStatus) {
+        this.categoryStatus = categoryStatus;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getCategoryName() {
         return categoryName;

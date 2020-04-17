@@ -10,6 +10,7 @@ import com.cctv.project.noah.outsource.service.DepartmentInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.text.Convert;
+import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,9 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
         if (departmentId == null) {
             return new Result(0,"id为空,无法修改！");
         }
+        if (StringUtils.isEmpty(departmentInfo.getDepartmentName())) {
+            return new Result(0,"部门名称不能为空！");
+        }
         DepartmentInfo departmentInfoDb = departmentInfoMapper.selectByPrimaryKey(departmentId);
         if (departmentInfoDb == null){
             return new Result(0,"无法修改不存在的部门！");
@@ -58,7 +62,7 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
     }
     @Override
     public Result insertBySelective(DepartmentInfo departmentInfo){
-        if (departmentInfo.getDepartmentName() == null) {
+        if (StringUtils.isEmpty(departmentInfo.getDepartmentName())) {
             return new Result(0,"部门名称不能为空！");
         }
         List<DepartmentInfo> departmentInfos = departmentInfoMapper.selectBySelective(departmentInfo);
