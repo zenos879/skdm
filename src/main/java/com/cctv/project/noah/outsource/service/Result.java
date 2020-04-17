@@ -30,6 +30,11 @@ public class Result {
         }
     }
 
+    public Result(Integer code, Boolean warning) {
+        this(code);
+        this.warning = warning;
+    }
+
     public Boolean getWarning() {
         return warning;
     }

@@ -26,7 +26,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     DepartmentInfoMapper departmentInfoMapper;
     @Override
     public List<ProjectInfo> selectList(ProjectInfo projectInfo){
-        return projectInfoMapper.selectList(projectInfo);
+        List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
+        return projectInfos;
     }
     @Override
     public List<ProjectInfo> selectByIds(String ids){
@@ -39,25 +40,21 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectId == null) {
             return new Result(0,"id为null,无法修改！");
         }
-        if (StringUtils.isEmpty(projectInfo.getProjectName())) {
-            return new Result(0,"项目名称不能为null！");
+        if (projectInfo.hasNull()) {
+            return new Result(0,"*标注的为必填项，不能为null!");
         }
         ProjectInfo projectInfoDb = projectInfoMapper.selectByPrimaryKey(projectId);
         if (projectInfoDb == null){
             return new Result(0,"无法修改不存在的项目！");
         }
-        if (projectInfoDb.getProjectName() .equals(projectInfo.getProjectName()) &&
-            projectInfoDb.getDepartmentId() == projectInfo.getDepartmentId()
-        ){
-            return new Result(0,"修改必须与之前不同！");
-        }
         int i = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
         return new Result(i);
     }
+
     @Override
     public Result insertBySelective(ProjectInfo projectInfo){
-        if (StringUtils.isEmpty(projectInfo.getProjectName())) {
-            return new Result(0,"项目名称不能为null！");
+        if (projectInfo.hasNull()) {
+            return new Result(0,"项目名称和部门为必填项不能为空!");
         }
         List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
         for (ProjectInfo info : projectInfos) {
@@ -111,7 +108,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
     @Override
     public ProjectInfo selectByPrimaryKey(Integer projectId){
-        return projectInfoMapper.selectByPrimaryKey(projectId);
+        ProjectInfo projectInfo = projectInfoMapper.selectByPrimaryKey(projectId);
+        return projectInfo;
     }
     @Override
     public Result deleteByIds(String ids){
@@ -120,8 +118,11 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         int faild = 0;
         for (Integer id : idArray) {
             Result result = deleteById(id);
-            if (result.code<1){
+            if (result.warning){
                 faild++;
+            }
+            if (result.code<1){
+                return result;
             }
             success++;
         }
@@ -133,11 +134,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             return new Result(0,"id不能为空！");
         }
         ProjectInfo projectInfo = projectInfoMapper.selectByPrimaryKey(id);
-        if (projectInfo == null) {
-            return new Result(0,"无法删除不存在项目！");
+        if (projectInfo == null || projectInfo.getStatus() == 0) {
+            return new Result(0,"无法删除不存在或已删除的项目！");
         }
+
         int i = projectInfoMapper.deleteByPrimaryKey(id);
-        return new Result(i);
+        return new Result(i,true);
     }
 
 
