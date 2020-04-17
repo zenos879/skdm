@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.outsource.mapper.AgreementInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.AgreementInfo">
-    <id column="agreement_id" jdbcType="INTEGER" property="agreementId" />
-    <result column="agreement_no" jdbcType="VARCHAR" property="agreementNo" />
-    <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
-    <result column="agreement_start" jdbcType="DATE" property="agreementStart" />
-    <result column="agreement_end" jdbcType="DATE" property="agreementEnd" />
+<mapper namespace="generator.ReviewInfoMapper">
+  <resultMap id="BaseResultMap" type="generator.ReviewInfo">
+    <id column="auto_id" jdbcType="INTEGER" property="autoId" />
+    <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="post_count" jdbcType="INTEGER" property="postCount" />
+    <result column="review_date" jdbcType="DATE" property="reviewDate" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
@@ -69,16 +70,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    agreement_id, agreement_no, supplier_id, agreement_start, agreement_end, create_time,
+    auto_id, purchase_no, post_id, project_id, post_count, review_date, create_time, 
     `status`
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="generator.ReviewInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from agreement_info
+    from review_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -100,41 +101,44 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from agreement_info
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    from review_info
+    where auto_id = #{autoId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from agreement_info
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    delete from review_info
+    where auto_id = #{autoId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample">
-    delete from agreement_info
+  <delete id="deleteByExample" parameterType="generator.ReviewInfoExample">
+    delete from review_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo" useGeneratedKeys="true">
-    insert into agreement_info (agreement_no, supplier_id, agreement_start, 
-      agreement_end, create_time, `status`
-      )
-    values (#{agreementNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{agreementStart,jdbcType=DATE}, 
-      #{agreementEnd,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
-      )
+  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="generator.ReviewInfo" useGeneratedKeys="true">
+    insert into review_info (purchase_no, post_id, project_id, 
+      post_count, review_date, create_time, 
+      `status`)
+    values (#{purchaseNo,jdbcType=VARCHAR}, #{postId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, 
+      #{postCount,jdbcType=INTEGER}, #{reviewDate,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo" useGeneratedKeys="true">
-    insert into agreement_info
+  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="generator.ReviewInfo" useGeneratedKeys="true">
+    insert into review_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="agreementNo != null">
-        agreement_no,
+      <if test="purchaseNo != null">
+        purchase_no,
       </if>
-      <if test="supplierId != null">
-        supplier_id,
+      <if test="postId != null">
+        post_id,
       </if>
-      <if test="agreementStart != null">
-        agreement_start,
+      <if test="projectId != null">
+        project_id,
       </if>
-      <if test="agreementEnd != null">
-        agreement_end,
+      <if test="postCount != null">
+        post_count,
+      </if>
+      <if test="reviewDate != null">
+        review_date,
       </if>
       <if test="createTime != null">
         create_time,
@@ -144,17 +148,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="agreementNo != null">
-        #{agreementNo,jdbcType=VARCHAR},
+      <if test="purchaseNo != null">
+        #{purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="supplierId != null">
-        #{supplierId,jdbcType=INTEGER},
+      <if test="postId != null">
+        #{postId,jdbcType=INTEGER},
       </if>
-      <if test="agreementStart != null">
-        #{agreementStart,jdbcType=DATE},
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="agreementEnd != null">
-        #{agreementEnd,jdbcType=DATE},
+      <if test="postCount != null">
+        #{postCount,jdbcType=INTEGER},
+      </if>
+      <if test="reviewDate != null">
+        #{reviewDate,jdbcType=DATE},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -164,29 +171,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample" resultType="java.lang.Long">
-    select count(*) from agreement_info
+  <select id="countByExample" parameterType="generator.ReviewInfoExample" resultType="java.lang.Long">
+    select count(*) from review_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update agreement_info
+    update review_info
     <set>
-      <if test="record.agreementId != null">
-        agreement_id = #{record.agreementId,jdbcType=INTEGER},
+      <if test="record.autoId != null">
+        auto_id = #{record.autoId,jdbcType=INTEGER},
       </if>
-      <if test="record.agreementNo != null">
-        agreement_no = #{record.agreementNo,jdbcType=VARCHAR},
+      <if test="record.purchaseNo != null">
+        purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplierId != null">
-        supplier_id = #{record.supplierId,jdbcType=INTEGER},
+      <if test="record.postId != null">
+        post_id = #{record.postId,jdbcType=INTEGER},
       </if>
-      <if test="record.agreementStart != null">
-        agreement_start = #{record.agreementStart,jdbcType=DATE},
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
       </if>
-      <if test="record.agreementEnd != null">
-        agreement_end = #{record.agreementEnd,jdbcType=DATE},
+      <if test="record.postCount != null">
+        post_count = #{record.postCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.reviewDate != null">
+        review_date = #{record.reviewDate,jdbcType=DATE},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -200,32 +210,36 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update agreement_info
-    set agreement_id = #{record.agreementId,jdbcType=INTEGER},
-      agreement_no = #{record.agreementNo,jdbcType=VARCHAR},
-      supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      agreement_start = #{record.agreementStart,jdbcType=DATE},
-      agreement_end = #{record.agreementEnd,jdbcType=DATE},
+    update review_info
+    set auto_id = #{record.autoId,jdbcType=INTEGER},
+      purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
+      post_id = #{record.postId,jdbcType=INTEGER},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      post_count = #{record.postCount,jdbcType=INTEGER},
+      review_date = #{record.reviewDate,jdbcType=DATE},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       `status` = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo">
-    update agreement_info
+  <update id="updateByPrimaryKeySelective" parameterType="generator.ReviewInfo">
+    update review_info
     <set>
-      <if test="agreementNo != null">
-        agreement_no = #{agreementNo,jdbcType=VARCHAR},
+      <if test="purchaseNo != null">
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="supplierId != null">
-        supplier_id = #{supplierId,jdbcType=INTEGER},
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=INTEGER},
       </if>
-      <if test="agreementStart != null">
-        agreement_start = #{agreementStart,jdbcType=DATE},
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
       </if>
-      <if test="agreementEnd != null">
-        agreement_end = #{agreementEnd,jdbcType=DATE},
+      <if test="postCount != null">
+        post_count = #{postCount,jdbcType=INTEGER},
+      </if>
+      <if test="reviewDate != null">
+        review_date = #{reviewDate,jdbcType=DATE},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -234,16 +248,17 @@
         `status` = #{status,jdbcType=INTEGER},
       </if>
     </set>
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo">
-    update agreement_info
-    set agreement_no = #{agreementNo,jdbcType=VARCHAR},
-      supplier_id = #{supplierId,jdbcType=INTEGER},
-      agreement_start = #{agreementStart,jdbcType=DATE},
-      agreement_end = #{agreementEnd,jdbcType=DATE},
+  <update id="updateByPrimaryKey" parameterType="generator.ReviewInfo">
+    update review_info
+    set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      post_id = #{postId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      post_count = #{postCount,jdbcType=INTEGER},
+      review_date = #{reviewDate,jdbcType=DATE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER}
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
 </mapper>

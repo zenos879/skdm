@@ -8,6 +8,7 @@
     <result column="post_id" jdbcType="INTEGER" property="postId" />
     <result column="bid_price" jdbcType="REAL" property="bidPrice" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, supplier_id, agreement_id, post_id, bid_price, create_time
+    auto_id, supplier_id, agreement_id, post_id, bid_price, create_time, `status`
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.SupplierBidExample" resultMap="BaseResultMap">
     select
@@ -113,9 +114,11 @@
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.SupplierBid" useGeneratedKeys="true">
     insert into supplier_bid (supplier_id, agreement_id, post_id, 
-      bid_price, create_time)
+      bid_price, create_time, `status`
+      )
     values (#{supplierId,jdbcType=INTEGER}, #{agreementId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, 
-      #{bidPrice,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP})
+      #{bidPrice,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.SupplierBid" useGeneratedKeys="true">
     insert into supplier_bid
@@ -135,6 +138,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="status != null">
+        `status`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="supplierId != null">
@@ -151,6 +157,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -181,6 +190,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -193,7 +205,8 @@
       agreement_id = #{record.agreementId,jdbcType=INTEGER},
       post_id = #{record.postId,jdbcType=INTEGER},
       bid_price = #{record.bidPrice,jdbcType=REAL},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `status` = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -216,6 +229,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
@@ -225,7 +241,8 @@
       agreement_id = #{agreementId,jdbcType=INTEGER},
       post_id = #{postId,jdbcType=INTEGER},
       bid_price = #{bidPrice,jdbcType=REAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER}
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
 </mapper>

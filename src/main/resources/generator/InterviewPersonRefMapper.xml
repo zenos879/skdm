@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.InterviewPersonRefMapper">
+  <resultMap id="BaseResultMap" type="generator.InterviewPersonRef">
+    <id column="auto_id" jdbcType="INTEGER" property="autoId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="candidate_id" jdbcType="INTEGER" property="candidateId" />
+    <result column="is_interview" jdbcType="TINYINT" property="isInterview" />
+    <result column="notify_date" jdbcType="DATE" property="notifyDate" />
+    <result column="interview_date" jdbcType="DATE" property="interviewDate" />
+    <result column="is_pass" jdbcType="TINYINT" property="isPass" />
+    <result column="is_reject" jdbcType="TINYINT" property="isReject" />
+    <result column="is_replace" jdbcType="TINYINT" property="isReplace" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="arrive_date" jdbcType="DATE" property="arriveDate" />
+    <result column="leave_date" jdbcType="DATE" property="leaveDate" />
+    <result column="leave_reason" jdbcType="VARCHAR" property="leaveReason" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    auto_id, order_no, candidate_id, is_interview, notify_date, interview_date, is_pass, 
+    is_reject, is_replace, reason, arrive_date, leave_date, leave_reason, create_time
+  </sql>
+  <select id="selectByExample" parameterType="generator.InterviewPersonRefExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from interview_person_ref
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+    <if test="forUpdate != null and forUpdate == true">
+      for update
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from interview_person_ref
+    where auto_id = #{autoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from interview_person_ref
+    where auto_id = #{autoId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="generator.InterviewPersonRefExample">
+    delete from interview_person_ref
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="generator.InterviewPersonRef" useGeneratedKeys="true">
+    insert into interview_person_ref (order_no, candidate_id, is_interview, 
+      notify_date, interview_date, is_pass, 
+      is_reject, is_replace, reason, 
+      arrive_date, leave_date, leave_reason, 
+      create_time)
+    values (#{orderNo,jdbcType=VARCHAR}, #{candidateId,jdbcType=INTEGER}, #{isInterview,jdbcType=TINYINT}, 
+      #{notifyDate,jdbcType=DATE}, #{interviewDate,jdbcType=DATE}, #{isPass,jdbcType=TINYINT}, 
+      #{isReject,jdbcType=TINYINT}, #{isReplace,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, 
+      #{arriveDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE}, #{leaveReason,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="generator.InterviewPersonRef" useGeneratedKeys="true">
+    insert into interview_person_ref
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="candidateId != null">
+        candidate_id,
+      </if>
+      <if test="isInterview != null">
+        is_interview,
+      </if>
+      <if test="notifyDate != null">
+        notify_date,
+      </if>
+      <if test="interviewDate != null">
+        interview_date,
+      </if>
+      <if test="isPass != null">
+        is_pass,
+      </if>
+      <if test="isReject != null">
+        is_reject,
+      </if>
+      <if test="isReplace != null">
+        is_replace,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="arriveDate != null">
+        arrive_date,
+      </if>
+      <if test="leaveDate != null">
+        leave_date,
+      </if>
+      <if test="leaveReason != null">
+        leave_reason,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="candidateId != null">
+        #{candidateId,jdbcType=INTEGER},
+      </if>
+      <if test="isInterview != null">
+        #{isInterview,jdbcType=TINYINT},
+      </if>
+      <if test="notifyDate != null">
+        #{notifyDate,jdbcType=DATE},
+      </if>
+      <if test="interviewDate != null">
+        #{interviewDate,jdbcType=DATE},
+      </if>
+      <if test="isPass != null">
+        #{isPass,jdbcType=TINYINT},
+      </if>
+      <if test="isReject != null">
+        #{isReject,jdbcType=TINYINT},
+      </if>
+      <if test="isReplace != null">
+        #{isReplace,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="arriveDate != null">
+        #{arriveDate,jdbcType=DATE},
+      </if>
+      <if test="leaveDate != null">
+        #{leaveDate,jdbcType=DATE},
+      </if>
+      <if test="leaveReason != null">
+        #{leaveReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="generator.InterviewPersonRefExample" resultType="java.lang.Long">
+    select count(*) from interview_person_ref
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update interview_person_ref
+    <set>
+      <if test="record.autoId != null">
+        auto_id = #{record.autoId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null">
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.candidateId != null">
+        candidate_id = #{record.candidateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isInterview != null">
+        is_interview = #{record.isInterview,jdbcType=TINYINT},
+      </if>
+      <if test="record.notifyDate != null">
+        notify_date = #{record.notifyDate,jdbcType=DATE},
+      </if>
+      <if test="record.interviewDate != null">
+        interview_date = #{record.interviewDate,jdbcType=DATE},
+      </if>
+      <if test="record.isPass != null">
+        is_pass = #{record.isPass,jdbcType=TINYINT},
+      </if>
+      <if test="record.isReject != null">
+        is_reject = #{record.isReject,jdbcType=TINYINT},
+      </if>
+      <if test="record.isReplace != null">
+        is_replace = #{record.isReplace,jdbcType=TINYINT},
+      </if>
+      <if test="record.reason != null">
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.arriveDate != null">
+        arrive_date = #{record.arriveDate,jdbcType=DATE},
+      </if>
+      <if test="record.leaveDate != null">
+        leave_date = #{record.leaveDate,jdbcType=DATE},
+      </if>
+      <if test="record.leaveReason != null">
+        leave_reason = #{record.leaveReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update interview_person_ref
+    set auto_id = #{record.autoId,jdbcType=INTEGER},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      candidate_id = #{record.candidateId,jdbcType=INTEGER},
+      is_interview = #{record.isInterview,jdbcType=TINYINT},
+      notify_date = #{record.notifyDate,jdbcType=DATE},
+      interview_date = #{record.interviewDate,jdbcType=DATE},
+      is_pass = #{record.isPass,jdbcType=TINYINT},
+      is_reject = #{record.isReject,jdbcType=TINYINT},
+      is_replace = #{record.isReplace,jdbcType=TINYINT},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      arrive_date = #{record.arriveDate,jdbcType=DATE},
+      leave_date = #{record.leaveDate,jdbcType=DATE},
+      leave_reason = #{record.leaveReason,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="generator.InterviewPersonRef">
+    update interview_person_ref
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="candidateId != null">
+        candidate_id = #{candidateId,jdbcType=INTEGER},
+      </if>
+      <if test="isInterview != null">
+        is_interview = #{isInterview,jdbcType=TINYINT},
+      </if>
+      <if test="notifyDate != null">
+        notify_date = #{notifyDate,jdbcType=DATE},
+      </if>
+      <if test="interviewDate != null">
+        interview_date = #{interviewDate,jdbcType=DATE},
+      </if>
+      <if test="isPass != null">
+        is_pass = #{isPass,jdbcType=TINYINT},
+      </if>
+      <if test="isReject != null">
+        is_reject = #{isReject,jdbcType=TINYINT},
+      </if>
+      <if test="isReplace != null">
+        is_replace = #{isReplace,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="arriveDate != null">
+        arrive_date = #{arriveDate,jdbcType=DATE},
+      </if>
+      <if test="leaveDate != null">
+        leave_date = #{leaveDate,jdbcType=DATE},
+      </if>
+      <if test="leaveReason != null">
+        leave_reason = #{leaveReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where auto_id = #{autoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="generator.InterviewPersonRef">
+    update interview_person_ref
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      candidate_id = #{candidateId,jdbcType=INTEGER},
+      is_interview = #{isInterview,jdbcType=TINYINT},
+      notify_date = #{notifyDate,jdbcType=DATE},
+      interview_date = #{interviewDate,jdbcType=DATE},
+      is_pass = #{isPass,jdbcType=TINYINT},
+      is_reject = #{isReject,jdbcType=TINYINT},
+      is_replace = #{isReplace,jdbcType=TINYINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      arrive_date = #{arriveDate,jdbcType=DATE},
+      leave_date = #{leaveDate,jdbcType=DATE},
+      leave_reason = #{leaveReason,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where auto_id = #{autoId,jdbcType=INTEGER}
+  </update>
+</mapper>

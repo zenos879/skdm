@@ -1,48 +1,47 @@
-package com.cctv.project.noah.outsource.entity;
-
-import com.cctv.project.noah.system.annotation.Excel;
+package generator;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * supplierBid
+ * interview_info
  * @author 
  */
-public class SupplierBid implements Serializable {
+public class InterviewInfo implements Serializable {
     /**
      * 自增主键
      */
     private Integer autoId;
 
     /**
+     * 订单编号：一次面试对应一个订单编号
+     */
+    private String orderNo;
+
+    /**
+     * 采购编号：一次评审对应一个采购编号
+     */
+    private String purchaseNo;
+
+    /**
+     * 项目id
+     */
+    private Integer projectId;
+
+    /**
      * 供应商id
      */
     private Integer supplierId;
 
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
-    private String supplierName;
-
     /**
-     * 合同id
+     * 部门id
      */
-    private Integer agreementId;
-
-    @Excel(name = "合同号", cellType = Excel.ColumnType.NUMERIC)
-    private String agreementNo;
+    private Integer departmentId;
 
     /**
      * 岗位id
      */
     private Integer postId;
-
-    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
-    private String postName;
-
-    /**
-     * 竞标价钱
-     */
-    private Float bidPrice;
 
     /**
      * 创建时间
@@ -61,6 +60,30 @@ public class SupplierBid implements Serializable {
         this.autoId = autoId;
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
     public Integer getSupplierId() {
         return supplierId;
     }
@@ -69,12 +92,12 @@ public class SupplierBid implements Serializable {
         this.supplierId = supplierId;
     }
 
-    public Integer getAgreementId() {
-        return agreementId;
+    public Integer getDepartmentId() {
+        return departmentId;
     }
 
-    public void setAgreementId(Integer agreementId) {
-        this.agreementId = agreementId;
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 
     public Integer getPostId() {
@@ -83,14 +106,6 @@ public class SupplierBid implements Serializable {
 
     public void setPostId(Integer postId) {
         this.postId = postId;
-    }
-
-    public Float getBidPrice() {
-        return bidPrice;
-    }
-
-    public void setBidPrice(Float bidPrice) {
-        this.bidPrice = bidPrice;
     }
 
     public Date getCreateTime() {
@@ -120,12 +135,14 @@ public class SupplierBid implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        SupplierBid other = (SupplierBid) that;
+        InterviewInfo other = (InterviewInfo) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
+            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
+            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
+            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getAgreementId() == null ? other.getAgreementId() == null : this.getAgreementId().equals(other.getAgreementId()))
+            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
-            && (this.getBidPrice() == null ? other.getBidPrice() == null : this.getBidPrice().equals(other.getBidPrice()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
@@ -135,10 +152,12 @@ public class SupplierBid implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
+        result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
+        result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
+        result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
-        result = prime * result + ((getAgreementId() == null) ? 0 : getAgreementId().hashCode());
+        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
-        result = prime * result + ((getBidPrice() == null) ? 0 : getBidPrice().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
@@ -151,38 +170,16 @@ public class SupplierBid implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", autoId=").append(autoId);
+        sb.append(", orderNo=").append(orderNo);
+        sb.append(", purchaseNo=").append(purchaseNo);
+        sb.append(", projectId=").append(projectId);
         sb.append(", supplierId=").append(supplierId);
-        sb.append(", agreementId=").append(agreementId);
+        sb.append(", departmentId=").append(departmentId);
         sb.append(", postId=").append(postId);
-        sb.append(", bidPrice=").append(bidPrice);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
-    }
-
-    public String getAgreementNo() {
-        return agreementNo;
-    }
-
-    public void setAgreementNo(String agreementNo) {
-        this.agreementNo = agreementNo;
-    }
-
-    public String getPostName() {
-        return postName;
-    }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
     }
 }

@@ -103,8 +103,10 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
         String supplierName = record.getSupplierName();
-        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
-        criteria.andSupplierIdEqualTo(supplierInfo.getSupplierId());
+        if (StringUtils.isNotEmpty(supplierName)){
+            SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+            criteria.andSupplierIdEqualTo(supplierInfo.getSupplierId());
+        }
         List<SupplierBid> supplierBids = supplierBidMapper.selectByExample(supplierBidExample);
         for (SupplierBid supplierBid : supplierBids) {
             completionSupplierName(supplierBid);
@@ -117,7 +119,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         SupplierBid supplierBid = supplierBidMapper.selectByPrimaryKey(autoId);
         // 补全
         completionSupplierName(supplierBid);
-        return null;
+        return supplierBid;
     }
 
     @Override
@@ -209,6 +211,14 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         record.setSupplierId(supplierInfo.getSupplierId());
         record.setAgreementId(agreementInfo.getAgreementId());
         record.setPostId(postInfo.getPostId());
+        boolean b = selectBeanExist(record);
+        //todo 还需要验证是否已经存在关系
+        //todo 还需要验证是否已经存在关系
+        //todo 还需要验证是否已经存在关系
+        //todo 还需要验证是否已经存在关系
+        //todo 还需要验证是否已经存在关系
+        //todo 还需要验证是否已经存在关系
+
         int i = supplierBidMapper.updateByPrimaryKeySelective(record);
         result.setCode(i);
         return result;

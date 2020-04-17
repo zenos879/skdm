@@ -4,54 +4,54 @@
     <th:block th:include="include :: header('合同数据')" />
 </head>
 <body class="gray-bg">
-    <!-- 主体内容开始 -->
-    <div class="container-div">
-        <!-- 第一行 -->
-        <div class="row">
-            <!-- clo-sm-12 为占用12个栅栏 一行为12个栅栏 search-collapse可折叠样式 -->
-            <div class="col-sm-12 search-collapse">
-                <form id="supplierbid-form">
-                    <!-- 表单开始 -->
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                供应商名称：<input type="text" name="supplierName" id="supplierName" autocomplete="off"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- 表单结束 -->
-                </form>
-            </div>
-            <!-- table开始 -->
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" >
-                    <i class="fa fa-plus"></i> 新增
-                </a>
-<!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >-->
-<!--                    <i class="fa fa-edit"></i> 修改-->
-<!--                </a>-->
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()">
-                    <i class="fa fa-upload"></i> 导入
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table" data-mobile-responsive="true"></table>
-            </div>
-            <!-- table结束 -->
+<!-- 主体内容开始 -->
+<div class="container-div">
+    <!-- 第一行 -->
+    <div class="row">
+        <!-- clo-sm-12 为占用12个栅栏 一行为12个栅栏 search-collapse可折叠样式 -->
+        <div class="col-sm-12 search-collapse">
+            <form id="supplierbid-form">
+                <!-- 表单开始 -->
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            供应商名称：<input type="text" name="supplierName" id="supplierName" autocomplete="off"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 表单结束 -->
+            </form>
         </div>
+        <!-- table开始 -->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" >
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >-->
+            <!--                    <i class="fa fa-edit"></i> 修改-->
+            <!--                </a>-->
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-info" onclick="$.table.importExcel()">
+                <i class="fa fa-upload"></i> 导入
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+        <!-- table结束 -->
     </div>
-    <!-- 主体内容结束 -->
+</div>
+<!-- 主体内容结束 -->
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
     var client = [[${@dict.getType('client')}]];
@@ -132,21 +132,21 @@
             });
         });
     }
-	</script>
+</script>
 </body>
 <!-- 导入区域 -->
 <script id="importTpl" type="text/template">
-<form enctype="multipart/form-data" class="mt20 mb10">
-	<div class="col-xs-offset-1">
-		<input type="file" id="file" name="file"/>
-		<div class="mt10 pt5">
-			<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
-			 &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
-		</div>
-		<font color="red" class="pull-left mt10">
-			提示：仅允许导入“xls”或“xlsx”格式文件！
-		</font>
-	</div>
-</form>
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+            <div class="mt10 pt5">
+                <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
+                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+            </div>
+            <font color="red" class="pull-left mt10">
+                提示：仅允许导入“xls”或“xlsx”格式文件！
+            </font>
+        </div>
+    </form>
 </script>
 </html>

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cctv.project.noah.outsource.mapper.AgreementInfoMapper">
-  <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.AgreementInfo">
-    <id column="agreement_id" jdbcType="INTEGER" property="agreementId" />
-    <result column="agreement_no" jdbcType="VARCHAR" property="agreementNo" />
-    <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
-    <result column="agreement_start" jdbcType="DATE" property="agreementStart" />
-    <result column="agreement_end" jdbcType="DATE" property="agreementEnd" />
+<mapper namespace="generator.CategoryInfoMapper">
+  <resultMap id="BaseResultMap" type="generator.CategoryInfo">
+    <id column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
@@ -69,16 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    agreement_id, agreement_no, supplier_id, agreement_start, agreement_end, create_time,
-    `status`
+    category_id, category_name, create_time, `status`
   </sql>
-  <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="generator.CategoryInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from agreement_info
+    from category_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -100,41 +96,30 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from agreement_info
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    from category_info
+    where category_id = #{categoryId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from agreement_info
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    delete from category_info
+    where category_id = #{categoryId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample">
-    delete from agreement_info
+  <delete id="deleteByExample" parameterType="generator.CategoryInfoExample">
+    delete from category_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo" useGeneratedKeys="true">
-    insert into agreement_info (agreement_no, supplier_id, agreement_start, 
-      agreement_end, create_time, `status`
+  <insert id="insert" keyColumn="category_id" keyProperty="categoryId" parameterType="generator.CategoryInfo" useGeneratedKeys="true">
+    insert into category_info (category_name, create_time, `status`
       )
-    values (#{agreementNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{agreementStart,jdbcType=DATE}, 
-      #{agreementEnd,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+    values (#{categoryName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="agreement_id" keyProperty="agreementId" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo" useGeneratedKeys="true">
-    insert into agreement_info
+  <insert id="insertSelective" keyColumn="category_id" keyProperty="categoryId" parameterType="generator.CategoryInfo" useGeneratedKeys="true">
+    insert into category_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="agreementNo != null">
-        agreement_no,
-      </if>
-      <if test="supplierId != null">
-        supplier_id,
-      </if>
-      <if test="agreementStart != null">
-        agreement_start,
-      </if>
-      <if test="agreementEnd != null">
-        agreement_end,
+      <if test="categoryName != null">
+        category_name,
       </if>
       <if test="createTime != null">
         create_time,
@@ -144,17 +129,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="agreementNo != null">
-        #{agreementNo,jdbcType=VARCHAR},
-      </if>
-      <if test="supplierId != null">
-        #{supplierId,jdbcType=INTEGER},
-      </if>
-      <if test="agreementStart != null">
-        #{agreementStart,jdbcType=DATE},
-      </if>
-      <if test="agreementEnd != null">
-        #{agreementEnd,jdbcType=DATE},
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -164,29 +140,20 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfoExample" resultType="java.lang.Long">
-    select count(*) from agreement_info
+  <select id="countByExample" parameterType="generator.CategoryInfoExample" resultType="java.lang.Long">
+    select count(*) from category_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update agreement_info
+    update category_info
     <set>
-      <if test="record.agreementId != null">
-        agreement_id = #{record.agreementId,jdbcType=INTEGER},
+      <if test="record.categoryId != null">
+        category_id = #{record.categoryId,jdbcType=INTEGER},
       </if>
-      <if test="record.agreementNo != null">
-        agreement_no = #{record.agreementNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.supplierId != null">
-        supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      </if>
-      <if test="record.agreementStart != null">
-        agreement_start = #{record.agreementStart,jdbcType=DATE},
-      </if>
-      <if test="record.agreementEnd != null">
-        agreement_end = #{record.agreementEnd,jdbcType=DATE},
+      <if test="record.categoryName != null">
+        category_name = #{record.categoryName,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -200,32 +167,20 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update agreement_info
-    set agreement_id = #{record.agreementId,jdbcType=INTEGER},
-      agreement_no = #{record.agreementNo,jdbcType=VARCHAR},
-      supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      agreement_start = #{record.agreementStart,jdbcType=DATE},
-      agreement_end = #{record.agreementEnd,jdbcType=DATE},
+    update category_info
+    set category_id = #{record.categoryId,jdbcType=INTEGER},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       `status` = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo">
-    update agreement_info
+  <update id="updateByPrimaryKeySelective" parameterType="generator.CategoryInfo">
+    update category_info
     <set>
-      <if test="agreementNo != null">
-        agreement_no = #{agreementNo,jdbcType=VARCHAR},
-      </if>
-      <if test="supplierId != null">
-        supplier_id = #{supplierId,jdbcType=INTEGER},
-      </if>
-      <if test="agreementStart != null">
-        agreement_start = #{agreementStart,jdbcType=DATE},
-      </if>
-      <if test="agreementEnd != null">
-        agreement_end = #{agreementEnd,jdbcType=DATE},
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -234,16 +189,13 @@
         `status` = #{status,jdbcType=INTEGER},
       </if>
     </set>
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.AgreementInfo">
-    update agreement_info
-    set agreement_no = #{agreementNo,jdbcType=VARCHAR},
-      supplier_id = #{supplierId,jdbcType=INTEGER},
-      agreement_start = #{agreementStart,jdbcType=DATE},
-      agreement_end = #{agreementEnd,jdbcType=DATE},
+  <update id="updateByPrimaryKey" parameterType="generator.CategoryInfo">
+    update category_info
+    set category_name = #{categoryName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER}
-    where agreement_id = #{agreementId,jdbcType=INTEGER}
+    where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
 </mapper>

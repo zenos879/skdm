@@ -52,6 +52,8 @@ public class AgreementInfo implements Serializable {
      */
     private Date createTime;
 
+    private Integer status;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getAgreementId() {
@@ -102,6 +104,14 @@ public class AgreementInfo implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -119,7 +129,8 @@ public class AgreementInfo implements Serializable {
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
             && (this.getAgreementStart() == null ? other.getAgreementStart() == null : this.getAgreementStart().equals(other.getAgreementStart()))
             && (this.getAgreementEnd() == null ? other.getAgreementEnd() == null : this.getAgreementEnd().equals(other.getAgreementEnd()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -132,6 +143,7 @@ public class AgreementInfo implements Serializable {
         result = prime * result + ((getAgreementStart() == null) ? 0 : getAgreementStart().hashCode());
         result = prime * result + ((getAgreementEnd() == null) ? 0 : getAgreementEnd().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -147,6 +159,7 @@ public class AgreementInfo implements Serializable {
         sb.append(", agreementStart=").append(agreementStart);
         sb.append(", agreementEnd=").append(agreementEnd);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

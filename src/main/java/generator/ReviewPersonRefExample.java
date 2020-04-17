@@ -1,11 +1,10 @@
-package com.cctv.project.noah.outsource.entity;
+package generator;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-public class AgreementInfoExample {
+public class ReviewPersonRefExample {
     protected String orderByClause;
 
     protected boolean distinct;
@@ -18,7 +17,7 @@ public class AgreementInfoExample {
 
     private Boolean forUpdate;
 
-    public AgreementInfoExample() {
+    public ReviewPersonRefExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -136,159 +135,133 @@ public class AgreementInfoExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
-        }
-
-        public Criteria andAgreementIdIsNull() {
-            addCriterion("agreement_id is null");
+        public Criteria andAutoIdIsNull() {
+            addCriterion("auto_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdIsNotNull() {
-            addCriterion("agreement_id is not null");
+        public Criteria andAutoIdIsNotNull() {
+            addCriterion("auto_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdEqualTo(Integer value) {
-            addCriterion("agreement_id =", value, "agreementId");
+        public Criteria andAutoIdEqualTo(Integer value) {
+            addCriterion("auto_id =", value, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdNotEqualTo(Integer value) {
-            addCriterion("agreement_id <>", value, "agreementId");
+        public Criteria andAutoIdNotEqualTo(Integer value) {
+            addCriterion("auto_id <>", value, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdGreaterThan(Integer value) {
-            addCriterion("agreement_id >", value, "agreementId");
+        public Criteria andAutoIdGreaterThan(Integer value) {
+            addCriterion("auto_id >", value, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("agreement_id >=", value, "agreementId");
+        public Criteria andAutoIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("auto_id >=", value, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdLessThan(Integer value) {
-            addCriterion("agreement_id <", value, "agreementId");
+        public Criteria andAutoIdLessThan(Integer value) {
+            addCriterion("auto_id <", value, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdLessThanOrEqualTo(Integer value) {
-            addCriterion("agreement_id <=", value, "agreementId");
+        public Criteria andAutoIdLessThanOrEqualTo(Integer value) {
+            addCriterion("auto_id <=", value, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdIn(List<Integer> values) {
-            addCriterion("agreement_id in", values, "agreementId");
+        public Criteria andAutoIdIn(List<Integer> values) {
+            addCriterion("auto_id in", values, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdNotIn(List<Integer> values) {
-            addCriterion("agreement_id not in", values, "agreementId");
+        public Criteria andAutoIdNotIn(List<Integer> values) {
+            addCriterion("auto_id not in", values, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdBetween(Integer value1, Integer value2) {
-            addCriterion("agreement_id between", value1, value2, "agreementId");
+        public Criteria andAutoIdBetween(Integer value1, Integer value2) {
+            addCriterion("auto_id between", value1, value2, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("agreement_id not between", value1, value2, "agreementId");
+        public Criteria andAutoIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("auto_id not between", value1, value2, "autoId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoIsNull() {
-            addCriterion("agreement_no is null");
+        public Criteria andPurchaseNoIsNull() {
+            addCriterion("purchase_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoIsNotNull() {
-            addCriterion("agreement_no is not null");
+        public Criteria andPurchaseNoIsNotNull() {
+            addCriterion("purchase_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoEqualTo(String value) {
-            addCriterion("agreement_no =", value, "agreementNo");
+        public Criteria andPurchaseNoEqualTo(String value) {
+            addCriterion("purchase_no =", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoNotEqualTo(String value) {
-            addCriterion("agreement_no <>", value, "agreementNo");
+        public Criteria andPurchaseNoNotEqualTo(String value) {
+            addCriterion("purchase_no <>", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoGreaterThan(String value) {
-            addCriterion("agreement_no >", value, "agreementNo");
+        public Criteria andPurchaseNoGreaterThan(String value) {
+            addCriterion("purchase_no >", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoGreaterThanOrEqualTo(String value) {
-            addCriterion("agreement_no >=", value, "agreementNo");
+        public Criteria andPurchaseNoGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_no >=", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoLessThan(String value) {
-            addCriterion("agreement_no <", value, "agreementNo");
+        public Criteria andPurchaseNoLessThan(String value) {
+            addCriterion("purchase_no <", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoLessThanOrEqualTo(String value) {
-            addCriterion("agreement_no <=", value, "agreementNo");
+        public Criteria andPurchaseNoLessThanOrEqualTo(String value) {
+            addCriterion("purchase_no <=", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoLike(String value) {
-            addCriterion("agreement_no like", value, "agreementNo");
+        public Criteria andPurchaseNoLike(String value) {
+            addCriterion("purchase_no like", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoNotLike(String value) {
-            addCriterion("agreement_no not like", value, "agreementNo");
+        public Criteria andPurchaseNoNotLike(String value) {
+            addCriterion("purchase_no not like", value, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoIn(List<String> values) {
-            addCriterion("agreement_no in", values, "agreementNo");
+        public Criteria andPurchaseNoIn(List<String> values) {
+            addCriterion("purchase_no in", values, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoNotIn(List<String> values) {
-            addCriterion("agreement_no not in", values, "agreementNo");
+        public Criteria andPurchaseNoNotIn(List<String> values) {
+            addCriterion("purchase_no not in", values, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoBetween(String value1, String value2) {
-            addCriterion("agreement_no between", value1, value2, "agreementNo");
+        public Criteria andPurchaseNoBetween(String value1, String value2) {
+            addCriterion("purchase_no between", value1, value2, "purchaseNo");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementNoNotBetween(String value1, String value2) {
-            addCriterion("agreement_no not between", value1, value2, "agreementNo");
+        public Criteria andPurchaseNoNotBetween(String value1, String value2) {
+            addCriterion("purchase_no not between", value1, value2, "purchaseNo");
             return (Criteria) this;
         }
 
@@ -352,123 +325,123 @@ public class AgreementInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartIsNull() {
-            addCriterion("agreement_start is null");
+        public Criteria andCandidateIdIsNull() {
+            addCriterion("candidate_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartIsNotNull() {
-            addCriterion("agreement_start is not null");
+        public Criteria andCandidateIdIsNotNull() {
+            addCriterion("candidate_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_start =", value, "agreementStart");
+        public Criteria andCandidateIdEqualTo(Integer value) {
+            addCriterion("candidate_id =", value, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartNotEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_start <>", value, "agreementStart");
+        public Criteria andCandidateIdNotEqualTo(Integer value) {
+            addCriterion("candidate_id <>", value, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartGreaterThan(Date value) {
-            addCriterionForJDBCDate("agreement_start >", value, "agreementStart");
+        public Criteria andCandidateIdGreaterThan(Integer value) {
+            addCriterion("candidate_id >", value, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_start >=", value, "agreementStart");
+        public Criteria andCandidateIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("candidate_id >=", value, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartLessThan(Date value) {
-            addCriterionForJDBCDate("agreement_start <", value, "agreementStart");
+        public Criteria andCandidateIdLessThan(Integer value) {
+            addCriterion("candidate_id <", value, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_start <=", value, "agreementStart");
+        public Criteria andCandidateIdLessThanOrEqualTo(Integer value) {
+            addCriterion("candidate_id <=", value, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartIn(List<Date> values) {
-            addCriterionForJDBCDate("agreement_start in", values, "agreementStart");
+        public Criteria andCandidateIdIn(List<Integer> values) {
+            addCriterion("candidate_id in", values, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartNotIn(List<Date> values) {
-            addCriterionForJDBCDate("agreement_start not in", values, "agreementStart");
+        public Criteria andCandidateIdNotIn(List<Integer> values) {
+            addCriterion("candidate_id not in", values, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("agreement_start between", value1, value2, "agreementStart");
+        public Criteria andCandidateIdBetween(Integer value1, Integer value2) {
+            addCriterion("candidate_id between", value1, value2, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementStartNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("agreement_start not between", value1, value2, "agreementStart");
+        public Criteria andCandidateIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("candidate_id not between", value1, value2, "candidateId");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndIsNull() {
-            addCriterion("agreement_end is null");
+        public Criteria andIsNotifyInterviewIsNull() {
+            addCriterion("is_notify_interview is null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndIsNotNull() {
-            addCriterion("agreement_end is not null");
+        public Criteria andIsNotifyInterviewIsNotNull() {
+            addCriterion("is_notify_interview is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_end =", value, "agreementEnd");
+        public Criteria andIsNotifyInterviewEqualTo(Byte value) {
+            addCriterion("is_notify_interview =", value, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndNotEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_end <>", value, "agreementEnd");
+        public Criteria andIsNotifyInterviewNotEqualTo(Byte value) {
+            addCriterion("is_notify_interview <>", value, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndGreaterThan(Date value) {
-            addCriterionForJDBCDate("agreement_end >", value, "agreementEnd");
+        public Criteria andIsNotifyInterviewGreaterThan(Byte value) {
+            addCriterion("is_notify_interview >", value, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_end >=", value, "agreementEnd");
+        public Criteria andIsNotifyInterviewGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_notify_interview >=", value, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndLessThan(Date value) {
-            addCriterionForJDBCDate("agreement_end <", value, "agreementEnd");
+        public Criteria andIsNotifyInterviewLessThan(Byte value) {
+            addCriterion("is_notify_interview <", value, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("agreement_end <=", value, "agreementEnd");
+        public Criteria andIsNotifyInterviewLessThanOrEqualTo(Byte value) {
+            addCriterion("is_notify_interview <=", value, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndIn(List<Date> values) {
-            addCriterionForJDBCDate("agreement_end in", values, "agreementEnd");
+        public Criteria andIsNotifyInterviewIn(List<Byte> values) {
+            addCriterion("is_notify_interview in", values, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndNotIn(List<Date> values) {
-            addCriterionForJDBCDate("agreement_end not in", values, "agreementEnd");
+        public Criteria andIsNotifyInterviewNotIn(List<Byte> values) {
+            addCriterion("is_notify_interview not in", values, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("agreement_end between", value1, value2, "agreementEnd");
+        public Criteria andIsNotifyInterviewBetween(Byte value1, Byte value2) {
+            addCriterion("is_notify_interview between", value1, value2, "isNotifyInterview");
             return (Criteria) this;
         }
 
-        public Criteria andAgreementEndNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("agreement_end not between", value1, value2, "agreementEnd");
+        public Criteria andIsNotifyInterviewNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_notify_interview not between", value1, value2, "isNotifyInterview");
             return (Criteria) this;
         }
 

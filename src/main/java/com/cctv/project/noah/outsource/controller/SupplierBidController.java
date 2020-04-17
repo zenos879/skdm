@@ -33,7 +33,7 @@ public class SupplierBidController extends BaseController {
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/supplierbid";
+        return prefix + "/supplierBid";
     }
 
     @GetMapping("/add")
@@ -44,7 +44,7 @@ public class SupplierBidController extends BaseController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
         SupplierBid supplierBid = supplierBidService.selectByPrimaryKey(id);
-        model.addAttribute("SupplierBid", supplierBid);
+        model.addAttribute("supplierBid", supplierBid);
         return prefix+"/edit";
     }
 
