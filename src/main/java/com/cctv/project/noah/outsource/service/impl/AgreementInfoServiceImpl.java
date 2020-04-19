@@ -4,10 +4,7 @@ import com.cctv.project.noah.outsource.entity.AgreementInfo;
 import com.cctv.project.noah.outsource.entity.AgreementInfoExample;
 import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.mapper.AgreementInfoMapper;
-import com.cctv.project.noah.outsource.service.AgreementInfoService;
-import com.cctv.project.noah.outsource.service.GeneralUtils;
-import com.cctv.project.noah.outsource.service.Result;
-import com.cctv.project.noah.outsource.service.SupplierInfoService;
+import com.cctv.project.noah.outsource.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +30,19 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     }
 
     @Override
-    public int deleteByPrimaryKey(Integer agreementId) {
-        return agreementInfoMapper.deleteByPrimaryKey(agreementId);
+    public Result deleteByPrimaryKey(Integer agreementId) {
+        Result result = new Result();
+        if (agreementId <= 0){
+            result.setCode(0);
+            result.setInfo("主键不存在，无法删除！");
+            return result;
+        }
+        AgreementInfo agreementInfo = new AgreementInfo();
+        agreementInfo.setAgreementId(agreementId);
+        agreementInfo.setStatus(ModelClass.STATUS_OFF);
+        int i = agreementInfoMapper.updateByPrimaryKeySelective(agreementInfo);
+        result.setCode(i);
+        return result;
     }
 
     @Override
@@ -43,7 +51,9 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
         List<Integer> idList = GeneralUtils.strArrToList(ids);
         criteria.andAgreementIdIn(idList);
-        int i = agreementInfoMapper.deleteByExample(agreementInfoExample);
+        AgreementInfo agreementInfo = new AgreementInfo();
+        agreementInfo.setStatus(ModelClass.STATUS_OFF);
+        int i = agreementInfoMapper.updateByExampleSelective(agreementInfo, agreementInfoExample);
         return new Result(i);
     }
 
@@ -60,6 +70,13 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             return result;
         }
         record.setSupplierId(supplierInfo.getSupplierId());
+        Integer integer = selectBeanByNum(record.getAgreementNo());
+        // 验证关系是否存在
+        if (integer > 0){
+            result.setCode(0);
+            result.setInfo("合同编号已经存在，无需新增！");
+            return result;
+        }
         int insert = agreementInfoMapper.insert(record);
         if (insert < 0){
             result.setCode(0);
@@ -158,8 +175,16 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             return result;
         }
         record.setSupplierId(supplierInfo.getSupplierId());
+        Integer integer = selectBeanByNum(record.getAgreementNo());
+        // 查到有值，并且不相等，则重复，不更新
+        if (integer > 0 && !agreementId.equals(integer)){
+            result.setCode(0);
+            result.setInfo("合同号已经存在，请调整后再提交！");
+            return result;
+        }
         int i = agreementInfoMapper.updateByPrimaryKeySelective(record);
-        return new Result(i);
+        result.setCode(i);
+        return result;
     }
 
     /**
@@ -188,15 +213,18 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
      * @param agreementNo
      * @return
      */
-    private boolean selectBeanByNum(String agreementNo){
+    private Integer selectBeanByNum(String agreementNo){
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
         criteria.andAgreementNoEqualTo(agreementNo);
+        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         if (agreementInfos.size() > 0){
-            return true;
+            AgreementInfo temp = agreementInfos.get(0);
+            Integer agreementId = temp.getAgreementId();
+            return agreementId;
         }
-        return false;
+        return 0;
     }
 
     @Override
@@ -223,8 +251,8 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             agreementInfo.setSupplierId(supplierInfo.getSupplierId());
             agreementInfo.setCreateTime(new Date());
             String agreementNo = agreementInfo.getAgreementNo();
-            boolean b = selectBeanByNum(agreementNo);
-            if (b){
+            Integer b = selectBeanByNum(agreementNo);
+            if (b > 0){
                 agreementInfoMapper.updateByPrimaryKeySelective(agreementInfo);
             } else {
                 agreementInfoMapper.insertSelective(agreementInfo);

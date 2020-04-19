@@ -42,6 +42,7 @@ public class SupplierBid implements Serializable {
     /**
      * 竞标价钱
      */
+    @Excel(name = "竞标价钱", cellType = Excel.ColumnType.NUMERIC)
     private Float bidPrice;
 
     /**

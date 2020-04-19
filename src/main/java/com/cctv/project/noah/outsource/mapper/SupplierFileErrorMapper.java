@@ -4,7 +4,9 @@ import com.cctv.project.noah.outsource.entity.SupplierFileError;
 import com.cctv.project.noah.outsource.entity.SupplierFileErrorExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface SupplierFileErrorMapper {
     long countByExample(SupplierFileErrorExample example);
 
