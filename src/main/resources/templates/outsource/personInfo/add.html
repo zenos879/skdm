@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('添加供应商文件错误数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-personinfo-add">
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人名：</label>
+                <div class="col-sm-7">
+                    <input name="candidateName" id="candidateName" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>身份证号：</label>
+                <div class="col-sm-7">
+                    <input name="idCard" id="idCard" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>电话号：</label>
+                <div class="col-sm-7">
+                    <input name="phone" id="phone" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "/outsource/personInfo";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-personinfo-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

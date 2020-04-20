@@ -7,7 +7,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-agreementinfo-edit" th:object="${agreementInfo}">
             <input type="hidden" name="agreementId" th:field="*{agreementId}">
-            <h4 class="form-header h4">项目信息</h4>
+            <h4 class="form-header h4">合同数据</h4>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
@@ -47,7 +47,7 @@
     <th:block th:include="include :: footer" />
     <script type="text/javascript">
         var prefix = ctx + "outsource/agreementinfo";
-        $("#form-project-edit").validate({
+        $("#form-agreementinfo-edit").validate({
             onkeyup: false,
             focusCleanup: true,
         });

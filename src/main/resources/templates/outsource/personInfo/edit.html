@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改人员数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-personInfo-edit" th:object="${personInfo}">
+        <input type="hidden" name="candidateId" th:field="*{candidateId}">
+        <h4 class="form-header h4">人员数据</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人名：</label>
+                    <div class="col-sm-7">
+                        <input name="candidateName" th:field="*{candidateName}" id="candidateName" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>身份证号：</label>
+                    <div class="col-sm-7">
+                        <input name="idCard" th:field="*{idCard}" id="idCard" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>电话号：</label>
+                    <div class="col-sm-7">
+                        <input name="phone" th:field="*{phone}" id="fileError" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "outsource/personInfo";
+    $("#form-personInfo-edit").validate({
+        onkeyup: false,
+        focusCleanup: true,
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-personInfo-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

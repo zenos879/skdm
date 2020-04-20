@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改合同数据')"/>
+    <th:block th:include="include :: header('修改供应商文件错误数据')"/>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-supplierfileerror-edit" th:object="${supplierFileError}">
         <input type="hidden" name="autoId" th:field="*{autoId}">
-        <h4 class="form-header h4">项目信息</h4>
+        <h4 class="form-header h4">供应商文件错误数据</h4>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -55,14 +55,14 @@
 <th:block th:include="include :: footer" />
 <script type="text/javascript">
     var prefix = ctx + "outsource/supplierFileError";
-    $("#form-project-edit").validate({
+    $("#form-supplierfileerror-edit").validate({
         onkeyup: false,
         focusCleanup: true,
     });
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-supplierfileerror-add').serialize());
+            $.operate.save(prefix + "/edit", $('#form-supplierfileerror-edit').serialize());
         }
     }
 </script>
