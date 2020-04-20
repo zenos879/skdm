@@ -1,7 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.utils.CommonUtil;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -36,7 +38,7 @@ public class PostInfo extends BaseEntity implements Serializable {
     private String categoryName;
 
 
-    private Integer categoryStatus;
+    private Integer categoryStatus = 1;
 
     /**
      * 创建时间
@@ -45,10 +47,18 @@ public class PostInfo extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
-    private Integer status;
+    private Integer status = 1;
 
     private static final long serialVersionUID = 1L;
 
+
+    public Boolean hasNull(){
+        return this.categoryId == null || StringUtils.isEmpty(this.postName);
+    }
+
+    public Boolean notNull(){
+        return !hasNull();
+    }
 
     public Integer getCategoryStatus() {
         return categoryStatus;
@@ -67,6 +77,9 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getCategoryName() {
+        if (this.categoryStatus == 0){
+            return CommonUtil.getDelText(categoryName);
+        }
         return categoryName;
     }
 

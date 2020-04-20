@@ -33,7 +33,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     public List<ProjectInfo> selectByIds(String ids){
         return projectInfoMapper.selectByIds(ids.split(","));
     }
-
+    @Override
+    public ProjectInfo selectByName(String name){
+        ProjectInfo projectInfo_sel = new ProjectInfo();
+        projectInfo_sel.setProjectName(name);
+        return projectInfoMapper.selectList(projectInfo_sel).get(0);
+    }
     @Override
     public Result updateBySelective(ProjectInfo projectInfo){
         Integer projectId = projectInfo.getProjectId();
@@ -58,9 +63,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         }
         List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
         for (ProjectInfo info : projectInfos) {
-            if (info.getProjectName() .equals(projectInfo.getProjectName()) &&
-                    info.getDepartmentId() == projectInfo.getDepartmentId()
-            ){
+            if (info.getProjectName() .equals(projectInfo.getProjectName())){
                 return new Result(0,"此项目已存在！",true);
             }
         }
@@ -80,8 +83,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
                 return new Result(0,"第"+(i+2)+"行的部门名称为空!");
             }
             DepartmentInfo departmentInfo = departmentInfoMapper.selectByName(projectInfo.getDepartmentName().trim());
-            if (departmentInfo == null) {
-                return new Result(0,"第"+(i+2)+"行的部门不存在!");
+            if (departmentInfo == null || departmentInfo.getStatus() == 0) {
+                return new Result(0,"第"+(i+2)+"行的部门不存在或已删除!");
             }
             projectInfo.setDepartmentId(departmentInfo.getDepartmentId());
             projectInfo.setCreateTime(new Date());

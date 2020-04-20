@@ -139,7 +139,7 @@
       <if test="autoId != null">
         AND auto_id = #{autoId,jdbcType=INTEGER}
       </if>
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         AND purchase_no like concat('%', #{purchaseNo}, '%')
       </if>
       <if test="postId != null">
@@ -186,7 +186,7 @@
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" useGeneratedKeys="true">
     insert into review_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         purchase_no,
       </if>
       <if test="postId != null">
@@ -204,9 +204,12 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="postId != null">
@@ -223,6 +226,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -277,7 +283,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo">
     update review_info
     <set>
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="postId != null">

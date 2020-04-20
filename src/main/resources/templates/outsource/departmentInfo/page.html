@@ -34,9 +34,9 @@
 		        	<a class="btn btn-success" onclick="$.operate.add()">
 		                <i class="fa fa-plus"></i> 新增
 		            </a>
-					<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
-						<i class="fa fa-remove"></i> 删除
-					</a>
+					<!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">-->
+						<!--<i class="fa fa-remove"></i> 删除-->
+					<!--</a>-->
 		            <a class="btn btn-info" onclick="$.table.importExcel()">
 			            <i class="fa fa-upload"></i> 导入
 			        </a>
@@ -97,7 +97,7 @@
 		            formatter: function(value, row, index) {
 		                var actions = [];
 		                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.departmentId + '\')"><i class="fa fa-edit"></i>修改</a> ');
-		                actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="_delete(\'' + row.departmentId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="_delete(\'' + row.departmentId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                return actions.join('');
 		            }
 		        }]

@@ -62,11 +62,6 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (postInfoDb == null || postInfoDb.getStatus() == 0){
             return new Result(0,"无法修改不存在的岗位！");
         }
-        if (postInfoDb.getPostName().equals(postInfo.getPostName()) &&
-            postInfoDb.getCategoryId() == postInfo.getCategoryId()
-        ){
-            return new Result(0,"修改必须与之前不同！");
-        }
         int i = postInfoMapper.updateByPrimaryKeySelective(postInfo);
         return new Result(i);
     }
@@ -81,9 +76,7 @@ public class PostInfoServiceImpl implements PostInfoService {
         List<PostInfo> postInfos = postInfoMapper.selectList(postInfo);
         if (postInfos.size()!=0){
             for (PostInfo info : postInfos) {
-                if (info.getPostName().equals(postInfo.getPostName()) &&
-                        info.getCategoryId() == postInfo.getCategoryId()
-                ){
+                if (info.getPostName().equals(postInfo.getPostName())){
                     return new Result(0,"此岗位已存在！",true);
                 }
             }

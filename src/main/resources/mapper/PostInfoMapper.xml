@@ -98,13 +98,13 @@
     select 
     <include refid="Base_Column_List" />
     from post_info
-    where post_id = #{postId,jdbcType=INTEGER} and status = 1
+    where post_id = #{postId,jdbcType=INTEGER}
   </select>
   <select id="selectByCategroyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from post_info
-    where category_id = #{categoryId,jdbcType=INTEGER} and status = 1
+    where category_id = #{categoryId,jdbcType=INTEGER}
   </select>
   <select id="selectList" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" resultMap="BaseResultMap">
     select
@@ -112,9 +112,11 @@
     p.post_name post_name,
     p.category_id category_id,
     p.create_time create_time,
-    cate.category_name categoryName
+    cate.category_name categoryName,
+    p.status status,
+    cate.status categoryStatus
     from post_info p INNER JOIN category_info cate
-    where cate.category_id = p.category_id and p.status = 1
+    where cate.category_id = p.category_id
     <if test="postId != null">
       AND post_id = #{postId,jdbcType=INTEGER}
     </if>
@@ -123,6 +125,9 @@
     </if>
     <if test="categoryId != null">
       AND cate.category_id = #{categoryId,jdbcType=INTEGER}
+    </if>
+    <if test="status != null">
+      AND p.status = #{status,jdbcType=INTEGER}
     </if>
     <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
       AND date_format(p.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
@@ -137,9 +142,11 @@
     p.post_name post_name,
     p.category_id category_id,
     p.create_time create_time,
-    cate.category_name categoryName
+    cate.category_name categoryName,
+    p.status status,
+    cate.status categoryStatus
     from post_info p INNER JOIN category_info cate
-    where cate.category_id = p.category_id and p.status = 1 and p.post_id in
+    where cate.category_id = p.category_id and p.post_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
     </foreach>
@@ -152,8 +159,6 @@
     </foreach >
   </insert >
   <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
---     delete from post_info
---     where post_id = #{postId,jdbcType=INTEGER}
     update post_info
     set status = 0
     where post_id = #{postId,jdbcType=INTEGER}
@@ -187,6 +192,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="postName != null and postName != ''">
@@ -197,6 +205,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -248,6 +259,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where post_id = #{postId,jdbcType=INTEGER}
   </update>
@@ -255,7 +269,8 @@
     update post_info
     set post_name = #{postName,jdbcType=VARCHAR},
       category_id = #{categoryId,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
     where post_id = #{postId,jdbcType=INTEGER}
   </update>
 </mapper>

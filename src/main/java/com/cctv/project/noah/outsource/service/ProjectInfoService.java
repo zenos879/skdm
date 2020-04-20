@@ -9,6 +9,8 @@ public interface ProjectInfoService {
 
     List<ProjectInfo> selectByIds(String ids);
 
+    ProjectInfo selectByName(String name);
+
     Result updateBySelective(ProjectInfo projectInfo);
 
     Result insertBySelective(ProjectInfo projectInfo);
