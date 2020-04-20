@@ -1,7 +1,11 @@
 package com.cctv.project.noah.outsource.service.impl;
 
+import com.cctv.project.noah.outsource.entity.PostInfo;
+import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import com.cctv.project.noah.outsource.entity.ReviewInfo;
 import com.cctv.project.noah.outsource.mapper.ReviewInfoMapper;
+import com.cctv.project.noah.outsource.service.PostInfoService;
+import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.ReviewInfoService;
 import com.cctv.project.noah.system.core.domain.text.Convert;
@@ -18,8 +22,11 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
     @Autowired
     ReviewInfoMapper reviewInfoMapper;
 
+    @Autowired
+    ProjectInfoService projectInfoService;
 
-
+    @Autowired
+    PostInfoService postInfoService;
     @Override
     public int insert(ReviewInfo record) {
         return reviewInfoMapper.insert(record);
@@ -50,8 +57,8 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
     private Boolean reviewInfoNotNull(ReviewInfo reviewInfo){
         return StringUtils.isNotEmpty(reviewInfo.getPurchaseNo()) &&
                 StringUtils.isNotNull(reviewInfo.getPostCount()) &&
-                StringUtils.isNotNull(reviewInfo.getPostId()) &&
-                StringUtils.isNotNull(reviewInfo.getProjectId()) &&
+                (StringUtils.isNotNull(reviewInfo.getPostId())||StringUtils.isNotEmpty(reviewInfo.getPostName())) &&
+                (StringUtils.isNotNull(reviewInfo.getProjectId())||StringUtils.isNotEmpty(reviewInfo.getProjectName())) &&
                 StringUtils.isNotNull(reviewInfo.getReviewDate());
     }
     private Boolean reviewInfoNull(ReviewInfo reviewInfo){
@@ -76,6 +83,22 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
         int i = reviewInfoMapper.updateByPrimaryKeySelective(reviewInfo);
         return new Result(i);
     }
+    //0：全部重复 1：只有评审日期不重复 2：除评审日期外还有不重复
+    private Integer checkReviewInfoRepeat(ReviewInfo reviewInfoDb,ReviewInfo reviewInfo){
+        if (reviewInfo.getProjectId() == reviewInfoDb.getProjectId() ||
+                reviewInfo.getPostId() == reviewInfoDb.getPostId() ||
+                reviewInfo.getPostCount() == reviewInfoDb.getPostCount() ||
+                reviewInfo.getPurchaseNo() == reviewInfoDb.getPurchaseNo()
+        ){
+            if (reviewInfo.getReviewDate() == reviewInfoDb.getReviewDate()){
+                return 0;
+            }else {
+                return 1;
+            }
+        }else {
+            return 2;
+        }
+    }
     @Override
     public Result insertBySelective(ReviewInfo reviewInfo){
         if (reviewInfoNull(reviewInfo)) {
@@ -84,7 +107,10 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
         List<ReviewInfo> reviewInfos = reviewInfoMapper.selectBySelective(reviewInfo);
         if (reviewInfos.size()!=0){
             for (ReviewInfo info : reviewInfos) {
-                //TODO 判重
+                Integer repeat = checkReviewInfoRepeat(reviewInfo, info);
+                if (repeat == 0){
+                    return new Result(0,"此评审数据已存在！",true);
+                }
             }
         }
         reviewInfo.setCreateTime(new Date());
@@ -100,8 +126,19 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
             if (reviewInfoNull(reviewInfo)){
                 return new Result(0,"所有项都是必填项，第"+(i+2)+"行的有未填项!");
             }
+            PostInfo postInfo = postInfoService.selectByName(reviewInfo.getPostName());
+            if (postInfo == null){
+                return new Result(0,"第"+(i+2)+"行的岗位不存在!");
+            }
+            reviewInfo.setPostId(postInfo.getPostId());
+            ProjectInfo projectInfo = projectInfoService.selectByName(reviewInfo.getProjectName());
+            if (projectInfo == null){
+                return new Result(0,"第"+(i+2)+"行的项目不存在!");
+            }
+            reviewInfo.setProjectId(projectInfo.getProjectId());
             reviewInfo.setCreateTime(new Date());
         }
+
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (ReviewInfo ReviewInfo : reviewInfos) {

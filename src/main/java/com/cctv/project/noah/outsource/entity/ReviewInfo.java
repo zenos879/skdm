@@ -5,6 +5,8 @@ import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -49,13 +51,15 @@ public class ReviewInfo extends BaseEntity implements Serializable {
     /**
      * 此次采购（评审）的日期
      */
-    @Excel(name = "评审日期")
+    @Excel(name = "评审日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date reviewDate;
 
-    private Date reviewBeginDate;
-
-    private Date reviewEndDate;
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+//    private Object reviewBeginDate;
+//
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+//    private Object reviewEndDate;
 
     private Integer status = 1;
     /**
@@ -92,22 +96,6 @@ public class ReviewInfo extends BaseEntity implements Serializable {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-    }
-
-    public Date getReviewBeginDate() {
-        return reviewBeginDate;
-    }
-
-    public void setReviewBeginDate(Date reviewBeginDate) {
-        this.reviewBeginDate = reviewBeginDate;
-    }
-
-    public Date getReviewEndDate() {
-        return reviewEndDate;
-    }
-
-    public void setReviewEndDate(Date reviewEndDate) {
-        this.reviewEndDate = reviewEndDate;
     }
 
     public Integer getAutoId() {
@@ -152,6 +140,15 @@ public class ReviewInfo extends BaseEntity implements Serializable {
 
     public Date getReviewDate() {
         return reviewDate;
+    }
+
+    public String getFormatReviewDate() {
+        if (this.reviewDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(reviewDate);
+        return format;
     }
 
     public void setReviewDate(Date reviewDate) {

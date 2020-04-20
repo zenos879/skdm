@@ -24,6 +24,11 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
 
     @Autowired
     DepartmentInfoMapper departmentInfoMapper;
+
+    @Override
+    public List<ProjectInfo> selectAll(){
+        return projectInfoMapper.selectList(new ProjectInfo());
+    }
     @Override
     public List<ProjectInfo> selectList(ProjectInfo projectInfo){
         List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
