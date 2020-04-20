@@ -7,7 +7,7 @@ import java.util.List;
 public interface SupplierBidService {
     int deleteByExample(SupplierBid record);
 
-    int deleteByPrimaryKey(Integer autoId);
+    Result deleteByPrimaryKey(Integer autoId);
 
     Result deleteByIds(String ids);
 

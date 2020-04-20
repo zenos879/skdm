@@ -36,17 +36,35 @@ public class SupplierBidServiceImpl implements SupplierBidService {
     }
 
     @Override
-    public int deleteByPrimaryKey(Integer autoId) {
-        return supplierBidMapper.deleteByPrimaryKey(autoId);
+    public Result deleteByPrimaryKey(Integer autoId) {
+        Result result = new Result();
+        if (autoId <= 0){
+            result.setCode(0);
+            result.setInfo("主键不存在，无法删除！");
+            return result;
+        }
+        SupplierBid supplierBid = new SupplierBid();
+        supplierBid.setAutoId(autoId);
+        supplierBid.setStatus(ModelClass.STATUS_OFF);
+        int i = supplierBidMapper.updateByPrimaryKeySelective(supplierBid);
+        result.setCode(i);
+        return result;
     }
 
+    /**
+     * 逻辑批量删除
+     * @param ids
+     * @return
+     */
     @Override
     public Result deleteByIds(String ids) {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
         List<Integer> idList = GeneralUtils.strArrToList(ids);
         criteria.andAutoIdIn(idList);
-        int i = supplierBidMapper.deleteByExample(supplierBidExample);
+        SupplierBid supplierBid = new SupplierBid();
+        supplierBid.setStatus(ModelClass.STATUS_OFF);
+        int i = supplierBidMapper.updateByExampleSelective(supplierBid, supplierBidExample);
         return new Result(i);
     }
 
@@ -79,9 +97,12 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         record.setSupplierId(supplierInfo.getSupplierId());
         record.setAgreementId(agreementInfo.getAgreementId());
         record.setPostId(postInfo.getPostId());
-        boolean b = selectBeanExist(record);
-        if (b){
-
+        Integer b = selectBeanExist(record, false);
+        // 验证关系是否存在
+        if (b > 0){
+            result.setCode(0);
+            result.setInfo("关系已经存在，无需新增！");
+            return result;
         }
         int insert = supplierBidMapper.insert(record);
         if (insert < 0){
@@ -93,7 +114,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
 
     @Override
     public Result insertSelective(SupplierBid record) {
-
+        // todo 扩展方法，暂时不用，用时需要注意去重
         int i = supplierBidMapper.insertSelective(record);
         return new Result(i);
     }
@@ -102,6 +123,12 @@ public class SupplierBidServiceImpl implements SupplierBidService {
     public List<SupplierBid> selectList(SupplierBid record) {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
+        Integer status = record.getStatus();
+        if (status == null){
+            criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+        } else {
+            criteria.andStatusEqualTo(status);
+        }
         String supplierName = record.getSupplierName();
         if (StringUtils.isNotEmpty(supplierName)){
             SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
@@ -211,14 +238,13 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         record.setSupplierId(supplierInfo.getSupplierId());
         record.setAgreementId(agreementInfo.getAgreementId());
         record.setPostId(postInfo.getPostId());
-        boolean b = selectBeanExist(record);
-        //todo 还需要验证是否已经存在关系
-        //todo 还需要验证是否已经存在关系
-        //todo 还需要验证是否已经存在关系
-        //todo 还需要验证是否已经存在关系
-        //todo 还需要验证是否已经存在关系
-        //todo 还需要验证是否已经存在关系
-
+        Integer au = selectBeanExist(record, false);
+        // 查到有值，并且不相等，则重复，不更新
+        if (au > 0 && !autoId.equals(au)){
+            result.setCode(0);
+            result.setInfo("关系已经存在，请调整后再提交！");
+            return result;
+        }
         int i = supplierBidMapper.updateByPrimaryKeySelective(record);
         result.setCode(i);
         return result;
@@ -235,7 +261,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
      * @param supplierBid
      * @return
      */
-    private boolean selectBeanExist(SupplierBid supplierBid){
+    private Integer selectBeanExist(SupplierBid supplierBid, boolean andPrice){
         Integer supplierId = supplierBid.getSupplierId();
         Integer agreementId = supplierBid.getAgreementId();
         Integer postId = supplierBid.getPostId();
@@ -244,11 +270,18 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         criteria.andSupplierIdEqualTo(supplierId);
         criteria.andAgreementIdEqualTo(agreementId);
         criteria.andPostIdEqualTo(postId);
+        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+        if (andPrice){
+            Float bidPrice = supplierBid.getBidPrice();
+            criteria.andBidPriceEqualTo(bidPrice);
+        }
         List<SupplierBid> supplierBids = supplierBidMapper.selectByExample(supplierBidExample);
         if (supplierBids.size() > 0){
-            return true;
+            SupplierBid temp = supplierBids.get(0);
+            Integer autoId = temp.getAutoId();
+            return autoId;
         }
-        return false;
+        return 0;
     }
 
     @Override
@@ -282,20 +315,31 @@ public class SupplierBidServiceImpl implements SupplierBidService {
             if (postInfo == null) {
                 return new Result(0,"第"+(i+2)+"行的岗位【" + supplierBid.getPostName() + "】不存在!");
             }
-            Integer supplierId = supplierBid.getSupplierId();
-            Integer agreementId = supplierBid.getAgreementId();
-            Integer postId = supplierBid.getPostId();
+            Integer supplierId = supplierInfo.getSupplierId();
+            Integer agreementId = agreementInfo.getAgreementId();
+            Integer postId = postInfo.getPostId();
             supplierBid.setSupplierId(supplierId);
             supplierBid.setAgreementId(agreementId);
             supplierBid.setPostId(postId);
+            supplierBid.setBidPrice(supplierBid.getBidPrice());
             supplierBid.setCreateTime(new Date());
-            // 判断是否存在
-            boolean b = selectBeanExist(supplierBid);
-            if (b){
+            // 判断数据库是否存在该关系
+            Integer autoId = selectBeanExist(supplierBid, true);
+            if (autoId > 0){
                 msg = msg + "[" + (i + 2) + "]";
                 continue;
+            } else {
+                // 不存在，则判断价格是否更改
+                autoId = selectBeanExist(supplierBid, false);
+                if (autoId > 0){
+                    // 关系存在，价格更改则更新价格
+                    supplierBid.setAutoId(autoId);
+                    supplierBidMapper.updateByPrimaryKeySelective(supplierBid);
+                } else {
+                    // 关系完全不存在，则新增
+                    supplierBidMapper.insertSelective(supplierBid);
+                }
             }
-            supplierBidMapper.updateByPrimaryKeySelective(supplierBid);
             count = i;
         }
         if (!StringUtils.isEmpty(msg)){

@@ -1,5 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +19,7 @@ public class SupplierFileError implements Serializable {
     /**
      * 采购编号：对应一次评审
      */
+    @Excel(name = "采购编号", cellType = Excel.ColumnType.NUMERIC)
     private String purcharNo;
 
     /**
@@ -23,25 +27,34 @@ public class SupplierFileError implements Serializable {
      */
     private Integer supplierId;
 
+    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    private String supplierName;
+
     /**
      * 文件错误数
      */
+    @Excel(name = "应答文件错误次数", cellType = Excel.ColumnType.NUMERIC)
     private Integer fileError;
 
     /**
      * 错误描述
      */
+    @Excel(name = "错误描述", cellType = Excel.ColumnType.NUMERIC)
     private String remark;
 
     /**
      * 发生日期
      */
+    @Excel(name = "发生日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date happenDate;
 
     /**
      * 创建时间
      */
     private Date createTime;
+
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -101,6 +114,14 @@ public class SupplierFileError implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -119,7 +140,8 @@ public class SupplierFileError implements Serializable {
             && (this.getFileError() == null ? other.getFileError() == null : this.getFileError().equals(other.getFileError()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getHappenDate() == null ? other.getHappenDate() == null : this.getHappenDate().equals(other.getHappenDate()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -133,6 +155,7 @@ public class SupplierFileError implements Serializable {
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getHappenDate() == null) ? 0 : getHappenDate().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -149,8 +172,17 @@ public class SupplierFileError implements Serializable {
         sb.append(", remark=").append(remark);
         sb.append(", happenDate=").append(happenDate);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

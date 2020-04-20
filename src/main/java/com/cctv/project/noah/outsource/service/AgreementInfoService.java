@@ -6,7 +6,7 @@ import java.util.List;
 public interface AgreementInfoService {
     int deleteByExample(AgreementInfo record);
 
-    int deleteByPrimaryKey(Integer agreementId);
+    Result deleteByPrimaryKey(Integer agreementId);
 
     Result deleteByIds(String ids);
 
