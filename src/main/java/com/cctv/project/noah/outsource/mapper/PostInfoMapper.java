@@ -4,7 +4,9 @@ import com.cctv.project.noah.outsource.entity.PostInfo;
 import com.cctv.project.noah.outsource.entity.PostInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface PostInfoMapper {
     long countByExample(PostInfoExample example);
 

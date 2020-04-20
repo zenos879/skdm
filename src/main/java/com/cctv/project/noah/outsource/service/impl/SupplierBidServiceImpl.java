@@ -124,11 +124,11 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
         Integer status = record.getStatus();
-        if (status == null){
-            criteria.andStatusEqualTo(ModelClass.STATUS_ON);
-        } else {
-            criteria.andStatusEqualTo(status);
-        }
+//        if (status == null){
+//            criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+//        } else {
+//            criteria.andStatusEqualTo(status);
+//        }
         String supplierName = record.getSupplierName();
         if (StringUtils.isNotEmpty(supplierName)){
             SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
@@ -270,7 +270,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         criteria.andSupplierIdEqualTo(supplierId);
         criteria.andAgreementIdEqualTo(agreementId);
         criteria.andPostIdEqualTo(postId);
-        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+//        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         if (andPrice){
             Float bidPrice = supplierBid.getBidPrice();
             criteria.andBidPriceEqualTo(bidPrice);

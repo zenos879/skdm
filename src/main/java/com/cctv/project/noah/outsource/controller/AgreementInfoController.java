@@ -105,7 +105,7 @@ public class AgreementInfoController extends BaseController {
 
     @RequestMapping("/remove")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.DELETE)
+    @Log(title = "合同数据", businessType = BusinessType.DELETE)
     public AjaxResult remove(String ids){
         return toAjax(agreementInfoService.deleteByIds(ids));
     }
