@@ -2,7 +2,6 @@ package com.cctv.project.noah.outsource.service.impl;
 
 import com.cctv.project.noah.outsource.entity.PersonInfo;
 import com.cctv.project.noah.outsource.entity.PersonInfoExample;
-import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.mapper.PersonInfoMapper;
 import com.cctv.project.noah.outsource.service.GeneralUtils;
 import com.cctv.project.noah.outsource.service.ModelClass;
@@ -115,6 +114,16 @@ public class PersonInfoServiceImpl implements PersonInfoService {
         List<PersonInfo> personInfos = personInfoMapper.selectByExample(personInfoExample);
         return personInfos;
     }
+
+    @Override
+    public List<PersonInfo> selectByName(String record) {
+        PersonInfoExample personInfoExample = new PersonInfoExample();
+        PersonInfoExample.Criteria criteria = personInfoExample.createCriteria();
+        criteria.andCandidateNameLike(record);
+        List<PersonInfo> personInfos = personInfoMapper.selectByExample(personInfoExample);
+        return personInfos;
+    }
+
 
     @Override
     public PersonInfo selectByPrimaryKey(Integer id) {
