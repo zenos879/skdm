@@ -100,6 +100,12 @@
     from project_info
     where project_id = #{projectId,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from project_info
+    where project_name = #{projectName,jdbcType=VARCHAR}
+  </select>
   <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

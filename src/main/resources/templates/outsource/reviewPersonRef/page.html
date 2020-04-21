@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('岗位数据列表')" />
+	<th:block th:include="include :: header('评审数据列表')" />
 	<th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
@@ -13,13 +13,29 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									岗位名称：<input type="text" name="postName"/>
+									采购编号：<input type="text" name="purchaseNo"/>
 								</li>
 								<li>
-									岗位分类：<select name="categoryId" id="categoryId" class="selectpicker" data-live-search="true" th:with="cates=${@categoryInfoService.selectAll()}">
-										<option value="">全部</option>
-										<option th:each="cate : ${cates}" th:text="${cate.categoryName}" th:value="${cate.categoryId}"></option>
+									采购总人数：<input type="text" name="postCount"/>
+								</li>
+								<li>
+									岗位：<select name="postId" id="postId" class="selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+									<option value="">全部</option>
+									<option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}"></option>
 									</select>
+								</li>
+								<li>
+									项目：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
+									<option value="">全部</option>
+									<option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectId}"></option>
+									</select>
+								</li>
+								</li>
+								<li class="select-time">
+									<label>评审日期： </label>
+									<input type="text" class="time-input" id="reviewBeginDate" placeholder="开始时间" name="params[reviewBeginDate]"/>
+									<span>-</span>
+									<input type="text" class="time-input" id="reviewEndDate" placeholder="结束时间" name="params[reviewEndDate]"/>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
@@ -46,7 +62,7 @@
 		            <a class="btn btn-info" onclick="$.table.importExcel()">
 			            <i class="fa fa-upload"></i> 导入
 			        </a>
-		            <a class="btn btn-warning" onclick="exportUser()">
+		            <a class="btn btn-warning" onclick="_export()">
 			            <i class="fa fa-download"></i> 导出
 			        </a>
 		        </div>
@@ -61,8 +77,8 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
 	<script th:inline="javascript">
-		var prefix = ctx + "outsource/postInfo";
-
+		var prefix = ctx + "outsource/reviewInfo";
+		// var isSubsidiary = [[${@dict.getType('isSubsidiary')}]];
 		$(function() {
 		    queryUserList();
 		});
@@ -78,24 +94,38 @@
 		        importTemplateUrl: prefix + "/importTemplate",
 		        sortName: "createTime",
 		        sortOrder: "desc",
-		        modalName: "岗位数据",
+		        modalName: "评审数据",
 		        columns: [{
 		        	checkbox:true
 				},
 		        {
-		            field: 'postId',
-		            title: '岗位ID',
+		            field: 'autoId',
+		            title: '评审ID',
 					sortable: true
 		        },
-		        {
-		            field: 'postName',
-		            title: '岗位名称',
-		            sortable: true
-		        },
-		        {
-		            field: 'categoryName',
-		            title: '岗位分类'
-		        },
+				{
+					field: 'purchaseNo',
+					title: '采购编号',
+					sortable: true
+				},
+				{
+					field: 'postName',
+					title: '岗位',
+					sortable: true
+				},
+				{
+					field: 'projectName',
+					title: '项目',
+					sortable: true
+				},{
+					field: 'postCount',
+					title: '采购总人数',
+					sortable: true,
+				},{
+					field: 'reviewDate',
+					title: '评审日期',
+					sortable: true,
+				},
 		        {
 		            field: 'createTime',
 		            title: '创建时间',
@@ -106,16 +136,26 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		                var actions = [];
-		                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.postId + '\')"><i class="fa fa-edit"></i>修改</a> ');
-		                // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.postId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.autoId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+		                // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="_delete(\'' + row.reviewId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                return actions.join('');
 		            }
 		        }]
 		    };
 		    $.table.init(options);
 		}
-
-		function exportUser() {
+		function _delete(id) {
+			$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？删除此信息会将与其相关的信息删除！", function() {
+				var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+				if($.table._option.type == table_type.bootstrapTreeTable) {
+					$.operate.get(url);
+				} else {
+					var data = { "ids": id };
+					$.operate.submit(url, "post", "json", data);
+				}
+			});
+		}
+		function _export() {
 			var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
 			if (rows.length == 0) {
 				$.table.exportExcel();

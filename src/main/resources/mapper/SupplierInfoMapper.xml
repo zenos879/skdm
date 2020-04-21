@@ -103,6 +103,12 @@
     from supplier_info
     where supplier_id = #{supplierId,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from supplier_info
+    where supplier_name = #{supplierName,jdbcType=VARCHAR}
+  </select>
   <select id="selectByIds" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

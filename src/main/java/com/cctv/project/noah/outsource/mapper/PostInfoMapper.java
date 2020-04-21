@@ -32,6 +32,8 @@ public interface PostInfoMapper {
 
     PostInfo selectByPrimaryKey(Integer postId);
 
+    PostInfo selectByName(String name);
+
 
 
     int updateByExampleSelective(@Param("record") PostInfo record, @Param("example") PostInfoExample example);

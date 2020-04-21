@@ -40,9 +40,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
     @Override
     public ProjectInfo selectByName(String name){
-        ProjectInfo projectInfo_sel = new ProjectInfo();
-        projectInfo_sel.setProjectName(name);
-        return projectInfoMapper.selectList(projectInfo_sel).get(0);
+        return projectInfoMapper.selectByName(name);
     }
     @Override
     public Result updateBySelective(ProjectInfo projectInfo){

@@ -42,9 +42,7 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
     @Override
     public PostInfo selectByName(String name){
-        PostInfo postInfo_sel = new PostInfo();
-        postInfo_sel.setPostName(name);
-        return postInfoMapper.selectList(postInfo_sel).get(0);
+        return postInfoMapper.selectByName(name);
     }
     @Override
     public Result updateBySelective(PostInfo postInfo){

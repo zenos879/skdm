@@ -100,6 +100,12 @@
     from post_info
     where post_id = #{postId,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from post_info
+    where post_name = #{postName,jdbcType=VARCHAR}
+  </select>
   <select id="selectByCategroyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

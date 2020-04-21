@@ -26,6 +26,8 @@ public interface ProjectInfoMapper {
 
     ProjectInfo selectByPrimaryKey(Integer projectId);
 
+    ProjectInfo selectByName(String name);
+
     List<ProjectInfo> selectBySelective(ProjectInfo projectInfo);
 
     List<ProjectInfo> selectList(ProjectInfo projectInfo);
