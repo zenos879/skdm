@@ -181,10 +181,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="post_id" keyProperty="postId" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" useGeneratedKeys="true">
-    insert into post_info (post_name, category_id, create_time
-      )
-    values (#{postName,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into post_info (post_name, category_id, create_time,
+      `status`)
+    values (#{postName,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="post_id" keyProperty="postId" parameterType="com.cctv.project.noah.outsource.entity.PostInfo" useGeneratedKeys="true">
     insert into post_info
@@ -238,6 +238,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +251,8 @@
     set post_id = #{record.postId,jdbcType=INTEGER},
       post_name = #{record.postName,jdbcType=VARCHAR},
       category_id = #{record.categoryId,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `status` = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

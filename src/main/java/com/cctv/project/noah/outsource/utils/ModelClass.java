@@ -1,4 +1,4 @@
-package com.cctv.project.noah.outsource.service;
+package com.cctv.project.noah.outsource.utils;
 
 public class ModelClass {
 

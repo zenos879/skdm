@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改合同数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-interviewinfo-edit" th:object="${interviewInfo}">
+        <input type="hidden" name="autoId" th:field="*{autoId}">
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>订单编号：</label>
+                <div class="col-sm-7">
+                    <input name="orderNo" th:field="*{orderNo}" id="orderNo"
+                           class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
+                <div class="col-sm-7">
+                    <input name="purchaseNo" th:field="*{purchaseNo}" id="purchaseNo"
+                           class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目名：</label>
+                <div class="col-sm-7">
+                    <input name="projectName" th:field="*{projectName}" id="projectName"
+                           class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                <div class="col-sm-7">
+                    <input name="supplierName" th:field="*{supplierName}" id="supplierName"
+                           class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>部门名称：</label>
+                <div class="col-sm-7">
+                    <input name="departmentName" th:field="*{departmentName}" id="departmentName"
+                           class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
+                <div class="col-sm-7">
+                    <input name="postName" th:field="*{postName}" id="postName"
+                           class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "/outsource/interviewInfo";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-interviewinfo-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

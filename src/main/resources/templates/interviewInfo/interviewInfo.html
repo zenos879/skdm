@@ -10,12 +10,15 @@
     <div class="row">
         <!-- clo-sm-12 为占用12个栅栏 一行为12个栅栏 search-collapse可折叠样式 -->
         <div class="col-sm-12 search-collapse">
-            <form id="supplierbid-form">
+            <form id="interviewinfo-form">
                 <!-- 表单开始 -->
                 <div class="select-list">
                     <ul>
                         <li>
-                            供应商名称：<input type="text" name="supplierName" id="supplierName" autocomplete="off"/>
+                            订单编号：<input type="text" name="orderNo" id="orderNo" autocomplete="off"/>
+                        </li>
+                        <li>
+                            采购编号：<input type="text" name="purchaseNo" id="purchaseNo" autocomplete="off"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -61,7 +64,7 @@
 
     function queryList() {
 
-        var prefix = ctx + "outsource/supplierBid";
+        var prefix = ctx + "outsource/interviewInfo";
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -72,31 +75,38 @@
             importTemplateUrl: prefix + "/importTemplate",
             sortName: "autoId",
             sortOrder: "desc",
-            modalName: "供应关系",
+            modalName: "面试数据",
             columns: [
                 {
                     checkbox: true
                 },
                 {
                     field: 'autoId',
-                    title: '供应商名称',
-                    visible: false
+                    title: '供应商名称'
+                },
+                {
+                    field: 'orderNo',
+                    title: '订单编号'
+                },
+                {
+                    field: 'purchaseNo',
+                    title: '采购编号'
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名'
                 },
                 {
                     field: 'supplierName',
                     title: '供应商名称'
                 },
                 {
-                    field: 'agreementNo',
-                    title: '合同号'
+                    field: 'departmentName',
+                    title: '部门名称'
                 },
                 {
                     field: 'postName',
                     title: '岗位名称'
-                },
-                {
-                    field: 'bidPrice',
-                    title: '价格'
                 },
                 {
                     title: '操作',

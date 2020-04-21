@@ -1,5 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,6 +11,14 @@ import java.util.Date;
  * @author 
  */
 public class InterviewInfo implements Serializable {
+
+    public static final String ORDER_NO = "订单编号";
+    public static final String PURCHASE_NO = "采购编号";
+    public static final String PROJECT_NAME = "项目名";
+    public static final String SUPPLIER_NAME = "供应商名称";
+    public static final String DEPARTMENT_NAME = "部门名称";
+    public static final String POST_NAME = "岗位名称";
+
     /**
      * 自增主键
      */
@@ -16,11 +27,13 @@ public class InterviewInfo implements Serializable {
     /**
      * 订单编号：一次面试对应一个订单编号
      */
+    @Excel(name = "订单编号", cellType = Excel.ColumnType.NUMERIC)
     private String orderNo;
 
     /**
      * 采购编号：一次评审对应一个采购编号
      */
+    @Excel(name = "采购编号", cellType = Excel.ColumnType.NUMERIC)
     private String purchaseNo;
 
     /**
@@ -28,25 +41,41 @@ public class InterviewInfo implements Serializable {
      */
     private Integer projectId;
 
+    @Excel(name = "项目名", cellType = Excel.ColumnType.NUMERIC)
+    private String projectName;
+
     /**
      * 供应商id
      */
     private Integer supplierId;
+
+    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    private String supplierName;
 
     /**
      * 部门id
      */
     private Integer departmentId;
 
+    @Excel(name = "部门名称", cellType = Excel.ColumnType.NUMERIC)
+    private String departmentName;
+
     /**
      * 岗位id
      */
     private Integer postId;
 
+    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
+    private String postName;
+
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
+
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -114,6 +143,14 @@ public class InterviewInfo implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -133,7 +170,8 @@ public class InterviewInfo implements Serializable {
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -148,6 +186,7 @@ public class InterviewInfo implements Serializable {
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -165,8 +204,41 @@ public class InterviewInfo implements Serializable {
         sb.append(", departmentId=").append(departmentId);
         sb.append(", postId=").append(postId);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

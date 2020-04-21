@@ -3,8 +3,8 @@ package com.cctv.project.noah.outsource.service.impl;
 import com.cctv.project.noah.outsource.entity.PersonInfo;
 import com.cctv.project.noah.outsource.entity.PersonInfoExample;
 import com.cctv.project.noah.outsource.mapper.PersonInfoMapper;
-import com.cctv.project.noah.outsource.service.GeneralUtils;
-import com.cctv.project.noah.outsource.service.ModelClass;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.outsource.service.PersonInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.util.StringUtils;
@@ -177,7 +177,7 @@ public class PersonInfoServiceImpl implements PersonInfoService {
      * 判断身份证号是否已经存在
      *
      * @param personInfo
-     * @return
+     * @return 返回主键
      */
     private Integer selectBeanExist(PersonInfo personInfo, boolean other) {
         String idCard = personInfo.getIdCard();
