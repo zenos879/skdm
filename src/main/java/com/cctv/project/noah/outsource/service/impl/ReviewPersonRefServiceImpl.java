@@ -98,7 +98,9 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
             if (reviewPersonRefNull(reviewPersonRef)){
                 return new Result(0,"所有项都是必填项，第"+(i+2)+"行的有未填项!");
             }
-            List<PersonInfo> personInfos = personInfoService.selectByName(reviewPersonRef.getCandidateName());
+            PersonInfo personInfo_sel = new PersonInfo();
+            personInfo_sel.setIdCard(reviewPersonRef.getIdCard());
+            List<PersonInfo> personInfos = personInfoService.selectList(personInfo_sel);
             if (StringUtils.isEmpty(personInfos)){
                 return new Result(0,"第"+(i+2)+"行的人员不存在!");
             }
