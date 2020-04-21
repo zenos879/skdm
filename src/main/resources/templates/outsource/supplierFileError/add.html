@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('添加供应商文件错误数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-supplierfileerror-add">
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
+                <div class="col-sm-7">
+                    <input name="purcharNo" id="purcharNo" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                <div class="col-sm-7">
+                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>应答文件错误次数：</label>
+                <div class="col-sm-7">
+                    <input name="fileError" id="fileError" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>错误描述：</label>
+                <div class="col-sm-7">
+                    <input name="remark" id="remark" class="form-control" type="text" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>发生日期：</label>
+                <div class="col-sm-7">
+                    <input type="text" class="datetime-input form-control" id="happenDate" placeholder="发生日期"
+                           name="happenDate" required/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "/outsource/supplierFileError";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-supplierfileerror-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

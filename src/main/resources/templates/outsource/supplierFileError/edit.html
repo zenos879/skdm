@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改供应商文件错误数据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-supplierfileerror-edit" th:object="${supplierFileError}">
+        <input type="hidden" name="autoId" th:field="*{autoId}">
+        <h4 class="form-header h4">供应商文件错误数据</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
+                    <div class="col-sm-7">
+                        <input name="purcharNo" th:field="*{purcharNo}" id="purcharNo" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                    <div class="col-sm-7">
+                        <input name="supplierName" th:field="*{supplierName}" id="supplierName" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>应答文件错误次数：</label>
+                    <div class="col-sm-7">
+                        <input name="fileError" th:field="*{fileError}" id="fileError" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>错误描述：</label>
+                    <div class="col-sm-7">
+                        <input name="remark" th:field="*{remark}" id="remark" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>发生日期：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control" id="happenDate" th:field="*{happenDate}" placeholder="发生日期" name="happenDate" required/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "outsource/supplierFileError";
+    $("#form-supplierfileerror-edit").validate({
+        onkeyup: false,
+        focusCleanup: true,
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-supplierfileerror-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

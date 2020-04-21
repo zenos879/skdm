@@ -217,7 +217,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
         criteria.andAgreementNoEqualTo(agreementNo);
-        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+//        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         if (agreementInfos.size() > 0){
             AgreementInfo temp = agreementInfos.get(0);

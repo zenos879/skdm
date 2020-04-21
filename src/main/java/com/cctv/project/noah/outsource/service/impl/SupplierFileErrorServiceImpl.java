@@ -102,11 +102,11 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
         SupplierFileErrorExample supplierFileErrorExample = new SupplierFileErrorExample();
         SupplierFileErrorExample.Criteria criteria = supplierFileErrorExample.createCriteria();
         Integer status = record.getStatus();
-        if (status == null){
-            criteria.andStatusEqualTo(ModelClass.STATUS_ON);
-        } else {
-            criteria.andStatusEqualTo(status);
-        }
+//        if (status == null){
+//            criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+//        } else {
+//            criteria.andStatusEqualTo(status);
+//        }
         String supplierName = record.getSupplierName();
         if (StringUtils.isNotEmpty(supplierName)){
             SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
@@ -218,7 +218,7 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
         criteria.andSupplierIdEqualTo(supplierId);
         criteria.andPurcharNoEqualTo(purcharNo);
         criteria.andHappenDateEqualTo(happenDate);
-        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
+//        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         if (errorCount){
             Integer fileError = supplierFileError.getFileError();
             criteria.andFileErrorEqualTo(fileError);
