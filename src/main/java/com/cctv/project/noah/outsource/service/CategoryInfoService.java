@@ -12,6 +12,8 @@ public interface CategoryInfoService {
 
     List<CategoryInfo> selectByIds(String ids);
 
+    CategoryInfo selectByName(String name);
+
     Result updateBySelective(CategoryInfo categoryInfo);
 
     Result insertBySelective(CategoryInfo categoryInfo);

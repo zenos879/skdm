@@ -38,6 +38,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
     }
 
     @Override
+    public CategoryInfo selectByName(String name){
+        return categoryInfoMapper.selectByName(name);
+    }
+    @Override
     public Result updateBySelective(CategoryInfo categoryInfo){
         Integer categoryId = categoryInfo.getCategoryId();
         if (categoryId == null) {

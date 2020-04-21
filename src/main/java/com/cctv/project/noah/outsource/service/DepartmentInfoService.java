@@ -12,6 +12,8 @@ public interface DepartmentInfoService {
 
     List<DepartmentInfo> selectByIds(String ids);
 
+    DepartmentInfo selectByName(String name);
+
     Result updateBySelective(DepartmentInfo departmentInfo);
 
     Result insertBySelective(DepartmentInfo departmentInfo);

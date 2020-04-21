@@ -38,9 +38,13 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
     }
     @Override
     public List<DepartmentInfo> selectByIds(String ids){
+
         return departmentInfoMapper.selectByIds(ids.split(","));
     }
-
+    @Override
+    public DepartmentInfo selectByName(String name){
+        return departmentInfoMapper.selectByName(name);
+    }
     @Override
     public Result updateBySelective(DepartmentInfo departmentInfo){
         Integer departmentId = departmentInfo.getDepartmentId();
