@@ -1,21 +1,29 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * review_info
  * @author 
  */
-public class ReviewInfo implements Serializable {
+public class ReviewInfo extends BaseEntity implements Serializable {
     /**
      * 自增主键
      */
+    @Excel(name = "评审数据ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Integer autoId;
 
     /**
      * 采购编号：一次评审一个采购编号
      */
+    @Excel(name = "采购编号")
     private String purchaseNo;
 
     /**
@@ -23,27 +31,72 @@ public class ReviewInfo implements Serializable {
      */
     private Integer postId;
 
+    @Excel(name = "岗位")
+    private String postName;
+
     /**
      * 项目id
      */
     private Integer projectId;
 
+    @Excel(name = "项目")
+    private String projectName;
+
     /**
      * 此次采购的总人数
      */
+    @Excel(name = "采购总人数")
     private Integer postCount;
 
     /**
      * 此次采购（评审）的日期
      */
+    @Excel(name = "评审日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date reviewDate;
 
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+//    private Object reviewBeginDate;
+//
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+//    private Object reviewEndDate;
+
+    private Integer status = 1;
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+
+
     private static final long serialVersionUID = 1L;
+
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public Integer getAutoId() {
         return autoId;
@@ -89,6 +142,15 @@ public class ReviewInfo implements Serializable {
         return reviewDate;
     }
 
+    public String getFormatReviewDate() {
+        if (this.reviewDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(reviewDate);
+        return format;
+    }
+
     public void setReviewDate(Date reviewDate) {
         this.reviewDate = reviewDate;
     }
@@ -113,26 +175,27 @@ public class ReviewInfo implements Serializable {
             return false;
         }
         ReviewInfo other = (ReviewInfo) that;
-        return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
+        return
+//                (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
+            (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
             && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
             && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
             && (this.getPostCount() == null ? other.getPostCount() == null : this.getPostCount().equals(other.getPostCount()))
-            && (this.getReviewDate() == null ? other.getReviewDate() == null : this.getReviewDate().equals(other.getReviewDate()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getReviewDate() == null ? other.getReviewDate() == null : this.getReviewDate().equals(other.getReviewDate()));
+//            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
+//        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
         result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
         result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         result = prime * result + ((getPostCount() == null) ? 0 : getPostCount().hashCode());
         result = prime * result + ((getReviewDate() == null) ? 0 : getReviewDate().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+//        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
     }
 

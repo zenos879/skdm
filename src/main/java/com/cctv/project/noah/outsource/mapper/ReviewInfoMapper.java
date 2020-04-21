@@ -20,6 +20,10 @@ public interface ReviewInfoMapper {
 
     ReviewInfo selectByPrimaryKey(Integer autoId);
 
+    List<ReviewInfo> selectBySelective(ReviewInfo reviewInfo);
+
+    List<ReviewInfo> selectByIds(String[] ids);
+
     int updateByExampleSelective(@Param("record") ReviewInfo record, @Param("example") ReviewInfoExample example);
 
     int updateByExample(@Param("record") ReviewInfo record, @Param("example") ReviewInfoExample example);

@@ -103,6 +103,12 @@
     from supplier_info
     where supplier_id = #{supplierId,jdbcType=INTEGER}
   </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from supplier_info
+    where supplier_name = #{supplierName,jdbcType=VARCHAR}
+  </select>
   <select id="selectByIds" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -165,16 +171,16 @@
   <insert id="insertSelective" keyColumn="supplier_id" keyProperty="supplierId" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfo" useGeneratedKeys="true">
     insert into supplier_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="supplierName != null">
+      <if test="supplierName != null and supplierName != ''">
         supplier_name,
       </if>
-      <if test="contactName != null">
+      <if test="contactName != null and contactName != ''">
         contact_name,
       </if>
-      <if test="contactTel != null">
+      <if test="contactTel != null and contactTel != ''">
         contact_tel,
       </if>
-      <if test="contactEmail != null">
+      <if test="contactEmail != null and contactEmail != ''">
         contact_email,
       </if>
       <if test="isSubsidiary != null">
@@ -183,18 +189,21 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="supplierName != null">
+      <if test="supplierName != null and supplierName != ''">
         #{supplierName,jdbcType=VARCHAR},
       </if>
-      <if test="contactName != null">
+      <if test="contactName != null and contactName != ''">
         #{contactName,jdbcType=VARCHAR},
       </if>
-      <if test="contactTel != null">
+      <if test="contactTel != null and contactTel != ''">
         #{contactTel,jdbcType=VARCHAR},
       </if>
-      <if test="contactEmail != null">
+      <if test="contactEmail != null and contactEmail != ''">
         #{contactEmail,jdbcType=VARCHAR},
       </if>
       <if test="isSubsidiary != null">
@@ -202,6 +211,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -256,16 +268,16 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.SupplierInfo">
     update supplier_info
     <set>
-      <if test="supplierName != null">
+      <if test="supplierName != null and supplierName != ''">
         supplier_name = #{supplierName,jdbcType=VARCHAR},
       </if>
-      <if test="contactName != null">
+      <if test="contactName != null and contactName != ''">
         contact_name = #{contactName,jdbcType=VARCHAR},
       </if>
-      <if test="contactTel != null">
+      <if test="contactTel != null and contactTel != ''">
         contact_tel = #{contactTel,jdbcType=VARCHAR},
       </if>
-      <if test="contactEmail != null">
+      <if test="contactEmail != null and contactEmail != ''">
         contact_email = #{contactEmail,jdbcType=VARCHAR},
       </if>
       <if test="isSubsidiary != null">

@@ -31,7 +31,17 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    private Integer status = 1;
+
     private static final long serialVersionUID = 1L;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public Integer getDepartmentId() {
         return departmentId;

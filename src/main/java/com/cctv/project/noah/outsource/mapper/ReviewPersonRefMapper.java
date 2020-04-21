@@ -18,6 +18,10 @@ public interface ReviewPersonRefMapper {
 
     List<ReviewPersonRef> selectByExample(ReviewPersonRefExample example);
 
+    List<ReviewPersonRef> selectByIds(String[] ids);
+
+    List<ReviewPersonRef> selectBySelective(ReviewPersonRef reviewPersonRef);
+
     ReviewPersonRef selectByPrimaryKey(Integer autoId);
 
     int updateByExampleSelective(@Param("record") ReviewPersonRef record, @Param("example") ReviewPersonRefExample example);

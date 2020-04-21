@@ -5,9 +5,13 @@ import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import java.util.List;
 
 public interface ProjectInfoService {
+    List<ProjectInfo> selectAll();
+
     List<ProjectInfo> selectList(ProjectInfo projectInfo);
 
     List<ProjectInfo> selectByIds(String ids);
+
+    ProjectInfo selectByName(String name);
 
     Result updateBySelective(ProjectInfo projectInfo);
 

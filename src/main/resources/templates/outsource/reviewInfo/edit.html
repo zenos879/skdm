@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改评审数据')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-review-edit" th:with="command = ${@reviewInfoService.selectByPrimaryKey(reviewId)}">
+            <h4 class="form-header h4">评审数据信息</h4>
+            <input type="hidden" name="autoId" th:value="${command.autoId}">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
+                        <div class="col-sm-8">
+                            <input name="purchaseNo" id="purchaseNo" th:value="${command.purchaseNo}" placeholder="请输入采购编号" class="form-control" type="text" maxlength="20" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购总人数：</label>
+                        <div class="col-sm-8">
+                            <input name="postCount" id="postCount" th:value="${command.postCount}" placeholder="请输入采购总人数" class="form-control" type="text" maxlength="20" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>岗位：</label>
+                        <div class="col-sm-8">
+                            <select name="postId" id="postId" class="form-control" th:with="posts=${@postInfoService.selectAll()}">
+                                <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}" th:selected="${command.postId == post.postId}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>项目：</label>
+                        <div class="col-sm-8">
+                            <select name="projectId" id="projectId" class="form-control" th:with="projects=${@projectInfoService.selectAll()}">
+                                <option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectId}" th:selected="${command.projectId == project.projectId}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>评审日期：</label>
+                        <div class="select-time col-sm-8">
+                            <!--<label>评审日期： </label>-->
+                            <input type="text" class="time-input form-control" id="reviewDate" placeholder="评审日期" name="reviewDate" th:value="${command.getFormatReviewDate()}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "outsource/reviewInfo";
+
+        $("#form-review-edit").validate({
+            onkeyup: false,
+            focusCleanup: true,
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-review-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

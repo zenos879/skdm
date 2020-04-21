@@ -24,46 +24,49 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
 
     @Autowired
     DepartmentInfoMapper departmentInfoMapper;
+
+    @Override
+    public List<ProjectInfo> selectAll(){
+        return projectInfoMapper.selectList(new ProjectInfo());
+    }
     @Override
     public List<ProjectInfo> selectList(ProjectInfo projectInfo){
-        return projectInfoMapper.selectList(projectInfo);
+        List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
+        return projectInfos;
     }
     @Override
     public List<ProjectInfo> selectByIds(String ids){
         return projectInfoMapper.selectByIds(ids.split(","));
     }
-
+    @Override
+    public ProjectInfo selectByName(String name){
+        return projectInfoMapper.selectByName(name);
+    }
     @Override
     public Result updateBySelective(ProjectInfo projectInfo){
         Integer projectId = projectInfo.getProjectId();
         if (projectId == null) {
             return new Result(0,"id为null,无法修改！");
         }
+        if (projectInfo.hasNull()) {
+            return new Result(0,"*标注的为必填项，不能为null!");
+        }
         ProjectInfo projectInfoDb = projectInfoMapper.selectByPrimaryKey(projectId);
         if (projectInfoDb == null){
             return new Result(0,"无法修改不存在的项目！");
         }
-        if (projectInfoDb.getProjectName() .equals(projectInfo.getProjectName()) &&
-            projectInfoDb.getDepartmentId() == projectInfo.getDepartmentId()
-        ){
-            return new Result(0,"修改必须与之前不同！");
-        }
         int i = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
         return new Result(i);
     }
+
     @Override
     public Result insertBySelective(ProjectInfo projectInfo){
-        if (projectInfo.getDepartmentId() == null) {
-            return new Result(0,"部门不能为null！");
-        }
-        if (projectInfo.getProjectName() == null) {
-            return new Result(0,"项目名称不能为null！");
+        if (projectInfo.hasNull()) {
+            return new Result(0,"项目名称和部门为必填项不能为空!");
         }
         List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
         for (ProjectInfo info : projectInfos) {
-            if (info.getProjectName() .equals(projectInfo.getProjectName()) &&
-                    info.getDepartmentId() == projectInfo.getDepartmentId()
-            ){
+            if (info.getProjectName() .equals(projectInfo.getProjectName())){
                 return new Result(0,"此项目已存在！",true);
             }
         }
@@ -83,8 +86,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
                 return new Result(0,"第"+(i+2)+"行的部门名称为空!");
             }
             DepartmentInfo departmentInfo = departmentInfoMapper.selectByName(projectInfo.getDepartmentName().trim());
-            if (departmentInfo == null) {
-                return new Result(0,"第"+(i+2)+"行的部门不存在!");
+            if (departmentInfo == null || departmentInfo.getStatus() == 0) {
+                return new Result(0,"第"+(i+2)+"行的部门不存在或已删除!");
             }
             projectInfo.setDepartmentId(departmentInfo.getDepartmentId());
             projectInfo.setCreateTime(new Date());
@@ -111,7 +114,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
     @Override
     public ProjectInfo selectByPrimaryKey(Integer projectId){
-        return projectInfoMapper.selectByPrimaryKey(projectId);
+        ProjectInfo projectInfo = projectInfoMapper.selectByPrimaryKey(projectId);
+        return projectInfo;
     }
     @Override
     public Result deleteByIds(String ids){
@@ -120,8 +124,11 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         int faild = 0;
         for (Integer id : idArray) {
             Result result = deleteById(id);
-            if (result.code<1){
+            if (result.warning){
                 faild++;
+            }
+            if (result.code<1){
+                return result;
             }
             success++;
         }
@@ -133,11 +140,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             return new Result(0,"id不能为空！");
         }
         ProjectInfo projectInfo = projectInfoMapper.selectByPrimaryKey(id);
-        if (projectInfo == null) {
-            return new Result(0,"无法删除不存在项目！");
+        if (projectInfo == null || projectInfo.getStatus() == 0) {
+            return new Result(0,"无法删除不存在或已删除的项目！");
         }
+
         int i = projectInfoMapper.deleteByPrimaryKey(id);
-        return new Result(i);
+        return new Result(i,true);
     }
 
 

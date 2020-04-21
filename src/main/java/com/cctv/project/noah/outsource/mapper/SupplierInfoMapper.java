@@ -26,6 +26,8 @@ public interface SupplierInfoMapper {
 
     SupplierInfo selectByPrimaryKey(Integer supplierId);
 
+    SupplierInfo selectByName(String name);
+
     int updateByExampleSelective(@Param("record") SupplierInfo record, @Param("example") SupplierInfoExample example);
 
     int updateByExample(@Param("record") SupplierInfo record, @Param("example") SupplierInfoExample example);

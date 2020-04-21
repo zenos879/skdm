@@ -1,8 +1,11 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.utils.CommonUtil;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -35,6 +38,9 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     @Excel(name = "部门名称")
     private String departmentName;
 
+
+    private Integer departmentStatus = 1;
+
     /**
      * 创建时间
      */
@@ -42,9 +48,30 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    private Integer status = 1;
+
     private static final long serialVersionUID = 1L;
 
+    public Integer getDepartmentStatus() {
+        return departmentStatus;
+    }
+
+    public void setDepartmentStatus(Integer departmentStatus) {
+        this.departmentStatus = departmentStatus;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public String getDepartmentName() {
+        if (this.departmentStatus == 0){
+            return CommonUtil.getDelText(departmentName);
+        }
         return departmentName;
     }
 
@@ -82,6 +109,15 @@ public class ProjectInfo extends BaseEntity implements Serializable{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Boolean hasNull(){
+        return this.departmentId == null ||
+                StringUtils.isEmpty(this.projectName);
+    }
+
+    public Boolean notNull(){
+        return !hasNull();
     }
 
     @Override

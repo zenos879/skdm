@@ -102,6 +102,69 @@
     from review_info
     where auto_id = #{autoId,jdbcType=INTEGER}
   </select>
+  <select id="selectByIds" resultMap="BaseResultMap">
+    select
+    r.auto_id auto_id,
+    r.purchase_no purchase_no,
+    r.post_id post_id,
+    r.project_id project_id,
+    r.post_count post_count,
+    r.review_date review_date,
+    r.create_time create_time,
+    p1.post_name postName,
+    p2.project_name projectName
+    from review_info r
+    INNER JOIN post_info p1
+    INNER JOIN project_info p2
+    WHERE r.post_id = p1.post_id and r.project_id = p2.project_id and r.auto_id in
+    <foreach collection="array" item="id"  open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+  <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" resultMap="BaseResultMap">
+    select
+    r.auto_id auto_id,
+    r.purchase_no purchase_no,
+    r.post_id post_id,
+    r.project_id project_id,
+    r.post_count post_count,
+    r.review_date review_date,
+    r.create_time create_time,
+    p1.post_name postName,
+    p2.project_name projectName
+    from review_info r
+    INNER JOIN post_info p1
+    INNER JOIN project_info p2
+    WHERE r.post_id = p1.post_id and r.project_id = p2.project_id
+      <if test="autoId != null">
+        AND r.auto_id = #{autoId,jdbcType=INTEGER}
+      </if>
+      <if test="purchaseNo != null and purchaseNo != ''">
+        AND r.purchase_no like concat('%', #{purchaseNo}, '%')
+      </if>
+      <if test="postId != null">
+        AND r.post_id = #{postId,jdbcType=INTEGER}
+      </if>
+      <if test="projectId != null">
+        AND r.project_id = #{projectId,jdbcType=INTEGER}
+      </if>
+      <if test="postCount != null">
+        AND r.post_count = #{postCount,jdbcType=INTEGER}
+      </if>
+      <if test="params!=null and params.reviewBeginDate != null and params.reviewBeginDate != ''"><!-- 开始时间检索 -->
+        AND date_format(r.review_date,'%y%m%d') &gt;= date_format(#{params.reviewBeginDate},'%y%m%d')
+      </if>
+      <if test="params!=null and params.reviewEndDate != null and params.reviewEndDate != ''"><!-- 结束时间检索 -->
+        AND date_format(r.review_date,'%y%m%d') &lt;= date_format(#{params.reviewEndDate},'%y%m%d')
+      </if>
+      <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+        AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+      </if>
+      <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+        AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+      </if>
+
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from review_info
     where auto_id = #{autoId,jdbcType=INTEGER}
@@ -123,7 +186,7 @@
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" useGeneratedKeys="true">
     insert into review_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         purchase_no,
       </if>
       <if test="postId != null">
@@ -141,9 +204,12 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="postId != null">
@@ -160,6 +226,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -214,7 +283,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo">
     update review_info
     <set>
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null and purchaseNo != ''">
         purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="postId != null">
@@ -245,4 +314,5 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
+
 </mapper>

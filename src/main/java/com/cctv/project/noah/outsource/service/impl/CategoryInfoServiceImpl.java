@@ -8,6 +8,7 @@ import com.cctv.project.noah.outsource.mapper.PostInfoMapper;
 import com.cctv.project.noah.outsource.service.CategoryInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.text.Convert;
+import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,9 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
         if (categoryId == null) {
             return new Result(0,"id为空,无法修改！");
         }
+        if (StringUtils.isEmpty(categoryInfo.getCategoryName())) {
+            return new Result(0,"岗位分类名称不能为空！");
+        }
         CategoryInfo categoryInfoDb = categoryInfoMapper.selectByPrimaryKey(categoryId);
         if (categoryInfoDb == null){
             return new Result(0,"无法修改不存在的岗位分类！");
@@ -54,7 +58,7 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
     }
     @Override
     public Result insertBySelective(CategoryInfo categoryInfo){
-        if (categoryInfo.getCategoryName() == null) {
+        if (StringUtils.isEmpty(categoryInfo.getCategoryName())) {
             return new Result(0,"岗位分类名称不能为空！");
         }
         List<CategoryInfo> categoryInfos = categoryInfoMapper.selectBySelective(categoryInfo);

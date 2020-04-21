@@ -13,6 +13,7 @@ import com.cctv.project.noah.outsource.service.PostInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.text.Convert;
+import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Autowired
     CategoryInfoMapper categoryInfoMapper;
 
+    public List<PostInfo> selectAll(){
+        return postInfoMapper.selectList(new PostInfo());
+    }
     @Override
     public List<PostInfo> selectList(PostInfo postInfo){
         return postInfoMapper.selectList(postInfo);
@@ -38,9 +42,7 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
     @Override
     public PostInfo selectByName(String name){
-        PostInfo postInfo_sel = new PostInfo();
-        postInfo_sel.setPostName(name);
-        return postInfoMapper.selectList(postInfo_sel).get(0);
+        return postInfoMapper.selectByName(name);
     }
     @Override
     public Result updateBySelective(PostInfo postInfo){
@@ -48,21 +50,22 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (postId == null) {
             return new Result(0,"id为空,无法修改！");
         }
-        PostInfo postInfoDb = postInfoMapper.selectByPrimaryKey(postId);
-        if (postInfoDb == null){
-            return new Result(0,"无法修改不存在的岗位！");
+        if (StringUtils.isEmpty(postInfo.getPostName())) {
+            return new Result(0,"岗位名称不能为空！");
         }
-        if (postInfoDb.getPostName().equals(postInfo.getPostName()) &&
-            postInfoDb.getCategoryId() == postInfo.getCategoryId()
-        ){
-            return new Result(0,"修改必须与之前不同！");
+        if (postInfo.getCategoryId() == null) {
+            return new Result(0,"岗位分类不能为空！");
+        }
+        PostInfo postInfoDb = postInfoMapper.selectByPrimaryKey(postId);
+        if (postInfoDb == null || postInfoDb.getStatus() == 0){
+            return new Result(0,"无法修改不存在的岗位！");
         }
         int i = postInfoMapper.updateByPrimaryKeySelective(postInfo);
         return new Result(i);
     }
     @Override
     public Result insertBySelective(PostInfo postInfo){
-        if (postInfo.getPostName() == null) {
+        if (StringUtils.isEmpty(postInfo.getPostName())) {
             return new Result(0,"岗位名称不能为空！");
         }
         if (postInfo.getCategoryId() == null) {
@@ -71,9 +74,7 @@ public class PostInfoServiceImpl implements PostInfoService {
         List<PostInfo> postInfos = postInfoMapper.selectList(postInfo);
         if (postInfos.size()!=0){
             for (PostInfo info : postInfos) {
-                if (info.getPostName().equals(postInfo.getPostName()) &&
-                        info.getCategoryId() == postInfo.getCategoryId()
-                ){
+                if (info.getPostName().equals(postInfo.getPostName())){
                     return new Result(0,"此岗位已存在！",true);
                 }
             }
