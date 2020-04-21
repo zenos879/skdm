@@ -116,6 +116,11 @@ public class PersonInfoServiceImpl implements PersonInfoService {
     }
 
     @Override
+    public List<PersonInfo> selectAll() {
+        return selectList(new PersonInfo());
+    }
+
+    @Override
     public List<PersonInfo> selectByName(String record) {
         PersonInfoExample personInfoExample = new PersonInfoExample();
         PersonInfoExample.Criteria criteria = personInfoExample.createCriteria();

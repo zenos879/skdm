@@ -18,6 +18,8 @@ public interface PersonInfoService {
 
     List<PersonInfo> selectList(PersonInfo record);
 
+    List<PersonInfo> selectAll();
+
     List<PersonInfo> selectByName(String record);
 
     List<PersonInfo> selectByIds(String ids);
