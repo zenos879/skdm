@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('评审数据列表')" />
+	<th:block th:include="include :: header('评审人员数据列表')" />
 	<th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
@@ -16,26 +16,23 @@
 									采购编号：<input type="text" name="purchaseNo"/>
 								</li>
 								<li>
-									采购总人数：<input type="text" name="postCount"/>
+									供应商：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+									<option value="">全部</option>
+									<option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
+								</select>
 								</li>
 								<li>
-									岗位：<select name="postId" id="postId" class="selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+									人员：<select name="candidateId" id="candidateId" class="selectpicker" data-live-search="true" th:with="persons=${@personInfoService.selectAll()}">
 									<option value="">全部</option>
-									<option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}"></option>
+									<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>
 									</select>
 								</li>
 								<li>
-									项目：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
-									<option value="">全部</option>
-									<option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectId}"></option>
+									是否通知参加面试：<select name="isNotifyInterview" th:with="type=${@dict.getType('isNotifyInterview')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 									</select>
 								</li>
-								</li>
-								<li class="select-time">
-									<label>评审日期： </label>
-									<input type="text" class="time-input" id="reviewBeginDate" placeholder="开始时间" name="params[reviewBeginDate]"/>
-									<span>-</span>
-									<input type="text" class="time-input" id="reviewEndDate" placeholder="结束时间" name="params[reviewEndDate]"/>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
@@ -77,8 +74,8 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
 	<script th:inline="javascript">
-		var prefix = ctx + "outsource/reviewInfo";
-		// var isSubsidiary = [[${@dict.getType('isSubsidiary')}]];
+		var prefix = ctx + "outsource/reviewPersonRef";
+		var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
 		$(function() {
 		    queryUserList();
 		});
@@ -94,13 +91,13 @@
 		        importTemplateUrl: prefix + "/importTemplate",
 		        sortName: "createTime",
 		        sortOrder: "desc",
-		        modalName: "评审数据",
+		        modalName: "评审人员数据",
 		        columns: [{
 		        	checkbox:true
 				},
 		        {
 		            field: 'autoId',
-		            title: '评审ID',
+		            title: '评审人员ID',
 					sortable: true
 		        },
 				{
@@ -109,22 +106,21 @@
 					sortable: true
 				},
 				{
-					field: 'postName',
-					title: '岗位',
+					field: 'supplierName',
+					title: '供应商',
 					sortable: true
 				},
 				{
-					field: 'projectName',
-					title: '项目',
+					field: 'candidateName',
+					title: '候选人',
 					sortable: true
 				},{
-					field: 'postCount',
-					title: '采购总人数',
-					sortable: true,
-				},{
-					field: 'reviewDate',
-					title: '评审日期',
-					sortable: true,
+						field: 'isNotifyInterview',
+						title: '是否是通知参加面试',
+						sortable: true,
+						formatter:function(value,row,index){
+							return $.table.selectDictLabel(isNotifyInterview, value);
+						}
 				},
 		        {
 		            field: 'createTime',

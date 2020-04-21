@@ -39,6 +39,9 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     @Excel(name = "候选人")
     private String candidateName;
 
+    @Excel(name = "身份证号",type = Excel.Type.IMPORT)
+    private String idCard;
+
     /**
      * 是否通知参加面试
      */
@@ -53,6 +56,14 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
 
     public String getSupplierName() {
         return supplierName;
