@@ -1,5 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,12 +19,16 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 订单编号：一次面试对应一个订单编号
      */
+    @Excel(name = "订单编号", cellType = Excel.ColumnType.NUMERIC)
     private String orderNo;
 
     /**
      * 候选人id
      */
     private Integer candidateId;
+
+    @Excel(name = "人名", cellType = Excel.ColumnType.NUMERIC)
+    private String candidateName;
 
     /**
      * 是否参加面试
@@ -31,11 +38,15 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 通知面试日期
      */
+    @Excel(name = "通知面试日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date notifyDate;
 
     /**
      * 参加面试日期
      */
+    @Excel(name = "参加面试日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date interviewDate;
 
     /**
@@ -61,11 +72,15 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 到岗日期
      */
+    @Excel(name = "到岗日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date arriveDate;
 
     /**
      * 离岗日期
      */
+    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date leaveDate;
 
     /**
@@ -76,7 +91,11 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
+
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -192,6 +211,14 @@ public class InterviewPersonRef implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -217,7 +244,8 @@ public class InterviewPersonRef implements Serializable {
             && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
             && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
             && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -238,6 +266,7 @@ public class InterviewPersonRef implements Serializable {
         result = prime * result + ((getLeaveDate() == null) ? 0 : getLeaveDate().hashCode());
         result = prime * result + ((getLeaveReason() == null) ? 0 : getLeaveReason().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -261,8 +290,17 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", leaveDate=").append(leaveDate);
         sb.append(", leaveReason=").append(leaveReason);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getCandidateName() {
+        return candidateName;
+    }
+
+    public void setCandidateName(String candidateName) {
+        this.candidateName = candidateName;
     }
 }

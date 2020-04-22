@@ -11,6 +11,8 @@ import java.util.Date;
  * @author 
  */
 public class PersonInfo implements Serializable {
+
+
     /**
      * 候选人ID，自增主键
 

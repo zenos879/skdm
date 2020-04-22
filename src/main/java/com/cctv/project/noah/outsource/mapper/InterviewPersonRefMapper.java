@@ -4,7 +4,9 @@ import com.cctv.project.noah.outsource.entity.InterviewPersonRef;
 import com.cctv.project.noah.outsource.entity.InterviewPersonRefExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface InterviewPersonRefMapper {
     long countByExample(InterviewPersonRefExample example);
 
