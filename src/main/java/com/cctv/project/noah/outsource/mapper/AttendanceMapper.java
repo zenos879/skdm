@@ -18,6 +18,12 @@ public interface AttendanceMapper {
 
     List<Attendance> selectByExample(AttendanceExample example);
 
+    List<Attendance> selectBySelective(Attendance attendance);
+
+    List<Attendance> selectByRepeat(Attendance attendance);
+
+    List<Attendance> selectByIds(String[] ids);
+
     Attendance selectByPrimaryKey(Long autoId);
 
     int updateByExampleSelective(@Param("record") Attendance record, @Param("example") AttendanceExample example);

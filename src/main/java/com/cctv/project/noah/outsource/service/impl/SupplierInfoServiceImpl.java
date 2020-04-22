@@ -88,13 +88,10 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
         if (supplierInfo.getIsSubsidiary() == null) {
             return new Result(0,"是否附属公司不能为null！");
         }
-        List<SupplierInfo> supplierInfos = supplierInfoMapper.selectBySelective(supplierInfo);
-        if (supplierInfos.size()!=0){
-            for (SupplierInfo info : supplierInfos) {
-                if (info.getSupplierName().equals(supplierInfo.getSupplierName())){
-                    return new Result(0,"此供应商已存在！",true);
-                }
-            }
+
+        SupplierInfo supplierInfoDb = supplierInfoMapper.selectByName(supplierInfo.getSupplierName());
+        if (supplierInfoDb != null) {
+            return new Result(0,"此供应商已存在！",true);
         }
         supplierInfo.setCreateTime(new Date());
         int i = supplierInfoMapper.insertSelective(supplierInfo);

@@ -80,11 +80,9 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
         if (reviewPersonRefNull(reviewPersonRef)) {
             return new Result(0,"*号标识项为必填项！");
         }
-        List<ReviewPersonRef> reviewPersonRefs = reviewPersonRefMapper.selectBySelective(reviewPersonRef);
+        List<ReviewPersonRef> reviewPersonRefs = reviewPersonRefMapper.selectByRepeat(reviewPersonRef);
         if (reviewPersonRefs.size()!=0){
-            for (ReviewPersonRef info : reviewPersonRefs) {
-                return new Result(0,"此评审人员数据已存在！",true);
-            }
+            return new Result(0,"此评审人员数据已存在！",true);
         }
         reviewPersonRef.setCreateTime(new Date());
         int i = reviewPersonRefMapper.insertSelective(reviewPersonRef);

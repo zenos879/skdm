@@ -69,13 +69,9 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
         if (StringUtils.isEmpty(departmentInfo.getDepartmentName())) {
             return new Result(0,"部门名称不能为空！");
         }
-        List<DepartmentInfo> departmentInfos = departmentInfoMapper.selectBySelective(departmentInfo);
-        if (departmentInfos.size()!=0){
-            for (DepartmentInfo info : departmentInfos) {
-                if (info.getDepartmentName().equals(departmentInfo.getDepartmentName())){
-                    return new Result(0,"此部门已存在！",true);
-                }
-            }
+        DepartmentInfo departmentInfoDb = departmentInfoMapper.selectByName(departmentInfo.getDepartmentName());
+        if (departmentInfoDb != null) {
+            return new Result(0,"此部门已存在！",true);
         }
         departmentInfo.setCreateTime(new Date());
         int i = departmentInfoMapper.insertSelective(departmentInfo);

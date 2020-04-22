@@ -71,13 +71,9 @@ public class PostInfoServiceImpl implements PostInfoService {
         if (postInfo.getCategoryId() == null) {
             return new Result(0,"岗位分类不能为空！");
         }
-        List<PostInfo> postInfos = postInfoMapper.selectList(postInfo);
-        if (postInfos.size()!=0){
-            for (PostInfo info : postInfos) {
-                if (info.getPostName().equals(postInfo.getPostName())){
-                    return new Result(0,"此岗位已存在！",true);
-                }
-            }
+        PostInfo postInfoDB = postInfoMapper.selectByName(postInfo.getPostName());
+        if (postInfoDB != null) {
+            return new Result(0,"此岗位已存在！",true);
         }
         postInfo.setCreateTime(new Date());
         int i = postInfoMapper.insertSelective(postInfo);

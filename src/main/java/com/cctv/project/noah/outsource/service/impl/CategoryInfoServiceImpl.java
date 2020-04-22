@@ -65,13 +65,9 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
         if (StringUtils.isEmpty(categoryInfo.getCategoryName())) {
             return new Result(0,"岗位分类名称不能为空！");
         }
-        List<CategoryInfo> categoryInfos = categoryInfoMapper.selectBySelective(categoryInfo);
-        if (categoryInfos.size()!=0){
-            for (CategoryInfo info : categoryInfos) {
-                if (info.getCategoryName().equals(categoryInfo.getCategoryName())){
-                    return new Result(0,"此岗位分类已存在！",true);
-                }
-            }
+        CategoryInfo categoryInfoDb = categoryInfoMapper.selectByName(categoryInfo.getCategoryName());
+        if (categoryInfoDb != null) {
+            return new Result(0,"此岗位分类已存在！",true);
         }
         categoryInfo.setCreateTime(new Date());
         int i = categoryInfoMapper.insertSelective(categoryInfo);

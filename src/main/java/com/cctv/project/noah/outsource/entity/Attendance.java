@@ -1,77 +1,165 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * attendance
  * @author 
  */
-public class Attendance implements Serializable {
+public class Attendance extends BaseEntity implements Serializable {
     /**
      * 自增主键
      */
+    @Excel(name = "考勤id", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Long autoId;
 
     /**
      * 订单编号：与一次面试对应
      */
+    @Excel(name = "订单编号")
     private String orderNo;
 
     /**
      * 考勤人id
      */
+
     private Integer candidateId;
+
+    @Excel(name = "考勤人")
+    private String candidateName;
 
     /**
      * 统计年份
      */
-    private Short statisticsYear;
+    @Excel(name = "统计年份")
+    private Integer statisticsYear;
 
     /**
      * 统计月份
      */
-    private Byte statisticsMonth;
+    @Excel(name = "统计月份")
+    private Integer statisticsMonth;
 
     /**
      * 到岗日期
      */
+    @Excel(name = "到岗日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date arriveDate;
 
     /**
      * 离岗日期
      */
+    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date leaveDate;
 
     /**
      * 备注说明
      */
+    @Excel(name = "备注说明")
     private String remark;
 
     /**
      * 是否被退回
      */
-    private Byte isReject;
+    @Excel(name = "是否替换")
+    private Integer isReject;
 
     /**
      * 应该工作天数
      */
+    @Excel(name = "应该工作天数")
     private Float serveDaysExpect;
 
     /**
      * 实际工作天数
      */
+    @Excel(name = "实际工作天数")
     private Float serveDaysActual;
+
+    @Excel(name = "考勤人身份证号",type = Excel.Type.IMPORT)
+    private String idCard;
 
     /**
      * 替换考勤人id，不是替换为空
      */
     private Integer insteadCandidateId;
 
+    @Excel(name = "替换考勤人")
+    private String insteadCandidateName;
+
+    @Excel(name = "替换考勤人身份证号",type = Excel.Type.IMPORT)
+    private String insteadIdCard;
+
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
+
+    public String getInsteadIdCard() {
+        return insteadIdCard;
+    }
+
+    public void setInsteadIdCard(String insteadIdCard) {
+        this.insteadIdCard = insteadIdCard;
+    }
+
+    public String getCandidateName() {
+        return candidateName;
+    }
+
+    public void setCandidateName(String candidateName) {
+        this.candidateName = candidateName;
+    }
+
+    public Integer getStatisticsYear() {
+        return statisticsYear;
+    }
+
+    public void setStatisticsYear(Integer statisticsYear) {
+        this.statisticsYear = statisticsYear;
+    }
+
+    public Integer getStatisticsMonth() {
+        return statisticsMonth;
+    }
+
+    public void setStatisticsMonth(Integer statisticsMonth) {
+        this.statisticsMonth = statisticsMonth;
+    }
+
+    public Integer getIsReject() {
+        return isReject;
+    }
+
+    public void setIsReject(Integer isReject) {
+        this.isReject = isReject;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getInsteadCandidateName() {
+        return insteadCandidateName;
+    }
+
+    public void setInsteadCandidateName(String insteadCandidateName) {
+        this.insteadCandidateName = insteadCandidateName;
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -99,21 +187,6 @@ public class Attendance implements Serializable {
         this.candidateId = candidateId;
     }
 
-    public Short getStatisticsYear() {
-        return statisticsYear;
-    }
-
-    public void setStatisticsYear(Short statisticsYear) {
-        this.statisticsYear = statisticsYear;
-    }
-
-    public Byte getStatisticsMonth() {
-        return statisticsMonth;
-    }
-
-    public void setStatisticsMonth(Byte statisticsMonth) {
-        this.statisticsMonth = statisticsMonth;
-    }
 
     public Date getArriveDate() {
         return arriveDate;
@@ -139,13 +212,23 @@ public class Attendance implements Serializable {
         this.remark = remark;
     }
 
-    public Byte getIsReject() {
-        return isReject;
+    public String getFormatArriveDate(){
+        if (this.arriveDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(arriveDate);
+        return format;
+    }
+    public String getFormatLeaveDate(){
+        if (this.leaveDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(leaveDate);
+        return format;
     }
 
-    public void setIsReject(Byte isReject) {
-        this.isReject = isReject;
-    }
 
     public Float getServeDaysExpect() {
         return serveDaysExpect;

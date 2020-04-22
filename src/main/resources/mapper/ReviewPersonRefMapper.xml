@@ -162,6 +162,37 @@
       AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
     </if>
   </select>
+  <select id="selectByRepeat" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" resultMap="BaseResultMap">
+    SELECT
+    r.auto_id auto_id,
+    r.purchase_no purchase_no,
+    r.supplier_id supplier_id,
+    r.candidate_id candidate_id,
+    r.is_notify_interview is_notify_interview,
+    r.create_time create_time,
+    s.supplier_name supplierName,
+    p.candidate_name candidateName
+    FROM
+    review_person_ref r
+    INNER JOIN supplier_info s
+    INNER JOIN person_info p
+    WHERE
+    r.candidate_id = p.candidate_id
+    AND r.supplier_id = s.supplier_id
+
+    <if test="purchaseNo != null and purchaseNo != ''">
+      AND r.purchase_no = #{purchaseNo}
+    </if>
+    <if test="supplierId != null">
+      AND r.supplier_id = #{supplierId,jdbcType=INTEGER}
+    </if>
+    <if test="candidateId != null">
+      AND r.candidate_id = #{candidateId,jdbcType=INTEGER}
+    </if>
+    <if test="isNotifyInterview != null">
+      AND r.is_notify_interview = #{isNotifyInterview,jdbcType=TINYINT}
+    </if>
+  </select>
 
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
