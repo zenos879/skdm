@@ -188,10 +188,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" useGeneratedKeys="true">
-    insert into project_info (project_name, department_id, create_time
-      )
-    values (#{projectName,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into project_info (project_name, department_id, create_time,
+      `status`)
+    values (#{projectName,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="project_id" keyProperty="projectId" parameterType="com.cctv.project.noah.outsource.entity.ProjectInfo" useGeneratedKeys="true">
     insert into project_info
@@ -252,6 +252,9 @@
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">

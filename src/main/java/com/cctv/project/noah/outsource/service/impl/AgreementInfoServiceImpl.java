@@ -5,6 +5,8 @@ import com.cctv.project.noah.outsource.entity.AgreementInfoExample;
 import com.cctv.project.noah.outsource.entity.SupplierInfo;
 import com.cctv.project.noah.outsource.mapper.AgreementInfoMapper;
 import com.cctv.project.noah.outsource.service.*;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

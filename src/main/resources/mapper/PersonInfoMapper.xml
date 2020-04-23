@@ -7,6 +7,7 @@
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    candidate_id, candidate_name, id_card, phone, create_time
+    candidate_id, candidate_name, id_card, phone, create_time, `status`
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.PersonInfoExample" resultMap="BaseResultMap">
     select
@@ -112,9 +113,9 @@
   </delete>
   <insert id="insert" keyColumn="candidate_id" keyProperty="candidateId" parameterType="com.cctv.project.noah.outsource.entity.PersonInfo" useGeneratedKeys="true">
     insert into person_info (candidate_name, id_card, phone, 
-      create_time)
+      create_time, `status`)
     values (#{candidateName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="candidate_id" keyProperty="candidateId" parameterType="com.cctv.project.noah.outsource.entity.PersonInfo" useGeneratedKeys="true">
     insert into person_info
@@ -131,6 +132,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="status != null">
+        `status`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="candidateName != null">
@@ -144,6 +148,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -171,6 +178,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -182,7 +192,8 @@
       candidate_name = #{record.candidateName,jdbcType=VARCHAR},
       id_card = #{record.idCard,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `status` = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -202,6 +213,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where candidate_id = #{candidateId,jdbcType=INTEGER}
   </update>
@@ -210,7 +224,8 @@
     set candidate_name = #{candidateName,jdbcType=VARCHAR},
       id_card = #{idCard,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER}
     where candidate_id = #{candidateId,jdbcType=INTEGER}
   </update>
 </mapper>

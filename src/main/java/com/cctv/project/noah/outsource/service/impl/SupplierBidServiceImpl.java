@@ -1,14 +1,14 @@
 package com.cctv.project.noah.outsource.service.impl;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.SupplierBidMapper;
 import com.cctv.project.noah.outsource.service.*;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

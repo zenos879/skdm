@@ -105,7 +105,7 @@ public class SupplierBidController extends BaseController {
 
     @RequestMapping("/remove")
     @ResponseBody
-    @Log(title = "项目数据", businessType = BusinessType.DELETE)
+    @Log(title = "供应商竞标数据", businessType = BusinessType.DELETE)
     public AjaxResult remove(String ids){
         return toAjax(supplierBidService.deleteByIds(ids));
     }
