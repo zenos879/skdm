@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.mapper;
 
 import com.cctv.project.noah.outsource.entity.Attendance;
+import com.cctv.project.noah.outsource.entity.AttendanceCount;
 import com.cctv.project.noah.outsource.entity.AttendanceExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -23,6 +24,10 @@ public interface AttendanceMapper {
     List<Attendance> selectByRepeat(Attendance attendance);
 
     List<Attendance> selectByIds(String[] ids);
+
+    List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount);
+
+    List<AttendanceCount> selectAttendanceCountByIds(String[] ids);
 
     Attendance selectByPrimaryKey(Long autoId);
 

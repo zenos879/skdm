@@ -2,6 +2,7 @@ package com.cctv.project.noah.outsource.controller;
 
 
 import com.cctv.project.noah.outsource.entity.Attendance;
+import com.cctv.project.noah.outsource.entity.AttendanceCount;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.AttendanceService;
 import com.cctv.project.noah.system.annotation.Log;
@@ -36,6 +37,10 @@ public class AttendanceController extends BaseController {
     public String add(){
         return prefix+"/add";
     }
+    @GetMapping("/attendanceCount")
+    public String attendanceCount(){
+        return prefix+"Count/page";
+    }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
@@ -48,6 +53,13 @@ public class AttendanceController extends BaseController {
     public TableDataInfo list(Attendance attendance){
         startPage();
         return getDataTable(attendanceService.selectBySelective(attendance));
+    }
+
+    @RequestMapping("/attendanceCountlist")
+    @ResponseBody
+    public TableDataInfo attendanceCountlist(AttendanceCount attendanceCount){
+        startPage();
+        return getDataTable(attendanceService.selectAttendanceCount(attendanceCount));
     }
 
     @PostMapping("/edit")
@@ -78,6 +90,20 @@ public class AttendanceController extends BaseController {
             list = attendanceService.selectBySelective(attendance);
         }
         return util.exportExcel(list, "考勤数据");
+    }
+
+    @PostMapping("/attendanceCountExport")
+    @ResponseBody
+    @Log(title = "考勤统计", businessType = BusinessType.EXPORT)
+    public AjaxResult attendanceCountExport(AttendanceCount attendanceCount, String ids){
+        ExcelUtil<AttendanceCount> util = new ExcelUtil<AttendanceCount>(AttendanceCount.class);
+        List<AttendanceCount> list;
+        if (ids !=null){
+            list = attendanceService.selectAttendanceCountByIds(ids);
+        }else {
+            list = attendanceService.selectAttendanceCount(attendanceCount);
+        }
+        return util.exportExcel(list, "考勤统计");
     }
 
 

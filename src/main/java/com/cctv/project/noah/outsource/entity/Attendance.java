@@ -70,7 +70,7 @@ public class Attendance extends BaseEntity implements Serializable {
      * 是否被退回
      */
     @Excel(name = "是否替换")
-    private Integer isReject;
+    private Integer isReject = 0;
 
     /**
      * 应该工作天数

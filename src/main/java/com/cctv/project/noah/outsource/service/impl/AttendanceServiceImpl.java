@@ -1,9 +1,6 @@
 package com.cctv.project.noah.outsource.service.impl;
 
-import com.cctv.project.noah.outsource.entity.Attendance;
-import com.cctv.project.noah.outsource.entity.PersonInfo;
-import com.cctv.project.noah.outsource.entity.ReviewPersonRef;
-import com.cctv.project.noah.outsource.entity.SupplierInfo;
+import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.AttendanceMapper;
 import com.cctv.project.noah.outsource.mapper.ReviewPersonRefMapper;
 import com.cctv.project.noah.outsource.service.*;
@@ -12,6 +9,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -46,12 +44,35 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<Attendance> selectBySelective(Attendance attendance){
         return attendanceMapper.selectBySelective(attendance);
     }
+
+    @Override
+    public List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount){
+        return attendanceMapper.selectAttendanceCount(attendanceCount);
+    }
+
+
+    public Integer getNowYear(){
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        return year;
+    }
+
+    public Integer getPrevMonth(){
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH);
+        return month;
+    }
+
+
+    @Override
+    public List<AttendanceCount> selectAttendanceCountByIds(String ids){
+        return attendanceMapper.selectAttendanceCountByIds(ids.split(","));
+    }
+
     @Override
     public List<Attendance> selectByIds(String ids){
         return attendanceMapper.selectByIds(ids.split(","));
     }
-
-
     private Boolean attendanceNotNull(Attendance attendance){
         return StringUtils.isNotEmpty(attendance.getOrderNo()) &&
                 (StringUtils.isNotNull(attendance.getCandidateId())||StringUtils.isNotEmpty(attendance.getCandidateName())) &&

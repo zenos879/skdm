@@ -122,25 +122,28 @@
     p.status status,
     cate.status categoryStatus
     from post_info p INNER JOIN category_info cate
-    where cate.category_id = p.category_id
-    <if test="postId != null">
-      AND post_id = #{postId,jdbcType=INTEGER}
-    </if>
-    <if test="postName != null and postName != ''">
-      AND post_name like concat('%', #{postName}, '%')
-    </if>
-    <if test="categoryId != null">
-      AND cate.category_id = #{categoryId,jdbcType=INTEGER}
-    </if>
-    <if test="status != null">
-      AND p.status = #{status,jdbcType=INTEGER}
-    </if>
-    <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-      AND date_format(p.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-    </if>
-    <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-      AND date_format(p.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-    </if>
+    on cate.category_id = p.category_id
+    <where>
+      <if test="postId != null">
+        AND post_id = #{postId,jdbcType=INTEGER}
+      </if>
+      <if test="postName != null and postName != ''">
+        AND post_name like concat('%', #{postName}, '%')
+      </if>
+      <if test="categoryId != null">
+        AND cate.category_id = #{categoryId,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        AND p.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+        AND date_format(p.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+      </if>
+      <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+        AND date_format(p.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+      </if>
+    </where>
+
   </select>
   <select id="selectByIds"  resultMap="BaseResultMap">
     select
@@ -152,7 +155,8 @@
     p.status status,
     cate.status categoryStatus
     from post_info p INNER JOIN category_info cate
-    where cate.category_id = p.category_id and p.post_id in
+    on cate.category_id = p.category_id
+    where p.post_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
     </foreach>

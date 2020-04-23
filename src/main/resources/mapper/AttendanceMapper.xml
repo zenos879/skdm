@@ -110,6 +110,60 @@
     from attendance
     where auto_id = #{autoId,jdbcType=BIGINT}
   </select>
+  <select id="selectAttendanceCount" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
+    SELECT
+	c.project_name projectName,
+	b.order_no orderNo,
+	d.department_name departmentName,
+	g.candidate_name candidateName,
+	f.post_name postName,
+	e.supplier_name supplierName,
+	a.serve_days_expect serveDaysExpect,
+	a.serve_days_actual serveDaysActual,
+	a.remark remark,
+	a.arrive_date arriveDate,
+	a.leave_date leaveDate,
+	a.auto_id autoId
+    FROM
+      attendance a
+    LEFT JOIN `interview_info` b ON a.order_no = b.order_no
+    LEFT JOIN project_info c ON b.project_id = c.project_id
+    LEFT JOIN department_info d ON c.department_id = d.department_id
+    LEFT JOIN supplier_info e ON b.supplier_id = e.supplier_id
+    LEFT JOIN post_info f ON b.post_id = f.post_id
+    LEFT JOIN person_info g ON a.candidate_id = g.candidate_id
+    WHERE
+      a.`statistics_year` = #{statisticsYear}
+    AND a.statistics_month = #{statisticsMonth}
+  </select>
+  <select id="selectAttendanceCountByIds" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
+    SELECT
+	c.project_name projectName,
+	b.order_no orderNo,
+	d.department_name departmentName,
+	g.candidate_name candidateName,
+	f.post_name postName,
+	e.supplier_name supplierName,
+	a.serve_days_expect serveDaysExpect,
+	a.serve_days_actual serveDaysActual,
+	a.remark remark,
+	a.arrive_date arriveDate,
+	a.leave_date leaveDate,
+	a.auto_id autoId
+    FROM
+      attendance a
+    LEFT JOIN `interview_info` b ON a.order_no = b.order_no
+    LEFT JOIN project_info c ON b.project_id = c.project_id
+    LEFT JOIN department_info d ON c.department_id = d.department_id
+    LEFT JOIN supplier_info e ON b.supplier_id = e.supplier_id
+    LEFT JOIN post_info f ON b.post_id = f.post_id
+    LEFT JOIN person_info g ON a.candidate_id = g.candidate_id
+    WHERE
+    a.auto_id in
+    <foreach collection="array" item="id"  open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
   <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.Attendance" resultMap="BaseResultMap">
     SELECT
     a.auto_id,
@@ -126,23 +180,12 @@
     a.instead_candidate_id instead_candidate_id,
     a.create_time create_time,
     p1.candidate_name candidateName,
-    CASE
-    WHEN a.instead_candidate_id != 0 THEN
-    (
-    SELECT
-    p2.candidate_name
-    FROM
-    person_info p2
-    WHERE
-    p2.candidate_id = a.instead_candidate_id
-    )
-    END insteadCandidateName
+    p2.candidate_name insteadCandidateName
     FROM
     attendance a
-    INNER JOIN person_info p1
-    WHERE
-    a.candidate_id = p1.candidate_id
-
+    INNER JOIN person_info p1 ON a.candidate_id = p1.candidate_id
+    LEFT JOIN person_info p2 ON a.instead_candidate_id = p2.candidate_id
+    <where>
       <if test="orderNo != null">
         and a.order_no like concat('%', #{orderNo}, '%')
       </if>
@@ -182,12 +225,13 @@
       <if test="insteadCandidateId != null">
         and a.instead_candidate_id = #{insteadCandidateId,jdbcType=INTEGER}
       </if>
-    <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-      AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-    </if>
-    <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-      AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-    </if>
+      <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+        AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+      </if>
+      <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+        AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+      </if>
+    </where>
   </select>
   <select id="selectByRepeat" parameterType="com.cctv.project.noah.outsource.entity.Attendance" resultMap="BaseResultMap">
     SELECT
@@ -205,35 +249,26 @@
     a.instead_candidate_id instead_candidate_id,
     a.create_time create_time,
     p1.candidate_name candidateName,
-    CASE
-    WHEN a.instead_candidate_id != 0 THEN
-    (
-    SELECT
-    p2.candidate_name
-    FROM
-    person_info p2
-    WHERE
-    p2.candidate_id = a.instead_candidate_id
-    )
-    END insteadCandidateName
+    p2.candidate_name insteadCandidateName
     FROM
     attendance a
-    INNER JOIN person_info p1
-    WHERE
-    a.candidate_id = p1.candidate_id
+    INNER JOIN person_info p1 ON a.candidate_id = p1.candidate_id
+    LEFT JOIN person_info p2 ON a.instead_candidate_id = p2.candidate_id
+    <where>
+      <if test="orderNo != null">
+        and a.order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="candidateId != null">
+        and a.candidate_id = #{candidateId,jdbcType=INTEGER}
+      </if>
+      <if test="statisticsYear != null">
+        and a.statistics_year = #{statisticsYear,jdbcType=SMALLINT}
+      </if>
+      <if test="statisticsMonth != null">
+        and a.statistics_month = #{statisticsMonth,jdbcType=TINYINT}
+      </if>
+    </where>
 
-    <if test="orderNo != null">
-      and a.order_no = #{orderNo,jdbcType=VARCHAR}
-    </if>
-    <if test="candidateId != null">
-      and a.candidate_id = #{candidateId,jdbcType=INTEGER}
-    </if>
-    <if test="statisticsYear != null">
-      and a.statistics_year = #{statisticsYear,jdbcType=SMALLINT}
-    </if>
-    <if test="statisticsMonth != null">
-      and a.statistics_month = #{statisticsMonth,jdbcType=TINYINT}
-    </if>
   </select>
   <select id="selectByIds" resultMap="BaseResultMap">
     SELECT
@@ -251,22 +286,12 @@
     a.instead_candidate_id instead_candidate_id,
     a.create_time create_time,
     p1.candidate_name candidateName,
-    CASE
-    WHEN a.instead_candidate_id != 0 THEN
-    (
-    SELECT
-    p2.candidate_name
-    FROM
-    person_info p2
-    WHERE
-    p2.candidate_id = a.instead_candidate_id
-    )
-    END insteadCandidateName
+    p2.candidate_name insteadCandidateName
     FROM
     attendance a
-    INNER JOIN person_info p1
-    WHERE
-    a.candidate_id = p1.candidate_id and a.auto_id in
+    INNER JOIN person_info p1 ON a.candidate_id = p1.candidate_id
+    LEFT JOIN person_info p2 ON a.instead_candidate_id = p2.candidate_id
+    where a.auto_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
     </foreach>
