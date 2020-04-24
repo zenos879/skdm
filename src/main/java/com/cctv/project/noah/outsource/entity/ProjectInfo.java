@@ -113,7 +113,7 @@ public class ProjectInfo extends BaseEntity implements Serializable{
 
     public Boolean hasNull(){
         return this.departmentId == null ||
-                StringUtils.isEmpty(this.projectName);
+                (StringUtils.isEmpty(this.projectName) && this.projectId == null);
     }
 
     public Boolean notNull(){

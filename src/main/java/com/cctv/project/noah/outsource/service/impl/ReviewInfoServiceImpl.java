@@ -104,7 +104,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
         if (reviewInfoNull(reviewInfo)) {
             return new Result(0,"*号标识项为必填项！");
         }
-        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectBySelective(reviewInfo);
+        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectByRepeat(reviewInfo);
         if (reviewInfos.size()!=0){
             for (ReviewInfo info : reviewInfos) {
                 Integer repeat = checkReviewInfoRepeat(reviewInfo, info);

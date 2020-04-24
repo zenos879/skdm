@@ -22,6 +22,8 @@ public interface ReviewPersonRefMapper {
 
     List<ReviewPersonRef> selectBySelective(ReviewPersonRef reviewPersonRef);
 
+    List<ReviewPersonRef> selectByRepeat(ReviewPersonRef reviewPersonRef);
+
     ReviewPersonRef selectByPrimaryKey(Integer autoId);
 
     int updateByExampleSelective(@Param("record") ReviewPersonRef record, @Param("example") ReviewPersonRefExample example);

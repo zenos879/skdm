@@ -50,7 +50,7 @@
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>评审日期：</label>
                         <div class="select-time col-sm-8">
                             <!--<label>评审日期： </label>-->
-                            <input type="text" class="time-input form-control" id="reviewDate" placeholder="评审日期" name="reviewDate" th:value="${command.getFormatReviewDate()}"/>
+                            <input type="text" class="time-input form-control" id="reviewDate" placeholder="评审日期" name="reviewDate" th:value="${command.getFormatReviewDate()}" required/>
                         </div>
                     </div>
                 </div>

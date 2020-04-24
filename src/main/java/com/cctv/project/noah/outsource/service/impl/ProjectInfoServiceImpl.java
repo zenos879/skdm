@@ -64,11 +64,10 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectInfo.hasNull()) {
             return new Result(0,"项目名称和部门为必填项不能为空!");
         }
-        List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
-        for (ProjectInfo info : projectInfos) {
-            if (info.getProjectName() .equals(projectInfo.getProjectName())){
-                return new Result(0,"此项目已存在！",true);
-            }
+
+        ProjectInfo projectInfoDb = projectInfoMapper.selectByName(projectInfo.getProjectName());
+        if (projectInfoDb != null) {
+            return new Result(0,"此项目已存在！",true);
         }
         projectInfo.setCreateTime(new Date());
         int i = projectInfoMapper.insertSelective(projectInfo);
