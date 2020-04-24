@@ -204,10 +204,12 @@ public class Attendance extends BaseEntity implements Serializable {
         this.leaveDate = leaveDate;
     }
 
+    @Override
     public String getRemark() {
         return remark;
     }
 
+    @Override
     public void setRemark(String remark) {
         this.remark = remark;
     }
@@ -254,10 +256,12 @@ public class Attendance extends BaseEntity implements Serializable {
         this.insteadCandidateId = insteadCandidateId;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
