@@ -26,10 +26,10 @@ public class Attendance extends BaseEntity implements Serializable {
     private String orderNo;
 
     /**
-     * 考勤人id
+     * 员工编号
      */
 
-    private Integer candidateId;
+    private Integer staffNo;
 
     @Excel(name = "考勤人")
     private String candidateName;
@@ -105,6 +105,8 @@ public class Attendance extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    private Integer status;
+
     public String getInsteadIdCard() {
         return insteadIdCard;
     }
@@ -179,12 +181,12 @@ public class Attendance extends BaseEntity implements Serializable {
         this.orderNo = orderNo;
     }
 
-    public Integer getCandidateId() {
-        return candidateId;
+    public Integer getStaffNo() {
+        return staffNo;
     }
 
-    public void setCandidateId(Integer candidateId) {
-        this.candidateId = candidateId;
+    public void setStaffNo(Integer staffNo) {
+        this.staffNo = staffNo;
     }
 
 
@@ -266,6 +268,14 @@ public class Attendance extends BaseEntity implements Serializable {
         this.createTime = createTime;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -280,7 +290,7 @@ public class Attendance extends BaseEntity implements Serializable {
         Attendance other = (Attendance) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
-            && (this.getCandidateId() == null ? other.getCandidateId() == null : this.getCandidateId().equals(other.getCandidateId()))
+            && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
             && (this.getStatisticsYear() == null ? other.getStatisticsYear() == null : this.getStatisticsYear().equals(other.getStatisticsYear()))
             && (this.getStatisticsMonth() == null ? other.getStatisticsMonth() == null : this.getStatisticsMonth().equals(other.getStatisticsMonth()))
             && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
@@ -299,7 +309,7 @@ public class Attendance extends BaseEntity implements Serializable {
         int result = 1;
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
-        result = prime * result + ((getCandidateId() == null) ? 0 : getCandidateId().hashCode());
+        result = prime * result + ((getStaffNo() == null) ? 0 : getStaffNo().hashCode());
         result = prime * result + ((getStatisticsYear() == null) ? 0 : getStatisticsYear().hashCode());
         result = prime * result + ((getStatisticsMonth() == null) ? 0 : getStatisticsMonth().hashCode());
         result = prime * result + ((getArriveDate() == null) ? 0 : getArriveDate().hashCode());
@@ -310,6 +320,7 @@ public class Attendance extends BaseEntity implements Serializable {
         result = prime * result + ((getServeDaysActual() == null) ? 0 : getServeDaysActual().hashCode());
         result = prime * result + ((getInsteadCandidateId() == null) ? 0 : getInsteadCandidateId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -321,7 +332,7 @@ public class Attendance extends BaseEntity implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", autoId=").append(autoId);
         sb.append(", orderNo=").append(orderNo);
-        sb.append(", candidateId=").append(candidateId);
+        sb.append(", staffNo=").append(staffNo);
         sb.append(", statisticsYear=").append(statisticsYear);
         sb.append(", statisticsMonth=").append(statisticsMonth);
         sb.append(", arriveDate=").append(arriveDate);
@@ -332,8 +343,10 @@ public class Attendance extends BaseEntity implements Serializable {
         sb.append(", serveDaysActual=").append(serveDaysActual);
         sb.append(", insteadCandidateId=").append(insteadCandidateId);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
     }
+
 }

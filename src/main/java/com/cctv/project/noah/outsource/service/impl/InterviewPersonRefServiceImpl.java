@@ -218,7 +218,6 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         criteria.andCandidateIdEqualTo(supplierId);
         criteria.andOrderNoEqualTo(orderNo);
         criteria.andIsPassEqualTo(isPass);
-//        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
         if (interviewPersonRefs.size() > 0){
             InterviewPersonRef temp = interviewPersonRefs.get(0);

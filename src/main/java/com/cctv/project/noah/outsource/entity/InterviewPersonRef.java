@@ -23,12 +23,30 @@ public class InterviewPersonRef implements Serializable {
     private String orderNo;
 
     /**
-     * 候选人id
+     * 面试人员员工编号
      */
-    private Integer candidateId;
+    private Integer staffNo;
 
+    /**
+     * 人员名字
+     */
     @Excel(name = "人名", cellType = Excel.ColumnType.NUMERIC)
-    private String candidateName;
+    private String staffName;
+
+    /**
+     * 身份证号，is_pass=1时必填
+     */
+    private String idCard;
+
+    /**
+     * 供应商id
+     */
+    private Integer supplierId;
+
+    /**
+     * 岗位id
+     */
+    private Integer postId;
 
     /**
      * 是否参加面试
@@ -60,9 +78,14 @@ public class InterviewPersonRef implements Serializable {
     private Byte isReject;
 
     /**
-     * 是否替换
+     * 是否替换（1：无缝替换，2有缝替换，0无替换）
      */
     private Byte isReplace;
+
+    /**
+     * 替换人的员工编号
+     */
+    private Integer replaceStaffNo;
 
     /**
      * 不符合岗位要求的原因及建议
@@ -115,12 +138,44 @@ public class InterviewPersonRef implements Serializable {
         this.orderNo = orderNo;
     }
 
-    public Integer getCandidateId() {
-        return candidateId;
+    public Integer getStaffNo() {
+        return staffNo;
     }
 
-    public void setCandidateId(Integer candidateId) {
-        this.candidateId = candidateId;
+    public void setStaffNo(Integer staffNo) {
+        this.staffNo = staffNo;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
     }
 
     public Byte getIsInterview() {
@@ -169,6 +224,14 @@ public class InterviewPersonRef implements Serializable {
 
     public void setIsReplace(Byte isReplace) {
         this.isReplace = isReplace;
+    }
+
+    public Integer getReplaceStaffNo() {
+        return replaceStaffNo;
+    }
+
+    public void setReplaceStaffNo(Integer replaceStaffNo) {
+        this.replaceStaffNo = replaceStaffNo;
     }
 
     public String getReason() {
@@ -233,13 +296,18 @@ public class InterviewPersonRef implements Serializable {
         InterviewPersonRef other = (InterviewPersonRef) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
-            && (this.getCandidateId() == null ? other.getCandidateId() == null : this.getCandidateId().equals(other.getCandidateId()))
+            && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
+            && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
+            && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
+            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+            && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
             && (this.getIsInterview() == null ? other.getIsInterview() == null : this.getIsInterview().equals(other.getIsInterview()))
             && (this.getNotifyDate() == null ? other.getNotifyDate() == null : this.getNotifyDate().equals(other.getNotifyDate()))
             && (this.getInterviewDate() == null ? other.getInterviewDate() == null : this.getInterviewDate().equals(other.getInterviewDate()))
             && (this.getIsPass() == null ? other.getIsPass() == null : this.getIsPass().equals(other.getIsPass()))
             && (this.getIsReject() == null ? other.getIsReject() == null : this.getIsReject().equals(other.getIsReject()))
             && (this.getIsReplace() == null ? other.getIsReplace() == null : this.getIsReplace().equals(other.getIsReplace()))
+            && (this.getReplaceStaffNo() == null ? other.getReplaceStaffNo() == null : this.getReplaceStaffNo().equals(other.getReplaceStaffNo()))
             && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
             && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
             && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
@@ -254,13 +322,18 @@ public class InterviewPersonRef implements Serializable {
         int result = 1;
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
-        result = prime * result + ((getCandidateId() == null) ? 0 : getCandidateId().hashCode());
+        result = prime * result + ((getStaffNo() == null) ? 0 : getStaffNo().hashCode());
+        result = prime * result + ((getStaffName() == null) ? 0 : getStaffName().hashCode());
+        result = prime * result + ((getIdCard() == null) ? 0 : getIdCard().hashCode());
+        result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
+        result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
         result = prime * result + ((getIsInterview() == null) ? 0 : getIsInterview().hashCode());
         result = prime * result + ((getNotifyDate() == null) ? 0 : getNotifyDate().hashCode());
         result = prime * result + ((getInterviewDate() == null) ? 0 : getInterviewDate().hashCode());
         result = prime * result + ((getIsPass() == null) ? 0 : getIsPass().hashCode());
         result = prime * result + ((getIsReject() == null) ? 0 : getIsReject().hashCode());
         result = prime * result + ((getIsReplace() == null) ? 0 : getIsReplace().hashCode());
+        result = prime * result + ((getReplaceStaffNo() == null) ? 0 : getReplaceStaffNo().hashCode());
         result = prime * result + ((getReason() == null) ? 0 : getReason().hashCode());
         result = prime * result + ((getArriveDate() == null) ? 0 : getArriveDate().hashCode());
         result = prime * result + ((getLeaveDate() == null) ? 0 : getLeaveDate().hashCode());
@@ -278,13 +351,18 @@ public class InterviewPersonRef implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", autoId=").append(autoId);
         sb.append(", orderNo=").append(orderNo);
-        sb.append(", candidateId=").append(candidateId);
+        sb.append(", staffNo=").append(staffNo);
+        sb.append(", staffName=").append(staffName);
+        sb.append(", idCard=").append(idCard);
+        sb.append(", supplierId=").append(supplierId);
+        sb.append(", postId=").append(postId);
         sb.append(", isInterview=").append(isInterview);
         sb.append(", notifyDate=").append(notifyDate);
         sb.append(", interviewDate=").append(interviewDate);
         sb.append(", isPass=").append(isPass);
         sb.append(", isReject=").append(isReject);
         sb.append(", isReplace=").append(isReplace);
+        sb.append(", replaceStaffNo=").append(replaceStaffNo);
         sb.append(", reason=").append(reason);
         sb.append(", arriveDate=").append(arriveDate);
         sb.append(", leaveDate=").append(leaveDate);
@@ -294,13 +372,5 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
-    }
-
-    public String getCandidateName() {
-        return candidateName;
-    }
-
-    public void setCandidateName(String candidateName) {
-        this.candidateName = candidateName;
     }
 }

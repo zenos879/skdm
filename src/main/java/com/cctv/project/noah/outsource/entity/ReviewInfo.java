@@ -69,8 +69,6 @@ public class ReviewInfo extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
-
-
     private static final long serialVersionUID = 1L;
 
 
@@ -155,10 +153,12 @@ public class ReviewInfo extends BaseEntity implements Serializable {
         this.reviewDate = reviewDate;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -175,27 +175,27 @@ public class ReviewInfo extends BaseEntity implements Serializable {
             return false;
         }
         ReviewInfo other = (ReviewInfo) that;
-        return
-//                (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
+        return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
+            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
             && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
-            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
             && (this.getPostCount() == null ? other.getPostCount() == null : this.getPostCount().equals(other.getPostCount()))
-            && (this.getReviewDate() == null ? other.getReviewDate() == null : this.getReviewDate().equals(other.getReviewDate()));
-//            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getReviewDate() == null ? other.getReviewDate() == null : this.getReviewDate().equals(other.getReviewDate()))
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-//        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
+        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
         result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
         result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         result = prime * result + ((getPostCount() == null) ? 0 : getPostCount().hashCode());
         result = prime * result + ((getReviewDate() == null) ? 0 : getReviewDate().hashCode());
-//        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -212,6 +212,7 @@ public class ReviewInfo extends BaseEntity implements Serializable {
         sb.append(", postCount=").append(postCount);
         sb.append(", reviewDate=").append(reviewDate);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

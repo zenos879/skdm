@@ -4,13 +4,18 @@
   <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
-    <result column="candidate_id" jdbcType="INTEGER" property="candidateId" />
+    <result column="staff_no" jdbcType="INTEGER" property="staffNo" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
     <result column="is_interview" jdbcType="TINYINT" property="isInterview" />
     <result column="notify_date" jdbcType="DATE" property="notifyDate" />
     <result column="interview_date" jdbcType="DATE" property="interviewDate" />
     <result column="is_pass" jdbcType="TINYINT" property="isPass" />
     <result column="is_reject" jdbcType="TINYINT" property="isReject" />
     <result column="is_replace" jdbcType="TINYINT" property="isReplace" />
+    <result column="replace_staff_no" jdbcType="INTEGER" property="replaceStaffNo" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="arrive_date" jdbcType="DATE" property="arriveDate" />
     <result column="leave_date" jdbcType="DATE" property="leaveDate" />
@@ -77,9 +82,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, order_no, candidate_id, is_interview, notify_date, interview_date, is_pass, 
-    is_reject, is_replace, reason, arrive_date, leave_date, leave_reason, create_time,
-    `status`
+    auto_id, order_no, staff_no, staff_name, id_card, supplier_id, post_id, is_interview,
+    notify_date, interview_date, is_pass, is_reject, is_replace, replace_staff_no, reason,
+    arrive_date, leave_date, leave_reason, create_time, `status`
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRefExample" resultMap="BaseResultMap">
     select
@@ -123,16 +128,20 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef" useGeneratedKeys="true">
-    insert into interview_person_ref (order_no, candidate_id, is_interview, 
-      notify_date, interview_date, is_pass, 
-      is_reject, is_replace, reason, 
-      arrive_date, leave_date, leave_reason, 
-      create_time, `status`)
-    values (#{orderNo,jdbcType=VARCHAR}, #{candidateId,jdbcType=INTEGER}, #{isInterview,jdbcType=TINYINT}, 
-      #{notifyDate,jdbcType=DATE}, #{interviewDate,jdbcType=DATE}, #{isPass,jdbcType=TINYINT}, 
-      #{isReject,jdbcType=TINYINT}, #{isReplace,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, 
-      #{arriveDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE}, #{leaveReason,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
+    insert into interview_person_ref (order_no, staff_no, staff_name,
+      id_card, supplier_id, post_id,
+      is_interview, notify_date, interview_date,
+      is_pass, is_reject, is_replace,
+      replace_staff_no, reason, arrive_date,
+      leave_date, leave_reason, create_time,
+      `status`)
+    values (#{orderNo,jdbcType=VARCHAR}, #{staffNo,jdbcType=INTEGER}, #{staffName,jdbcType=VARCHAR},
+      #{idCard,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER},
+      #{isInterview,jdbcType=TINYINT}, #{notifyDate,jdbcType=DATE}, #{interviewDate,jdbcType=DATE},
+      #{isPass,jdbcType=TINYINT}, #{isReject,jdbcType=TINYINT}, #{isReplace,jdbcType=TINYINT},
+      #{replaceStaffNo,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{arriveDate,jdbcType=DATE},
+      #{leaveDate,jdbcType=DATE}, #{leaveReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef" useGeneratedKeys="true">
     insert into interview_person_ref
@@ -140,8 +149,20 @@
       <if test="orderNo != null">
         order_no,
       </if>
-      <if test="candidateId != null">
-        candidate_id,
+      <if test="staffNo != null">
+        staff_no,
+      </if>
+      <if test="staffName != null">
+        staff_name,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="supplierId != null">
+        supplier_id,
+      </if>
+      <if test="postId != null">
+        post_id,
       </if>
       <if test="isInterview != null">
         is_interview,
@@ -160,6 +181,9 @@
       </if>
       <if test="isReplace != null">
         is_replace,
+      </if>
+      <if test="replaceStaffNo != null">
+        replace_staff_no,
       </if>
       <if test="reason != null">
         reason,
@@ -184,8 +208,20 @@
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="candidateId != null">
-        #{candidateId,jdbcType=INTEGER},
+      <if test="staffNo != null">
+        #{staffNo,jdbcType=INTEGER},
+      </if>
+      <if test="staffName != null">
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null">
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null">
+        #{postId,jdbcType=INTEGER},
       </if>
       <if test="isInterview != null">
         #{isInterview,jdbcType=TINYINT},
@@ -204,6 +240,9 @@
       </if>
       <if test="isReplace != null">
         #{isReplace,jdbcType=TINYINT},
+      </if>
+      <if test="replaceStaffNo != null">
+        #{replaceStaffNo,jdbcType=INTEGER},
       </if>
       <if test="reason != null">
         #{reason,jdbcType=VARCHAR},
@@ -240,8 +279,20 @@
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.candidateId != null">
-        candidate_id = #{record.candidateId,jdbcType=INTEGER},
+      <if test="record.staffNo != null">
+        staff_no = #{record.staffNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.staffName != null">
+        staff_name = #{record.staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCard != null">
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierId != null">
+        supplier_id = #{record.supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="record.postId != null">
+        post_id = #{record.postId,jdbcType=INTEGER},
       </if>
       <if test="record.isInterview != null">
         is_interview = #{record.isInterview,jdbcType=TINYINT},
@@ -260,6 +311,9 @@
       </if>
       <if test="record.isReplace != null">
         is_replace = #{record.isReplace,jdbcType=TINYINT},
+      </if>
+      <if test="record.replaceStaffNo != null">
+        replace_staff_no = #{record.replaceStaffNo,jdbcType=INTEGER},
       </if>
       <if test="record.reason != null">
         reason = #{record.reason,jdbcType=VARCHAR},
@@ -288,13 +342,18 @@
     update interview_person_ref
     set auto_id = #{record.autoId,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
-      candidate_id = #{record.candidateId,jdbcType=INTEGER},
+      staff_no = #{record.staffNo,jdbcType=INTEGER},
+      staff_name = #{record.staffName,jdbcType=VARCHAR},
+      id_card = #{record.idCard,jdbcType=VARCHAR},
+      supplier_id = #{record.supplierId,jdbcType=INTEGER},
+      post_id = #{record.postId,jdbcType=INTEGER},
       is_interview = #{record.isInterview,jdbcType=TINYINT},
       notify_date = #{record.notifyDate,jdbcType=DATE},
       interview_date = #{record.interviewDate,jdbcType=DATE},
       is_pass = #{record.isPass,jdbcType=TINYINT},
       is_reject = #{record.isReject,jdbcType=TINYINT},
       is_replace = #{record.isReplace,jdbcType=TINYINT},
+      replace_staff_no = #{record.replaceStaffNo,jdbcType=INTEGER},
       reason = #{record.reason,jdbcType=VARCHAR},
       arrive_date = #{record.arriveDate,jdbcType=DATE},
       leave_date = #{record.leaveDate,jdbcType=DATE},
@@ -311,8 +370,20 @@
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="candidateId != null">
-        candidate_id = #{candidateId,jdbcType=INTEGER},
+      <if test="staffNo != null">
+        staff_no = #{staffNo,jdbcType=INTEGER},
+      </if>
+      <if test="staffName != null">
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null">
+        supplier_id = #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=INTEGER},
       </if>
       <if test="isInterview != null">
         is_interview = #{isInterview,jdbcType=TINYINT},
@@ -331,6 +402,9 @@
       </if>
       <if test="isReplace != null">
         is_replace = #{isReplace,jdbcType=TINYINT},
+      </if>
+      <if test="replaceStaffNo != null">
+        replace_staff_no = #{replaceStaffNo,jdbcType=INTEGER},
       </if>
       <if test="reason != null">
         reason = #{reason,jdbcType=VARCHAR},
@@ -356,13 +430,18 @@
   <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     update interview_person_ref
     set order_no = #{orderNo,jdbcType=VARCHAR},
-      candidate_id = #{candidateId,jdbcType=INTEGER},
+      staff_no = #{staffNo,jdbcType=INTEGER},
+      staff_name = #{staffName,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      supplier_id = #{supplierId,jdbcType=INTEGER},
+      post_id = #{postId,jdbcType=INTEGER},
       is_interview = #{isInterview,jdbcType=TINYINT},
       notify_date = #{notifyDate,jdbcType=DATE},
       interview_date = #{interviewDate,jdbcType=DATE},
       is_pass = #{isPass,jdbcType=TINYINT},
       is_reject = #{isReject,jdbcType=TINYINT},
       is_replace = #{isReplace,jdbcType=TINYINT},
+      replace_staff_no = #{replaceStaffNo,jdbcType=INTEGER},
       reason = #{reason,jdbcType=VARCHAR},
       arrive_date = #{arriveDate,jdbcType=DATE},
       leave_date = #{leaveDate,jdbcType=DATE},

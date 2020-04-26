@@ -31,16 +31,21 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
 
     @Excel(name = "供应商")
     private String supplierName;
+
+    private Integer postId;
+
+    @Excel(name = "岗位名称")
+    private String postName;
+
     /**
-     * 候选人id
+     * 参加评审会的人员名称
      */
-    private Integer candidateId;
-
     @Excel(name = "候选人")
-    private String candidateName;
+    private String personName;
 
-    @Excel(name = "身份证号",type = Excel.Type.IMPORT)
-    private String idCard;
+//
+//    @Excel(name = "身份证号",type = Excel.Type.IMPORT)
+//    private String idCard;
 
     /**
      * 是否通知参加面试
@@ -57,13 +62,13 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
+//    public String getIdCard() {
+//        return idCard;
+//    }
+//
+//    public void setIdCard(String idCard) {
+//        this.idCard = idCard;
+//    }
 
     public String getSupplierName() {
         return supplierName;
@@ -71,14 +76,6 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
-    }
-
-    public String getCandidateName() {
-        return candidateName;
-    }
-
-    public void setCandidateName(String candidateName) {
-        this.candidateName = candidateName;
     }
 
     public Integer getAutoId() {
@@ -105,12 +102,20 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
         this.supplierId = supplierId;
     }
 
-    public Integer getCandidateId() {
-        return candidateId;
+    public Integer getPostId() {
+        return postId;
     }
 
-    public void setCandidateId(Integer candidateId) {
-        this.candidateId = candidateId;
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
     public Integer getIsNotifyInterview() {
@@ -141,25 +146,26 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
             return false;
         }
         ReviewPersonRef other = (ReviewPersonRef) that;
-        return
-//                (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
+        return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
+            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getCandidateId() == null ? other.getCandidateId() == null : this.getCandidateId().equals(other.getCandidateId()))
-            && (this.getIsNotifyInterview() == null ? other.getIsNotifyInterview() == null : this.getIsNotifyInterview().equals(other.getIsNotifyInterview()));
-//            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
+            && (this.getPersonName() == null ? other.getPersonName() == null : this.getPersonName().equals(other.getPersonName()))
+            && (this.getIsNotifyInterview() == null ? other.getIsNotifyInterview() == null : this.getIsNotifyInterview().equals(other.getIsNotifyInterview()))
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-//        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
+        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
         result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
-        result = prime * result + ((getCandidateId() == null) ? 0 : getCandidateId().hashCode());
+        result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
+        result = prime * result + ((getPersonName() == null) ? 0 : getPersonName().hashCode());
         result = prime * result + ((getIsNotifyInterview() == null) ? 0 : getIsNotifyInterview().hashCode());
-//        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         return result;
     }
 
@@ -172,7 +178,8 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
         sb.append(", autoId=").append(autoId);
         sb.append(", purchaseNo=").append(purchaseNo);
         sb.append(", supplierId=").append(supplierId);
-        sb.append(", candidateId=").append(candidateId);
+        sb.append(", postId=").append(postId);
+        sb.append(", personName=").append(personName);
         sb.append(", isNotifyInterview=").append(isNotifyInterview);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

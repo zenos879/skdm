@@ -325,63 +325,133 @@ public class ReviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIsNull() {
-            addCriterion("candidate_id is null");
+        public Criteria andPostIdIsNull() {
+            addCriterion("post_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIsNotNull() {
-            addCriterion("candidate_id is not null");
+        public Criteria andPostIdIsNotNull() {
+            addCriterion("post_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdEqualTo(Integer value) {
-            addCriterion("candidate_id =", value, "candidateId");
+        public Criteria andPostIdEqualTo(Integer value) {
+            addCriterion("post_id =", value, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotEqualTo(Integer value) {
-            addCriterion("candidate_id <>", value, "candidateId");
+        public Criteria andPostIdNotEqualTo(Integer value) {
+            addCriterion("post_id <>", value, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdGreaterThan(Integer value) {
-            addCriterion("candidate_id >", value, "candidateId");
+        public Criteria andPostIdGreaterThan(Integer value) {
+            addCriterion("post_id >", value, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("candidate_id >=", value, "candidateId");
+        public Criteria andPostIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("post_id >=", value, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdLessThan(Integer value) {
-            addCriterion("candidate_id <", value, "candidateId");
+        public Criteria andPostIdLessThan(Integer value) {
+            addCriterion("post_id <", value, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdLessThanOrEqualTo(Integer value) {
-            addCriterion("candidate_id <=", value, "candidateId");
+        public Criteria andPostIdLessThanOrEqualTo(Integer value) {
+            addCriterion("post_id <=", value, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIn(List<Integer> values) {
-            addCriterion("candidate_id in", values, "candidateId");
+        public Criteria andPostIdIn(List<Integer> values) {
+            addCriterion("post_id in", values, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotIn(List<Integer> values) {
-            addCriterion("candidate_id not in", values, "candidateId");
+        public Criteria andPostIdNotIn(List<Integer> values) {
+            addCriterion("post_id not in", values, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdBetween(Integer value1, Integer value2) {
-            addCriterion("candidate_id between", value1, value2, "candidateId");
+        public Criteria andPostIdBetween(Integer value1, Integer value2) {
+            addCriterion("post_id between", value1, value2, "postId");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("candidate_id not between", value1, value2, "candidateId");
+        public Criteria andPostIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("post_id not between", value1, value2, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameIsNull() {
+            addCriterion("person_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameIsNotNull() {
+            addCriterion("person_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameEqualTo(String value) {
+            addCriterion("person_name =", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameNotEqualTo(String value) {
+            addCriterion("person_name <>", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameGreaterThan(String value) {
+            addCriterion("person_name >", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameGreaterThanOrEqualTo(String value) {
+            addCriterion("person_name >=", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameLessThan(String value) {
+            addCriterion("person_name <", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameLessThanOrEqualTo(String value) {
+            addCriterion("person_name <=", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameLike(String value) {
+            addCriterion("person_name like", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameNotLike(String value) {
+            addCriterion("person_name not like", value, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameIn(List<String> values) {
+            addCriterion("person_name in", values, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameNotIn(List<String> values) {
+            addCriterion("person_name not in", values, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameBetween(String value1, String value2) {
+            addCriterion("person_name between", value1, value2, "personName");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonNameNotBetween(String value1, String value2) {
+            addCriterion("person_name not between", value1, value2, "personName");
             return (Criteria) this;
         }
 

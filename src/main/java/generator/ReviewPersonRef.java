@@ -23,10 +23,12 @@ public class ReviewPersonRef implements Serializable {
      */
     private Integer supplierId;
 
+    private Integer postId;
+
     /**
-     * 候选人id
+     * 参加评审会的人员名称
      */
-    private Integer candidateId;
+    private String personName;
 
     /**
      * 是否通知参加面试
@@ -66,12 +68,20 @@ public class ReviewPersonRef implements Serializable {
         this.supplierId = supplierId;
     }
 
-    public Integer getCandidateId() {
-        return candidateId;
+    public Integer getPostId() {
+        return postId;
     }
 
-    public void setCandidateId(Integer candidateId) {
-        this.candidateId = candidateId;
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
     public Byte getIsNotifyInterview() {
@@ -113,7 +123,8 @@ public class ReviewPersonRef implements Serializable {
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
             && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getCandidateId() == null ? other.getCandidateId() == null : this.getCandidateId().equals(other.getCandidateId()))
+            && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
+            && (this.getPersonName() == null ? other.getPersonName() == null : this.getPersonName().equals(other.getPersonName()))
             && (this.getIsNotifyInterview() == null ? other.getIsNotifyInterview() == null : this.getIsNotifyInterview().equals(other.getIsNotifyInterview()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
@@ -126,7 +137,8 @@ public class ReviewPersonRef implements Serializable {
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
         result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
-        result = prime * result + ((getCandidateId() == null) ? 0 : getCandidateId().hashCode());
+        result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
+        result = prime * result + ((getPersonName() == null) ? 0 : getPersonName().hashCode());
         result = prime * result + ((getIsNotifyInterview() == null) ? 0 : getIsNotifyInterview().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -142,7 +154,8 @@ public class ReviewPersonRef implements Serializable {
         sb.append(", autoId=").append(autoId);
         sb.append(", purchaseNo=").append(purchaseNo);
         sb.append(", supplierId=").append(supplierId);
-        sb.append(", candidateId=").append(candidateId);
+        sb.append(", postId=").append(postId);
+        sb.append(", personName=").append(personName);
         sb.append(", isNotifyInterview=").append(isNotifyInterview);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);

@@ -5,10 +5,6 @@
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
-    <result column="project_id" jdbcType="INTEGER" property="projectId" />
-    <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
-    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
-    <result column="post_id" jdbcType="INTEGER" property="postId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -70,8 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, order_no, purchase_no, project_id, supplier_id, department_id, post_id, 
-    create_time
+    auto_id, order_no, purchase_no, create_time
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.InterviewInfoExample" resultMap="BaseResultMap">
     select
@@ -115,12 +110,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewInfo" useGeneratedKeys="true">
-    insert into interview_info (order_no, purchase_no, project_id, 
-      supplier_id, department_id, post_id, 
-      create_time)
-    values (#{orderNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, 
-      #{supplierId,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into interview_info (order_no, purchase_no, create_time
+      )
+    values (#{orderNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewInfo" useGeneratedKeys="true">
     insert into interview_info
@@ -130,18 +123,6 @@
       </if>
       <if test="purchaseNo != null">
         purchase_no,
-      </if>
-      <if test="projectId != null">
-        project_id,
-      </if>
-      <if test="supplierId != null">
-        supplier_id,
-      </if>
-      <if test="departmentId != null">
-        department_id,
-      </if>
-      <if test="postId != null">
-        post_id,
       </if>
       <if test="createTime != null">
         create_time,
@@ -153,18 +134,6 @@
       </if>
       <if test="purchaseNo != null">
         #{purchaseNo,jdbcType=VARCHAR},
-      </if>
-      <if test="projectId != null">
-        #{projectId,jdbcType=INTEGER},
-      </if>
-      <if test="supplierId != null">
-        #{supplierId,jdbcType=INTEGER},
-      </if>
-      <if test="departmentId != null">
-        #{departmentId,jdbcType=INTEGER},
-      </if>
-      <if test="postId != null">
-        #{postId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -189,18 +158,6 @@
       <if test="record.purchaseNo != null">
         purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.projectId != null">
-        project_id = #{record.projectId,jdbcType=INTEGER},
-      </if>
-      <if test="record.supplierId != null">
-        supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      </if>
-      <if test="record.departmentId != null">
-        department_id = #{record.departmentId,jdbcType=INTEGER},
-      </if>
-      <if test="record.postId != null">
-        post_id = #{record.postId,jdbcType=INTEGER},
-      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -214,10 +171,6 @@
     set auto_id = #{record.autoId,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
-      project_id = #{record.projectId,jdbcType=INTEGER},
-      supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      department_id = #{record.departmentId,jdbcType=INTEGER},
-      post_id = #{record.postId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -232,18 +185,6 @@
       <if test="purchaseNo != null">
         purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="projectId != null">
-        project_id = #{projectId,jdbcType=INTEGER},
-      </if>
-      <if test="supplierId != null">
-        supplier_id = #{supplierId,jdbcType=INTEGER},
-      </if>
-      <if test="departmentId != null">
-        department_id = #{departmentId,jdbcType=INTEGER},
-      </if>
-      <if test="postId != null">
-        post_id = #{postId,jdbcType=INTEGER},
-      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -254,10 +195,6 @@
     update interview_info
     set order_no = #{orderNo,jdbcType=VARCHAR},
       purchase_no = #{purchaseNo,jdbcType=VARCHAR},
-      project_id = #{projectId,jdbcType=INTEGER},
-      supplier_id = #{supplierId,jdbcType=INTEGER},
-      department_id = #{departmentId,jdbcType=INTEGER},
-      post_id = #{postId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>

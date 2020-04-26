@@ -93,6 +93,30 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>到岗日期：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control" id="arriveDate" th:field="*{arriveDate}" placeholder="到岗日期" name="arriveDate" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>离岗日期：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control" id="leaveDate" th:field="*{leaveDate}" placeholder="离岗日期" name="leaveDate" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>离岗原因：</label>
+                    <div class="col-sm-7">
+                        <input name="reason" th:field="*{leaveReason}" id="leaveReason" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>

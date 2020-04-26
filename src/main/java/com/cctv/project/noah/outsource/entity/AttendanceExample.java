@@ -292,63 +292,63 @@ public class AttendanceExample {
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIsNull() {
-            addCriterion("candidate_id is null");
+        public Criteria andStaffNoIsNull() {
+            addCriterion("staff_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIsNotNull() {
-            addCriterion("candidate_id is not null");
+        public Criteria andStaffNoIsNotNull() {
+            addCriterion("staff_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdEqualTo(Integer value) {
-            addCriterion("candidate_id =", value, "candidateId");
+        public Criteria andStaffNoEqualTo(Integer value) {
+            addCriterion("staff_no =", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotEqualTo(Integer value) {
-            addCriterion("candidate_id <>", value, "candidateId");
+        public Criteria andStaffNoNotEqualTo(Integer value) {
+            addCriterion("staff_no <>", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdGreaterThan(Integer value) {
-            addCriterion("candidate_id >", value, "candidateId");
+        public Criteria andStaffNoGreaterThan(Integer value) {
+            addCriterion("staff_no >", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("candidate_id >=", value, "candidateId");
+        public Criteria andStaffNoGreaterThanOrEqualTo(Integer value) {
+            addCriterion("staff_no >=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdLessThan(Integer value) {
-            addCriterion("candidate_id <", value, "candidateId");
+        public Criteria andStaffNoLessThan(Integer value) {
+            addCriterion("staff_no <", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdLessThanOrEqualTo(Integer value) {
-            addCriterion("candidate_id <=", value, "candidateId");
+        public Criteria andStaffNoLessThanOrEqualTo(Integer value) {
+            addCriterion("staff_no <=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIn(List<Integer> values) {
-            addCriterion("candidate_id in", values, "candidateId");
+        public Criteria andStaffNoIn(List<Integer> values) {
+            addCriterion("staff_no in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotIn(List<Integer> values) {
-            addCriterion("candidate_id not in", values, "candidateId");
+        public Criteria andStaffNoNotIn(List<Integer> values) {
+            addCriterion("staff_no not in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdBetween(Integer value1, Integer value2) {
-            addCriterion("candidate_id between", value1, value2, "candidateId");
+        public Criteria andStaffNoBetween(Integer value1, Integer value2) {
+            addCriterion("staff_no between", value1, value2, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("candidate_id not between", value1, value2, "candidateId");
+        public Criteria andStaffNoNotBetween(Integer value1, Integer value2) {
+            addCriterion("staff_no not between", value1, value2, "staffNo");
             return (Criteria) this;
         }
 

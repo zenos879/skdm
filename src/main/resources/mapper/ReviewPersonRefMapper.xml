@@ -5,7 +5,8 @@
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
     <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
-    <result column="candidate_id" jdbcType="INTEGER" property="candidateId" />
+    <result column="post_id" jdbcType="INTEGER" property="postId" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
     <result column="is_notify_interview" jdbcType="TINYINT" property="isNotifyInterview" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, purchase_no, supplier_id, candidate_id, is_notify_interview, create_time
+    auto_id, purchase_no, supplier_id, post_id, person_name, is_notify_interview, create_time
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRefExample" resultMap="BaseResultMap">
     select
@@ -204,10 +205,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" useGeneratedKeys="true">
-    insert into review_person_ref (purchase_no, supplier_id, candidate_id, 
-      is_notify_interview, create_time)
-    values (#{purchaseNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{candidateId,jdbcType=INTEGER}, 
-      #{isNotifyInterview,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+    insert into review_person_ref (purchase_no, supplier_id, post_id,
+      person_name, is_notify_interview, create_time)
+    values (#{purchaseNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER},
+      #{personName,jdbcType=VARCHAR}, #{isNotifyInterview,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" useGeneratedKeys="true">
     insert into review_person_ref
@@ -218,8 +219,11 @@
       <if test="supplierId != null">
         supplier_id,
       </if>
-      <if test="candidateId != null">
-        candidate_id,
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="personName != null">
+        person_name,
       </if>
       <if test="isNotifyInterview != null">
         is_notify_interview,
@@ -235,8 +239,11 @@
       <if test="supplierId != null">
         #{supplierId,jdbcType=INTEGER},
       </if>
-      <if test="candidateId != null">
-        #{candidateId,jdbcType=INTEGER},
+      <if test="postId != null">
+        #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="personName != null">
+        #{personName,jdbcType=VARCHAR},
       </if>
       <if test="isNotifyInterview != null">
         #{isNotifyInterview,jdbcType=TINYINT},
@@ -264,8 +271,11 @@
       <if test="record.supplierId != null">
         supplier_id = #{record.supplierId,jdbcType=INTEGER},
       </if>
-      <if test="record.candidateId != null">
-        candidate_id = #{record.candidateId,jdbcType=INTEGER},
+      <if test="record.postId != null">
+        post_id = #{record.postId,jdbcType=INTEGER},
+      </if>
+      <if test="record.personName != null">
+        person_name = #{record.personName,jdbcType=VARCHAR},
       </if>
       <if test="record.isNotifyInterview != null">
         is_notify_interview = #{record.isNotifyInterview,jdbcType=TINYINT},
@@ -283,7 +293,8 @@
     set auto_id = #{record.autoId,jdbcType=INTEGER},
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      candidate_id = #{record.candidateId,jdbcType=INTEGER},
+      post_id = #{record.postId,jdbcType=INTEGER},
+      person_name = #{record.personName,jdbcType=VARCHAR},
       is_notify_interview = #{record.isNotifyInterview,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -299,8 +310,11 @@
       <if test="supplierId != null">
         supplier_id = #{supplierId,jdbcType=INTEGER},
       </if>
-      <if test="candidateId != null">
-        candidate_id = #{candidateId,jdbcType=INTEGER},
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="personName != null">
+        person_name = #{personName,jdbcType=VARCHAR},
       </if>
       <if test="isNotifyInterview != null">
         is_notify_interview = #{isNotifyInterview,jdbcType=TINYINT},
@@ -315,7 +329,8 @@
     update review_person_ref
     set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       supplier_id = #{supplierId,jdbcType=INTEGER},
-      candidate_id = #{candidateId,jdbcType=INTEGER},
+      post_id = #{postId,jdbcType=INTEGER},
+      person_name = #{personName,jdbcType=VARCHAR},
       is_notify_interview = #{isNotifyInterview,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where auto_id = #{autoId,jdbcType=INTEGER}

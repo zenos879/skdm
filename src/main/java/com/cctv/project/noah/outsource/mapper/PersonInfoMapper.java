@@ -1,5 +1,6 @@
 package com.cctv.project.noah.outsource.mapper;
 
+import com.cctv.project.noah.outsource.entity.CurrentPersonCount;
 import com.cctv.project.noah.outsource.entity.PersonInfo;
 import com.cctv.project.noah.outsource.entity.PersonInfoExample;
 import java.util.List;
@@ -29,4 +30,6 @@ public interface PersonInfoMapper {
     int updateByPrimaryKeySelective(PersonInfo record);
 
     int updateByPrimaryKey(PersonInfo record);
+
+    List<CurrentPersonCount> selectCurrentPersonCount(CurrentPersonCount record);
 }

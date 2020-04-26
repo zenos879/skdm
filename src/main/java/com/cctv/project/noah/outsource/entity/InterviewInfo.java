@@ -14,10 +14,6 @@ public class InterviewInfo implements Serializable {
 
     public static final String ORDER_NO = "订单编号";
     public static final String PURCHASE_NO = "采购编号";
-    public static final String PROJECT_NAME = "项目名";
-    public static final String SUPPLIER_NAME = "供应商名称";
-    public static final String DEPARTMENT_NAME = "部门名称";
-    public static final String POST_NAME = "岗位名称";
 
     /**
      * 自增主键
@@ -37,45 +33,11 @@ public class InterviewInfo implements Serializable {
     private String purchaseNo;
 
     /**
-     * 项目id
-     */
-    private Integer projectId;
-
-    @Excel(name = "项目名", cellType = Excel.ColumnType.NUMERIC)
-    private String projectName;
-
-    /**
-     * 供应商id
-     */
-    private Integer supplierId;
-
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
-    private String supplierName;
-
-    /**
-     * 部门id
-     */
-    private Integer departmentId;
-
-    @Excel(name = "部门名称", cellType = Excel.ColumnType.NUMERIC)
-    private String departmentName;
-
-    /**
-     * 岗位id
-     */
-    private Integer postId;
-
-    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
-    private String postName;
-
-    /**
      * 创建时间
      */
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
-
-    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -103,52 +65,12 @@ public class InterviewInfo implements Serializable {
         this.purchaseNo = purchaseNo;
     }
 
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public Integer getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Integer supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public Integer getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public Integer getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Integer postId) {
-        this.postId = postId;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     @Override
@@ -166,12 +88,7 @@ public class InterviewInfo implements Serializable {
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
-            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
-            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
-            && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
@@ -181,12 +98,7 @@ public class InterviewInfo implements Serializable {
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
-        result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
-        result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
-        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
-        result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -199,46 +111,9 @@ public class InterviewInfo implements Serializable {
         sb.append(", autoId=").append(autoId);
         sb.append(", orderNo=").append(orderNo);
         sb.append(", purchaseNo=").append(purchaseNo);
-        sb.append(", projectId=").append(projectId);
-        sb.append(", supplierId=").append(supplierId);
-        sb.append(", departmentId=").append(departmentId);
-        sb.append(", postId=").append(postId);
         sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
-    }
-
-    public String getPostName() {
-        return postName;
-    }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
     }
 }

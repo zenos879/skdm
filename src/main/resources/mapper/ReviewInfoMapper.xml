@@ -5,7 +5,6 @@
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
     <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
     <result column="post_id" jdbcType="INTEGER" property="postId" />
-    <result column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="post_count" jdbcType="INTEGER" property="postCount" />
     <result column="review_date" jdbcType="DATE" property="reviewDate" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -69,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, purchase_no, post_id, project_id, post_count, review_date, create_time
+    auto_id, purchase_no, post_id, post_count, review_date, create_time
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfoExample" resultMap="BaseResultMap">
     select
@@ -102,98 +101,6 @@
     from review_info
     where auto_id = #{autoId,jdbcType=INTEGER}
   </select>
-  <select id="selectByIds" resultMap="BaseResultMap">
-    select
-    r.auto_id auto_id,
-    r.purchase_no purchase_no,
-    r.post_id post_id,
-    r.project_id project_id,
-    r.post_count post_count,
-    r.review_date review_date,
-    r.create_time create_time,
-    p1.post_name postName,
-    p2.project_name projectName
-    from review_info r
-    INNER JOIN post_info p1 on r.post_id = p1.post_id
-    INNER JOIN project_info p2 on r.project_id = p2.project_id
-    where r.auto_id in
-    <foreach collection="array" item="id"  open="(" separator="," close=")">
-      #{id}
-    </foreach>
-  </select>
-  <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" resultMap="BaseResultMap">
-    select
-    r.auto_id auto_id,
-    r.purchase_no purchase_no,
-    r.post_id post_id,
-    r.project_id project_id,
-    r.post_count post_count,
-    r.review_date review_date,
-    r.create_time create_time,
-    p1.post_name postName,
-    p2.project_name projectName
-    from review_info r
-    INNER JOIN post_info p1 on r.post_id = p1.post_id
-    INNER JOIN project_info p2 on r.project_id = p2.project_id
-    <where>
-      <if test="autoId != null">
-        AND r.auto_id = #{autoId,jdbcType=INTEGER}
-      </if>
-      <if test="purchaseNo != null and purchaseNo != ''">
-        AND r.purchase_no like concat('%', #{purchaseNo}, '%')
-      </if>
-      <if test="postId != null">
-        AND r.post_id = #{postId,jdbcType=INTEGER}
-      </if>
-      <if test="projectId != null">
-        AND r.project_id = #{projectId,jdbcType=INTEGER}
-      </if>
-      <if test="postCount != null">
-        AND r.post_count = #{postCount,jdbcType=INTEGER}
-      </if>
-      <if test="params!=null and params.reviewBeginDate != null and params.reviewBeginDate != ''"><!-- 开始时间检索 -->
-        AND date_format(r.review_date,'%y%m%d') &gt;= date_format(#{params.reviewBeginDate},'%y%m%d')
-      </if>
-      <if test="params!=null and params.reviewEndDate != null and params.reviewEndDate != ''"><!-- 结束时间检索 -->
-        AND date_format(r.review_date,'%y%m%d') &lt;= date_format(#{params.reviewEndDate},'%y%m%d')
-      </if>
-      <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-        AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-      </if>
-      <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-        AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-      </if>
-    </where>
-  </select>
-  <select id="selectByRepeat" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" resultMap="BaseResultMap">
-    select
-    r.auto_id auto_id,
-    r.purchase_no purchase_no,
-    r.post_id post_id,
-    r.project_id project_id,
-    r.post_count post_count,
-    r.review_date review_date,
-    r.create_time create_time,
-    p1.post_name postName,
-    p2.project_name projectName
-    from review_info r
-    INNER JOIN post_info p1 on r.post_id = p1.post_id
-    INNER JOIN project_info p2 on r.project_id = p2.project_id
-    <where>
-      <if test="purchaseNo != null and purchaseNo != ''">
-        AND r.purchase_no = #{purchaseNo}
-      </if>
-      <if test="postId != null">
-        AND r.post_id = #{postId,jdbcType=INTEGER}
-      </if>
-      <if test="projectId != null">
-        AND r.project_id = #{projectId,jdbcType=INTEGER}
-      </if>
-      <if test="postCount != null">
-        AND r.post_count = #{postCount,jdbcType=INTEGER}
-      </if>
-    </where>
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from review_info
     where auto_id = #{autoId,jdbcType=INTEGER}
@@ -205,24 +112,21 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" useGeneratedKeys="true">
-    insert into review_info (purchase_no, post_id, project_id, 
-      post_count, review_date, create_time
+    insert into review_info (purchase_no, post_id, post_count,
+      review_date, create_time
       )
-    values (#{purchaseNo,jdbcType=VARCHAR}, #{postId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, 
-      #{postCount,jdbcType=INTEGER}, #{reviewDate,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}
+    values (#{purchaseNo,jdbcType=VARCHAR}, #{postId,jdbcType=INTEGER}, #{postCount,jdbcType=INTEGER},
+      #{reviewDate,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo" useGeneratedKeys="true">
     insert into review_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="purchaseNo != null and purchaseNo != ''">
+      <if test="purchaseNo != null">
         purchase_no,
       </if>
       <if test="postId != null">
         post_id,
-      </if>
-      <if test="projectId != null">
-        project_id,
       </if>
       <if test="postCount != null">
         post_count,
@@ -233,19 +137,13 @@
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="status != null">
-        status,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="purchaseNo != null and purchaseNo != ''">
+      <if test="purchaseNo != null">
         #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="postId != null">
         #{postId,jdbcType=INTEGER},
-      </if>
-      <if test="projectId != null">
-        #{projectId,jdbcType=INTEGER},
       </if>
       <if test="postCount != null">
         #{postCount,jdbcType=INTEGER},
@@ -255,9 +153,6 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -279,9 +174,6 @@
       <if test="record.postId != null">
         post_id = #{record.postId,jdbcType=INTEGER},
       </if>
-      <if test="record.projectId != null">
-        project_id = #{record.projectId,jdbcType=INTEGER},
-      </if>
       <if test="record.postCount != null">
         post_count = #{record.postCount,jdbcType=INTEGER},
       </if>
@@ -301,7 +193,6 @@
     set auto_id = #{record.autoId,jdbcType=INTEGER},
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       post_id = #{record.postId,jdbcType=INTEGER},
-      project_id = #{record.projectId,jdbcType=INTEGER},
       post_count = #{record.postCount,jdbcType=INTEGER},
       review_date = #{record.reviewDate,jdbcType=DATE},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
@@ -312,14 +203,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewInfo">
     update review_info
     <set>
-      <if test="purchaseNo != null and purchaseNo != ''">
+      <if test="purchaseNo != null">
         purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="postId != null">
         post_id = #{postId,jdbcType=INTEGER},
-      </if>
-      <if test="projectId != null">
-        project_id = #{projectId,jdbcType=INTEGER},
       </if>
       <if test="postCount != null">
         post_count = #{postCount,jdbcType=INTEGER},
@@ -337,11 +225,9 @@
     update review_info
     set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       post_id = #{postId,jdbcType=INTEGER},
-      project_id = #{projectId,jdbcType=INTEGER},
       post_count = #{postCount,jdbcType=INTEGER},
       review_date = #{reviewDate,jdbcType=DATE},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
-
 </mapper>

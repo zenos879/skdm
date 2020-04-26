@@ -292,63 +292,323 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIsNull() {
-            addCriterion("candidate_id is null");
+        public Criteria andStaffNoIsNull() {
+            addCriterion("staff_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIsNotNull() {
-            addCriterion("candidate_id is not null");
+        public Criteria andStaffNoIsNotNull() {
+            addCriterion("staff_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdEqualTo(Integer value) {
-            addCriterion("candidate_id =", value, "candidateId");
+        public Criteria andStaffNoEqualTo(Integer value) {
+            addCriterion("staff_no =", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotEqualTo(Integer value) {
-            addCriterion("candidate_id <>", value, "candidateId");
+        public Criteria andStaffNoNotEqualTo(Integer value) {
+            addCriterion("staff_no <>", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdGreaterThan(Integer value) {
-            addCriterion("candidate_id >", value, "candidateId");
+        public Criteria andStaffNoGreaterThan(Integer value) {
+            addCriterion("staff_no >", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("candidate_id >=", value, "candidateId");
+        public Criteria andStaffNoGreaterThanOrEqualTo(Integer value) {
+            addCriterion("staff_no >=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdLessThan(Integer value) {
-            addCriterion("candidate_id <", value, "candidateId");
+        public Criteria andStaffNoLessThan(Integer value) {
+            addCriterion("staff_no <", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdLessThanOrEqualTo(Integer value) {
-            addCriterion("candidate_id <=", value, "candidateId");
+        public Criteria andStaffNoLessThanOrEqualTo(Integer value) {
+            addCriterion("staff_no <=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdIn(List<Integer> values) {
-            addCriterion("candidate_id in", values, "candidateId");
+        public Criteria andStaffNoIn(List<Integer> values) {
+            addCriterion("staff_no in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotIn(List<Integer> values) {
-            addCriterion("candidate_id not in", values, "candidateId");
+        public Criteria andStaffNoNotIn(List<Integer> values) {
+            addCriterion("staff_no not in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdBetween(Integer value1, Integer value2) {
-            addCriterion("candidate_id between", value1, value2, "candidateId");
+        public Criteria andStaffNoBetween(Integer value1, Integer value2) {
+            addCriterion("staff_no between", value1, value2, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andCandidateIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("candidate_id not between", value1, value2, "candidateId");
+        public Criteria andStaffNoNotBetween(Integer value1, Integer value2) {
+            addCriterion("staff_no not between", value1, value2, "staffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameIsNull() {
+            addCriterion("staff_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameIsNotNull() {
+            addCriterion("staff_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameEqualTo(String value) {
+            addCriterion("staff_name =", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameNotEqualTo(String value) {
+            addCriterion("staff_name <>", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameGreaterThan(String value) {
+            addCriterion("staff_name >", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameGreaterThanOrEqualTo(String value) {
+            addCriterion("staff_name >=", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameLessThan(String value) {
+            addCriterion("staff_name <", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameLessThanOrEqualTo(String value) {
+            addCriterion("staff_name <=", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameLike(String value) {
+            addCriterion("staff_name like", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameNotLike(String value) {
+            addCriterion("staff_name not like", value, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameIn(List<String> values) {
+            addCriterion("staff_name in", values, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameNotIn(List<String> values) {
+            addCriterion("staff_name not in", values, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameBetween(String value1, String value2) {
+            addCriterion("staff_name between", value1, value2, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNameNotBetween(String value1, String value2) {
+            addCriterion("staff_name not between", value1, value2, "staffName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardIsNull() {
+            addCriterion("id_card is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardIsNotNull() {
+            addCriterion("id_card is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardEqualTo(String value) {
+            addCriterion("id_card =", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardNotEqualTo(String value) {
+            addCriterion("id_card <>", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardGreaterThan(String value) {
+            addCriterion("id_card >", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardGreaterThanOrEqualTo(String value) {
+            addCriterion("id_card >=", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardLessThan(String value) {
+            addCriterion("id_card <", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardLessThanOrEqualTo(String value) {
+            addCriterion("id_card <=", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardLike(String value) {
+            addCriterion("id_card like", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardNotLike(String value) {
+            addCriterion("id_card not like", value, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardIn(List<String> values) {
+            addCriterion("id_card in", values, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardNotIn(List<String> values) {
+            addCriterion("id_card not in", values, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardBetween(String value1, String value2) {
+            addCriterion("id_card between", value1, value2, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdCardNotBetween(String value1, String value2) {
+            addCriterion("id_card not between", value1, value2, "idCard");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdIsNull() {
+            addCriterion("supplier_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdIsNotNull() {
+            addCriterion("supplier_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdEqualTo(Integer value) {
+            addCriterion("supplier_id =", value, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdNotEqualTo(Integer value) {
+            addCriterion("supplier_id <>", value, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdGreaterThan(Integer value) {
+            addCriterion("supplier_id >", value, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("supplier_id >=", value, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdLessThan(Integer value) {
+            addCriterion("supplier_id <", value, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdLessThanOrEqualTo(Integer value) {
+            addCriterion("supplier_id <=", value, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdIn(List<Integer> values) {
+            addCriterion("supplier_id in", values, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdNotIn(List<Integer> values) {
+            addCriterion("supplier_id not in", values, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdBetween(Integer value1, Integer value2) {
+            addCriterion("supplier_id between", value1, value2, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("supplier_id not between", value1, value2, "supplierId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdIsNull() {
+            addCriterion("post_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdIsNotNull() {
+            addCriterion("post_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdEqualTo(Integer value) {
+            addCriterion("post_id =", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdNotEqualTo(Integer value) {
+            addCriterion("post_id <>", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdGreaterThan(Integer value) {
+            addCriterion("post_id >", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("post_id >=", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdLessThan(Integer value) {
+            addCriterion("post_id <", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdLessThanOrEqualTo(Integer value) {
+            addCriterion("post_id <=", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdIn(List<Integer> values) {
+            addCriterion("post_id in", values, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdNotIn(List<Integer> values) {
+            addCriterion("post_id not in", values, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdBetween(Integer value1, Integer value2) {
+            addCriterion("post_id between", value1, value2, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("post_id not between", value1, value2, "postId");
             return (Criteria) this;
         }
 
@@ -709,6 +969,66 @@ public class InterviewPersonRefExample {
 
         public Criteria andIsReplaceNotBetween(Byte value1, Byte value2) {
             addCriterion("is_replace not between", value1, value2, "isReplace");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoIsNull() {
+            addCriterion("replace_staff_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoIsNotNull() {
+            addCriterion("replace_staff_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoEqualTo(Integer value) {
+            addCriterion("replace_staff_no =", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoNotEqualTo(Integer value) {
+            addCriterion("replace_staff_no <>", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoGreaterThan(Integer value) {
+            addCriterion("replace_staff_no >", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoGreaterThanOrEqualTo(Integer value) {
+            addCriterion("replace_staff_no >=", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoLessThan(Integer value) {
+            addCriterion("replace_staff_no <", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoLessThanOrEqualTo(Integer value) {
+            addCriterion("replace_staff_no <=", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoIn(List<Integer> values) {
+            addCriterion("replace_staff_no in", values, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoNotIn(List<Integer> values) {
+            addCriterion("replace_staff_no not in", values, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoBetween(Integer value1, Integer value2) {
+            addCriterion("replace_staff_no between", value1, value2, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoNotBetween(Integer value1, Integer value2) {
+            addCriterion("replace_staff_no not between", value1, value2, "replaceStaffNo");
             return (Criteria) this;
         }
 

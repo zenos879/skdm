@@ -134,7 +134,8 @@ public class PostInfo extends BaseEntity implements Serializable {
         return (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
             && (this.getPostName() == null ? other.getPostName() == null : this.getPostName().equals(other.getPostName()))
             && (this.getCategoryId() == null ? other.getCategoryId() == null : this.getCategoryId().equals(other.getCategoryId()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -145,6 +146,7 @@ public class PostInfo extends BaseEntity implements Serializable {
         result = prime * result + ((getPostName() == null) ? 0 : getPostName().hashCode());
         result = prime * result + ((getCategoryId() == null) ? 0 : getCategoryId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -158,6 +160,7 @@ public class PostInfo extends BaseEntity implements Serializable {
         sb.append(", postName=").append(postName);
         sb.append(", categoryId=").append(categoryId);
         sb.append(", createTime=").append(createTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

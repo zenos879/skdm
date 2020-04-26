@@ -101,6 +101,29 @@
     from person_info
     where candidate_id = #{candidateId,jdbcType=INTEGER}
   </select>
+  
+  <select id="selectCurrentPersonCount" parameterType="com.cctv.project.noah.outsource.entity.CurrentPersonCount" resultType="com.cctv.project.noah.outsource.entity.CurrentPersonCount">
+    SELECT
+    f.project_name,
+	a.order_no,
+	e.department_name,
+	g.candidate_name,
+	c.post_name,
+	d.supplier_name,
+	a.arrive_date,
+	g.id_card,
+	g.`phone`
+    FROM `interview_person_ref` a
+    LEFT JOIN interview_info b ON a.order_no = b.order_no
+    LEFT JOIN post_info c ON b.post_id=c.post_id
+    LEFT JOIN supplier_info d ON b.supplier_id=d.supplier_id
+    LEFT JOIN department_info e ON b.department_id=e.department_id
+    LEFT JOIN project_info f ON b.project_id=f.project_id
+    LEFT JOIN person_info g ON a.candidate_id=g.candidate_id
+    WHERE a.is_pass = 1 AND a.leave_date IS NULL AND a.arrive_date &lt;= now()
+    ORDER BY f.project_name, d.supplier_name, a.order_no, c.post_name;
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from person_info
     where candidate_id = #{candidateId,jdbcType=INTEGER}
