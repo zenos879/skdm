@@ -273,6 +273,12 @@
             <version>3.5.0.201409260305-r</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.snowflake</groupId>
+            <artifactId>snowflake-ingest-sdk</artifactId>
+            <version>0.9.6</version>
+        </dependency>
+
     </dependencies>
 
     <build>
