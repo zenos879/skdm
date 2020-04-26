@@ -69,7 +69,22 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, purchase_no, supplier_id, post_id, person_name, is_notify_interview, create_time
+    auto_id, purchase_no, supplier_id,post_id, person_name, is_notify_interview, create_time
+  </sql>
+  <sql id="selectJoin">
+    SELECT
+    r.auto_id auto_id,
+    r.purchase_no purchase_no,
+    r.supplier_id supplier_id,
+    r.person_name person_name,
+    r.is_notify_interview is_notify_interview,
+    r.create_time create_time,
+    s.supplier_name supplierName,
+	p.post_name postName
+    FROM
+    review_person_ref r
+    LEFT JOIN supplier_info s on r.supplier_id = s.supplier_id
+	LEFT JOIN post_info p on r.post_id = p.post_id
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRefExample" resultMap="BaseResultMap">
     select
@@ -103,19 +118,7 @@
     where auto_id = #{autoId,jdbcType=INTEGER}
   </select>
   <select id="selectByIds" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    SELECT
-    r.auto_id auto_id,
-    r.purchase_no purchase_no,
-    r.supplier_id supplier_id,
-    r.candidate_id candidate_id,
-    r.is_notify_interview is_notify_interview,
-    r.create_time create_time,
-    s.supplier_name supplierName,
-    p.candidate_name candidateName
-    FROM
-    review_person_ref r
-    INNER JOIN supplier_info s on r.supplier_id = s.supplier_id
-    INNER JOIN person_info p on r.candidate_id = p.candidate_id
+    <include refid="selectJoin"></include>
     where r.auto_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
@@ -123,19 +126,7 @@
   </select>
 
   <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" resultMap="BaseResultMap">
-    SELECT
-    r.auto_id auto_id,
-    r.purchase_no purchase_no,
-    r.supplier_id supplier_id,
-    r.candidate_id candidate_id,
-    r.is_notify_interview is_notify_interview,
-    r.create_time create_time,
-    s.supplier_name supplierName,
-    p.candidate_name candidateName
-    FROM
-    review_person_ref r
-    INNER JOIN supplier_info s on r.supplier_id = s.supplier_id
-    INNER JOIN person_info p on r.candidate_id = p.candidate_id
+    <include refid="selectJoin"></include>
     <where>
       <if test="autoId != null">
         AND r.auto_id = #{autoId,jdbcType=INTEGER}
@@ -146,8 +137,11 @@
       <if test="supplierId != null">
         AND r.supplier_id = #{supplierId,jdbcType=INTEGER}
       </if>
-      <if test="candidateId != null">
-        AND r.candidate_id = #{candidateId,jdbcType=INTEGER}
+      <if test="postId != null">
+        AND r.post_id = #{postId,jdbcType=INTEGER}
+      </if>
+      <if test="personName != null and personName != ''">
+        AND r.person_name like concat('%', #{personName}, '%')
       </if>
       <if test="isNotifyInterview != null">
         AND r.is_notify_interview = #{isNotifyInterview,jdbcType=TINYINT}
@@ -162,19 +156,7 @@
 
   </select>
   <select id="selectByRepeat" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" resultMap="BaseResultMap">
-    SELECT
-    r.auto_id auto_id,
-    r.purchase_no purchase_no,
-    r.supplier_id supplier_id,
-    r.candidate_id candidate_id,
-    r.is_notify_interview is_notify_interview,
-    r.create_time create_time,
-    s.supplier_name supplierName,
-    p.candidate_name candidateName
-    FROM
-    review_person_ref r
-    INNER JOIN supplier_info s on r.supplier_id = s.supplier_id
-    INNER JOIN person_info p on r.candidate_id = p.candidate_id
+    <include refid="selectJoin"></include>
     <where>
       <if test="purchaseNo != null and purchaseNo != ''">
         AND r.purchase_no = #{purchaseNo}
@@ -182,8 +164,11 @@
       <if test="supplierId != null">
         AND r.supplier_id = #{supplierId,jdbcType=INTEGER}
       </if>
-      <if test="candidateId != null">
-        AND r.candidate_id = #{candidateId,jdbcType=INTEGER}
+      <if test="postId != null">
+        AND r.post_id = #{postId,jdbcType=INTEGER}
+      </if>
+      <if test="personName != null">
+        AND r.person_name = #{personName}
       </if>
       <if test="isNotifyInterview != null">
         AND r.is_notify_interview = #{isNotifyInterview,jdbcType=TINYINT}
@@ -205,10 +190,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" useGeneratedKeys="true">
-    insert into review_person_ref (purchase_no, supplier_id, post_id,
-      person_name, is_notify_interview, create_time)
-    values (#{purchaseNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER},
-      #{personName,jdbcType=VARCHAR}, #{isNotifyInterview,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+    insert into review_person_ref (purchase_no, supplier_id, person_name, post_id,
+      is_notify_interview, create_time)
+    values (#{purchaseNo,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{person_name,jdbcType=VARCHAR}, #{post_id,jdbcType=INTEGER},
+      #{isNotifyInterview,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" useGeneratedKeys="true">
     insert into review_person_ref
@@ -243,7 +228,7 @@
         #{postId,jdbcType=INTEGER},
       </if>
       <if test="personName != null">
-        #{personName,jdbcType=VARCHAR},
+        #{personName,jdbcType=INTEGER},
       </if>
       <if test="isNotifyInterview != null">
         #{isNotifyInterview,jdbcType=TINYINT},
@@ -271,11 +256,8 @@
       <if test="record.supplierId != null">
         supplier_id = #{record.supplierId,jdbcType=INTEGER},
       </if>
-      <if test="record.postId != null">
-        post_id = #{record.postId,jdbcType=INTEGER},
-      </if>
-      <if test="record.personName != null">
-        person_name = #{record.personName,jdbcType=VARCHAR},
+      <if test="record.candidateId != null">
+        candidate_id = #{record.candidateId,jdbcType=INTEGER},
       </if>
       <if test="record.isNotifyInterview != null">
         is_notify_interview = #{record.isNotifyInterview,jdbcType=TINYINT},
@@ -293,8 +275,7 @@
     set auto_id = #{record.autoId,jdbcType=INTEGER},
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      post_id = #{record.postId,jdbcType=INTEGER},
-      person_name = #{record.personName,jdbcType=VARCHAR},
+      candidate_id = #{record.candidateId,jdbcType=INTEGER},
       is_notify_interview = #{record.isNotifyInterview,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">

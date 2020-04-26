@@ -23,6 +23,9 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
     @Autowired
     PersonInfoService personInfoService;
 
+    @Autowired
+    PostInfoService postInfoService;
+
     @Override
     public int insert(ReviewPersonRef record) {
         return reviewPersonRefMapper.insert(record);
@@ -53,7 +56,7 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
     private Boolean reviewPersonRefNotNull(ReviewPersonRef reviewPersonRef){
         return StringUtils.isNotEmpty(reviewPersonRef.getPurchaseNo()) &&
                 (StringUtils.isNotNull(reviewPersonRef.getSupplierId())||StringUtils.isNotEmpty(reviewPersonRef.getSupplierName())) &&
-                (StringUtils.isNotNull(reviewPersonRef.getCandidateId())||StringUtils.isNotEmpty(reviewPersonRef.getCandidateName())) &&
+                (StringUtils.isNotNull(reviewPersonRef.getCandidateId())||StringUtils.isNotEmpty(reviewPersonRef.getPersonName())) &&
                 StringUtils.isNotNull(reviewPersonRef.getIsNotifyInterview());
     }
     private Boolean reviewPersonRefNull(ReviewPersonRef reviewPersonRef){
@@ -96,13 +99,11 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
             if (reviewPersonRefNull(reviewPersonRef)){
                 return new Result(0,"所有项都是必填项，第"+(i+2)+"行的有未填项!");
             }
-            PersonInfo personInfo_sel = new PersonInfo();
-            personInfo_sel.setIdCard(reviewPersonRef.getIdCard());
-            List<PersonInfo> personInfos = personInfoService.selectList(personInfo_sel);
-            if (StringUtils.isEmpty(personInfos)){
-                return new Result(0,"第"+(i+2)+"行的人员不存在!");
+            PostInfo postInfo = postInfoService.selectByName(reviewPersonRef.getPostName());
+            if (postInfo == null){
+                return new Result(0,"第"+(i+2)+"行的岗位不存在!");
             }
-            reviewPersonRef.setCandidateId(personInfos.get(0).getCandidateId());
+            reviewPersonRef.setPostId(postInfo.getPostId());
             SupplierInfo supplierInfo = supplierInfoService.selectByName(reviewPersonRef.getSupplierName());
             if (supplierInfo == null){
                 return new Result(0,"第"+(i+2)+"行的供应商不存在!");

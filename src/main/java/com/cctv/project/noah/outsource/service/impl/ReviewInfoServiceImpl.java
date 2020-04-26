@@ -3,16 +3,24 @@ package com.cctv.project.noah.outsource.service.impl;
 import com.cctv.project.noah.outsource.entity.PostInfo;
 import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import com.cctv.project.noah.outsource.entity.ReviewInfo;
+import com.cctv.project.noah.outsource.entity.ReviewPersonRef;
 import com.cctv.project.noah.outsource.mapper.ReviewInfoMapper;
 import com.cctv.project.noah.outsource.service.PostInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.ReviewInfoService;
+import com.cctv.project.noah.outsource.utils.PoiUtil;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -182,5 +190,109 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
         }
         int i = reviewInfoMapper.deleteByPrimaryKey(id);
         return new Result(i);
+    }
+    String[] reviewInfoHeaders = {"项目名称","采购编号","岗位","岗位需求数","评审日期"};
+    String[] reviewPersonRefHeaders = {"人名","岗位","供应商名称","是否通知面试"};
+
+    public Result importJion(MultipartFile file){
+        List<String> reviewInfoHeadersList = Arrays.asList(reviewInfoHeaders);
+        List<String> reviewPersonRefHeadersList = Arrays.asList(reviewPersonRefHeaders);
+        List<ReviewInfo> reviewInfoInserts = new ArrayList<>();
+        List<ReviewPersonRef> reviewPersonRefInserts = new ArrayList<>();
+        try {
+            List<String[]> lines = PoiUtil.readExcel(file);
+            Boolean isReviewInfo = false;
+            Boolean isReviewPersonRef = false;
+
+            for (int i = 0; i<lines.size();i++) {
+                String[] line = lines.get(i);
+                List<String> lineList = Arrays.asList(line);
+                if (lineList.contains(reviewInfoHeadersList)){
+                    isReviewInfo = true;
+                    isReviewPersonRef = false;
+                    continue;
+                }
+                if (lineList.contains(reviewPersonRefHeadersList)) {
+                    isReviewPersonRef = true;
+                    isReviewInfo = false;
+                    continue;
+                }
+                String projectName = null;
+                String purchaseNo = null;
+
+
+                if (isReviewInfo){
+                    ReviewInfo reviewInfo = new ReviewInfo();
+                    String project_name = lineList.get(reviewInfoHeadersList.indexOf("项目名称"));
+                    if (StringUtils.isEmpty(projectName)){
+                        return new Result(0,"第"+(i+1)+"行的项目名称不能为null！");
+                    }
+                    ProjectInfo projectInfo = projectInfoService.selectByName(projectName);
+                    if (projectInfo == null){
+                        return new Result(0,"第"+(i+1)+"行的项目不存在！");
+                    }
+                    if (projectName == null){
+                        projectName = project_name;
+                    }else {
+                        if (!project_name.equals(projectName)){
+                            return new Result(0,"第"+(i+1)+"行的项目名称与上面不同！");
+                        }
+                    }
+                    reviewInfo.setProjectId(projectInfo.getProjectId());
+                    String purchase_no = lineList.get(reviewInfoHeadersList.indexOf("采购编号"));
+                    if (StringUtils.isEmpty(purchase_no)){
+                        return new Result(0,"第"+(i+1)+"行的采购编号不能为null！");
+                    }
+                    if (purchaseNo == null){
+                        purchaseNo = purchase_no;
+                    }else {
+                        if (!purchaseNo.equals(purchase_no)){
+                            return new Result(0,"第"+(i+1)+"行的采购编号与上面不同！");
+                        }
+                    }
+                    reviewInfo.setPurchaseNo(purchase_no);
+                    String postName = lineList.get(reviewInfoHeadersList.indexOf("岗位"));
+                    if (StringUtils.isEmpty(postName)){
+                        return new Result(0,"第"+(i+1)+"行的岗位不能为null！");
+                    }
+                    PostInfo postInfo = postInfoService.selectByName(postName);
+                    if (postInfo == null){
+                        return new Result(0,"第"+(i+1)+"行的岗位不存在！");
+                    }
+                    reviewInfo.setPostId(postInfo.getPostId());
+                    String postCount = lineList.get(reviewInfoHeadersList.indexOf("岗位需求数"));
+                    if (StringUtils.isEmpty(postCount)){
+                        return new Result(0,"第"+(i+1)+"行的岗位需求数不能为null！");
+                    }
+                    try {
+                        reviewInfo.setPostCount(Integer.valueOf(postCount));
+                    } catch (NumberFormatException e) {
+                        return new Result(0,"第"+(i+1)+"行的岗位需求数格式不是数字！");
+                    }
+                    String reviewDate = lineList.get(reviewInfoHeadersList.indexOf("评审日期"));
+                    if (StringUtils.isEmpty(postCount)){
+                        return new Result(0,"第"+(i+1)+"行的评审日期不能为null！");
+                    }
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date _reviewDate = null;
+                    try {
+                        _reviewDate = simpleDateFormat.parse(reviewDate);
+                    } catch (ParseException e) {
+                        return new Result(0,"第"+(i+1)+"行的评审日期时间格式不正确！");
+                    }
+                    reviewInfo.setReviewDate(_reviewDate);
+                    reviewInfo.setCreateTime(new Date());
+                    reviewInfoInserts.add(reviewInfo);
+                }
+                if (isReviewPersonRef){
+
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

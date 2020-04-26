@@ -22,11 +22,11 @@
 										<option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}"></option>
 									</select>
 								</li>
-								<li>
-									状态：<select name="status" th:with="type=${@dict.getType('status')}">
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-									</select>
-								</li>
+								<!--<li>-->
+									<!--状态：<select name="status" th:with="type=${@dict.getType('status')}">-->
+									<!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+									<!--</select>-->
+								<!--</li>-->
 								<li class="select-time">
 									<label>创建时间： </label>
 									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
@@ -108,15 +108,15 @@
 		            title: '创建时间',
 		            sortable: true
 		        },
-				{
-					field: 'status',
-					title: '状态',
-					sortable: true,
-					formatter:function(value,row,index){
-						return $.table.selectDictLabel(_status, value);
-						// return value;
-					}
-				},
+				// {
+				// 	field: 'status',
+				// 	title: '状态',
+				// 	sortable: true,
+				// 	formatter:function(value,row,index){
+				// 		return $.table.selectDictLabel(_status, value);
+				// 		// return value;
+				// 	}
+				// },
 		        {
 		            title: '操作',
 		            align: 'center',

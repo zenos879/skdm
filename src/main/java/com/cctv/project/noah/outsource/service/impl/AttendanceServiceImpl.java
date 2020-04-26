@@ -75,7 +75,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
     private Boolean attendanceNotNull(Attendance attendance){
         return StringUtils.isNotEmpty(attendance.getOrderNo()) &&
-                (StringUtils.isNotNull(attendance.getCandidateId())||StringUtils.isNotEmpty(attendance.getCandidateName())) &&
+//                (StringUtils.isNotNull(attendance.getCandidateId())||StringUtils.isNotEmpty(attendance.getCandidateName())) &&
                 StringUtils.isNotNull(attendance.getStatisticsYear()) &&
                 StringUtils.isNotNull(attendance.getStatisticsMonth()) &&
                 StringUtils.isNotNull(attendance.getServeDaysExpect()) &&
@@ -129,7 +129,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             if (StringUtils.isEmpty(personInfos)){
                 return new Result(0,"第"+(i+2)+"行的人员不存在!");
             }
-            attendance.setCandidateId(personInfos.get(0).getCandidateId());
+//            attendance.setCandidateId(personInfos.get(0).getCandidateId());
             if (attendance.getIsReject() != 0 && StringUtils.isNotEmpty(attendance.getInsteadIdCard())) {
                 personInfo_sel.setIdCard(attendance.getInsteadIdCard());
                 List<PersonInfo> insteadPersonInfos = personInfoService.selectList(personInfo_sel);

@@ -22,12 +22,20 @@
 								</select>
 								</li>
 								<li>
-									人员：<select name="candidateId" id="candidateId" class="selectpicker" data-live-search="true" th:with="persons=${@personInfoService.selectAll()}">
-									<option value="">全部</option>
-									<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>
-									</select>
+									人员：<input type="text" name="personName"/>
+									<!--<select name="candidateId" id="candidateId" class="selectpicker" data-live-search="true" th:with="persons=${@personInfoService.selectAll()}">-->
+									<!--<option value="">全部</option>-->
+									<!--<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>-->
+									<!--</select>-->
 								</li>
-								<li>
+                                <li>
+                                    岗位：
+                                    <select name="postId" id="postId" class="selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+                                    <option value="">全部</option>
+                                    <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}"></option>
+                                    </select>
+                                </li>
+                                <li>
 									是否通知参加面试：<select name="isNotifyInterview" th:with="type=${@dict.getType('isNotifyInterview')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -111,7 +119,12 @@
 					sortable: true
 				},
 				{
-					field: 'candidateName',
+					field: 'postName',
+					title: '岗位',
+					sortable: true
+				},
+				{
+					field: 'personName',
 					title: '候选人',
 					sortable: true
 				},{

@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>项目：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>供应商：</label>
                         <div class="col-sm-8">
                             <select name="supplierId" id="supplierId" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
                                 <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
@@ -28,11 +28,23 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>岗位：</label>
+                        <div class="col-sm-8">
+                            <select name="postId" id="postId" class="form-control" th:with="posts=${@postInfoService.selectAll()}">
+                                <option th:each="post : ${posts}" th:text="${post.getPostName()}" th:value="${post.getPostId()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>人员：</label>
                         <div class="col-sm-8">
-                            <select name="candidateId" id="candidateId" class="form-control"  th:with="persons=${@personInfoService.selectAll()}">
-                                <option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>
-                            </select>
+                            <!--<select name="candidateId" id="candidateId" class="form-control"  th:with="persons=${@personInfoService.selectAll()}">-->
+                                <!--<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>-->
+                            <!--</select>-->
+                            <input name="personName" id="personName" placeholder="请输入人员名" class="form-control" type="text" maxlength="20" required>
+
                         </div>
                     </div>
                 </div>

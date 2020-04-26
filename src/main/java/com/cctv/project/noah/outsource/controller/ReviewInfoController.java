@@ -4,6 +4,7 @@ package com.cctv.project.noah.outsource.controller;
 import com.cctv.project.noah.outsource.entity.ReviewInfo;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.ReviewInfoService;
+import com.cctv.project.noah.outsource.utils.PoiUtil;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -89,6 +91,16 @@ public class ReviewInfoController extends BaseController {
         List<ReviewInfo> reviewInfos = util.importExcel(file.getInputStream());
         Result result = reviewInfoService.importPostInfo(reviewInfos);
         return toAjax(result);
+    }
+    @ResponseBody
+    @PostMapping("/import")
+    @Log(title = "评审数据", businessType = BusinessType.IMPORT)
+    public AjaxResult _import(MultipartFile file, boolean updateSupport) throws Exception {
+        List<String[]> strings = PoiUtil.readExcel(file);
+        for (String[] string : strings) {
+            System.out.println("Arrays.toString(string) = " + Arrays.toString(string));
+        }
+        return toAjax(1);
     }
 
     @ResponseBody
