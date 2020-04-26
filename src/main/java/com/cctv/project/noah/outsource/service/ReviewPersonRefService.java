@@ -19,7 +19,7 @@ public interface ReviewPersonRefService {
 
     Result insertBySelective(ReviewPersonRef reviewPersonRef);
 
-    Result importPostInfo(List<ReviewPersonRef> reviewPersonRefs);
+    Result importReviewPersonRef(List<ReviewPersonRef> reviewPersonRefs);
 
     Result deleteByIds(String ids);
 }

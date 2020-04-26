@@ -1,10 +1,8 @@
 package com.cctv.project.noah.outsource.controller;
 
 
-import com.cctv.project.noah.outsource.entity.ReviewInfo;
 import com.cctv.project.noah.outsource.entity.ReviewPersonRef;
 import com.cctv.project.noah.outsource.service.Result;
-import com.cctv.project.noah.outsource.service.ReviewInfoService;
 import com.cctv.project.noah.outsource.service.ReviewPersonRefService;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
@@ -89,7 +87,7 @@ public class ReviewPersonRefController extends BaseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<ReviewPersonRef> util = new ExcelUtil<ReviewPersonRef>(ReviewPersonRef.class);
         List<ReviewPersonRef> reviewPersonRefs = util.importExcel(file.getInputStream());
-        Result result = reviewPersonRefService.importPostInfo(reviewPersonRefs);
+        Result result = reviewPersonRefService.importReviewPersonRef(reviewPersonRefs);
         return toAjax(result);
     }
 

@@ -93,7 +93,7 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
     }
 
     @Override
-    public Result importPostInfo(List<ReviewPersonRef> reviewPersonRefs){
+    public Result importReviewPersonRef(List<ReviewPersonRef> reviewPersonRefs){
         for (int i = 0; i < reviewPersonRefs.size(); i++) {
             ReviewPersonRef reviewPersonRef = reviewPersonRefs.get(i);
             if (reviewPersonRefNull(reviewPersonRef)){

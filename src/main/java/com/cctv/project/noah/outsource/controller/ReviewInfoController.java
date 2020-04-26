@@ -89,18 +89,15 @@ public class ReviewInfoController extends BaseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<ReviewInfo> util = new ExcelUtil<ReviewInfo>(ReviewInfo.class);
         List<ReviewInfo> reviewInfos = util.importExcel(file.getInputStream());
-        Result result = reviewInfoService.importPostInfo(reviewInfos);
+        Result result = reviewInfoService.importReviewInfo(reviewInfos);
         return toAjax(result);
     }
     @ResponseBody
     @PostMapping("/import")
     @Log(title = "评审数据", businessType = BusinessType.IMPORT)
     public AjaxResult _import(MultipartFile file, boolean updateSupport) throws Exception {
-        List<String[]> strings = PoiUtil.readExcel(file);
-        for (String[] string : strings) {
-            System.out.println("Arrays.toString(string) = " + Arrays.toString(string));
-        }
-        return toAjax(1);
+        Result result = reviewInfoService.importJion(file);
+        return toAjax(result);
     }
 
     @ResponseBody

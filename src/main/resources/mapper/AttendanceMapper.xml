@@ -116,7 +116,7 @@
 	c.project_name projectName,
 	b.order_no orderNo,
 	d.department_name departmentName,
-	g.candidate_name candidateName,
+	g.candidate_name personName,
 	f.post_name postName,
 	e.supplier_name supplierName,
 	a.serve_days_expect serveDaysExpect,
@@ -142,7 +142,7 @@
 	c.project_name projectName,
 	b.order_no orderNo,
 	d.department_name departmentName,
-	g.candidate_name candidateName,
+	g.candidate_name personName,
 	f.post_name postName,
 	e.supplier_name supplierName,
 	a.serve_days_expect serveDaysExpect,
@@ -180,7 +180,7 @@
     a.serve_days_actual serve_days_actual,
     a.instead_candidate_id instead_candidate_id,
     a.create_time create_time,
-    p1.candidate_name candidateName,
+    p1.candidate_name personName,
     p2.candidate_name insteadCandidateName
     FROM
     attendance a
@@ -249,7 +249,7 @@
     a.serve_days_actual serve_days_actual,
     a.instead_candidate_id instead_candidate_id,
     a.create_time create_time,
-    p1.candidate_name candidateName,
+    p1.candidate_name personName,
     p2.candidate_name insteadCandidateName
     FROM
     attendance a
@@ -286,7 +286,7 @@
     a.serve_days_actual serve_days_actual,
     a.instead_candidate_id instead_candidate_id,
     a.create_time create_time,
-    p1.candidate_name candidateName,
+    p1.candidate_name personName,
     p2.candidate_name insteadCandidateName
     FROM
     attendance a

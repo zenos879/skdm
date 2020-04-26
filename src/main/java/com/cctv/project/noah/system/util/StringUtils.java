@@ -3,6 +3,7 @@ package com.cctv.project.noah.system.util;
 import com.cctv.project.noah.system.core.domain.text.StrFormatter;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -341,5 +342,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             }
         }
         return sb.toString();
+    }
+
+    public static <T> Boolean contains(List<T> parent,List<T> child){
+        Boolean contains = true;
+        for (T t : child) {
+            if (parent.indexOf(t) == -1) {
+                contains = false;
+                break;
+            }
+        }
+        return contains;
     }
 }
