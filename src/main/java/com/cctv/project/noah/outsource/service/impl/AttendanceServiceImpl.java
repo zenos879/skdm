@@ -1,14 +1,23 @@
 package com.cctv.project.noah.outsource.service.impl;
 
+import com.cctv.project.noah.ShiroUtils;
 import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.AttendanceMapper;
 import com.cctv.project.noah.outsource.mapper.ReviewPersonRefMapper;
 import com.cctv.project.noah.outsource.service.*;
 import com.cctv.project.noah.system.core.domain.text.Convert;
+import com.cctv.project.noah.system.entity.SysRole;
+import com.cctv.project.noah.system.entity.SysUser;
+import com.cctv.project.noah.system.service.RoleService;
+import com.cctv.project.noah.system.service.UserService;
 import com.cctv.project.noah.system.util.StringUtils;
+import lombok.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,13 +31,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     PersonInfoService personInfoService;
 
+    @Autowired
+    UserService userService;
 
-    @Override
-    public int insert(Attendance record) {
-        return attendanceMapper.insert(record);
-    }
-
-
+    @Autowired
+    RoleService roleService;
+    Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
     @Override
     public Attendance selectByPrimaryKey(Long autoId) {
         return attendanceMapper.selectByPrimaryKey(autoId);
@@ -40,9 +48,41 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendances;
     }
 
+    private Integer getDepartmentId(){
+        SysUser sysUser = ShiroUtils.getSysUser();
+        List<SysRole> sysRoles = roleService.selectRolesByUserId(sysUser.getUserId());
+        Boolean hasJ = false;
+        Boolean hasR = false;
+        for (SysRole sysRole : sysRoles) {
+            if ("projectManager".equals(sysRole.getRoleKey())) {
+                hasJ = true;
+            }
+            if ("admin".equals(sysRole.getRoleKey())){
+                hasR = true;
+                break;
+            }
+        }
+        if (hasR){
+            return -1;
+        }
+        if (hasJ){
+            //TODO 根据用户名获取人员表中的部门ID
+            return 0;
+        }else {
+            return null;
+        }
+    }
+
     @Override
     public List<Attendance> selectBySelective(Attendance attendance){
-        return attendanceMapper.selectBySelective(attendance);
+        Integer departmentId = getDepartmentId();
+        if (departmentId == null){
+            return new ArrayList<>();
+        }
+        if (departmentId != -1){
+            attendance.setDepartmentId(departmentId);
+        }
+        return attendanceMapper.selectAttendanceList(attendance);
     }
 
     @Override
@@ -74,11 +114,12 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceMapper.selectByIds(ids.split(","));
     }
     private Boolean attendanceNotNull(Attendance attendance){
-        return StringUtils.isNotEmpty(attendance.getOrderNo()) &&
-//                (StringUtils.isNotNull(attendance.getCandidateId())||StringUtils.isNotEmpty(attendance.getCandidateName())) &&
-                StringUtils.isNotNull(attendance.getStatisticsYear()) &&
-                StringUtils.isNotNull(attendance.getStatisticsMonth()) &&
-                StringUtils.isNotNull(attendance.getServeDaysExpect()) &&
+//        return StringUtils.isNotEmpty(attendance.getOrderNo()) &&
+//                StringUtils.isNotEmpty(attendance.getStaffName()) &&
+//                StringUtils.isNotNull(attendance.getStaffNo()) &&
+//                StringUtils.isNotNull(attendance.getStatisticsYear()) &&
+//                StringUtils.isNotNull(attendance.getStatisticsMonth()) &&
+        return StringUtils.isNotNull(attendance.getServeDaysExpect()) &&
                 StringUtils.isNotNull(attendance.getServeDaysActual());
     }
     private Boolean attendanceNull(Attendance attendance){
@@ -88,16 +129,16 @@ public class AttendanceServiceImpl implements AttendanceService {
     public Result updateBySelective(Attendance attendance){
         Long attendanceAutoId = attendance.getAutoId();
         if (attendanceAutoId == null) {
-            return new Result(0,"id为空,无法修改！");
+            return new Result(0,"id为空,无法修改！",true);
         }
         if (attendanceNull(attendance)) {
-            return new Result(0,"*号标识项为必填项！");
+            return new Result(0,"*号标识项为必填项！",true);
         }
         Attendance attendanceDb = attendanceMapper.selectByPrimaryKey(attendanceAutoId);
         if (attendanceDb == null){
-            return new Result(0,"无法修改不存在的考勤数据！");
+            return new Result(0,"无法修改不存在的考勤数据！",true);
         }
-        int i = attendanceMapper.updateByPrimaryKeySelective(attendance);
+        int i = attendanceMapper.update(attendance);
         return new Result(i);
     }
     @Override
@@ -105,47 +146,40 @@ public class AttendanceServiceImpl implements AttendanceService {
         if (attendanceNull(attendance)) {
             return new Result(0,"*号标识项为必填项！");
         }
-        List<Attendance> attendances = attendanceMapper.selectByRepeat(attendance);
+        List<Attendance> attendances = attendanceMapper.selectAttendanceList(attendance);
         if (attendances.size()!=0){
             for (Attendance info : attendances) {
                 return new Result(0,"此考勤数据已存在！",true);
             }
         }
         attendance.setCreateTime(new Date());
-        int i = attendanceMapper.insertSelective(attendance);
+        int i = attendanceMapper.insertAttendance(attendance);
         return new Result(i);
     }
-
+    @Override
+    public List<Attendance> exportCore(List<Attendance> all){
+        for (Attendance attendance : all) {
+            attendance.setServeDaysActual(null);
+            attendance.setServeDaysExpect(null);
+        }
+        return all;
+    }
     @Override
     public Result importPostInfo(List<Attendance> attendances){
         for (int i = 0; i < attendances.size(); i++) {
             Attendance attendance = attendances.get(i);
+            if (attendance.getAutoId() == null) {
+                return new Result(0,"第"+(i+2)+"行的考勤编号为空!");
+            }
             if (attendanceNull(attendance)){
-                return new Result(0,"订单编号，考勤人，年份，月份，应服务天数，实际服务天数项都是必填项，第"+(i+2)+"行的有未填项!");
+                return new Result(0,"应服务天数，实际服务天数项都是必填项，第"+(i+2)+"行的有未填项!");
             }
-            PersonInfo personInfo_sel = new PersonInfo();
-            personInfo_sel.setIdCard(attendance.getIdCard());
-            List<PersonInfo> personInfos = personInfoService.selectList(personInfo_sel);
-            if (StringUtils.isEmpty(personInfos)){
-                return new Result(0,"第"+(i+2)+"行的人员不存在!");
-            }
-//            attendance.setCandidateId(personInfos.get(0).getCandidateId());
-            if (attendance.getIsReject() != 0 && StringUtils.isNotEmpty(attendance.getInsteadIdCard())) {
-                personInfo_sel.setIdCard(attendance.getInsteadIdCard());
-                List<PersonInfo> insteadPersonInfos = personInfoService.selectList(personInfo_sel);
-                if (StringUtils.isEmpty(insteadPersonInfos)){
-                    return new Result(0,"第"+(i+2)+"行的替换考勤人员不存在!");
-                }
-                attendance.setInsteadCandidateId(insteadPersonInfos.get(0).getCandidateId());
-            }
-
-            attendance.setCreateTime(new Date());
         }
 
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (Attendance attendance : attendances) {
-            Result result = insertBySelective(attendance);
+            Result result = updateBySelective(attendance);
             if (result.warning){
                 warning.append("第").append(i+2).append("行").append("未插入，原因是：<")
                         .append(result.info).append("></br>");

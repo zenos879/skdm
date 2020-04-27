@@ -14,6 +14,7 @@ import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,16 +44,18 @@ public class AttendanceController extends BaseController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("attendanceId",id);
-        return prefix+"/edit";
+    public String edit(@PathVariable("id") Long id, ModelMap mmap){
+        Attendance attendance = attendanceService.selectByPrimaryKey(id);
+        mmap.put("attendance", attendance);
+        return prefix + "/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
     public TableDataInfo list(Attendance attendance){
         startPage();
-        return getDataTable(attendanceService.selectBySelective(attendance));
+        List<Attendance> attendances = attendanceService.selectBySelective(attendance);
+        return getDataTable(attendances);
     }
 
     @RequestMapping("/attendanceCountlist")
@@ -70,13 +73,13 @@ public class AttendanceController extends BaseController {
         return toAjax(result);
     }
 
-    @PostMapping("/add")
-    @ResponseBody
-    @Log(title = "考勤数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(Attendance attendance){
-        Result result = attendanceService.insertBySelective(attendance);
-        return toAjax(result);
-    }
+//    @PostMapping("/add")
+//    @ResponseBody
+//    @Log(title = "考勤数据", businessType = BusinessType.INSERT)
+//    public AjaxResult add(Attendance attendance){
+//        Result result = attendanceService.insertBySelective(attendance);
+//        return toAjax(result);
+//    }
 
     @PostMapping("/export")
     @ResponseBody
@@ -89,6 +92,21 @@ public class AttendanceController extends BaseController {
         }else {
             list = attendanceService.selectBySelective(attendance);
         }
+        return util.exportExcel(list, "考勤数据");
+    }
+
+    @PostMapping("/exportCore")
+    @ResponseBody
+    @Log(title = "考勤数据", businessType = BusinessType.EXPORT)
+    public AjaxResult exportCore(Attendance attendance, String ids){
+        ExcelUtil<Attendance> util = new ExcelUtil<Attendance>(Attendance.class);
+        List<Attendance> list;
+        if (ids !=null){
+            list = attendanceService.selectByIds(ids);
+        }else {
+            list = attendanceService.selectBySelective(attendance);
+        }
+        attendanceService.exportCore(list);
         return util.exportExcel(list, "考勤数据");
     }
 

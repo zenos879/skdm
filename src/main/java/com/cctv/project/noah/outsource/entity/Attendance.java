@@ -1,102 +1,58 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * attendance
- * @author 
+ * 【考勤】对象 attendance
+ * 
+ * @author system
+ * @date 2020-04-27
  */
-public class Attendance extends BaseEntity implements Serializable {
-    /**
-     * 自增主键
-     */
-    @Excel(name = "考勤id", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
+public class Attendance extends BaseEntity  implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /** 自增主键 */
+    @Excel(name = "考勤编号")
     private Long autoId;
 
-    /**
-     * 订单编号：与一次面试对应
-     */
-    @Excel(name = "订单编号")
+    /** 订单编号：与一次面试对应 */
+    @Excel(name = "订单编号：与一次面试对应")
     private String orderNo;
 
-    /**
-     * 员工编号
-     */
+    /** 考勤人id */
+    @Excel(name = "考勤人id")
+    private Long staffNo;
 
-    private Integer staffNo;
-
-    @Excel(name = "考勤人")
-    private String candidateName;
-
-    /**
-     * 统计年份
-     */
+    /** 统计年份 */
     @Excel(name = "统计年份")
-    private Integer statisticsYear;
+    private Long statisticsYear;
 
-    /**
-     * 统计月份
-     */
+    /** 统计月份 */
     @Excel(name = "统计月份")
-    private Integer statisticsMonth;
+    private Long statisticsMonth;
 
-    /**
-     * 到岗日期
-     */
-    @Excel(name = "到岗日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    private Date arriveDate;
-
-    /**
-     * 离岗日期
-     */
-    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-    private Date leaveDate;
-
-    /**
-     * 备注说明
-     */
-    @Excel(name = "备注说明")
-    private String remark;
-
-    /**
-     * 是否被退回
-     */
-    @Excel(name = "是否替换")
-    private Integer isReject = 0;
-
-    /**
-     * 应该工作天数
-     */
+    /** 应该工作天数 */
     @Excel(name = "应该工作天数")
-    private Float serveDaysExpect;
+    private Long serveDaysExpect;
 
-    /**
-     * 实际工作天数
-     */
+    /** 实际工作天数 */
     @Excel(name = "实际工作天数")
-    private Float serveDaysActual;
+    private Long serveDaysActual;
 
-    @Excel(name = "考勤人身份证号",type = Excel.Type.IMPORT)
-    private String idCard;
+    /** $column.columnComment */
+    @Excel(name = "实际工作天数")
+    private Integer status;
 
-    /**
-     * 替换考勤人id，不是替换为空
-     */
-    private Integer insteadCandidateId;
-
-    @Excel(name = "替换考勤人")
-    private String insteadCandidateName;
-
-    @Excel(name = "替换考勤人身份证号",type = Excel.Type.IMPORT)
-    private String insteadIdCard;
+    /** 临时使用：考勤人名称 */
+    @Excel(name = "考勤人名称")
+    private String staffName;
 
     /**
      * 创建时间
@@ -105,248 +61,93 @@ public class Attendance extends BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
-    private Integer status;
+    private Integer departmentId;
 
-    public String getInsteadIdCard() {
-        return insteadIdCard;
+    public Integer getDepartmentId() {
+        return departmentId;
     }
 
-    public void setInsteadIdCard(String insteadIdCard) {
-        this.insteadIdCard = insteadIdCard;
-    }
-
-    public String getCandidateName() {
-        return candidateName;
-    }
-
-    public void setCandidateName(String candidateName) {
-        this.candidateName = candidateName;
-    }
-
-    public Integer getStatisticsYear() {
-        return statisticsYear;
-    }
-
-    public void setStatisticsYear(Integer statisticsYear) {
-        this.statisticsYear = statisticsYear;
-    }
-
-    public Integer getStatisticsMonth() {
-        return statisticsMonth;
-    }
-
-    public void setStatisticsMonth(Integer statisticsMonth) {
-        this.statisticsMonth = statisticsMonth;
-    }
-
-    public Integer getIsReject() {
-        return isReject;
-    }
-
-    public void setIsReject(Integer isReject) {
-        this.isReject = isReject;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public String getInsteadCandidateName() {
-        return insteadCandidateName;
-    }
-
-    public void setInsteadCandidateName(String insteadCandidateName) {
-        this.insteadCandidateName = insteadCandidateName;
-    }
-
-    private static final long serialVersionUID = 1L;
-
-    public Long getAutoId() {
-        return autoId;
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
     }
 
     public void setAutoId(Long autoId) {
         this.autoId = autoId;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public Long getAutoId() {
+        return autoId;
     }
-
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
 
-    public Integer getStaffNo() {
-        return staffNo;
+    public String getOrderNo() {
+        return orderNo;
     }
-
-    public void setStaffNo(Integer staffNo) {
+    public void setStaffNo(Long staffNo) {
         this.staffNo = staffNo;
     }
 
-
-    public Date getArriveDate() {
-        return arriveDate;
+    public Long getStaffNo() {
+        return staffNo;
+    }
+    public void setStatisticsYear(Long statisticsYear) {
+        this.statisticsYear = statisticsYear;
     }
 
-    public void setArriveDate(Date arriveDate) {
-        this.arriveDate = arriveDate;
+    public Long getStatisticsYear() {
+        return statisticsYear;
+    }
+    public void setStatisticsMonth(Long statisticsMonth) {
+        this.statisticsMonth = statisticsMonth;
     }
 
-    public Date getLeaveDate() {
-        return leaveDate;
+    public Long getStatisticsMonth() {
+        return statisticsMonth;
     }
-
-    public void setLeaveDate(Date leaveDate) {
-        this.leaveDate = leaveDate;
-    }
-
-    @Override
-    public String getRemark() {
-        return remark;
-    }
-
-    @Override
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getFormatArriveDate(){
-        if (this.arriveDate == null){
-            return null;
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(arriveDate);
-        return format;
-    }
-    public String getFormatLeaveDate(){
-        if (this.leaveDate == null){
-            return null;
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(leaveDate);
-        return format;
-    }
-
-
-    public Float getServeDaysExpect() {
-        return serveDaysExpect;
-    }
-
-    public void setServeDaysExpect(Float serveDaysExpect) {
+    public void setServeDaysExpect(Long serveDaysExpect) {
         this.serveDaysExpect = serveDaysExpect;
     }
 
-    public Float getServeDaysActual() {
-        return serveDaysActual;
+    public Long getServeDaysExpect() {
+        return serveDaysExpect;
     }
-
-    public void setServeDaysActual(Float serveDaysActual) {
+    public void setServeDaysActual(Long serveDaysActual) {
         this.serveDaysActual = serveDaysActual;
     }
 
-    public Integer getInsteadCandidateId() {
-        return insteadCandidateId;
+    public Long getServeDaysActual() {
+        return serveDaysActual;
     }
-
-    public void setInsteadCandidateId(Integer insteadCandidateId) {
-        this.insteadCandidateId = insteadCandidateId;
-    }
-
-    @Override
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @Override
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getStatus() {
         return status;
     }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        Attendance other = (Attendance) that;
-        return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
-            && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
-            && (this.getStatisticsYear() == null ? other.getStatisticsYear() == null : this.getStatisticsYear().equals(other.getStatisticsYear()))
-            && (this.getStatisticsMonth() == null ? other.getStatisticsMonth() == null : this.getStatisticsMonth().equals(other.getStatisticsMonth()))
-            && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
-            && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getIsReject() == null ? other.getIsReject() == null : this.getIsReject().equals(other.getIsReject()))
-            && (this.getServeDaysExpect() == null ? other.getServeDaysExpect() == null : this.getServeDaysExpect().equals(other.getServeDaysExpect()))
-            && (this.getServeDaysActual() == null ? other.getServeDaysActual() == null : this.getServeDaysActual().equals(other.getServeDaysActual()))
-            && (this.getInsteadCandidateId() == null ? other.getInsteadCandidateId() == null : this.getInsteadCandidateId().equals(other.getInsteadCandidateId()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
-        result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
-        result = prime * result + ((getStaffNo() == null) ? 0 : getStaffNo().hashCode());
-        result = prime * result + ((getStatisticsYear() == null) ? 0 : getStatisticsYear().hashCode());
-        result = prime * result + ((getStatisticsMonth() == null) ? 0 : getStatisticsMonth().hashCode());
-        result = prime * result + ((getArriveDate() == null) ? 0 : getArriveDate().hashCode());
-        result = prime * result + ((getLeaveDate() == null) ? 0 : getLeaveDate().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
-        result = prime * result + ((getIsReject() == null) ? 0 : getIsReject().hashCode());
-        result = prime * result + ((getServeDaysExpect() == null) ? 0 : getServeDaysExpect().hashCode());
-        result = prime * result + ((getServeDaysActual() == null) ? 0 : getServeDaysActual().hashCode());
-        result = prime * result + ((getInsteadCandidateId() == null) ? 0 : getInsteadCandidateId().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        return result;
+    public String getStaffName() {
+        return staffName;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", autoId=").append(autoId);
-        sb.append(", orderNo=").append(orderNo);
-        sb.append(", staffNo=").append(staffNo);
-        sb.append(", statisticsYear=").append(statisticsYear);
-        sb.append(", statisticsMonth=").append(statisticsMonth);
-        sb.append(", arriveDate=").append(arriveDate);
-        sb.append(", leaveDate=").append(leaveDate);
-        sb.append(", remark=").append(remark);
-        sb.append(", isReject=").append(isReject);
-        sb.append(", serveDaysExpect=").append(serveDaysExpect);
-        sb.append(", serveDaysActual=").append(serveDaysActual);
-        sb.append(", insteadCandidateId=").append(insteadCandidateId);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("autoId", getAutoId())
+            .append("orderNo", getOrderNo())
+            .append("staffNo", getStaffNo())
+            .append("statisticsYear", getStatisticsYear())
+            .append("statisticsMonth", getStatisticsMonth())
+            .append("serveDaysExpect", getServeDaysExpect())
+            .append("serveDaysActual", getServeDaysActual())
+            .append("createTime", getCreateTime())
+            .append("status", getStatus())
+            .append("staffName", getStaffName())
+            .toString();
     }
-
 }

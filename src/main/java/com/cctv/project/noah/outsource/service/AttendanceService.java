@@ -6,7 +6,7 @@ import com.cctv.project.noah.outsource.entity.AttendanceCount;
 import java.util.List;
 
 public interface AttendanceService {
-    int insert(Attendance record);
+
 
     Attendance selectByPrimaryKey(Long autoId);
 
@@ -23,6 +23,8 @@ public interface AttendanceService {
     Result updateBySelective(Attendance attendance);
 
     Result insertBySelective(Attendance attendance);
+
+    List<Attendance> exportCore(List<Attendance> all);
 
     Result importPostInfo(List<Attendance> attendances);
 

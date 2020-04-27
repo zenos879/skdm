@@ -13,15 +13,9 @@ public interface AttendanceMapper {
 
     int deleteByPrimaryKey(Long autoId);
 
-    int insert(Attendance record);
-
-    int insertSelective(Attendance record);
-
     List<Attendance> selectByExample(AttendanceExample example);
 
     List<Attendance> selectBySelective(Attendance attendance);
-
-    List<Attendance> selectByRepeat(Attendance attendance);
 
     List<Attendance> selectByIds(String[] ids);
 
@@ -35,7 +29,44 @@ public interface AttendanceMapper {
 
     int updateByExample(@Param("record") Attendance record, @Param("example") AttendanceExample example);
 
-    int updateByPrimaryKeySelective(Attendance record);
+    /**
+     * 查询Attendance列表
+     *
+     * @param attendance
+     * @return 【Attendance】集合
+     */
+    public List<Attendance> selectAttendanceList(Attendance attendance);
 
-    int updateByPrimaryKey(Attendance record);
+    /**
+     * 新增【Attendance】
+     *
+     * @param attendance 【Attendance】
+     * @return 结果
+     */
+    public int insertAttendance(Attendance attendance);
+
+    /**
+     * 修改【Attendance】
+     *
+     * @param attendance 【Attendance】
+     * @return 结果
+     */
+    public int updateAttendance(Attendance attendance);
+    public int update(Attendance attendance);
+
+    /**
+     * 删除【Attendance】
+     *
+     * @param autoId 【Attendance】ID
+     * @return 结果
+     */
+    public int deleteAttendanceById(Long autoId);
+
+    /**
+     * 批量删除【Attendance】
+     *
+     * @param autoIds 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteAttendanceByIds(String[] autoIds);
 }
