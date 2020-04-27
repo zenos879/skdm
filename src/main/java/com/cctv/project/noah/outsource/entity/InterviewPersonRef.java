@@ -25,7 +25,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 面试人员员工编号
      */
-    private Integer staffNo;
+    private Long staffNo;
 
     /**
      * 人员名字
@@ -34,7 +34,7 @@ public class InterviewPersonRef implements Serializable {
     private String staffName;
 
     /**
-     * 身份证号，is_pass=1时必填
+     * 身份证号
      */
     private String idCard;
 
@@ -43,15 +43,29 @@ public class InterviewPersonRef implements Serializable {
      */
     private Integer supplierId;
 
+    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    private String supplierName;
+
+    /**
+     * 部门id
+     */
+    private Integer departmentId;
+
+    @Excel(name = "部门名称", cellType = Excel.ColumnType.NUMERIC)
+    private String departmentName;
+
     /**
      * 岗位id
      */
     private Integer postId;
 
+    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
+    private String postName;
+
     /**
      * 是否参加面试
      */
-    private Byte isInterview;
+    private Integer isInterview;
 
     /**
      * 通知面试日期
@@ -70,17 +84,17 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 是否通过
      */
-    private Byte isPass;
+    private Integer isPass;
 
     /**
      * 是否被退回
      */
-    private Byte isReject;
+    private Integer isReject;
 
     /**
      * 是否替换（1：无缝替换，2有缝替换，0无替换）
      */
-    private Byte isReplace;
+    private Integer isReplace;
 
     /**
      * 替换人的员工编号
@@ -138,11 +152,11 @@ public class InterviewPersonRef implements Serializable {
         this.orderNo = orderNo;
     }
 
-    public Integer getStaffNo() {
+    public Long getStaffNo() {
         return staffNo;
     }
 
-    public void setStaffNo(Integer staffNo) {
+    public void setStaffNo(Long staffNo) {
         this.staffNo = staffNo;
     }
 
@@ -178,11 +192,11 @@ public class InterviewPersonRef implements Serializable {
         this.postId = postId;
     }
 
-    public Byte getIsInterview() {
+    public Integer getIsInterview() {
         return isInterview;
     }
 
-    public void setIsInterview(Byte isInterview) {
+    public void setIsInterview(Integer isInterview) {
         this.isInterview = isInterview;
     }
 
@@ -202,27 +216,27 @@ public class InterviewPersonRef implements Serializable {
         this.interviewDate = interviewDate;
     }
 
-    public Byte getIsPass() {
+    public Integer getIsPass() {
         return isPass;
     }
 
-    public void setIsPass(Byte isPass) {
+    public void setIsPass(Integer isPass) {
         this.isPass = isPass;
     }
 
-    public Byte getIsReject() {
+    public Integer getIsReject() {
         return isReject;
     }
 
-    public void setIsReject(Byte isReject) {
+    public void setIsReject(Integer isReject) {
         this.isReject = isReject;
     }
 
-    public Byte getIsReplace() {
+    public Integer getIsReplace() {
         return isReplace;
     }
 
-    public void setIsReplace(Byte isReplace) {
+    public void setIsReplace(Integer isReplace) {
         this.isReplace = isReplace;
     }
 
@@ -282,6 +296,14 @@ public class InterviewPersonRef implements Serializable {
         this.status = status;
     }
 
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -313,7 +335,8 @@ public class InterviewPersonRef implements Serializable {
             && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
             && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()));
     }
 
     @Override
@@ -340,6 +363,7 @@ public class InterviewPersonRef implements Serializable {
         result = prime * result + ((getLeaveReason() == null) ? 0 : getLeaveReason().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         return result;
     }
 
@@ -369,8 +393,33 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", leaveReason=").append(leaveReason);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
+        sb.append(", departmentId=").append(departmentId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
     }
 }

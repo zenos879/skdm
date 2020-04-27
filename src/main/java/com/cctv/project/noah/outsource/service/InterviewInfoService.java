@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.service;
 
 import com.cctv.project.noah.outsource.entity.InterviewInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface InterviewInfoService {
 
     List<InterviewInfo> selectAll();
 
-    List<InterviewInfo> selectByName(String record);
+    InterviewInfo selectByName(String record);
 
     List<InterviewInfo> selectByIds(String ids);
 
@@ -33,5 +34,5 @@ public interface InterviewInfoService {
 
     Result updateByPrimaryKey(InterviewInfo record);
 
-    Result importInterviewInfo(List<InterviewInfo> records);
+    Result importInterviewInfo(MultipartFile file) throws Exception ;
 }

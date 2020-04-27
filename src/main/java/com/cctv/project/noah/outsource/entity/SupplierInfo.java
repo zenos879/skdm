@@ -115,10 +115,12 @@ public class SupplierInfo extends BaseEntity implements Serializable {
         this.isSubsidiary = isSubsidiary;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

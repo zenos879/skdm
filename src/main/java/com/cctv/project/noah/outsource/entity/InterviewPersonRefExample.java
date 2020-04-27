@@ -302,52 +302,52 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoEqualTo(Integer value) {
+        public Criteria andStaffNoEqualTo(Long value) {
             addCriterion("staff_no =", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotEqualTo(Integer value) {
+        public Criteria andStaffNoNotEqualTo(Long value) {
             addCriterion("staff_no <>", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoGreaterThan(Integer value) {
+        public Criteria andStaffNoGreaterThan(Long value) {
             addCriterion("staff_no >", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoGreaterThanOrEqualTo(Integer value) {
+        public Criteria andStaffNoGreaterThanOrEqualTo(Long value) {
             addCriterion("staff_no >=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoLessThan(Integer value) {
+        public Criteria andStaffNoLessThan(Long value) {
             addCriterion("staff_no <", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoLessThanOrEqualTo(Integer value) {
+        public Criteria andStaffNoLessThanOrEqualTo(Long value) {
             addCriterion("staff_no <=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoIn(List<Integer> values) {
+        public Criteria andStaffNoIn(List<Long> values) {
             addCriterion("staff_no in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotIn(List<Integer> values) {
+        public Criteria andStaffNoNotIn(List<Long> values) {
             addCriterion("staff_no not in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoBetween(Integer value1, Integer value2) {
+        public Criteria andStaffNoBetween(Long value1, Long value2) {
             addCriterion("staff_no between", value1, value2, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotBetween(Integer value1, Integer value2) {
+        public Criteria andStaffNoNotBetween(Long value1, Long value2) {
             addCriterion("staff_no not between", value1, value2, "staffNo");
             return (Criteria) this;
         }
@@ -622,52 +622,52 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewEqualTo(Byte value) {
+        public Criteria andIsInterviewEqualTo(Integer value) {
             addCriterion("is_interview =", value, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewNotEqualTo(Byte value) {
+        public Criteria andIsInterviewNotEqualTo(Integer value) {
             addCriterion("is_interview <>", value, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewGreaterThan(Byte value) {
+        public Criteria andIsInterviewGreaterThan(Integer value) {
             addCriterion("is_interview >", value, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsInterviewGreaterThanOrEqualTo(Integer value) {
             addCriterion("is_interview >=", value, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewLessThan(Byte value) {
+        public Criteria andIsInterviewLessThan(Integer value) {
             addCriterion("is_interview <", value, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewLessThanOrEqualTo(Byte value) {
+        public Criteria andIsInterviewLessThanOrEqualTo(Integer value) {
             addCriterion("is_interview <=", value, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewIn(List<Byte> values) {
+        public Criteria andIsInterviewIn(List<Integer> values) {
             addCriterion("is_interview in", values, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewNotIn(List<Byte> values) {
+        public Criteria andIsInterviewNotIn(List<Integer> values) {
             addCriterion("is_interview not in", values, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewBetween(Byte value1, Byte value2) {
+        public Criteria andIsInterviewBetween(Integer value1, Integer value2) {
             addCriterion("is_interview between", value1, value2, "isInterview");
             return (Criteria) this;
         }
 
-        public Criteria andIsInterviewNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsInterviewNotBetween(Integer value1, Integer value2) {
             addCriterion("is_interview not between", value1, value2, "isInterview");
             return (Criteria) this;
         }
@@ -802,52 +802,52 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsPassEqualTo(Byte value) {
+        public Criteria andIsPassEqualTo(Integer value) {
             addCriterion("is_pass =", value, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassNotEqualTo(Byte value) {
+        public Criteria andIsPassNotEqualTo(Integer value) {
             addCriterion("is_pass <>", value, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassGreaterThan(Byte value) {
+        public Criteria andIsPassGreaterThan(Integer value) {
             addCriterion("is_pass >", value, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsPassGreaterThanOrEqualTo(Integer value) {
             addCriterion("is_pass >=", value, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassLessThan(Byte value) {
+        public Criteria andIsPassLessThan(Integer value) {
             addCriterion("is_pass <", value, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassLessThanOrEqualTo(Byte value) {
+        public Criteria andIsPassLessThanOrEqualTo(Integer value) {
             addCriterion("is_pass <=", value, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassIn(List<Byte> values) {
+        public Criteria andIsPassIn(List<Integer> values) {
             addCriterion("is_pass in", values, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassNotIn(List<Byte> values) {
+        public Criteria andIsPassNotIn(List<Integer> values) {
             addCriterion("is_pass not in", values, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassBetween(Byte value1, Byte value2) {
+        public Criteria andIsPassBetween(Integer value1, Integer value2) {
             addCriterion("is_pass between", value1, value2, "isPass");
             return (Criteria) this;
         }
 
-        public Criteria andIsPassNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsPassNotBetween(Integer value1, Integer value2) {
             addCriterion("is_pass not between", value1, value2, "isPass");
             return (Criteria) this;
         }
@@ -862,52 +862,52 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectEqualTo(Byte value) {
+        public Criteria andIsRejectEqualTo(Integer value) {
             addCriterion("is_reject =", value, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectNotEqualTo(Byte value) {
+        public Criteria andIsRejectNotEqualTo(Integer value) {
             addCriterion("is_reject <>", value, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectGreaterThan(Byte value) {
+        public Criteria andIsRejectGreaterThan(Integer value) {
             addCriterion("is_reject >", value, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsRejectGreaterThanOrEqualTo(Integer value) {
             addCriterion("is_reject >=", value, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectLessThan(Byte value) {
+        public Criteria andIsRejectLessThan(Integer value) {
             addCriterion("is_reject <", value, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectLessThanOrEqualTo(Byte value) {
+        public Criteria andIsRejectLessThanOrEqualTo(Integer value) {
             addCriterion("is_reject <=", value, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectIn(List<Byte> values) {
+        public Criteria andIsRejectIn(List<Integer> values) {
             addCriterion("is_reject in", values, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectNotIn(List<Byte> values) {
+        public Criteria andIsRejectNotIn(List<Integer> values) {
             addCriterion("is_reject not in", values, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectBetween(Byte value1, Byte value2) {
+        public Criteria andIsRejectBetween(Integer value1, Integer value2) {
             addCriterion("is_reject between", value1, value2, "isReject");
             return (Criteria) this;
         }
 
-        public Criteria andIsRejectNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsRejectNotBetween(Integer value1, Integer value2) {
             addCriterion("is_reject not between", value1, value2, "isReject");
             return (Criteria) this;
         }
@@ -922,52 +922,52 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceEqualTo(Byte value) {
+        public Criteria andIsReplaceEqualTo(Integer value) {
             addCriterion("is_replace =", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceNotEqualTo(Byte value) {
+        public Criteria andIsReplaceNotEqualTo(Integer value) {
             addCriterion("is_replace <>", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceGreaterThan(Byte value) {
+        public Criteria andIsReplaceGreaterThan(Integer value) {
             addCriterion("is_replace >", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceGreaterThanOrEqualTo(Byte value) {
+        public Criteria andIsReplaceGreaterThanOrEqualTo(Integer value) {
             addCriterion("is_replace >=", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceLessThan(Byte value) {
+        public Criteria andIsReplaceLessThan(Integer value) {
             addCriterion("is_replace <", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceLessThanOrEqualTo(Byte value) {
+        public Criteria andIsReplaceLessThanOrEqualTo(Integer value) {
             addCriterion("is_replace <=", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceIn(List<Byte> values) {
+        public Criteria andIsReplaceIn(List<Integer> values) {
             addCriterion("is_replace in", values, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceNotIn(List<Byte> values) {
+        public Criteria andIsReplaceNotIn(List<Integer> values) {
             addCriterion("is_replace not in", values, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceBetween(Byte value1, Byte value2) {
+        public Criteria andIsReplaceBetween(Integer value1, Integer value2) {
             addCriterion("is_replace between", value1, value2, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceNotBetween(Byte value1, Byte value2) {
+        public Criteria andIsReplaceNotBetween(Integer value1, Integer value2) {
             addCriterion("is_replace not between", value1, value2, "isReplace");
             return (Criteria) this;
         }
@@ -1409,6 +1409,66 @@ public class InterviewPersonRefExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("`status` not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdIsNull() {
+            addCriterion("department_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdIsNotNull() {
+            addCriterion("department_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdEqualTo(Integer value) {
+            addCriterion("department_id =", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotEqualTo(Integer value) {
+            addCriterion("department_id <>", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdGreaterThan(Integer value) {
+            addCriterion("department_id >", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("department_id >=", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdLessThan(Integer value) {
+            addCriterion("department_id <", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("department_id <=", value, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdIn(List<Integer> values) {
+            addCriterion("department_id in", values, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotIn(List<Integer> values) {
+            addCriterion("department_id not in", values, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdBetween(Integer value1, Integer value2) {
+            addCriterion("department_id between", value1, value2, "departmentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("department_id not between", value1, value2, "departmentId");
             return (Criteria) this;
         }
     }

@@ -30,27 +30,29 @@ public class InterviewInfoController extends BaseController {
     @Autowired
     InterviewInfoService interviewInfoService;
 
-    /** 页面跳转 */
+    /**
+     * 页面跳转
+     */
     @GetMapping()
     public String page() {
         return prefix + "/interviewInfo";
     }
 
     @GetMapping("/add")
-    public String add(){
-        return prefix+"/add";
+    public String add() {
+        return prefix + "/add";
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
+    public String edit(@PathVariable("id") Integer id, Model model) {
         InterviewInfo interviewInfo = interviewInfoService.selectByPrimaryKey(id);
         model.addAttribute("interviewInfo", interviewInfo);
-        return prefix+"/edit";
+        return prefix + "/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(InterviewInfo interviewInfo){
+    public TableDataInfo list(InterviewInfo interviewInfo) {
         startPage();
         return getDataTable(interviewInfoService.selectList(interviewInfo));
     }
@@ -58,7 +60,7 @@ public class InterviewInfoController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "面试数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(InterviewInfo interviewInfo){
+    public AjaxResult edit(InterviewInfo interviewInfo) {
         Result result = interviewInfoService.updateByPrimaryKeySelective(interviewInfo);
         return toAjax(result);
     }
@@ -66,7 +68,7 @@ public class InterviewInfoController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "面试数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(InterviewInfo interviewInfo){
+    public AjaxResult add(InterviewInfo interviewInfo) {
         Result result = interviewInfoService.insertSelective(interviewInfo);
         return toAjax(result);
     }
@@ -74,12 +76,12 @@ public class InterviewInfoController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "面试数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(InterviewInfo interviewInfo,String ids){
+    public AjaxResult export(InterviewInfo interviewInfo, String ids) {
         ExcelUtil<InterviewInfo> util = new ExcelUtil<>(InterviewInfo.class);
         List<InterviewInfo> list;
-        if (ids != null){
+        if (ids != null) {
             list = interviewInfoService.selectByIds(ids);
-        }else {
+        } else {
             list = interviewInfoService.selectList(interviewInfo);
         }
         return util.exportExcel(list, "面试数据");
@@ -90,9 +92,9 @@ public class InterviewInfoController extends BaseController {
     @PostMapping("/importData")
     @Log(title = "面试数据", businessType = BusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<InterviewInfo> util = new ExcelUtil<>(InterviewInfo.class);
-        List<InterviewInfo> interviewInfos = util.importExcel(file.getInputStream());
-        Result result = interviewInfoService.importInterviewInfo(interviewInfos);
+//        ExcelUtil<InterviewInfo> util = new ExcelUtil<>(InterviewInfo.class);
+//        List<InterviewInfo> interviewInfos = util.importExcel("", 0, 2, file.getInputStream());
+        Result result = interviewInfoService.importInterviewInfo(file);
         return toAjax(result);
     }
 
@@ -106,10 +108,9 @@ public class InterviewInfoController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     @Log(title = "面试数据", businessType = BusinessType.DELETE)
-    public AjaxResult remove(String ids){
+    public AjaxResult remove(String ids) {
         return toAjax(interviewInfoService.deleteByIds(ids));
     }
-
 
 
 }
