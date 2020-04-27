@@ -34,17 +34,12 @@ public class InterviewPersonRef implements Serializable {
     private String staffName;
 
     /**
-     * 身份证号
+     * 岗位id
      */
-    private String idCard;
+    private Integer postId;
 
-    /**
-     * 供应商id
-     */
-    private Integer supplierId;
-
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
-    private String supplierName;
+    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
+    private String postName;
 
     /**
      * 部门id
@@ -55,45 +50,55 @@ public class InterviewPersonRef implements Serializable {
     private String departmentName;
 
     /**
-     * 岗位id
+     * 供应商id
      */
-    private Integer postId;
+    private Integer supplierId;
 
-    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
-    private String postName;
+    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    private String supplierName;
+
+    /**
+     * 身份证号
+     */
+    @Excel(name = "身份证号", cellType = Excel.ColumnType.NUMERIC)
+    private String idCard;
 
     /**
      * 是否参加面试
      */
+    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否")
     private Integer isInterview;
 
     /**
      * 通知面试日期
      */
-    @Excel(name = "通知面试日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "通知面试日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date notifyDate;
 
     /**
      * 参加面试日期
      */
-    @Excel(name = "参加面试日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "参加面试日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date interviewDate;
 
     /**
      * 是否通过
      */
+    @Excel(name = "是否通过", readConverterExp = "1=是,0=否")
     private Integer isPass;
 
     /**
-     * 是否被退回
+     * 是否退回
      */
+    @Excel(name = "是否退回", readConverterExp = "1=是,0=否")
     private Integer isReject;
 
     /**
-     * 是否替换（1：无缝替换，2有缝替换，0无替换）
+     * 是否替换（1：无缝替换，2:有缝替换，0:无替换）
      */
+    @Excel(name = "是否替换", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
     private Integer isReplace;
 
     /**
@@ -101,9 +106,13 @@ public class InterviewPersonRef implements Serializable {
      */
     private Integer replaceStaffNo;
 
+    @Excel(name = "替换人员身份证号", cellType = Excel.ColumnType.NUMERIC)
+    private Integer replacdStaffIdCard;
+
     /**
      * 不符合岗位要求的原因及建议
      */
+    @Excel(name = "不符合原因", cellType = Excel.ColumnType.NUMERIC)
     private String reason;
 
     /**
@@ -116,13 +125,14 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 离岗日期
      */
-    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date leaveDate;
 
     /**
      * 离岗原因
      */
+    @Excel(name = "离岗原因", cellType = Excel.ColumnType.NUMERIC, type = Excel.Type.EXPORT)
     private String leaveReason;
 
     /**

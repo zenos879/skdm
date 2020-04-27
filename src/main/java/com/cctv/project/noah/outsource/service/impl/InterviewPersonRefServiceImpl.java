@@ -136,16 +136,14 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     public List<InterviewPersonRef> selectList(InterviewPersonRef record) {
         InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
         InterviewPersonRefExample.Criteria criteria = interviewPersonRefExample.createCriteria();
-        Integer status = record.getStatus();
-//        String candidateName = record.getCandidateName();
-//        if (StringUtils.isNotEmpty(candidateName)){
-//            PersonInfo personInfo = personInfoService.selectByName(candidateName);
-//            criteria.andCandidateIdEqualTo(personInfo.getCandidateId());
-//        }
+        String staffName = record.getStaffName();
+        if (StringUtils.isNotEmpty(staffName)) {
+            criteria.andStaffNameEqualTo(staffName);
+        }
         List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
-//        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
-//            completionCandidateName(interviewPersonRef);
-//        }
+        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
+            completionCandidateName(interviewPersonRef);
+        }
         return interviewPersonRefs;
     }
 
@@ -153,7 +151,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     public InterviewPersonRef selectByPrimaryKey(Integer autoId) {
         InterviewPersonRef interviewPersonRef = interviewPersonRefMapper.selectByPrimaryKey(autoId);
         // 补全
-//        completionCandidateName(interviewPersonRef);
+        completionCandidateName(interviewPersonRef);
         return interviewPersonRef;
     }
 
@@ -165,39 +163,55 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         criteria.andAutoIdIn(idList);
         List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
         // 补全
-//        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
-//            completionCandidateName(interviewPersonRef);
-//        }
+        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
+            completionCandidateName(interviewPersonRef);
+        }
         return interviewPersonRefs;
     }
 
     /**
      * 数据库查询结果，补全各关系名称
      *
-     * @param interviewPersonRef
+     * @param record
      * @return
      */
-    private InterviewPersonRef completionCandidateName(InterviewPersonRef interviewPersonRef) {
-//        Integer supplierId = interviewPersonRef.getCandidateId();
-//        PersonInfo tempPersonInfo = personInfoService.selectByPrimaryKey(supplierId);
-//        interviewPersonRef.setCandidateName(tempPersonInfo.getCandidateName());
-        return interviewPersonRef;
+    private InterviewPersonRef completionCandidateName(InterviewPersonRef record) {
+        Integer supplierId = record.getSupplierId();
+        Integer departmentId = record.getDepartmentId();
+        Integer postId = record.getPostId();
+        SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
+        record.setSupplierName(supplierInfo.getSupplierName());
+        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
+        record.setDepartmentName(departmentInfo.getDepartmentName());
+        PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
+        record.setPostName(postInfo.getPostName());
+        Long staffNo = record.getStaffNo();
+        if (staffNo == 0) {
+            record.setStaffNo(GeneralUtils.generateStaffNo());
+        }
+        return record;
     }
 
     /**
      * 根据页面提供的名称，补全存入数据库中的id
      *
-     * @param interviewPersonRef
+     * @param record
      * @return
      */
-    private InterviewPersonRef conversionNameById(InterviewPersonRef interviewPersonRef) {
-//        String candidateName = interviewPersonRef.getCandidateName();
-//        PersonInfo personInfo = personInfoService.selectByName(candidateName);
-//        if (interviewPersonRef == null){
-//            return null;
-//        }
-//        interviewPersonRef.setCandidateId(personInfo.getCandidateId());
-        return interviewPersonRef;
+    private InterviewPersonRef conversionNameById(InterviewPersonRef record) {
+        String supplierName = record.getSupplierName();
+        String departmentName = record.getDepartmentName();
+        String postName = record.getPostName();
+        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        DepartmentInfo departmentInfo = departmentInfoService.selectByName(departmentName);
+        PostInfo postInfo = postInfoService.selectByName(postName);
+        if (supplierInfo == null || departmentInfo == null || postInfo == null) {
+            return null;
+        }
+        record.setSupplierId(supplierInfo.getSupplierId());
+        record.setDepartmentId(departmentInfo.getDepartmentId());
+        record.setPostId(postInfo.getPostId());
+        return record;
     }
 
     @Override
@@ -213,7 +227,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         // 查到有值，并且不相等，则重复，不更新
         if (resId > 0 && !id.equals(resId)) {
             result.setCode(0);
-            result.setInfo("关系已经存在，请调整后再提交！");
+            result.setInfo("人员已经存在，请调整后再提交！");
             return result;
         }
         int i = interviewPersonRefMapper.updateByPrimaryKeySelective(record);
@@ -255,56 +269,80 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         int count = 0;
         String msg = "";
         for (int i = 0; i < records.size(); i++) {
-            InterviewPersonRef interviewPersonRef = records.get(i);
-//            String purcharNo = interviewPersonRef.getPurcharNo();
-//            if (purcharNo == null) {
-//                return new Result(0,"第"+(i+2)+"行的采购编号为空!");
-//            }
-//            String candidateName = interviewPersonRef.getCandidateName();
-//            if (candidateName == null) {
-//                return new Result(0,"第"+(i+2)+"行的人名名称为空!");
-//            }
-//            Integer fileError = interviewPersonRef.getFileError();
-//            if (fileError == null) {
-//                return new Result(0,"第"+(i+2)+"行的应答文件错误次数为空!");
-//            }
-//            String remark = interviewPersonRef.getRemark();
-//            if (remark == null) {
-//                return new Result(0,"第"+(i+2)+"行的错误描述为空!");
-//            }
-//            Date happenDate = interviewPersonRef.getHappenDate();
-//            if (happenDate == null) {
-//                return new Result(0,"第"+(i+2)+"行的发生日期为空!");
-//            }
-//            // 判断人名是否存在
-//            PersonInfo personInfo = personInfoService.selectByName(candidateName);
-//            if (personInfo == null) {
-//                return new Result(0,"第"+(i+2)+"行的人名【" + candidateName + "】不存在!");
-//            }
+            InterviewPersonRef temp = records.get(i);
+            String staffName = temp.getStaffName();
+            if (StringUtils.isEmpty(staffName)) {
+                return new Result(0, "第" + (i + 4) + "行的人名为空!");
+            }
+            String postName = temp.getPostName();
+            if (StringUtils.isEmpty(postName)) {
+                return new Result(0, "第" + (i + 4) + "行的岗位名称为空!");
+            }
+            String departmentName = temp.getDepartmentName();
+            if (StringUtils.isEmpty(departmentName)) {
+                return new Result(0, "第" + (i + 4) + "行的部门名称为空!");
+            }
+            String supplierName = temp.getSupplierName();
+            if (StringUtils.isEmpty(supplierName)) {
+                return new Result(0, "第" + (i + 4) + "行的供应商名称为空!");
+            }
+            String idCard = temp.getIdCard();
+            if (StringUtils.isEmpty(idCard)) {
+                return new Result(0, "第" + (i + 4) + "行的身份证号为空!");
+            }
+            Integer isInterview = temp.getIsInterview();
+            if (StringUtils.isEmpty(idCard)) {
+                return new Result(0, "第" + (i + 4) + "行的是否参加面试为空!");
+            }
+            Integer isPass = temp.getIsPass();
+            if (isPass == null) {
+                return new Result(0, "第" + (i + 4) + "行的是否通过为空!");
+            }
+            Integer isReject = temp.getIsReject();
+            if (isReject == null) {
+                return new Result(0, "第" + (i + 4) + "行的是否退回为空!");
+            }
+            Integer isReplace = temp.getIsReplace();
+            if (isReplace == null) {
+                return new Result(0, "第" + (i + 4) + "行的是否替换为空!");
+            }
+            Integer replaceStaffNo = temp.getReplaceStaffNo();
+            if (replaceStaffNo == null) {
+                temp.setReplaceStaffNo(0);
+            }
+            String reason = temp.getReason();
+            if (StringUtils.isEmpty(reason)) {
+                temp.setReason("");
+            }
+            // 验证关联信息是否存在
+            PostInfo postInfo = postInfoService.selectByName(postName);
+            if (postInfo == null){
+                return new Result(0, "第" + (i + 4) + "行的岗位信息【" + postName + "】不存在!");
+            }
             // 补全实体
-//            Integer supplierId = personInfo.getCandidateId();
-//            interviewPersonRef.setPurcharNo(purcharNo);
-//            interviewPersonRef.setCandidateId(supplierId);
-//            interviewPersonRef.setFileError(fileError);
-//            interviewPersonRef.setRemark(remark);
-//            interviewPersonRef.setHappenDate(happenDate);
-            interviewPersonRef.setCreateTime(new Date());
+
+//            temp.setPurcharNo(purcharNo);
+//            temp.setCandidateId(supplierId);
+//            temp.setFileError(fileError);
+//            temp.setRemark(remark);
+//            temp.setHappenDate(happenDate);
+            temp.setCreateTime(new Date());
             // 判断数据库是否存在该关系
-            Integer autoId = selectBeanExist(interviewPersonRef, true);
+            Integer autoId = selectBeanExist(temp, true);
             if (autoId > 0) {
-                msg = msg + "[" + (i + 2) + "]";
+                msg = msg + "[" + (i + 4) + "]";
                 continue;
             } else {
                 // 不存在，则判断价格是否更改
-                autoId = selectBeanExist(interviewPersonRef, false);
-                if (autoId > 0) {
-                    // 关系存在，价格更改则更新价格
-                    interviewPersonRef.setAutoId(autoId);
-                    interviewPersonRefMapper.updateByPrimaryKeySelective(interviewPersonRef);
-                } else {
-                    // 关系完全不存在，则新增
-                    interviewPersonRefMapper.insertSelective(interviewPersonRef);
-                }
+//                autoId = selectBeanExist(interviewPersonRef, false);
+//                if (autoId > 0) {
+//                    // 关系存在，价格更改则更新价格
+//                    interviewPersonRef.setAutoId(autoId);
+//                    interviewPersonRefMapper.updateByPrimaryKeySelective(interviewPersonRef);
+//                } else {
+//                    // 关系完全不存在，则新增
+//                    interviewPersonRefMapper.insertSelective(interviewPersonRef);
+//                }
             }
             count = i;
         }
