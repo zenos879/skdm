@@ -16,10 +16,8 @@
 									订单编号：<input type="text" name="orderNo"/>
 								</li>
 								<li>
-									考勤人：<select name="candidateId" id="candidateId" class="selectpicker" data-live-search="true" th:with="persons=${@personInfoService.selectAll()}">
-									<option value="">全部</option>
-									<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>
-									</select>
+									<!--TODO与人员表关联-->
+									考勤人id：<input type="text" name="staffNo"/>
 								</li>
 								<li>
 									统计年份：<input type="text" name="statisticsYear"/>
@@ -27,34 +25,15 @@
 								<li>
 									统计月份：<input type="text" name="statisticsMonth"/>
 								</li>
-								<li class="select-time">
-									<label>到岗日期： </label>
-									<input type="text" class="time-input" id="arriveDateStart" placeholder="开始时间" name="params[arriveDateStart]"/>
-									<span>-</span>
-									<input type="text" class="time-input" id="arriveDateEnd" placeholder="结束时间" name="params[arriveDateEnd]"/>
-								</li>
-								<li class="select-time">
-									<label>离岗日期： </label>
-									<input type="text" class="time-input" id="leaveDateStart" placeholder="开始时间" name="params[leaveDateStart]"/>
-									<span>-</span>
-									<input type="text" class="time-input" id="leaveDateEnd" placeholder="结束时间" name="params[leaveDateEnd]"/>
+								<li>
+									应该工作天数：<input type="text" name="serveDaysExpect"/>
 								</li>
 								<li>
-									是否替换：<select name="isReject" th:with="type=${@dict.getType('isReject')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-									</select>
-								</li>
-								</li>
-								<li class="select-time">
-									<label>创建时间： </label>
-									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
-									<span>-</span>
-									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+									实际工作天数：<input type="text" name="serveDaysActual"/>
 								</li>
 								<li>
 									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+									<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 								</li>
 							</ul>
 						</div>
@@ -62,18 +41,21 @@
 				</div>
 				
 		        <div class="btn-group-sm" id="toolbar" role="group">
-		        	<a class="btn btn-success" onclick="$.operate.add()">
-		                <i class="fa fa-plus"></i> 新增
-		            </a>
+		        	<!--<a class="btn btn-success" onclick="$.operate.add()">-->
+		                <!--<i class="fa fa-plus"></i> 新增-->
+		            <!--</a>-->
 					<!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">-->
 						<!--<i class="fa fa-remove"></i> 删除-->
 					<!--</a>-->
 		            <a class="btn btn-info" onclick="$.table.importExcel()">
 			            <i class="fa fa-upload"></i> 导入
 			        </a>
-		            <a class="btn btn-warning" onclick="_export()">
-			            <i class="fa fa-download"></i> 导出
-			        </a>
+					<a class="btn btn-warning" onclick="_export()">
+						<i class="fa fa-download"></i> 导出所有数据
+					</a>
+					<a class="btn btn-warning" onclick="_export('core')">
+						<i class="fa fa-download"></i> 导出核心数据
+					</a>
 		        </div>
 		        
 		        <div class="col-sm-12 select-table table-striped">
@@ -87,7 +69,6 @@
 	<th:block th:include="include :: ztree-js" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/attendance";
-		var isReject = [[${@dict.getType('isReject')}]];
 		$(function() {
 		    queryUserList();
 		});
@@ -105,74 +86,55 @@
 		        sortOrder: "desc",
 		        modalName: "考勤数据",
 		        columns: [{
-		        	checkbox:true
+					checkbox: true
 				},
-		        {
-		            field: 'autoId',
-		            title: '考勤ID',
-					sortable: true
-		        },
-				{
-					field: 'orderNo',
-					title: '订单编号',
-					sortable: true
-				},
-				{
-					field: 'candidateName',
-					title: '考勤人',
-					sortable: true
-				},{
-					field: 'statisticsYear',
-					title: '统计年份',
-					sortable: true
-				},{
-					field: 'statisticsMonth',
-					title: '统计月份',
-					sortable: true
-				},{
-					field: 'arriveDate',
-					title: '到岗日期',
-					sortable: true
-				},{
-					field: 'leaveDate',
-					title: '离岗日期',
-					sortable: true
-				},{
-					field: 'serveDaysExpect',
-					title: '应该工作天数',
-					sortable: true
-				},{
-					field: 'serveDaysActual',
-					title: '实际工作天数',
-					sortable: true
-				},{
-						field: 'isReject',
-						title: '是否替换',
-						sortable: true,
-						formatter:function(value,row,index){
-							return $.table.selectDictLabel(isReject, value);
+					{
+						field : 'autoId',
+						title : '自增主键',
+						visible: false
+					},
+					{
+						field : 'orderNo',
+						title : '订单编号'
+					},
+					{
+						field : 'staffNo',
+						title : '考勤人id'
+					},
+					{
+						field : 'statisticsYear',
+						title : '统计年份'
+					},
+					{
+						field : 'statisticsMonth',
+						title : '统计月份'
+					},
+					{
+						field : 'serveDaysExpect',
+						title : '应该工作天数'
+					},
+					{
+						field : 'serveDaysActual',
+						title : '实际工作天数'
+					},
+					{
+						field : 'status',
+						title : '创建时间'
+					},
+					{
+						field : 'staffName',
+						title : '考勤人名称'
+					},
+					{
+						title: '操作',
+						align: 'center',
+						formatter: function(value, row, index) {
+							var actions = [];
+							actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.autoId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+							// actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.autoId + '\')"><i class="fa fa-remove"></i>删除</a>');
+							return actions.join('');
 						}
-				},
-				{
-					field: 'insteadCandidateName',
-					title: '替换考勤人',
-					sortable: true
-				},
-		        {
-		            field: 'createTime',
-		            title: '创建时间',
-		            sortable: true
-		        },
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		                var actions = [];
-		                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.autoId + '\')"><i class="fa fa-edit"></i>修改</a> ');
-		                // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="_delete(\'' + row.reviewId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-		                return actions.join('');
-		            }
-		        }]
+					}]
 		    };
 		    $.table.init(options);
 		}
@@ -187,7 +149,7 @@
 				}
 			});
 		}
-		function _export() {
+		function _export(flag) {
 			var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
 			if (rows.length == 0) {
 				$.table.exportExcel();
@@ -196,7 +158,13 @@
 			$.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
 				$.modal.loading("正在导出数据，请稍后...");
 				var data = { "ids": rows.join() };
-				$.post($.table._option.exportUrl,data, function(result) {
+				var url;
+				if (flag == "core"){
+					url = $.table._option.exportUrl;
+				}else {
+					url = $.table._option.exportCoreUrl;
+				}
+				$.post(url,data, function(result) {
 					if (result.code == web_status.SUCCESS) {
 						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
 					} else if (result.code == web_status.WARNING) {
