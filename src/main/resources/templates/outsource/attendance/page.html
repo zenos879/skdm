@@ -80,9 +80,10 @@
 		        updateUrl: prefix + "/edit/{id}",
 		        removeUrl: prefix + "/remove",
 		        exportUrl: prefix + "/export",
+				exportCoreUrl: prefix + "/exportCore",
 		        importUrl: prefix + "/importData",
 		        importTemplateUrl: prefix + "/importTemplate",
-		        sortName: "createTime",
+		        sortName: "autoId",
 		        sortOrder: "desc",
 		        modalName: "考勤数据",
 		        columns: [{
@@ -102,6 +103,10 @@
 						title : '考勤人id'
 					},
 					{
+						field : 'staffName',
+						title : '考勤人名称'
+					},
+					{
 						field : 'statisticsYear',
 						title : '统计年份'
 					},
@@ -118,12 +123,12 @@
 						title : '实际工作天数'
 					},
 					{
-						field : 'status',
+						field : 'createTime',
 						title : '创建时间'
 					},
 					{
-						field : 'staffName',
-						title : '考勤人名称'
+						field : 'remark',
+						title : '备注'
 					},
 					{
 						title: '操作',
@@ -151,19 +156,32 @@
 		}
 		function _export(flag) {
 			var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+			var url;
+			if (flag == "core"){
+				url = $.table._option.exportCoreUrl;
+			}else {
+				url = $.table._option.exportUrl;
+			}
 			if (rows.length == 0) {
-				$.table.exportExcel();
+				$.modal.confirm("确定导出所有考勤数据吗？", function() {
+					$.modal.loading("正在导出数据，请稍后...");
+					var currentId = $('form').attr('id')
+					$.post(url, $("#" + currentId).serializeArray(), function(result) {
+						if (result.code == web_status.SUCCESS) {
+							window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+						} else if (result.code == web_status.WARNING) {
+							$.modal.alertWarning(result.msg)
+						} else {
+							$.modal.alertError(result.msg);
+						}
+						$.modal.closeLoading();
+					});
+				});
 				return;
 			}
 			$.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
 				$.modal.loading("正在导出数据，请稍后...");
 				var data = { "ids": rows.join() };
-				var url;
-				if (flag == "core"){
-					url = $.table._option.exportUrl;
-				}else {
-					url = $.table._option.exportCoreUrl;
-				}
 				$.post(url,data, function(result) {
 					if (result.code == web_status.SUCCESS) {
 						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
@@ -183,10 +201,10 @@
 <form enctype="multipart/form-data" class="mt20 mb10">
 	<div class="col-xs-offset-1">
 		<input type="file" id="file" name="file"/>
-		<div class="mt10 pt5">
-			<!--<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据-->
-			 &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
-		</div>
+		<!--<div class="mt10 pt5">-->
+			<!--&lt;!&ndash;<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据&ndash;&gt;-->
+			 <!--&nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
+		<!--</div>-->
 		<font color="red" class="pull-left mt10">
 			提示：仅允许导入“xls”或“xlsx”格式文件！
 		</font>

@@ -1,6 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.utils.JsonLongSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.cctv.project.noah.system.annotation.Excel;
@@ -23,11 +25,12 @@ public class Attendance extends BaseEntity  implements Serializable {
     private Long autoId;
 
     /** 订单编号：与一次面试对应 */
-    @Excel(name = "订单编号：与一次面试对应")
+    @Excel(name = "订单编号")
     private String orderNo;
 
     /** 考勤人id */
     @Excel(name = "考勤人id")
+    @JsonSerialize(using = JsonLongSerializer.class)
     private Long staffNo;
 
     /** 统计年份 */
@@ -46,13 +49,13 @@ public class Attendance extends BaseEntity  implements Serializable {
     @Excel(name = "实际工作天数")
     private Long serveDaysActual;
 
-    /** $column.columnComment */
-    @Excel(name = "实际工作天数")
     private Integer status;
 
     /** 临时使用：考勤人名称 */
     @Excel(name = "考勤人名称")
     private String staffName;
+
+    public String remark;
 
     /**
      * 创建时间
@@ -69,6 +72,27 @@ public class Attendance extends BaseEntity  implements Serializable {
 
     public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
+    }
+
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public void setAutoId(Long autoId) {

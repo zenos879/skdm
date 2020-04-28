@@ -5,12 +5,16 @@ import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.AttendanceMapper;
 import com.cctv.project.noah.outsource.mapper.ReviewPersonRefMapper;
 import com.cctv.project.noah.outsource.service.*;
+import com.cctv.project.noah.system.core.domain.page.PageDomain;
+import com.cctv.project.noah.system.core.domain.page.TableSupport;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.entity.SysRole;
 import com.cctv.project.noah.system.entity.SysUser;
 import com.cctv.project.noah.system.service.RoleService;
 import com.cctv.project.noah.system.service.UserService;
 import com.cctv.project.noah.system.util.StringUtils;
+import com.cctv.project.noah.system.util.sql.SqlUtil;
+import com.github.pagehelper.PageHelper;
 import lombok.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +33,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     AttendanceMapper attendanceMapper;
 
     @Autowired
-    PersonInfoService personInfoService;
+    StaffInfoService staffInfoService;
 
     @Autowired
     UserService userService;
@@ -48,7 +52,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendances;
     }
 
-    private Integer getDepartmentId(){
+    @Override
+    public Integer getDepartmentId(){
         SysUser sysUser = ShiroUtils.getSysUser();
         List<SysRole> sysRoles = roleService.selectRolesByUserId(sysUser.getUserId());
         Boolean hasJ = false;
@@ -75,16 +80,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public List<Attendance> selectBySelective(Attendance attendance){
-        Integer departmentId = getDepartmentId();
-        if (departmentId == null){
-            return new ArrayList<>();
-        }
-        if (departmentId != -1){
-            attendance.setDepartmentId(departmentId);
-        }
-        return attendanceMapper.selectAttendanceList(attendance);
+        return attendanceMapper.selectBySelective(attendance);
     }
-
     @Override
     public List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount){
         return attendanceMapper.selectAttendanceCount(attendanceCount);

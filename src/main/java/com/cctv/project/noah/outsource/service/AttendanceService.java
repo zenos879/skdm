@@ -12,6 +12,8 @@ public interface AttendanceService {
 
     List<Attendance> selectAll();
 
+    Integer getDepartmentId();
+
     List<Attendance> selectBySelective(Attendance attendance);
 
     List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount);

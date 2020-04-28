@@ -21,7 +21,7 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
     SupplierInfoService supplierInfoService;
 
     @Autowired
-    PersonInfoService personInfoService;
+    StaffInfoService staffInfoService;
 
     @Autowired
     PostInfoService postInfoService;

@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -53,6 +54,13 @@ public class AttendanceController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public TableDataInfo list(Attendance attendance){
+        Integer departmentId = attendanceService.getDepartmentId();
+        if (departmentId == null){
+            return getDataTable(new ArrayList<>());
+        }
+        if (departmentId != -1){
+            attendance.setDepartmentId(departmentId);
+        }
         startPage();
         List<Attendance> attendances = attendanceService.selectBySelective(attendance);
         return getDataTable(attendances);
@@ -92,7 +100,8 @@ public class AttendanceController extends BaseController {
         }else {
             list = attendanceService.selectBySelective(attendance);
         }
-        return util.exportExcel(list, "考勤数据");
+        AjaxResult ajaxResult = util.exportExcel(list, "考勤数据");
+        return ajaxResult;
     }
 
     @PostMapping("/exportCore")

@@ -1,7 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.utils.JsonLongSerializer;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
@@ -37,6 +39,13 @@ public class AttendanceCount{
     @Excel(name = "备注说明")
     private String remark;
 
+    @Excel(name = "考勤人")
+    private String staffName;
+
+    @Excel(name = "考勤人ID")
+    @JsonSerialize(using = JsonLongSerializer.class)
+    private Long staffNo;
+
     /**
      * 到岗日期
      */
@@ -62,6 +71,23 @@ public class AttendanceCount{
      */
     @Excel(name = "统计月份")
     private Integer statisticsMonth;
+
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public Long getStaffNo() {
+        return staffNo;
+    }
+
+    public void setStaffNo(Long staffNo) {
+        this.staffNo = staffNo;
+    }
 
     public Integer getStatisticsYear() {
         return statisticsYear;
