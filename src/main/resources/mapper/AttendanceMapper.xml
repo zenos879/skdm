@@ -12,6 +12,7 @@
         <result property="createTime"    column="create_time"    />
         <result property="status"    column="status"    />
         <result property="staffName"    column="staff_name"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,16 +73,21 @@
     </where>
   </sql>
     <sql id="selectAttendanceVo">
-            a.auto_id,
-            a.order_no,
-            a.staff_no,
-            statistics_year,
-            statistics_month,
-            serve_days_expect,
-            serve_days_actual,
-            a.create_time,
-            a.STATUS,
-            s.staff_name
+        SELECT
+        a.auto_id,
+        a.order_no,
+        a.staff_no,
+        a.statistics_year,
+        a.statistics_month,
+        a.serve_days_expect,
+        a.serve_days_actual,
+        a.create_time,
+        a. STATUS,
+        s.staff_name,
+        a.remark
+        FROM
+        attendance a
+        LEFT JOIN staff_info s ON s.staff_no = a.staff_no
     </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.AttendanceExample" resultMap="BaseResultMap">
     select
@@ -109,29 +115,25 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-      SELECT
+
       <include refid="selectAttendanceVo"/>
-      FROM
-      attendance a
-      LEFT JOIN staff_info s ON a.staff_no = s.staff_no
+
     where a.auto_id = #{autoId,jdbcType=BIGINT}
   </select>
     <select id="selectAttendanceList" parameterType="Attendance" resultMap="BaseResultMap">
-        SELECT
+
         <include refid="selectAttendanceVo"/>
-        FROM
-        attendance a
-        LEFT JOIN staff_info s ON a.staff_no = s.staff_no
+
         <where>
-            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
-            <if test="staffNo != null "> and staff_no = #{staffNo}</if>
-            <if test="statisticsYear != null "> and statistics_year = #{statisticsYear}</if>
-            <if test="departmentId != null "> and department_id = #{departmentId}</if>
-            <if test="statisticsMonth != null "> and statistics_month = #{statisticsMonth}</if>
-            <if test="serveDaysExpect != null "> and serve_days_expect = #{serveDaysExpect}</if>
-            <if test="serveDaysActual != null "> and serve_days_actual = #{serveDaysActual}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="staffName != null  and staffName != ''"> and staff_name = #{staffName}</if>
+            <if test="orderNo != null  and orderNo != ''"> and a.order_no = #{orderNo}</if>
+            <if test="staffNo != null "> and a.staff_no = #{staffNo}</if>
+            <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
+            <if test="departmentId != null "> and a.department_id = #{departmentId}</if>
+            <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
+            <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
+            <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
+            <if test="status != null "> and a.status = #{status}</if>
+            <if test="staffName != null  and staffName != ''"> and s.staff_name = #{staffName}</if>
             <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -140,38 +142,42 @@
             </if>
         </where>
     </select>
+    <sql id="selectCount">
+        SELECT
+        pro.project_name projectName,
+        inter.order_no orderNo,
+        dep.department_name departmentName,
+        sta.staff_name,
+        sta.staff_no,
+        pos.post_name postName,
+        sup.supplier_name supplierName,
+        a.serve_days_expect serveDaysExpect,
+        a.serve_days_actual serveDaysActual,
+        sta.arrive_date arriveDate,
+        sta.leave_date leaveDate,
+        a.auto_id autoId,
+        a.remark remark
+        FROM
+        attendance a
+        LEFT JOIN `staff_info` sta ON sta.staff_no = a.staff_no
+        LEFT JOIN interview_info inter ON inter.order_no = sta.order_no
+        LEFT JOIN review_info re ON re.purchase_no = inter.purchase_no
+        AND re.post_id = sta.post_id
+        LEFT JOIN project_info pro ON pro.project_id = re.project_id
+        LEFT JOIN department_info dep ON dep.department_id = sta.department_id
+        LEFT JOIN supplier_info sup ON sup.supplier_id = sta.supplier_id
+        LEFT JOIN post_info pos ON pos.post_id = sta.post_id
+    </sql>
   <select id="selectAttendanceCount" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
-    SELECT
-	c.project_name projectName,
-	b.order_no orderNo,
-	d.department_name departmentName,
-	g.candidate_name personName,
-	f.post_name postName,
-	e.supplier_name supplierName,
-	a.serve_days_expect serveDaysExpect,
-	a.serve_days_actual serveDaysActual,
-	a.remark remark,
-	a.arrive_date arriveDate,
-	a.leave_date leaveDate,
-	a.auto_id autoId
-    FROM
-      attendance a
-    LEFT JOIN `interview_info` b ON a.order_no = b.order_no
-    LEFT JOIN project_info c ON b.project_id = c.project_id
-    LEFT JOIN department_info d ON c.department_id = d.department_id
-    LEFT JOIN supplier_info e ON b.supplier_id = e.supplier_id
-    LEFT JOIN post_info f ON b.post_id = f.post_id
-    LEFT JOIN person_info g ON a.candidate_id = g.candidate_id
+    <include refid="selectCount"/>
     WHERE
       a.`statistics_year` = #{statisticsYear}
     AND a.statistics_month = #{statisticsMonth}
   </select>
   <select id="selectAttendanceCountByIds" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
-      SELECT
+
       <include refid="selectAttendanceVo"/>
-      FROM
-      attendance a
-      LEFT JOIN staff_info s ON a.staff_no = s.staff_no
+
     WHERE
     a.auto_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
@@ -179,21 +185,19 @@
     </foreach>
   </select>
   <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.Attendance" resultMap="BaseResultMap">
-      SELECT
+
       <include refid="selectAttendanceVo"/>
-      FROM
-      attendance a
-      LEFT JOIN staff_info s ON a.staff_no = s.staff_no
+
       <where>
-          <if test="departmentId != null "> and department_id = #{departmentId}</if>
-          <if test="orderNo != null  and orderNo != ''"> and order_no like concat('%', #{orderNo}, '%')</if>
-          <if test="staffNo != null "> and staff_no = #{staffNo}</if>
-          <if test="statisticsYear != null "> and statistics_year = #{statisticsYear}</if>
-          <if test="statisticsMonth != null "> and statistics_month = #{statisticsMonth}</if>
-          <if test="serveDaysExpect != null "> and serve_days_expect = #{serveDaysExpect}</if>
-          <if test="serveDaysActual != null "> and serve_days_actual = #{serveDaysActual}</if>
-          <if test="status != null "> and status = #{status}</if>
-          <if test="staffName != null  and staffName != ''"> and staff_name like concat('%', #{staffName}, '%')</if>
+          <if test="departmentId != null "> and a.department_id = #{departmentId}</if>
+          <if test="orderNo != null  and orderNo != ''"> and a.order_no like concat('%', #{orderNo}, '%')</if>
+          <if test="staffNo != null "> and a.staff_no = #{staffNo}</if>
+          <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
+          <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
+          <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
+          <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
+          <if test="status != null "> and a.status = #{status}</if>
+          <if test="staffName != null  and staffName != ''"> and a.staff_name like concat('%', #{staffName}, '%')</if>
           <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
               AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
           </if>
@@ -203,11 +207,9 @@
       </where>
   </select>
   <select id="selectByIds" resultMap="BaseResultMap">
-      SELECT
+
       <include refid="selectAttendanceVo"/>
-      FROM
-      attendance a
-      LEFT JOIN staff_info s ON a.staff_no = s.staff_no
+
     where a.auto_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
       #{id}
@@ -342,7 +344,7 @@
     </update>
     <update id="update" parameterType="Attendance">
         update attendance
-        set serve_days_expect = #{serveDaysExpect},serve_days_expect = #{serveDaysExpect}
+        set serve_days_expect = #{serveDaysExpect},serve_days_actual = #{serveDaysActual}
         where auto_id = #{autoId}
     </update>
 
