@@ -9,6 +9,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,10 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 
     @Autowired
     PostInfoService postInfoService;
+
+    @Autowired
+    StaffInfoService staffInfoService;
+
 
     @Override
     public int deleteByExample(InterviewPersonRef record) {
@@ -268,7 +273,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
      * @param interviewPersonRef
      * @return
      */
-    private Integer selectBeanExist(InterviewPersonRef interviewPersonRef, boolean errorCount) {
+    private Integer selectBeanExist(InterviewPersonRef interviewPersonRef, boolean other) {
         String orderNo = interviewPersonRef.getOrderNo();
         String idCard = interviewPersonRef.getIdCard();
         InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
@@ -284,13 +289,38 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         return 0;
     }
 
+    /**
+     * 根据面试人员数据，补全人员信息实体
+     *
+     * @param record
+     * @return
+     */
+    public StaffInfo generateStaffInfo(InterviewPersonRef record) {
+        StaffInfo staffInfo = new StaffInfo();
+        staffInfo.setOrderNo(record.getOrderNo());
+        staffInfo.setStaffNo(record.getStaffNo());
+        staffInfo.setStaffName(record.getStaffName());
+        staffInfo.setIdCard(record.getIdCard());
+        staffInfo.setSupplierId(record.getSupplierId());
+        staffInfo.setPostId(record.getPostId());
+        staffInfo.setDepartmentId(record.getDepartmentId());
+        staffInfo.setIsReplace(record.getIsReplace());
+//        staffInfo.setReplaceGroup();
+        staffInfo.setReason(record.getReason());
+        staffInfo.setArriveDate(record.getArriveDate());
+        staffInfo.setLeaveDate(record.getLeaveDate());
+        staffInfo.setLeaveReason(record.getLeaveReason());
+        return staffInfo;
+    }
+
     @Override
-    public Result importInterviewPersonRef(List<InterviewPersonRef> records) {
+    public Result importInterviewPersonRef(String orderNo, List<InterviewPersonRef> records) {
         Result result = new Result();
-        int count = 0;
-        String msg = "";
+//        int count = 0;
+//        String msg = "";
         for (int i = 0; i < records.size(); i++) {
             InterviewPersonRef temp = records.get(i);
+            temp.setOrderNo(orderNo);
             String staffName = temp.getStaffName();
             if (StringUtils.isEmpty(staffName)) {
                 return new Result(0, "第" + (i + 4) + "行的人名为空!");
@@ -312,7 +342,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 return new Result(0, "第" + (i + 4) + "行的身份证号为空!");
             }
             Integer isInterview = temp.getIsInterview();
-            if (StringUtils.isEmpty(idCard)) {
+            if (isInterview == null) {
                 return new Result(0, "第" + (i + 4) + "行的是否参加面试为空!");
             }
             Integer isPass = temp.getIsPass();
@@ -327,18 +357,22 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             if (isReplace == null) {
                 return new Result(0, "第" + (i + 4) + "行的是否替换为空!");
             }
-            Long replaceStaffNo = temp.getReplaceStaffNo();
-            if (replaceStaffNo == null) {
-                temp.setReplaceStaffNo(0L);
+            String replacdStaffIdCard = temp.getReplacdStaffIdCard();
+            if (StringUtils.isEmpty(replacdStaffIdCard)) {
+                if (isReplace != 0) {
+                    return new Result(0, "第" + (i + 4) + "行有替换人员时，替换人员证件号必须填写!");
+                }
             } else {
-                // 根据替换人身份证号，查找员工编号
-                Long aLong = selectNoByIdCard(idCard);
-                temp.setReplaceStaffNo(aLong);
+                if (isReplace == 0) {
+                    return new Result(0, "第" + (i + 4) + "行无替换人员时，无需填写替换人员证件号!");
+                }
             }
             String reason = temp.getReason();
             if (StringUtils.isEmpty(reason)) {
                 temp.setReason("");
             }
+            Date arriveDate = temp.getArriveDate();
+            temp.setArriveDate(arriveDate);
             // 验证关联信息是否存在
             PostInfo postInfo = postInfoService.selectByName(postName);
             if (postInfo == null) {
@@ -352,31 +386,76 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             if (supplierInfo == null) {
                 return new Result(0, "第" + (i + 4) + "行的供应商信息【" + supplierName + "】不存在!");
             }
-
-            // 补全实体
+            // 补全关联信息
             temp.setPostId(postInfo.getPostId());
             temp.setDepartmentId(departmentInfo.getDepartmentId());
             temp.setSupplierId(supplierInfo.getSupplierId());
-            temp.setCreateTime(new Date());
-            // 判断数据库是否存在该关系
-            Integer autoId = selectBeanExist(temp, true);
-            if (autoId > 0) {
-                // 存在，则更新
-                interviewPersonRefMapper.updateByPrimaryKeySelective(temp);
-            } else {
+        }
+        /** 第一遍循环先新增数据库不存在的数据 */
+        for (InterviewPersonRef record : records) {
+            // 判断数据库是否存在该信息
+            Integer autoId = selectBeanExist(record, true);
+            if (autoId == 0) {
                 // 不存在，则新增,同时生成员工编号
-                temp.setStaffNo(GeneralUtils.generateStaffNo());
-                interviewPersonRefMapper.insertSelective(temp);
+                record.setStaffNo(GeneralUtils.generateStaffNo());
+                record.setCreateTime(new Date());
+                int i = interviewPersonRefMapper.insertSelective(record);
             }
-            count = i;
         }
-        if (!StringUtils.isEmpty(msg)) {
-            msg = msg + "行未执行，请核对是否重复或输入错误！";
-        } else {
-            msg = "共计导入" + count + "条";
+        /** 第二遍循环，补全替换人员信息，替换人身份证号转为员工编号，同时全部update一遍 */
+        for (InterviewPersonRef record : records) {
+            Integer isReplace = record.getIsReplace();
+            Long replaceStaffNo = record.getReplaceStaffNo();
+            String replacdStaffIdCard = record.getReplacdStaffIdCard();
+            if (isReplace == 0) {
+                record.setReplaceStaffNo(0L);
+            } else {
+                // 根据替换人身份证号，查找员工编号
+                Long aLong = selectNoByIdCard(replacdStaffIdCard);
+                if (aLong == 0L) {
+                    return new Result(0, "人员信息在导入数据和数据库中都没有找到，人员信息【" + record.toString() + "】");
+                } else {
+                    record.setReplaceStaffNo(aLong);
+                }
+            }
+            // 查询主键，然后更新实体
+            Integer id = selectBeanExist(record, false);
+            record.setAutoId(id);
+            interviewPersonRefMapper.updateByPrimaryKeySelective(record);
         }
-        result.setCode(count);
-        result.setInfo(msg);
+        /** 第三遍循环，插入和更新StaffInfo表，并维护replaceGroup字段 */
+        for (InterviewPersonRef record : records) {
+            // 如果isPass=1,需要判断staffInfo表中是否存在，不存在则插入，存在则更新
+            if (record.getIsPass() == 1) {
+                StaffInfo staffInfo = generateStaffInfo(record);
+                List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
+                if (staffInfos.size() == 0) {
+                    staffInfo.setCreateTime(new Date());
+                    staffInfoService.insert(staffInfo);
+                } else {
+                    Integer autoId = staffInfos.get(0).getAutoId();
+                    staffInfo.setAutoId(autoId);
+                    staffInfoService.updateByPrimaryKeySelective(staffInfo);
+                }
+            }
+            //如果存在替换人员，还要维护staffInfo表中对应的replaceGroup字段
+            if (record.getIsReplace() != 0) {
+                Long staffNo = record.getStaffNo();
+                Long replaceStaffNo = record.getReplaceStaffNo();
+                List<Long> tempList = new ArrayList<>();
+                tempList.add(staffNo);
+                tempList.add(replaceStaffNo);
+                staffInfoService.updateGroupByStaffNo(tempList);
+            }
+        }
+
+//        if (!StringUtils.isEmpty(msg)) {
+//            msg = msg + "行未执行，请核对是否重复或输入错误！";
+//        } else {
+//            msg = "共计导入" + count + "条";
+//        }
+//        result.setCode(count);
+        result.setInfo("导入成功");
         return result;
     }
 }

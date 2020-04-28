@@ -4,7 +4,9 @@ import com.cctv.project.noah.outsource.entity.ReviewInfo;
 import com.cctv.project.noah.outsource.entity.ReviewInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface ReviewInfoMapper {
     long countByExample(ReviewInfoExample example);
 

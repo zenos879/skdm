@@ -86,15 +86,15 @@ public class InterviewPersonRefController extends BaseController {
     }
 
 
-    @ResponseBody
-    @PostMapping("/importData")
-    @Log(title = "面试人员数据", businessType = BusinessType.IMPORT)
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<InterviewPersonRef> util = new ExcelUtil<>(InterviewPersonRef.class);
-        List<InterviewPersonRef> interviewPersonRefs = util.importExcel(file.getInputStream());
-        Result result = interviewPersonRefService.importInterviewPersonRef(interviewPersonRefs);
-        return toAjax(result);
-    }
+//    @ResponseBody
+//    @PostMapping("/importData")
+//    @Log(title = "面试人员数据", businessType = BusinessType.IMPORT)
+//    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+//        ExcelUtil<InterviewPersonRef> util = new ExcelUtil<>(InterviewPersonRef.class);
+//        List<InterviewPersonRef> interviewPersonRefs = util.importExcel(file.getInputStream());
+//        Result result = interviewPersonRefService.importInterviewPersonRef(interviewPersonRefs);
+//        return toAjax(result);
+//    }
 
     @ResponseBody
     @GetMapping("/importTemplate")

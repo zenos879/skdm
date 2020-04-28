@@ -1,9 +1,9 @@
 package com.cctv.project.noah.outsource.controller;
 
 
-import com.cctv.project.noah.outsource.entity.PersonInfo;
+import com.cctv.project.noah.outsource.entity.StaffInfo;
 import com.cctv.project.noah.outsource.service.Result;
-import com.cctv.project.noah.outsource.service.PersonInfoService;
+import com.cctv.project.noah.outsource.service.StaffInfoService;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
@@ -23,17 +23,17 @@ import java.util.List;
  * @author HuberyYan
  */
 @Controller
-@RequestMapping("/outsource/personInfo")
-public class PersonInfoController extends BaseController {
-    private String prefix = "outsource/personInfo";
+@RequestMapping("/outsource/staffInfo")
+public class StaffInfoController extends BaseController {
+    private String prefix = "outsource/staffInfo";
 
     @Autowired
-    PersonInfoService personInfoService;
+    StaffInfoService staffInfoService;
 
     /** 页面跳转 */
     @GetMapping()
     public String page() {
-        return prefix + "/personInfo";
+        return prefix + "/staffInfo";
     }
 
     @GetMapping("/add")
@@ -43,63 +43,63 @@ public class PersonInfoController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        PersonInfo personInfo = personInfoService.selectByPrimaryKey(id);
-        model.addAttribute("personInfo", personInfo);
+        StaffInfo staffInfo = staffInfoService.selectByPrimaryKey(id);
+        model.addAttribute("staffInfo", staffInfo);
         return prefix+"/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(PersonInfo projectInfo){
+    public TableDataInfo list(StaffInfo projectInfo){
         startPage();
-        return getDataTable(personInfoService.selectList(projectInfo));
+        return getDataTable(staffInfoService.selectList(projectInfo));
     }
 
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(PersonInfo projectInfo){
-        Result result = personInfoService.updateByPrimaryKeySelective(projectInfo);
+    public AjaxResult edit(StaffInfo projectInfo){
+        Result result = staffInfoService.updateByPrimaryKeySelective(projectInfo);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(PersonInfo projectInfo){
-        Result result = personInfoService.insertSelective(projectInfo);
+    public AjaxResult add(StaffInfo projectInfo){
+        Result result = staffInfoService.insertSelective(projectInfo);
         return toAjax(result);
     }
 
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(PersonInfo projectInfo,String ids){
-        ExcelUtil<PersonInfo> util = new ExcelUtil<>(PersonInfo.class);
-        List<PersonInfo> list;
+    public AjaxResult export(StaffInfo projectInfo,String ids){
+        ExcelUtil<StaffInfo> util = new ExcelUtil<>(StaffInfo.class);
+        List<StaffInfo> list;
         if (ids != null){
-            list = personInfoService.selectByIds(ids);
+            list = staffInfoService.selectByIds(ids);
         }else {
-            list = personInfoService.selectList(projectInfo);
+            list = staffInfoService.selectList(projectInfo);
         }
         return util.exportExcel(list, "人员数据");
     }
 
 
-    @ResponseBody
-    @PostMapping("/importData")
-    @Log(title = "人员数据", businessType = BusinessType.IMPORT)
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<PersonInfo> util = new ExcelUtil<>(PersonInfo.class);
-        List<PersonInfo> personInfos = util.importExcel(file.getInputStream());
-        Result result = personInfoService.importPersonInfo(personInfos);
-        return toAjax(result);
-    }
+//    @ResponseBody
+//    @PostMapping("/importData")
+//    @Log(title = "人员数据", businessType = BusinessType.IMPORT)
+//    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+//        ExcelUtil<StaffInfo> util = new ExcelUtil<>(StaffInfo.class);
+//        List<StaffInfo> staffInfos = util.importExcel(file.getInputStream());
+//        Result result = staffInfoService.importStaffInfo(staffInfos);
+//        return toAjax(result);
+//    }
 
     @ResponseBody
     @GetMapping("/importTemplate")
     public AjaxResult importTemplate() {
-        ExcelUtil<PersonInfo> util = new ExcelUtil<>(PersonInfo.class);
+        ExcelUtil<StaffInfo> util = new ExcelUtil<>(StaffInfo.class);
         return util.importTemplateExcel("人员数据");
     }
 
@@ -107,7 +107,7 @@ public class PersonInfoController extends BaseController {
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.DELETE)
     public AjaxResult remove(String ids){
-        return toAjax(personInfoService.deleteByIds(ids));
+        return toAjax(staffInfoService.deleteByIds(ids));
     }
 
 
