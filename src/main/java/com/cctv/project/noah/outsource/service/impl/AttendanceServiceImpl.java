@@ -10,6 +10,7 @@ import com.cctv.project.noah.system.core.domain.page.TableSupport;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.entity.SysRole;
 import com.cctv.project.noah.system.entity.SysUser;
+import com.cctv.project.noah.system.mapper.SysRoleMapper;
 import com.cctv.project.noah.system.service.RoleService;
 import com.cctv.project.noah.system.service.UserService;
 import com.cctv.project.noah.system.util.StringUtils;
@@ -39,6 +40,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     UserService userService;
 
     @Autowired
+    SysRoleMapper sysRoleMapper;
+
+    @Autowired
     RoleService roleService;
     Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
     @Override
@@ -55,7 +59,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public Integer getDepartmentId(){
         SysUser sysUser = ShiroUtils.getSysUser();
-        List<SysRole> sysRoles = roleService.selectRolesByUserId(sysUser.getUserId());
+        List<SysRole> sysRoles = sysRoleMapper.selectRolesByUserId(sysUser.getUserId());
         Boolean hasJ = false;
         Boolean hasR = false;
         for (SysRole sysRole : sysRoles) {
