@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeneralUtils {
-
+   public static Snowflake snowflake;
     /**
      * 逗号隔开的字符串数组，转为List集合
      *
@@ -25,12 +25,17 @@ public class GeneralUtils {
         }
         return idList;
     }
-
-    /**
-     * 生成员工编号
-     */
+    //生成员工编号
     public static Long generateStaffNo() {
-        Snowflake snowflake = IdUtil.createSnowflake(1, 1);
+        if (snowflake==null){
+            snowflake = IdUtil.createSnowflake(1, 1);
+        }
         return snowflake.nextId();
+    }
+
+    public static void main(String[] args) {
+        for (int i = 0; i < 100; i++) {
+            System.out.println(GeneralUtils.generateStaffNo());
+        }
     }
 }
