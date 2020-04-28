@@ -1,6 +1,7 @@
 package com.cctv.project.noah.system.service;
 
 import com.cctv.project.noah.system.entity.SysRole;
+import com.cctv.project.noah.system.entity.SysUser;
 import com.cctv.project.noah.system.entity.SysUserRole;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface RoleService {
     List<SysRole> selectRoleAll();
 
     public List<SysRole> selectRolesByUserId(Long userId);
+
+    Boolean isProjectManager(SysUser sysUser);
 
     List<SysRole> selectRoleList(SysRole role);
 

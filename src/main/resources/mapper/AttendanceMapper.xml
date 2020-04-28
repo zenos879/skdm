@@ -128,7 +128,7 @@
             <if test="orderNo != null  and orderNo != ''"> and a.order_no = #{orderNo}</if>
             <if test="staffNo != null "> and a.staff_no = #{staffNo}</if>
             <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
-            <if test="departmentId != null "> and a.department_id = #{departmentId}</if>
+            <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
             <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
             <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
             <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
@@ -147,8 +147,8 @@
         pro.project_name projectName,
         inter.order_no orderNo,
         dep.department_name departmentName,
-        sta.staff_name,
-        sta.staff_no,
+        sta.staff_name staffName,
+        sta.staff_no staffNo,
         pos.post_name postName,
         sup.supplier_name supplierName,
         a.serve_days_expect serveDaysExpect,
@@ -176,8 +176,7 @@
   </select>
   <select id="selectAttendanceCountByIds" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
 
-      <include refid="selectAttendanceVo"/>
-
+      <include refid="selectCount"/>
     WHERE
     a.auto_id in
     <foreach collection="array" item="id"  open="(" separator="," close=")">
@@ -189,7 +188,7 @@
       <include refid="selectAttendanceVo"/>
 
       <where>
-          <if test="departmentId != null "> and a.department_id = #{departmentId}</if>
+          <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
           <if test="orderNo != null  and orderNo != ''"> and a.order_no like concat('%', #{orderNo}, '%')</if>
           <if test="staffNo != null "> and a.staff_no = #{staffNo}</if>
           <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>

@@ -71,8 +71,10 @@ public class AttendanceServiceImpl implements AttendanceService {
             return -1;
         }
         if (hasJ){
-            //TODO 根据用户名获取人员表中的部门ID
-            return 0;
+            StaffInfo staffInfo = new StaffInfo();
+            staffInfo.setStaffNo(Long.valueOf(sysUser.getUserName()));
+            List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
+            return staffInfos.get(0).getDepartmentId();
         }else {
             return null;
         }
