@@ -982,52 +982,52 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoEqualTo(Integer value) {
+        public Criteria andReplaceStaffNoEqualTo(Long value) {
             addCriterion("replace_staff_no =", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoNotEqualTo(Integer value) {
+        public Criteria andReplaceStaffNoNotEqualTo(Long value) {
             addCriterion("replace_staff_no <>", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoGreaterThan(Integer value) {
+        public Criteria andReplaceStaffNoGreaterThan(Long value) {
             addCriterion("replace_staff_no >", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoGreaterThanOrEqualTo(Integer value) {
+        public Criteria andReplaceStaffNoGreaterThanOrEqualTo(Long value) {
             addCriterion("replace_staff_no >=", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoLessThan(Integer value) {
+        public Criteria andReplaceStaffNoLessThan(Long value) {
             addCriterion("replace_staff_no <", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoLessThanOrEqualTo(Integer value) {
+        public Criteria andReplaceStaffNoLessThanOrEqualTo(Long value) {
             addCriterion("replace_staff_no <=", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoIn(List<Integer> values) {
+        public Criteria andReplaceStaffNoIn(List<Long> values) {
             addCriterion("replace_staff_no in", values, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoNotIn(List<Integer> values) {
+        public Criteria andReplaceStaffNoNotIn(List<Long> values) {
             addCriterion("replace_staff_no not in", values, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoBetween(Integer value1, Integer value2) {
+        public Criteria andReplaceStaffNoBetween(Long value1, Long value2) {
             addCriterion("replace_staff_no between", value1, value2, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoNotBetween(Integer value1, Integer value2) {
+        public Criteria andReplaceStaffNoNotBetween(Long value1, Long value2) {
             addCriterion("replace_staff_no not between", value1, value2, "replaceStaffNo");
             return (Criteria) this;
         }

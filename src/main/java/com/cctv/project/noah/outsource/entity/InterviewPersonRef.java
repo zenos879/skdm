@@ -104,7 +104,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 替换人的员工编号
      */
-    private Integer replaceStaffNo;
+    private Long replaceStaffNo;
 
     @Excel(name = "替换人员身份证号", cellType = Excel.ColumnType.NUMERIC)
     private Integer replacdStaffIdCard;
@@ -250,11 +250,11 @@ public class InterviewPersonRef implements Serializable {
         this.isReplace = isReplace;
     }
 
-    public Integer getReplaceStaffNo() {
+    public Long getReplaceStaffNo() {
         return replaceStaffNo;
     }
 
-    public void setReplaceStaffNo(Integer replaceStaffNo) {
+    public void setReplaceStaffNo(Long replaceStaffNo) {
         this.replaceStaffNo = replaceStaffNo;
     }
 

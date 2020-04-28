@@ -156,6 +156,27 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     }
 
     @Override
+    public List<InterviewPersonRef> selectByName(String name) {
+        InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
+        InterviewPersonRefExample.Criteria criteria = interviewPersonRefExample.createCriteria();
+        criteria.andStaffNameEqualTo(name);
+        return interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
+    }
+
+    @Override
+    public Long selectNoByIdCard(String idCard) {
+        InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
+        InterviewPersonRefExample.Criteria criteria = interviewPersonRefExample.createCriteria();
+        criteria.andIdCardEqualTo(idCard);
+        List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
+        if (interviewPersonRefs.size() > 0) {
+            InterviewPersonRef interviewPersonRef = interviewPersonRefs.get(0);
+            return interviewPersonRef.getStaffNo();
+        }
+        return 0L;
+    }
+
+    @Override
     public List<InterviewPersonRef> selectByIds(String ids) {
         InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
         InterviewPersonRefExample.Criteria criteria = interviewPersonRefExample.createCriteria();
@@ -306,9 +327,13 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             if (isReplace == null) {
                 return new Result(0, "第" + (i + 4) + "行的是否替换为空!");
             }
-            Integer replaceStaffNo = temp.getReplaceStaffNo();
+            Long replaceStaffNo = temp.getReplaceStaffNo();
             if (replaceStaffNo == null) {
-                temp.setReplaceStaffNo(0);
+                temp.setReplaceStaffNo(0L);
+            } else {
+                // 根据替换人身份证号，查找员工编号
+                Long aLong = selectNoByIdCard(idCard);
+                temp.setReplaceStaffNo(aLong);
             }
             String reason = temp.getReason();
             if (StringUtils.isEmpty(reason)) {
@@ -316,33 +341,32 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             }
             // 验证关联信息是否存在
             PostInfo postInfo = postInfoService.selectByName(postName);
-            if (postInfo == null){
+            if (postInfo == null) {
                 return new Result(0, "第" + (i + 4) + "行的岗位信息【" + postName + "】不存在!");
             }
-            // 补全实体
+            DepartmentInfo departmentInfo = departmentInfoService.selectByName(departmentName);
+            if (departmentInfo == null) {
+                return new Result(0, "第" + (i + 4) + "行的部门信息【" + departmentName + "】不存在!");
+            }
+            SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+            if (supplierInfo == null) {
+                return new Result(0, "第" + (i + 4) + "行的供应商信息【" + supplierName + "】不存在!");
+            }
 
-//            temp.setPurcharNo(purcharNo);
-//            temp.setCandidateId(supplierId);
-//            temp.setFileError(fileError);
-//            temp.setRemark(remark);
-//            temp.setHappenDate(happenDate);
+            // 补全实体
+            temp.setPostId(postInfo.getPostId());
+            temp.setDepartmentId(departmentInfo.getDepartmentId());
+            temp.setSupplierId(supplierInfo.getSupplierId());
             temp.setCreateTime(new Date());
             // 判断数据库是否存在该关系
             Integer autoId = selectBeanExist(temp, true);
             if (autoId > 0) {
-                msg = msg + "[" + (i + 4) + "]";
-                continue;
+                // 存在，则更新
+                interviewPersonRefMapper.updateByPrimaryKeySelective(temp);
             } else {
-                // 不存在，则判断价格是否更改
-//                autoId = selectBeanExist(interviewPersonRef, false);
-//                if (autoId > 0) {
-//                    // 关系存在，价格更改则更新价格
-//                    interviewPersonRef.setAutoId(autoId);
-//                    interviewPersonRefMapper.updateByPrimaryKeySelective(interviewPersonRef);
-//                } else {
-//                    // 关系完全不存在，则新增
-//                    interviewPersonRefMapper.insertSelective(interviewPersonRef);
-//                }
+                // 不存在，则新增,同时生成员工编号
+                temp.setStaffNo(GeneralUtils.generateStaffNo());
+                interviewPersonRefMapper.insertSelective(temp);
             }
             count = i;
         }
