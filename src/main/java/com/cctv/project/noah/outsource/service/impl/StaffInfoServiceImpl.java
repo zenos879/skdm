@@ -95,6 +95,10 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     public List<StaffInfo> selectList(StaffInfo record) {
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        Long staffNo = record.getStaffNo();
+        if (staffNo != null) {
+            criteria.andStaffNoEqualTo(staffNo);
+        }
         String staffName = record.getStaffName();
         if (StringUtils.isNotEmpty(staffName)) {
             criteria.andStaffNameLike(staffName);
@@ -102,6 +106,10 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         String idCard = record.getIdCard();
         if (StringUtils.isNotEmpty(idCard)) {
             criteria.andIdCardLike(idCard);
+        }
+        Integer departmentId = record.getDepartmentId();
+        if (departmentId != null) {
+            criteria.andDepartmentIdEqualTo(departmentId);
         }
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         return staffInfos;
