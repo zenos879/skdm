@@ -133,9 +133,13 @@
 				$.table.exportExcel();
 				return;
 			}
+			var  statisticsYear = $.table.selectColumns(2);
+			console.log("============第2行数据=========");
+			console.log(statisticsYear);
+			console.log(rows);
 			$.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
 				$.modal.loading("正在导出数据，请稍后...");
-				var data = { "ids": rows.join() };
+				var data = { "ids": rows.join(),"statisticsYear":"","":"" };
 				$.post($.table._option.exportUrl,data, function(result) {
 					if (result.code == web_status.SUCCESS) {
 						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
