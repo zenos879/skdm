@@ -24,6 +24,8 @@ public interface StaffInfoMapper {
 
     StaffInfo selectByPrimaryKey(Integer autoId);
 
+    Integer groupMax();
+
     int updateByExampleSelective(@Param("record") StaffInfo record, @Param("example") StaffInfoExample example);
 
     int updateByExample(@Param("record") StaffInfo record, @Param("example") StaffInfoExample example);

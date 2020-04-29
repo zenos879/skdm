@@ -72,7 +72,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         // 验证关系是否存在
         if (b > 0) {
             result.setCode(0);
-            result.setInfo("该人员（身份证号）已经存在，无需新增！");
+            result.setInfo("该人员（员工编号、身份证号）已经存在，无需新增！");
             return result;
         }
         record.setCreateTime(new Date());
@@ -147,6 +147,11 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
     @Override
+    public Integer groupMax() {
+        return staffInfoMapper.groupMax();
+    }
+
+    @Override
     public Result updateByPrimaryKeySelective(StaffInfo record) {
         Result result = new Result();
         Integer id = record.getAutoId();
@@ -174,15 +179,35 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
     /**
+     * 更新替换分组信息
+     *
+     * @param staffNos 被替换人和替换人的员工编号
+     * @return
+     */
+    @Override
+    public Result updateGroupByStaffNo(List<Long> staffNos) {
+        StaffInfo staffInfo = new StaffInfo();
+        Integer integer = groupMax();
+        staffInfo.setReplaceGroup(integer + 1);
+        StaffInfoExample staffInfoExample = new StaffInfoExample();
+        StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        criteria.andStaffNoIn(staffNos);
+        int i = staffInfoMapper.updateByExampleSelective(staffInfo, staffInfoExample);
+        return new Result(i);
+    }
+
+    /**
      * 判断身份证号是否已经存在
      *
      * @param staffInfo
      * @return 返回主键
      */
     private Integer selectBeanExist(StaffInfo staffInfo, boolean other) {
+        Long staffNo = staffInfo.getStaffNo();
         String idCard = staffInfo.getIdCard();
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        criteria.andStaffNoEqualTo(staffNo);
         criteria.andIdCardEqualTo(idCard);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         if (staffInfos.size() > 0) {

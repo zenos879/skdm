@@ -30,5 +30,5 @@ public interface InterviewPersonRefService {
 
     Result updateByPrimaryKey(InterviewPersonRef record);
 
-    Result importInterviewPersonRef(List<InterviewPersonRef> records);
+    Result importInterviewPersonRef(String orderNo, List<InterviewPersonRef> records);
 }

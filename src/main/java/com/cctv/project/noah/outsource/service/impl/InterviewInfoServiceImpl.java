@@ -270,7 +270,7 @@ public class InterviewInfoServiceImpl implements InterviewInfoService {
         //todo 插入面试人员表
         ExcelUtil<InterviewPersonRef> util2 = new ExcelUtil<>(InterviewPersonRef.class);
         List<InterviewPersonRef> interviewPersonRefs = util2.importExcel("", 2, 0, file.getInputStream());
-        result = interviewPersonRefService.importInterviewPersonRef(interviewPersonRefs);
+        result = interviewPersonRefService.importInterviewPersonRef(orderNo, interviewPersonRefs);
 //        }
         if (!StringUtils.isEmpty(msg)) {
             msg = msg + "行未执行，请核对是否重复或输入错误！";

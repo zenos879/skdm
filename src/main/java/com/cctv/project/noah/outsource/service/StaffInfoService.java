@@ -24,11 +24,15 @@ public interface StaffInfoService {
 
     List<StaffInfo> selectByIds(String ids);
 
+    Integer groupMax();
+
     StaffInfo selectByPrimaryKey(Integer autoId);
 
     Result updateByPrimaryKeySelective(StaffInfo record);
 
     Result updateByPrimaryKey(StaffInfo record);
+
+    Result updateGroupByStaffNo(List<Long> staffNo);
 
 //    Result importStaffInfo(List<StaffInfo> records);
 }

@@ -98,7 +98,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 是否替换（1：无缝替换，2:有缝替换，0:无替换）
      */
-    @Excel(name = "是否替换", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
+    @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
     private Integer isReplace;
 
     /**
@@ -106,8 +106,8 @@ public class InterviewPersonRef implements Serializable {
      */
     private Long replaceStaffNo;
 
-    @Excel(name = "替换人员身份证号", cellType = Excel.ColumnType.NUMERIC)
-    private Integer replacdStaffIdCard;
+    @Excel(name = "替换人员身份证号（非替换则为空）", cellType = Excel.ColumnType.NUMERIC)
+    private String replacdStaffIdCard;
 
     /**
      * 不符合岗位要求的原因及建议
@@ -389,7 +389,9 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", staffName=").append(staffName);
         sb.append(", idCard=").append(idCard);
         sb.append(", supplierId=").append(supplierId);
+        sb.append(", supplierName=").append(supplierName);
         sb.append(", postId=").append(postId);
+        sb.append(", postName=").append(postName);
         sb.append(", isInterview=").append(isInterview);
         sb.append(", notifyDate=").append(notifyDate);
         sb.append(", interviewDate=").append(interviewDate);
@@ -397,6 +399,7 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", isReject=").append(isReject);
         sb.append(", isReplace=").append(isReplace);
         sb.append(", replaceStaffNo=").append(replaceStaffNo);
+        sb.append(", replacdStaffIdCard=").append(replacdStaffIdCard);
         sb.append(", reason=").append(reason);
         sb.append(", arriveDate=").append(arriveDate);
         sb.append(", leaveDate=").append(leaveDate);
@@ -404,6 +407,7 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
         sb.append(", departmentId=").append(departmentId);
+        sb.append(", departmentName=").append(departmentName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -431,5 +435,13 @@ public class InterviewPersonRef implements Serializable {
 
     public void setPostName(String postName) {
         this.postName = postName;
+    }
+
+    public String getReplacdStaffIdCard() {
+        return replacdStaffIdCard;
+    }
+
+    public void setReplacdStaffIdCard(String replacdStaffIdCard) {
+        this.replacdStaffIdCard = replacdStaffIdCard;
     }
 }
