@@ -29,14 +29,14 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
      */
     private Integer supplierId;
 
-    @Excel(name = "供应商")
+    @Excel(name = "供应商名称")
     private String supplierName;
     /**
      * 候选人id
      */
     private Integer candidateId;
 
-    @Excel(name = "候选人")
+    @Excel(name = "人名")
     private String personName;
 
 //    @Excel(name = "身份证号",type = Excel.Type.IMPORT)
@@ -50,7 +50,7 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 是否通知参加面试
      */
-    @Excel(name = "是否通知参加面试")
+    @Excel(name = "是否通知面试")
     private Integer isNotifyInterview;
 
     /**
