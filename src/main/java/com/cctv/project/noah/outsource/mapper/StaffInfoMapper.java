@@ -35,5 +35,7 @@ public interface StaffInfoMapper {
 
     int updateByPrimaryKey(StaffInfo record);
 
-    List<CurrentPersonCount> selectCurrentPersonCount(CurrentPersonCount record);
+    List<CurrentPersonCount> selectCurrentStaff(CurrentPersonCount record);
+
+    List<CurrentPersonCount> selectCurrentStaffByIds(String[] ids);
 }

@@ -58,6 +58,7 @@
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
     var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
+    var isReject = [[${@dict.getType('isReject')}]];
     $(function(){
         queryList();
     });
@@ -125,7 +126,7 @@
                     title: '是否替换',
                     sortable: true,
                     formatter:function(value,row,index){
-                        return $.table.selectDictLabel(isNotifyInterview, value);
+                        return $.table.selectDictLabel(isReject, value);
                     }
                 },
                 {
@@ -155,6 +156,12 @@
                 {
                     field: 'leaveReason',
                     title: '离岗原因'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                    sortable: true
                 },
                 {
                     title: '操作',

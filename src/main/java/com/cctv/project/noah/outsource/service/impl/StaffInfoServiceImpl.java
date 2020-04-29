@@ -129,6 +129,16 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
     @Override
+    public List<CurrentPersonCount> selectCurrentStaff(CurrentPersonCount record) {
+        return staffInfoMapper.selectCurrentStaff(record);
+    }
+
+    @Override
+    public List<CurrentPersonCount> selectCurrentStaffByIds(String ids) {
+        return staffInfoMapper.selectCurrentStaffByIds(ids.split(","));
+    }
+
+    @Override
     public List<StaffInfo> selectAll() {
         return selectList(new StaffInfo());
     }

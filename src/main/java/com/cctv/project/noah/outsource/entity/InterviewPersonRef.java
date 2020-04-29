@@ -19,7 +19,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 订单编号：一次面试对应一个订单编号
      */
-    @Excel(name = "订单编号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "订单编号")
     private String orderNo;
 
     /**
@@ -30,7 +30,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 人员名字
      */
-    @Excel(name = "人名", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "人名")
     private String staffName;
 
     /**
@@ -38,7 +38,7 @@ public class InterviewPersonRef implements Serializable {
      */
     private Integer postId;
 
-    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "岗位名称")
     private String postName;
 
     /**
@@ -46,7 +46,7 @@ public class InterviewPersonRef implements Serializable {
      */
     private Integer departmentId;
 
-    @Excel(name = "部门名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "部门名称")
     private String departmentName;
 
     /**
@@ -54,13 +54,13 @@ public class InterviewPersonRef implements Serializable {
      */
     private Integer supplierId;
 
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "供应商名称")
     private String supplierName;
 
     /**
      * 身份证号
      */
-    @Excel(name = "身份证号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "身份证号")
     private String idCard;
 
     /**
@@ -106,13 +106,13 @@ public class InterviewPersonRef implements Serializable {
      */
     private Long replaceStaffNo;
 
-    @Excel(name = "替换人员身份证号（非替换则为空）", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "替换人员身份证号（非替换则为空）")
     private String replacdStaffIdCard;
 
     /**
      * 不符合岗位要求的原因及建议
      */
-    @Excel(name = "不符合原因", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "不符合原因")
     private String reason;
 
     /**
@@ -132,7 +132,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 离岗原因
      */
-    @Excel(name = "离岗原因", cellType = Excel.ColumnType.NUMERIC, type = Excel.Type.EXPORT)
+    @Excel(name = "离岗原因", type = Excel.Type.EXPORT)
     private String leaveReason;
 
     /**
