@@ -126,7 +126,7 @@
         $.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
             $.modal.loading("正在导出数据，请稍后...");
             var data = { "ids": rows.join() };
-            $.post($.table._option.exportCheckUrl,data, function(result) {
+            $.post($.table._option.exportUrl,data, function(result) {
                 if (result.code == web_status.SUCCESS) {
                     window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
                 } else if (result.code == web_status.WARNING) {

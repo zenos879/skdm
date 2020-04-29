@@ -74,13 +74,13 @@ public class AgreementInfoController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "合同数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(AgreementInfo projectInfo,String ids){
+    public AjaxResult export(AgreementInfo agreementInfo,String ids){
         ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         List<AgreementInfo> list;
         if (ids != null){
             list = agreementInfoService.selectByIds(ids);
         }else {
-            list = agreementInfoService.selectList(projectInfo);
+            list = agreementInfoService.selectList(agreementInfo);
         }
         return util.exportExcel(list, "合同数据");
     }
