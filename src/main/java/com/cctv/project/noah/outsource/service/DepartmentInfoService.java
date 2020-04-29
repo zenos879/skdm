@@ -18,7 +18,7 @@ public interface DepartmentInfoService {
 
     Result insertBySelective(DepartmentInfo departmentInfo);
 
-    Result importPostInfo(List<DepartmentInfo> departmentInfos);
+    Result importDepartmentInfo(List<DepartmentInfo> departmentInfos);
 
     DepartmentInfo selectByPrimaryKey(Integer id);
 

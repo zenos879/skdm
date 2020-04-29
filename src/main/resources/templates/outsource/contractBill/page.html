@@ -39,29 +39,29 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
 	<script th:inline="javascript">
-		var prefix = ctx + "outsource/attendance";
+		var prefix = ctx + "outsource/contractBill";
 		$(function() {
 		    queryUserList();
 		});
 
 		function queryUserList() {
 		    var options = {
-		        url: prefix + "/attendanceCountlist",
+		        url: prefix + "/list",
 		        // createUrl: prefix + "/add",
 		        // updateUrl: prefix + "/edit/{id}",
 		        // removeUrl: prefix + "/remove",
-		        exportUrl: prefix + "/attendanceCountExport",
+		        exportUrl: prefix + "/export",
 		        // importUrl: prefix + "/importData",
 		        // importTemplateUrl: prefix + "/importTemplate",
 		        // sortName: "autoId",
 		        // sortOrder: "desc",
-		        modalName: "考勤数据",
+		        modalName: "合同账单",
 		        columns: [{
 		        	checkbox:true
 				},
 		        {
 		            field: 'autoId',
-		            title: '考勤ID',
+		            title: '合同ID',
 					sortable: true
 		        },
 				{

@@ -21,5 +21,7 @@ public interface ReviewPersonRefService {
 
     Result importReviewPersonRef(List<ReviewPersonRef> reviewPersonRefs);
 
+    Result importReviewPersonRef(List<ReviewPersonRef> reviewPersonRefs, int start);
+
     Result deleteByIds(String ids);
 }

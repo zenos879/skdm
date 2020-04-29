@@ -39,13 +39,13 @@ public class ReviewInfo extends BaseEntity implements Serializable {
      */
     private Integer projectId;
 
-    @Excel(name = "项目")
+    @Excel(name = "项目名称")
     private String projectName;
 
     /**
      * 此次采购的总人数
      */
-    @Excel(name = "采购总人数")
+    @Excel(name = "岗位需求数")
     private Integer postCount;
 
     /**

@@ -18,7 +18,7 @@ public interface CategoryInfoService {
 
     Result insertBySelective(CategoryInfo categoryInfo);
 
-    Result importPostInfo(List<CategoryInfo> categoryInfos);
+    Result importCategoryInfo(List<CategoryInfo> categoryInfos);
 
     CategoryInfo selectByPrimaryKey(Integer projectId);
 

@@ -91,9 +91,12 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
         int i = reviewPersonRefMapper.insertSelective(reviewPersonRef);
         return new Result(i);
     }
-
     @Override
     public Result importReviewPersonRef(List<ReviewPersonRef> reviewPersonRefs){
+        return importReviewPersonRef(reviewPersonRefs,0);
+    }
+    @Override
+    public Result importReviewPersonRef(List<ReviewPersonRef> reviewPersonRefs, int start){
         for (int i = 0; i < reviewPersonRefs.size(); i++) {
             ReviewPersonRef reviewPersonRef = reviewPersonRefs.get(i);
             if (reviewPersonRefNull(reviewPersonRef)){
@@ -112,23 +115,25 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
             reviewPersonRef.setCreateTime(new Date());
         }
 
+        int success = 0;
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (ReviewPersonRef reviewPersonRef : reviewPersonRefs) {
+            start++;
             Result result = insertBySelective(reviewPersonRef);
             if (result.warning){
-                warning.append("第").append(i+2).append("行").append("未插入，原因是：<")
+                warning.append("第").append(start+1).append("行").append("未插入，原因是：<")
                         .append(result.info).append("></br>");
                 continue;
             }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
+                return new Result(result.code,"第"+(start+1)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = reviewPersonRefs.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
-        return new Result(i,warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
     @Override
     public Result deleteByIds(String ids) {

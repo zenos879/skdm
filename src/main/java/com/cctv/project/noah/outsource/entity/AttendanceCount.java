@@ -16,8 +16,6 @@ public class AttendanceCount{
     private String orderNo;
     @Excel(name = "部门名称")
     private String departmentName;
-    @Excel(name = "考勤人")
-    private String candidateName;
     @Excel(name = "岗位名称")
     private String postName;
     @Excel(name = "供应商名称")
@@ -179,13 +177,6 @@ public class AttendanceCount{
         this.departmentName = departmentName;
     }
 
-    public String getCandidateName() {
-        return candidateName;
-    }
-
-    public void setCandidateName(String candidateName) {
-        this.candidateName = candidateName;
-    }
 
     public String getPostName() {
         return postName;

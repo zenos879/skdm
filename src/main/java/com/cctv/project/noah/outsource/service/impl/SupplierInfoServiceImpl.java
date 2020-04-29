@@ -100,7 +100,7 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
     }
 
     @Override
-    public Result importPostInfo(List<SupplierInfo> supplierInfos){
+    public Result importSupplierInfo(List<SupplierInfo> supplierInfos){
         for (int i = 0; i < supplierInfos.size(); i++) {
             SupplierInfo supplierInfo = supplierInfos.get(i);
             if (supplierInfo.getSupplierName() == null) {
@@ -111,23 +111,25 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
             }
             supplierInfo.setCreateTime(new Date());
         }
+        int success = 0;
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (SupplierInfo supplierInfo : supplierInfos) {
+            i++;
             Result result = insertBySelective(supplierInfo);
             if (result.warning){
-                warning.append("第").append(i+2).append("行的").append(supplierInfo.getSupplierName()).append("未插入，原因是：<")
+                warning.append("第").append(i+1).append("行的").append(supplierInfo.getSupplierName()).append("未插入，原因是：<")
                         .append(result.info).append("></br>");
                 continue;
             }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
+                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = supplierInfos.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
-        return new Result(i,warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
     @Override
     public Result deleteByIds(String ids) {
