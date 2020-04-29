@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.BillMapper">
+  <resultMap id="BillResultMap" type="com.cctv.project.noah.outsource.entity.DetailedBill">
+    <id column="auto_id" jdbcType="BIGINT" property="autoId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="staff_no" jdbcType="INTEGER" property="staffNo" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="bid_price" jdbcType="REAL" property="bidPrice" />
+    <result column="serve_days_expect" jdbcType="REAL" property="serveDaysExpect" />
+    <result column="serve_days_actual" jdbcType="REAL" property="serveDaysActual" />
+    <result column="arrive_date" jdbcType="DATE" property="arriveDate" />
+    <result column="leave_date" jdbcType="DATE" property="leaveDate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="statistics_year" jdbcType="SMALLINT" property="statisticsYear" />
+    <result column="statistics_month" jdbcType="TINYINT" property="statisticsMonth" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <select id="selectDetailBillBySelective" parameterType="com.cctv.project.noah.outsource.entity.DetailedBill" resultMap="BillResultMap">
+    select a.statistics_year ,a.statistics_month,a.staff_no, dep.department_name,pro.project_name,inter.order_no,pos.post_name,sta.staff_name,sup.supplier_name,ll.bid_price,a.serve_days_expect,a.serve_days_actual,sta.arrive_date,sta.leave_date,a.remark
+    from attendance a
+    left join staff_info sta on sta.staff_no=a.staff_no
+    left join interview_info inter on inter.order_no = sta.order_no
+    left join review_info re on re.purchase_no = inter.purchase_no and re.post_id = sta.post_id
+    left join project_info pro on pro.project_id=re.project_id
+    left join department_info dep on dep.department_id = sta.department_id
+    left join supplier_info sup on sup.supplier_id = sta.supplier_id
+    left join post_info pos on pos.post_id=sta.post_id
+    LEFT JOIN
+    (select tmp.supplier_id, tmp.post_id,tmp.bid_price,ag.agreement_no,ag.agreement_start,ag.agreement_end from supplier_bid tmp
+    left join agreement_info ag on tmp.agreement_id=ag.agreement_id) as ll on ll.supplier_id=sta.supplier_id and ll.post_id = sta.post_id
+    <where>
+        ll.agreement_start &lt;= date_format(now(),'%y%m%d') and ll.agreement_end &gt;= date_format(now(),'%y%m%d')
+      <if test="orderNo != null">
+        and a.order_no like concat('%', #{orderNo}, '%')
+      </if>
+      <if test="staffNo != null">
+        and a.staff_no = #{staffNo,jdbcType=INTEGER}
+      </if>
+      <if test="statisticsYear != null">
+        and a.statistics_year = #{statisticsYear,jdbcType=SMALLINT}
+      </if>
+      <if test="statisticsMonth != null">
+        and a.statistics_month = #{statisticsMonth,jdbcType=TINYINT}
+      </if>
+      <if test="serveDaysExpect != null">
+        and a.serve_days_expect = #{serveDaysExpect,jdbcType=REAL}
+      </if>
+      <if test="serveDaysActual != null">
+        and a.serve_days_actual = #{serveDaysActual,jdbcType=REAL}
+      </if>
+    </where>
+  </select>
+  <select id="selectDetailBillByIds" resultMap="BillResultMap">
+        select a.statistics_year ,a.statistics_month,a.staff_no, dep.department_name,pro.project_name,inter.order_no,pos.post_name,sta.staff_name,sup.supplier_name,ll.bid_price,a.serve_days_expect,a.serve_days_actual,sta.arrive_date,sta.leave_date,a.remark
+        from attendance a
+        left join staff_info sta on sta.staff_no=a.staff_no
+        left join interview_info inter on inter.order_no = sta.order_no
+        left join review_info re on re.purchase_no = inter.purchase_no and re.post_id = sta.post_id
+        left join project_info pro on pro.project_id=re.project_id
+        left join department_info dep on dep.department_id = sta.department_id
+        left join supplier_info sup on sup.supplier_id = sta.supplier_id
+        left join post_info pos on pos.post_id=sta.post_id
+        LEFT JOIN
+        (select tmp.supplier_id, tmp.post_id,tmp.bid_price,ag.agreement_no,ag.agreement_start,ag.agreement_end from supplier_bid tmp
+        left join agreement_info ag on tmp.agreement_id=ag.agreement_id) as ll on ll.supplier_id=sta.supplier_id and ll.post_id = sta.post_id
+        <where>
+          ll.agreement_start &lt;= date_format(now(),'%y%m%d') and ll.agreement_end &gt;= date_format(now(),'%y%m%d')
+          <if test="statisticsYear != null">
+            and a.statistics_year = #{statisticsYear,jdbcType=SMALLINT}
+          </if>
+          <if test="statisticsMonth != null">
+            and a.statistics_month = #{statisticsMonth,jdbcType=TINYINT}
+          </if>
+            and a.staff_no in
+          <foreach collection="array" item="id"  open="(" separator="," close=")">
+            #{ids}
+          </foreach>
+        </where>
+  </select>
+</mapper>
