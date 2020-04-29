@@ -4,6 +4,7 @@ import com.cctv.project.noah.system.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -91,6 +92,25 @@ public class AgreementInfo implements Serializable {
     public Date getAgreementEnd() {
         return agreementEnd;
     }
+
+    public String getFormatStartDate() {
+        if (this.agreementStart == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(agreementStart);
+        return format;
+    }
+    public String getFormatEndDate() {
+        if (this.agreementEnd == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(agreementEnd);
+        return format;
+    }
+
+
 
     public void setAgreementEnd(Date agreementEnd) {
         this.agreementEnd = agreementEnd;

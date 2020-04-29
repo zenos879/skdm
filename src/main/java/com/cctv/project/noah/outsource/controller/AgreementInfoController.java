@@ -45,11 +45,7 @@ public class AgreementInfoController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(id);
-//        Date agreementStart = agreementInfo.getAgreementStart();
-//        Date agreementEnd = agreementInfo.getAgreementEnd();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        model.addAttribute("agreementInfo", agreementInfo);
+        model.addAttribute("id", id);
         return prefix+"/edit";
     }
 

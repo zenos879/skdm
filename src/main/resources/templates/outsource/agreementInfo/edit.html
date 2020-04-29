@@ -5,15 +5,15 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-agreementinfo-edit" th:object="${agreementInfo}">
-            <input type="hidden" name="agreementId" th:field="*{agreementId}">
+        <form class="form-horizontal m" id="form-agreementinfo-edit" th:with="command = ${@agreementInfoService.selectByPrimaryKey(id)}">
+            <input type="hidden" name="agreementId" th:value="${command.agreementId}">
             <h4 class="form-header h4">合同数据</h4>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
                         <div class="col-sm-7">
-                            <input name="agreementNo" th:field="*{agreementNo}" id="agreementNo" class="form-control" type="text" required>
+                            <input name="agreementNo" th:value="${command.agreementNo}" id="agreementNo" class="form-control" type="text" required>
                         </div>
                     </div>
                 </div>
@@ -21,7 +21,9 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                         <div class="col-sm-7">
-                            <input name="supplierName" th:field="*{supplierName}" id="supplierName" class="form-control" type="text" required>
+                            <select name="supplierId" id="supplierId" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierId}" th:selected="${command.supplierId == supplier.supplierId}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -29,7 +31,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同开始时间：</label>
                         <div class="col-sm-7">
-                            <input type="text" class="time-input form-control time-formate" id="agreementStart" th:field="*{agreementStart}" placeholder="合同开始时间" name="agreementStart" required/>
+                            <input type="text" class="time-input form-control time-formate" id="agreementStart" th:value="${command.getFormatStartDate()}" placeholder="合同开始时间" name="agreementStart" required/>
                         </div>
                     </div>
                 </div>
@@ -37,7 +39,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同结束时间：</label>
                         <div class="col-sm-7">
-                            <input type="text" class="time-input form-control" id="agreementEnd" th:field="*{agreementEnd}" placeholder="合同结束时间" name="agreementEnd" required/>
+                            <input type="text" class="time-input form-control" id="agreementEnd" th:value="${command.getFormatEndDate()}"  placeholder="合同结束时间" name="agreementEnd" required/>
                         </div>
                     </div>
                 </div>
@@ -47,6 +49,7 @@
     <th:block th:include="include :: footer" />
     <script type="text/javascript">
         var prefix = ctx + "outsource/agreementinfo";
+
         $("#form-agreementinfo-edit").validate({
             onkeyup: false,
             focusCleanup: true,

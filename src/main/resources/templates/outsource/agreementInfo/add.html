@@ -17,8 +17,13 @@
         <div class="col-sm-11">
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+<!--                <div class="col-sm-7">-->
+<!--                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>-->
+<!--                </div>-->
                 <div class="col-sm-7">
-                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>
+                    <select name="supplierId" id="supplierId" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                        <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierId}"></option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -26,7 +31,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同开始时间：</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" id="agreementStart" placeholder="开始时间"
+                    <input type="text" class="time-input form-control" id="agreementStart" placeholder="开始时间"
                            name="agreementStart" required/>
                 </div>
             </div>
@@ -35,7 +40,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同结束时间：</label>
                 <div class="col-sm-7">
-                    <input type="text" class="datetime-input form-control" id="agreementEnd" placeholder="结束时间"
+                    <input type="text" class="time-input form-control" id="agreementEnd" placeholder="结束时间"
                            name="agreementEnd" required/>
                 </div>
             </div>
@@ -46,6 +51,10 @@
 <script type="text/javascript">
     var prefix = ctx + "/outsource/agreementInfo";
 
+    $("#form-agreementinfo-add").validate({
+        onkeyup: false,
+        focusCleanup: true,
+    });
     function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/add", $('#form-agreementinfo-add').serialize());
