@@ -19,7 +19,7 @@ public class AgreementInfo implements Serializable {
     /**
      * 合同号
      */
-    @Excel(name = "合同号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "合同号")
     private String agreementNo;
 
     /**
@@ -30,7 +30,7 @@ public class AgreementInfo implements Serializable {
     /**
      * 供应商名称
      */
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "供应商名称")
     private String supplierName;
 
     /**

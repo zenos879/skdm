@@ -82,7 +82,8 @@
                 },
                 {
                     field: 'autoId',
-                    title: '供应商名称'
+                    title: 'ID',
+                    visible: false
                 },
                 {
                     field: 'orderNo',
@@ -93,20 +94,10 @@
                     title: '采购编号'
                 },
                 {
-                    field: 'projectName',
-                    title: '项目名'
-                },
-                {
-                    field: 'supplierName',
-                    title: '供应商名称'
-                },
-                {
-                    field: 'departmentName',
-                    title: '部门名称'
-                },
-                {
-                    field: 'postName',
-                    title: '岗位名称'
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                    sortable: true
                 },
                 {
                     title: '操作',
@@ -131,7 +122,7 @@
         $.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
             $.modal.loading("正在导出数据，请稍后...");
             var data = { "ids": rows.join() };
-            $.post($.table._option.exportCheckUrl,data, function(result) {
+            $.post($.table._option.exportUrl,data, function(result) {
                 if (result.code == web_status.SUCCESS) {
                     window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
                 } else if (result.code == web_status.WARNING) {

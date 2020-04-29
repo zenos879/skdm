@@ -20,7 +20,7 @@ public class SupplierBid implements Serializable {
      */
     private Integer supplierId;
 
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "供应商名称")
     private String supplierName;
 
     /**
@@ -28,7 +28,7 @@ public class SupplierBid implements Serializable {
      */
     private Integer agreementId;
 
-    @Excel(name = "合同号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "合同号")
     private String agreementNo;
 
     /**
@@ -36,7 +36,7 @@ public class SupplierBid implements Serializable {
      */
     private Integer postId;
 
-    @Excel(name = "岗位名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "岗位名称")
     private String postName;
 
     /**
