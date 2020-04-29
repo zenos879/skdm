@@ -26,7 +26,7 @@ public interface SupplierInfoService {
 
     Result insertBySelective(SupplierInfo supplierInfo);
 
-    Result importPostInfo(List<SupplierInfo> supplierInfos);
+    Result importSupplierInfo(List<SupplierInfo> supplierInfos);
 
     Result deleteByIds(String ids);
 }

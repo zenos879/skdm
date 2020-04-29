@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('考勤统计列表')" />
+	<th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+	<div class="ui-layout-center">
+		<div class="container-div">
+			<div class="row">
+				<div class="col-sm-12 search-collapse">
+					<form id="post-form">
+						<div class="select-list">
+							<ul>
+								<li>
+									统计年份：<input type="text" name="statisticsYear" th:value="${@attendanceService.getNowYear()}"/>
+								</li>
+								<li>
+									统计月份：<input type="text" name="statisticsMonth" th:value="${@attendanceService.getPrevMonth()}"/>
+								</li>
+							</ul>
+						</div>
+					</form>
+				</div>
+				
+		        <div class="btn-group-sm" id="toolbar" role="group">
+		            <a class="btn btn-warning" onclick="_export()">
+			            <i class="fa fa-download"></i> 导出
+			        </a>
+		        </div>
+		        
+		        <div class="col-sm-12 select-table table-striped">
+				    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: ztree-js" />
+	<script th:inline="javascript">
+		var prefix = ctx + "outsource/contractBill";
+		$(function() {
+		    queryUserList();
+		});
+
+		function queryUserList() {
+		    var options = {
+		        url: prefix + "/list",
+		        // createUrl: prefix + "/add",
+		        // updateUrl: prefix + "/edit/{id}",
+		        // removeUrl: prefix + "/remove",
+		        exportUrl: prefix + "/export",
+		        // importUrl: prefix + "/importData",
+		        // importTemplateUrl: prefix + "/importTemplate",
+		        // sortName: "autoId",
+		        // sortOrder: "desc",
+		        modalName: "合同账单",
+		        columns: [{
+		        	checkbox:true
+				},
+		        {
+		            field: 'autoId',
+		            title: '合同ID',
+					sortable: true
+		        },
+				{
+					field: 'orderNo',
+					title: '订单编号',
+					sortable: true
+				},{
+					field: 'staffNo',
+					title: '考勤人ID',
+					sortable: true
+				},{
+					field: 'staffName',
+					title: '考勤人',
+					sortable: true
+				},{
+					field: 'projectName',
+					title: '项目名称',
+					sortable: true
+				},{
+					field: 'departmentName',
+					title: '部门名称',
+					sortable: true
+				},{
+					field: 'postName',
+					title: '岗位名称',
+					sortable: true
+				},{
+					field: 'supplierName',
+					title: '供应商名称',
+					sortable: true
+				},{
+					field: 'arriveDate',
+					title: '到岗日期',
+					sortable: true
+				},{
+					field: 'leaveDate',
+					title: '离岗日期',
+					sortable: true
+				},{
+					field: 'serveDaysExpect',
+					title: '应该工作天数',
+					sortable: true
+				},{
+					field: 'serveDaysActual',
+					title: '实际工作天数',
+					sortable: true
+				}
+		        ]
+		    };
+		    $.table.init(options);
+		}
+		function _export() {
+			var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+			if (rows.length == 0) {
+				$.table.exportExcel();
+				return;
+			}
+			$.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
+				$.modal.loading("正在导出数据，请稍后...");
+				var data = { "ids": rows.join() };
+				$.post($.table._option.exportUrl,data, function(result) {
+					if (result.code == web_status.SUCCESS) {
+						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+					} else if (result.code == web_status.WARNING) {
+						$.modal.alertWarning(result.msg)
+					} else {
+						$.modal.alertError(result.msg);
+					}
+					$.modal.closeLoading();
+				});
+			});
+		}
+	</script>
+</body>
+</html>

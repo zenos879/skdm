@@ -2,9 +2,7 @@ package com.cctv.project.noah.outsource.controller;
 
 
 import com.cctv.project.noah.outsource.entity.CategoryInfo;
-import com.cctv.project.noah.outsource.entity.PostInfo;
 import com.cctv.project.noah.outsource.service.CategoryInfoService;
-import com.cctv.project.noah.outsource.service.PostInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
@@ -89,7 +87,7 @@ public class CategoryInfoController extends BaseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<CategoryInfo> util = new ExcelUtil<CategoryInfo>(CategoryInfo.class);
         List<CategoryInfo> categoryInfos = util.importExcel(file.getInputStream());
-        Result result = categoryInfoService.importPostInfo(categoryInfos);
+        Result result = categoryInfoService.importCategoryInfo(categoryInfos);
         return toAjax(result);
     }
 

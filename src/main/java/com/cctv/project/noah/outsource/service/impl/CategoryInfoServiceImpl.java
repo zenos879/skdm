@@ -76,7 +76,7 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
     }
 
     @Override
-    public Result importPostInfo(List<CategoryInfo> categoryInfos){
+    public Result importCategoryInfo(List<CategoryInfo> categoryInfos){
         for (int i = 0; i < categoryInfos.size(); i++) {
             CategoryInfo categoryInfo = categoryInfos.get(i);
             if (categoryInfo.getCategoryName() == null) {
@@ -84,9 +84,11 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
             }
             categoryInfo.setCreateTime(new Date());
         }
+        int success = 0;
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (CategoryInfo categoryInfo : categoryInfos) {
+            i++;
             Result result = insertBySelective(categoryInfo);
             if (result.warning){
                 warning.append("第").append(i+2).append("行的").append(categoryInfo.getCategoryName()).append("未插入，原因是：<")
@@ -96,11 +98,11 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
             if (result.code<1){
                 return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = categoryInfos.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
-        return new Result(i,warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
     @Override
     public CategoryInfo selectByPrimaryKey(Integer id){

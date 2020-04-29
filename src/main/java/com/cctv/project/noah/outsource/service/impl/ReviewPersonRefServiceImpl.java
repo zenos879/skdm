@@ -112,9 +112,11 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
             reviewPersonRef.setCreateTime(new Date());
         }
 
+        int success = 0;
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (ReviewPersonRef reviewPersonRef : reviewPersonRefs) {
+            i++;
             Result result = insertBySelective(reviewPersonRef);
             if (result.warning){
                 warning.append("第").append(i+2).append("行").append("未插入，原因是：<")
@@ -124,11 +126,11 @@ public class ReviewPersonRefServiceImpl implements ReviewPersonRefService {
             if (result.code<1){
                 return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = reviewPersonRefs.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
-        return new Result(i,warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
     @Override
     public Result deleteByIds(String ids) {

@@ -98,9 +98,11 @@ public class PostInfoServiceImpl implements PostInfoService {
             postInfo.setCategoryId(categoryInfo.getCategoryId());
             postInfo.setCreateTime(new Date());
         }
+        int success = 0;
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (PostInfo postInfo : postInfos) {
+            i++;
             Result result = insertBySelective(postInfo);
             if (result.warning){
                 warning.append("第").append(i+2).append("行的").append(postInfo.getPostName()).append("未插入，原因是：<")
@@ -110,11 +112,11 @@ public class PostInfoServiceImpl implements PostInfoService {
             if (result.code<1){
                 return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = postInfos.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
-        return new Result(i,warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
     @Override
     public PostInfo selectByPrimaryKey(Integer projectId){
