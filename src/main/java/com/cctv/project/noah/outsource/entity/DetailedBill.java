@@ -35,6 +35,8 @@ public class DetailedBill {
     private Float serveDaysExpect;
     @Excel(name = "实际工作日")
     private Float serveDaysActual;
+    //公共假期（只与离职和本月入职的人员有关）
+    private int publicVacation;
 
     @Excel(name = "到岗日期", width = 30, dateFormat = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -45,6 +47,11 @@ public class DetailedBill {
 
     @Excel(name = "备注")
     private String remark;
+
+    //是否替换：0:无替换，1：无缝替换，2：有缝替换
+    private int isReplace;
+    //替换人员的分组，互为替换的人员是一组，replaceGroup 相同
+    private int replaceGroup;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
@@ -194,6 +201,30 @@ public class DetailedBill {
 
     public void setStaffNo(String staffNo) {
         this.staffNo = staffNo;
+    }
+
+    public int getPublicVacation() {
+        return publicVacation;
+    }
+
+    public void setPublicVacation(int publicVacation) {
+        this.publicVacation = publicVacation;
+    }
+
+    public int getIsReplace() {
+        return isReplace;
+    }
+
+    public void setIsReplace(int isReplace) {
+        this.isReplace = isReplace;
+    }
+
+    public int getReplaceGroup() {
+        return replaceGroup;
+    }
+
+    public void setReplaceGroup(int replaceGroup) {
+        this.replaceGroup = replaceGroup;
     }
 }
 

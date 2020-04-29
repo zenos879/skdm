@@ -21,12 +21,10 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <select id="selectDetailBillBySelective" parameterType="com.cctv.project.noah.outsource.entity.DetailedBill" resultMap="BillResultMap">
-    select a.statistics_year ,a.statistics_month,a.staff_no, dep.department_name,pro.project_name,inter.order_no,pos.post_name,sta.staff_name,sup.supplier_name,ll.bid_price,a.serve_days_expect,a.serve_days_actual,sta.arrive_date,sta.leave_date,a.remark
+    select a.statistics_year ,a.statistics_month,a.staff_no, dep.department_name,pro.project_name,sta.order_no,pos.post_name,sta.staff_name,sup.supplier_name,ll.bid_price,a.serve_days_expect,a.serve_days_actual,sta.arrive_date,sta.leave_date,a.remark
     from attendance a
     left join staff_info sta on sta.staff_no=a.staff_no
-    left join interview_info inter on inter.order_no = sta.order_no
-    left join review_info re on re.purchase_no = inter.purchase_no and re.post_id = sta.post_id
-    left join project_info pro on pro.project_id=re.project_id
+    left join project_info pro on pro.project_id=sta.project_id
     left join department_info dep on dep.department_id = sta.department_id
     left join supplier_info sup on sup.supplier_id = sta.supplier_id
     left join post_info pos on pos.post_id=sta.post_id
@@ -54,6 +52,7 @@
         and a.serve_days_actual = #{serveDaysActual,jdbcType=REAL}
       </if>
     </where>
+    group by dep.department_id,pro.project_id,sta.order_no
   </select>
   <select id="selectDetailBillByIds" resultMap="BillResultMap">
         select a.statistics_year ,a.statistics_month,a.staff_no, dep.department_name,pro.project_name,inter.order_no,pos.post_name,sta.staff_name,sup.supplier_name,ll.bid_price,a.serve_days_expect,a.serve_days_actual,sta.arrive_date,sta.leave_date,a.remark

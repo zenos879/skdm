@@ -18,7 +18,7 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
     /**
      * 订单编号：一次面试对应一个订单编号
      */
-    @Excel(name = "订单编号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "订单编号")
     private String orderNo;
 
     /**
@@ -30,8 +30,8 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
     /**
      * 候选人名字
      */
-    @Excel(name = "人名", cellType = Excel.ColumnType.NUMERIC)
-    private String candidateName;
+    @Excel(name = "人名")
+    private String staffName;
 
     /**
      * 岗位名称
@@ -55,7 +55,7 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
     /**
      * 候选人身份证ID
      */
-    @Excel(name = "身份证号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "身份证号")
     private String idCard;
 
     public String getProjectName() {
@@ -80,14 +80,6 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
-    }
-
-    public String getCandidateName() {
-        return candidateName;
-    }
-
-    public void setCandidateName(String candidateName) {
-        this.candidateName = candidateName;
     }
 
     public String getPostName() {
@@ -122,4 +114,11 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
         this.idCard = idCard;
     }
 
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
 }
