@@ -1,12 +1,10 @@
 package com.cctv.project.noah.outsource.service.impl;
 
-import com.cctv.project.noah.outsource.entity.StaffInfo;
-import com.cctv.project.noah.outsource.entity.StaffInfoExample;
+import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.StaffInfoMapper;
+import com.cctv.project.noah.outsource.service.*;
 import com.cctv.project.noah.outsource.utils.GeneralUtils;
 import com.cctv.project.noah.outsource.utils.ModelClass;
-import com.cctv.project.noah.outsource.service.StaffInfoService;
-import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,18 @@ public class StaffInfoServiceImpl implements StaffInfoService {
 
     @Autowired
     StaffInfoMapper staffInfoMapper;
+
+    @Autowired
+    ProjectInfoService projectInfoService;
+
+    @Autowired
+    SupplierInfoService supplierInfoService;
+
+    @Autowired
+    DepartmentInfoService departmentInfoService;
+
+    @Autowired
+    PostInfoService postInfoService;
 
     @Override
     public int deleteByExample(StaffInfo record) {
@@ -112,6 +122,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             criteria.andDepartmentIdEqualTo(departmentId);
         }
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+        for (StaffInfo staffInfo : staffInfos) {
+            completionCandidateName(staffInfo);
+        }
         return staffInfos;
     }
 
@@ -126,6 +139,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
         criteria.andStaffNameLike(record);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+        for (StaffInfo staffInfo : staffInfos) {
+            completionCandidateName(staffInfo);
+        }
         return staffInfos;
     }
 
@@ -133,6 +149,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     @Override
     public StaffInfo selectByPrimaryKey(Integer id) {
         StaffInfo staffInfo = staffInfoMapper.selectByPrimaryKey(id);
+        completionCandidateName(staffInfo);
         return staffInfo;
     }
 
@@ -143,7 +160,40 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         List<Integer> idList = GeneralUtils.strArrToList(ids);
         criteria.andAutoIdIn(idList);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+        for (StaffInfo staffInfo : staffInfos) {
+            completionCandidateName(staffInfo);
+        }
         return staffInfos;
+    }
+
+    /**
+     * 数据库查询结果，补全各关系名称
+     *
+     * @param record
+     * @return
+     */
+    private StaffInfo completionCandidateName(StaffInfo record) {
+        Integer projectId = record.getProjectId();
+        Integer supplierId = record.getSupplierId();
+        Integer departmentId = record.getDepartmentId();
+        Integer postId = record.getPostId();
+        ProjectInfo projectInfo = projectInfoService.selectByPrimaryKey(projectId);
+        if (projectInfo != null){
+            record.setProjectName(projectInfo.getProjectName());
+        }
+        SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
+        if (supplierInfo != null){
+            record.setSupplierName(supplierInfo.getSupplierName());
+        }
+        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
+        if (departmentInfo != null){
+            record.setDepartmentName(departmentInfo.getDepartmentName());
+        }
+        PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
+        if (postInfo != null){
+            record.setPostName(postInfo.getPostName());
+        }
+        return record;
     }
 
     @Override
@@ -218,48 +268,4 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         return 0;
     }
 
-//    @Override
-//    public Result importStaffInfo(List<StaffInfo> records) {
-//        Result result = new Result();
-//        int count = 0;
-//        String msg = "";
-//        for (int i = 0; i < records.size(); i++) {
-//            StaffInfo staffInfo = records.get(i);
-//            String staffName = staffInfo.getStaffName();
-//            if (StringUtils.isEmpty(staffName)) {
-//                return new Result(0, "第" + (i + 2) + "行的人名为空!");
-//            }
-//            String idCard = staffInfo.getIdCard();
-//            if (StringUtils.isEmpty(idCard)) {
-//                return new Result(0, "第" + (i + 2) + "行的身份证号为空!");
-//            }
-//            String phone = staffInfo.getPhone();
-//            if (StringUtils.isEmpty(phone)) {
-//                return new Result(0, "第" + (i + 2) + "行的电话号为空!");
-//            }
-//            staffInfo.setStaffName(staffName);
-//            staffInfo.setIdCard(idCard);
-//            staffInfo.setPhone(phone);
-//            staffInfo.setCreateTime(new Date());
-//            // 判断数据库是否存在该关系
-//            Integer id = selectBeanExist(staffInfo, false);
-//            if (id > 0) {
-//                // 存在，则更新
-//                staffInfo.setAutoId(id);
-//                staffInfoMapper.updateByPrimaryKeySelective(staffInfo);
-//            } else {
-//                // 不存在，则新增
-//                staffInfoMapper.insertSelective(staffInfo);
-//            }
-//            count = i;
-//        }
-//        if (!StringUtils.isEmpty(msg)) {
-//            msg = msg + "行未执行，请核对是否重复或输入错误！";
-//        } else {
-//            msg = "共计导入" + count + "条";
-//        }
-//        result.setCode(count);
-//        result.setInfo(msg);
-//        return result;
-//    }
 }

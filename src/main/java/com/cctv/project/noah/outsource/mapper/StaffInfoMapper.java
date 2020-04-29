@@ -1,5 +1,6 @@
 package com.cctv.project.noah.outsource.mapper;
 
+import com.cctv.project.noah.outsource.entity.CurrentPersonCount;
 import com.cctv.project.noah.outsource.entity.StaffInfo;
 import com.cctv.project.noah.outsource.entity.StaffInfoExample;
 
@@ -33,4 +34,6 @@ public interface StaffInfoMapper {
     int updateByPrimaryKeySelective(StaffInfo record);
 
     int updateByPrimaryKey(StaffInfo record);
+
+    List<CurrentPersonCount> selectCurrentPersonCount(CurrentPersonCount record);
 }
