@@ -58,12 +58,6 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
     @Excel(name = "身份证号", cellType = Excel.ColumnType.NUMERIC)
     private String idCard;
 
-    /**
-     * 候选人电话
-     */
-    @Excel(name = "电话号", cellType = Excel.ColumnType.NUMERIC)
-    private String phone;
-
     public String getProjectName() {
         return projectName;
     }
@@ -128,11 +122,4 @@ public class CurrentPersonCount  extends BaseEntity implements Serializable {
         this.idCard = idCard;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

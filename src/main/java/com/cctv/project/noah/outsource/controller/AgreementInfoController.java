@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -44,6 +46,9 @@ public class AgreementInfoController extends BaseController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
         AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(id);
+//        Date agreementStart = agreementInfo.getAgreementStart();
+//        Date agreementEnd = agreementInfo.getAgreementEnd();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         model.addAttribute("agreementInfo", agreementInfo);
         return prefix+"/edit";
     }

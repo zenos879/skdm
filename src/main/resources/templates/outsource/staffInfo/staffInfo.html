@@ -15,13 +15,10 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                人名：<input type="text" name="candidateName" id="candidateName" autocomplete="off"/>
+                                人名：<input type="text" name="staffName" id="staffName" autocomplete="off"/>
                             </li>
                             <li>
                                 身份证号：<input type="text" name="idCard" id="idCard" autocomplete="off"/>
-                            </li>
-                            <li>
-                                电话号：<input type="text" name="phone" id="phone" autocomplete="off"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -34,18 +31,18 @@
             </div>
             <!-- table开始 -->
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" >
-                    <i class="fa fa-plus"></i> 新增
-                </a>
+<!--                <a class="btn btn-success" onclick="$.operate.add()" >-->
+<!--                    <i class="fa fa-plus"></i> 新增-->
+<!--                </a>-->
 <!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >-->
 <!--                    <i class="fa fa-edit"></i> 修改-->
 <!--                </a>-->
 <!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >-->
 <!--                    <i class="fa fa-remove"></i> 删除-->
 <!--                </a>-->
-                <a class="btn btn-info" onclick="$.table.importExcel()">
-                    <i class="fa fa-upload"></i> 导入
-                </a>
+<!--                <a class="btn btn-info" onclick="$.table.importExcel()">-->
+<!--                    <i class="fa fa-upload"></i> 导入-->
+<!--                </a>-->
                 <a class="btn btn-warning" onclick="exportUser()" >
                     <i class="fa fa-download"></i> 导出
                 </a>
@@ -60,13 +57,13 @@
     <!-- 主体内容结束 -->
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
-
+    var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
     $(function(){
         queryList();
     });
 
     function queryList() {
-        var prefix = ctx + "outsource/personInfo";
+        var prefix = ctx + "outsource/staffInfo";
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
@@ -75,7 +72,7 @@
             exportUrl: prefix + "/export",
             importUrl: prefix + "/importData",
             importTemplateUrl: prefix + "/importTemplate",
-            sortName: "candidateId",
+            sortName: "autoId",
             sortOrder: "desc",
             modalName: "人名",
             columns: [
@@ -83,12 +80,24 @@
                     checkbox: true
                 },
                 {
-                    field: 'candidateId',
+                    field: 'autoId',
                     title: 'ID',
                     visible: false
                 },
                 {
-                    field: 'candidateName',
+                    field: 'purchaseNo',
+                    title: '采购编号'
+                },
+                {
+                    field: 'orderNo',
+                    title: '订单编号'
+                },
+                {
+                    field: 'staffNo',
+                    title: '员工编号'
+                },
+                {
+                    field: 'staffName',
                     title: '人名'
                 },
                 {
@@ -96,25 +105,70 @@
                     title: '身份证号'
                 },
                 {
-                    field: 'phone',
-                    title: '电话号'
+                    field: 'projectName',
+                    title: '项目名称'
+                },
+                {
+                    field: 'supplierName',
+                    title: '供应商名称'
+                },
+                {
+                    field: 'postName',
+                    title: '岗位名称'
+                },
+                {
+                    field: 'departmentName',
+                    title: '部门名称'
+                },
+                {
+                    field: 'isReplace',
+                    title: '是否替换',
+                    sortable: true,
+                    formatter:function(value,row,index){
+                        return $.table.selectDictLabel(isNotifyInterview, value);
+                    }
+                },
+                {
+                    field: 'replaceGroup',
+                    title: '替换的人员分组'
+                },
+                {
+                    field: 'reason',
+                    title: '不符合岗位要求的原因及建议'
+                },
+                {
+                    field: 'arriveDate',
+                    title: '到岗日期',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'leaveDate',
+                    title: '离岗日期',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'leaveReason',
+                    title: '离岗原因'
                 },
                 {
                     field: 'createTime',
                     title: '创建时间',
                     align: 'center',
                     sortable: true
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.candidateId + '\')"><i class="fa fa-edit"></i>修改</a> ');
-                        // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.candidateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-                        return actions.join('');
-                    }
-                }]
+                }
+                // {
+                //     title: '操作',
+                //     align: 'center',
+                //     formatter: function(value, row, index) {
+                //         var actions = [];
+                //         actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.candidateId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+                //         actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.candidateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                //         return actions.join('');
+                //     }
+                // }
+                ]
         };
         $.table.init(options);
     }
@@ -142,19 +196,19 @@
     }
 	</script>
 </body>
-<!-- 导入区域 -->
-<script id="importTpl" type="text/template">
-<form enctype="multipart/form-data" class="mt20 mb10">
-	<div class="col-xs-offset-1">
-		<input type="file" id="file" name="file"/>
-		<div class="mt10 pt5">
-			<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
-			 &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
-		</div>
-		<font color="red" class="pull-left mt10">
-			提示：仅允许导入“xls”或“xlsx”格式文件！
-		</font>
-	</div>
-</form>
-</script>
+<!--&lt;!&ndash; 导入区域 &ndash;&gt;-->
+<!--<script id="importTpl" type="text/template">-->
+<!--<form enctype="multipart/form-data" class="mt20 mb10">-->
+<!--	<div class="col-xs-offset-1">-->
+<!--		<input type="file" id="file" name="file"/>-->
+<!--		<div class="mt10 pt5">-->
+<!--			<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据-->
+<!--			 &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
+<!--		</div>-->
+<!--		<font color="red" class="pull-left mt10">-->
+<!--			提示：仅允许导入“xls”或“xlsx”格式文件！-->
+<!--		</font>-->
+<!--	</div>-->
+<!--</form>-->
+<!--</script>-->
 </html>

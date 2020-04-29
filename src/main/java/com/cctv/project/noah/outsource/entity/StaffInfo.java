@@ -1,5 +1,8 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,78 +16,107 @@ public class StaffInfo implements Serializable {
      */
     private Integer autoId;
 
+    /**
+     * 采购编号
+     */
+    @Excel(name = "采购编号")
     private String purchaseNo;
 
     /**
      * 订单编号：一次面试对应一个订单编号
      */
+    @Excel(name = "订单编号")
     private String orderNo;
 
     /**
      * 面试人员员工编号
      */
+    @Excel(name = "员工编号")
     private Long staffNo;
 
     /**
      * 人员名字
      */
+    @Excel(name = "人名")
     private String staffName;
 
     /**
-     * 身份证号，is_pass=1时必填
+     * 身份证号
      */
+    @Excel(name = "身份证号")
     private String idCard;
 
     private Integer projectId;
+
+    private String projectName;
 
     /**
      * 供应商id
      */
     private Integer supplierId;
 
+    @Excel(name = "供应商名称")
+    private String supplierName;
+
     /**
      * 岗位id
      */
     private Integer postId;
+
+    @Excel(name = "岗位名称")
+    private String postName;
 
     /**
      * 部门id
      */
     private Integer departmentId;
 
+    @Excel(name = "部门名称")
+    private String departmentName;
+
     /**
      * 是否替换（1：无缝替换，2有缝替换，0无替换）
      */
+    @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
     private Integer isReplace;
 
     /**
      * 替换的人员分组
      */
+    @Excel(name = "替换的人员分组")
     private Integer replaceGroup;
 
     /**
      * 不符合岗位要求的原因及建议
      */
+    @Excel(name = "不符合岗位要求的原因及建议")
     private String reason;
 
     /**
      * 到岗日期
      */
+    @Excel(name = "到岗日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date arriveDate;
 
     /**
      * 离岗日期
      */
+    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date leaveDate;
 
     /**
      * 离岗原因
      */
+    @Excel(name = "离岗原因")
     private String leaveReason;
 
     /**
      * 创建时间
      */
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private Integer status;
@@ -319,5 +351,37 @@ public class StaffInfo implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }
