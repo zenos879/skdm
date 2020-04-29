@@ -186,12 +186,12 @@ public class AttendanceServiceImpl implements AttendanceService {
             i++;
             Result result = updateBySelective(attendance);
             if (result.warning){
-                warning.append("第").append(i+2).append("行").append("未插入，原因是：<")
+                warning.append("第").append(i+1).append("行").append("未插入，原因是：<")
                         .append(result.info).append("></br>");
                 continue;
             }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
+                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
             }
             success++;
         }
