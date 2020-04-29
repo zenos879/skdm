@@ -130,7 +130,8 @@ public class StaffInfoServiceImpl implements StaffInfoService {
 
     @Override
     public List<CurrentPersonCount> selectCurrentStaff(CurrentPersonCount record) {
-        return staffInfoMapper.selectCurrentStaff(record);
+        List<CurrentPersonCount> currentPersonCounts = staffInfoMapper.selectCurrentStaff(record);
+        return currentPersonCounts;
     }
 
     @Override

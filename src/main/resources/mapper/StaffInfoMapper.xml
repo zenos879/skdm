@@ -122,21 +122,21 @@
     </select>
     <sql id="selectCurrentStaffInfo">
         SELECT
-	    f.project_name,
+	    f.project_name projectName,
 	    a.order_no,
-	    e.department_name,
+	    e.department_name departmentName,
 	    a.staff_name,
-	    cc.post_name,
-	    d.supplier_name,
+	    cc.post_name postName,
+	    d.supplier_name supplierName,
 	    a.arrive_date,
 	    a.id_card
         from `staff_info` a
-        left join post_info c on a.post_id=cc.post_id
+        left join post_info cc on a.post_id=cc.post_id
         left join supplier_info d on a.supplier_id=d.supplier_id
         left join department_info e on a.department_id=e.department_id
         left join project_info f on a.project_id=f.project_id
     </sql>
-    <select id="selectCurrentStaff" parameterType="com.cctv.project.noah.outsource.entity.CurrentPersonCount" resultType="com.cctv.project.noah.outsource.entity.CurrentPersonCount">
+    <select id="selectCurrentStaff" parameterType="com.cctv.project.noah.outsource.entity.CurrentPersonCount" resultMap="BaseResultMap">
         <include refid="selectCurrentStaffInfo"/>
         WHERE
         a.leave_date is null
@@ -158,7 +158,7 @@
         </if>
         ORDER BY f.project_name, d.supplier_name, a.order_no, cc.post_name
     </select>
-    <select id="selectCurrentStaffByIds" parameterType="com.cctv.project.noah.outsource.entity.CurrentPersonCount" resultType="com.cctv.project.noah.outsource.entity.CurrentPersonCount">
+    <select id="selectCurrentStaffByIds" parameterType="com.cctv.project.noah.outsource.entity.CurrentPersonCount" resultMap="BaseResultMap">
 
         <include refid="selectCurrentStaffInfo"/>
 
