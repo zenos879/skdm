@@ -13,6 +13,8 @@ public class StaffInfo implements Serializable {
      */
     private Integer autoId;
 
+    private String purchaseNo;
+
     /**
      * 订单编号：一次面试对应一个订单编号
      */
@@ -32,6 +34,8 @@ public class StaffInfo implements Serializable {
      * 身份证号，is_pass=1时必填
      */
     private String idCard;
+
+    private Integer projectId;
 
     /**
      * 供应商id
@@ -95,6 +99,14 @@ public class StaffInfo implements Serializable {
         this.autoId = autoId;
     }
 
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo;
+    }
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -125,6 +137,14 @@ public class StaffInfo implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public Integer getSupplierId() {
@@ -228,10 +248,12 @@ public class StaffInfo implements Serializable {
         }
         StaffInfo other = (StaffInfo) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
+            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
             && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
             && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
+            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
             && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
             && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
@@ -250,10 +272,12 @@ public class StaffInfo implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
+        result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getStaffNo() == null) ? 0 : getStaffNo().hashCode());
         result = prime * result + ((getStaffName() == null) ? 0 : getStaffName().hashCode());
         result = prime * result + ((getIdCard() == null) ? 0 : getIdCard().hashCode());
+        result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         result = prime * result + ((getSupplierId() == null) ? 0 : getSupplierId().hashCode());
         result = prime * result + ((getPostId() == null) ? 0 : getPostId().hashCode());
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
@@ -275,10 +299,12 @@ public class StaffInfo implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", autoId=").append(autoId);
+        sb.append(", purchaseNo=").append(purchaseNo);
         sb.append(", orderNo=").append(orderNo);
         sb.append(", staffNo=").append(staffNo);
         sb.append(", staffName=").append(staffName);
         sb.append(", idCard=").append(idCard);
+        sb.append(", projectId=").append(projectId);
         sb.append(", supplierId=").append(supplierId);
         sb.append(", postId=").append(postId);
         sb.append(", departmentId=").append(departmentId);
