@@ -1,5 +1,6 @@
 package com.cctv.project.noah.outsource.service.impl;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.InterviewPersonRefMapper;
 import com.cctv.project.noah.outsource.service.*;
@@ -20,13 +21,8 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     InterviewPersonRefMapper interviewPersonRefMapper;
 
     @Autowired
-    InterviewInfoService interviewInfoService;
-
-    @Autowired
     SupplierInfoService supplierInfoService;
 
-    @Autowired
-    DepartmentInfoService departmentInfoService;
 
     @Autowired
     PostInfoService postInfoService;
@@ -34,6 +30,11 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     @Autowired
     StaffInfoService staffInfoService;
 
+    @Autowired
+    ProjectInfoService projectInfoService;
+
+    @Autowired
+    ReviewInfoService reviewInfoService;
 
     @Override
     public int deleteByExample(InterviewPersonRef record) {
@@ -80,28 +81,12 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     @Override
     public Result insert(InterviewPersonRef record) {
         Result result = new Result();
-        // 插入时判断订单编号是否存在
-        String orderNo = record.getOrderNo();
-        InterviewInfo interviewInfo = interviewInfoService.selectByName(orderNo);
-        if (interviewInfo == null) {
-            result.setCode(0);
-            result.setInfo("订单编号不存在，请先添加订单！");
-            return result;
-        }
         // 插入时判断供应商是否存在
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
         if (supplierInfo == null) {
             result.setCode(0);
             result.setInfo("供应商不存在，请先添加供应商！");
-            return result;
-        }
-        // 插入时判断部门是否存在
-        String departmentName = record.getDepartmentName();
-        DepartmentInfo departmentInfo = departmentInfoService.selectByName(departmentName);
-        if (departmentInfo == null) {
-            result.setCode(0);
-            result.setInfo("部门不存在，请先添加部门！");
             return result;
         }
         // 插入时判断岗位是否存在
@@ -203,12 +188,12 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
      */
     private InterviewPersonRef completionCandidateName(InterviewPersonRef record) {
         Integer supplierId = record.getSupplierId();
-        Integer departmentId = record.getDepartmentId();
+//        Integer departmentId = record.getDepartmentId();
         Integer postId = record.getPostId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         record.setSupplierName(supplierInfo.getSupplierName());
-        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
-        record.setDepartmentName(departmentInfo.getDepartmentName());
+//        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
+//        record.setDepartmentName(departmentInfo.getDepartmentName());
         PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
         record.setPostName(postInfo.getPostName());
         Long staffNo = record.getStaffNo();
@@ -226,16 +211,16 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
      */
     private InterviewPersonRef conversionNameById(InterviewPersonRef record) {
         String supplierName = record.getSupplierName();
-        String departmentName = record.getDepartmentName();
+//        String departmentName = record.getDepartmentName();
         String postName = record.getPostName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
-        DepartmentInfo departmentInfo = departmentInfoService.selectByName(departmentName);
+//        DepartmentInfo departmentInfo = departmentInfoService.selectByName(departmentName);
         PostInfo postInfo = postInfoService.selectByName(postName);
-        if (supplierInfo == null || departmentInfo == null || postInfo == null) {
+        if (supplierInfo == null || postInfo == null) {
             return null;
         }
         record.setSupplierId(supplierInfo.getSupplierId());
-        record.setDepartmentId(departmentInfo.getDepartmentId());
+//        record.setDepartmentId(departmentInfo.getDepartmentId());
         record.setPostId(postInfo.getPostId());
         return record;
     }
@@ -314,57 +299,61 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     }
 
     @Override
-    public Result importInterviewPersonRef(String orderNo, List<InterviewPersonRef> records) {
+    public Result importInterviewPersonRef(List<InterviewPersonRef> records) {
         Result result = new Result();
 //        int count = 0;
 //        String msg = "";
         for (int i = 0; i < records.size(); i++) {
             InterviewPersonRef temp = records.get(i);
-            temp.setOrderNo(orderNo);
+            // 对表格数据进行判空
+            String purchaseNo = temp.getPurchaseNo();
+            if (StringUtils.isEmpty(purchaseNo)) {
+                return new Result(0, "第" + (i + 2) + "行的" + InterviewPersonRef.PURCHASE_NO + "为空!");
+            }
+            String orderNo = temp.getOrderNo();
+            if (StringUtils.isEmpty(orderNo)) {
+                return new Result(0, "第" + (i + 2) + "行的" + InterviewPersonRef.ORDER_NO + "为空!");
+            }
             String staffName = temp.getStaffName();
             if (StringUtils.isEmpty(staffName)) {
-                return new Result(0, "第" + (i + 4) + "行的人名为空!");
+                return new Result(0, "第" + (i + 2) + "行的人名为空!");
             }
             String postName = temp.getPostName();
             if (StringUtils.isEmpty(postName)) {
-                return new Result(0, "第" + (i + 4) + "行的岗位名称为空!");
-            }
-            String departmentName = temp.getDepartmentName();
-            if (StringUtils.isEmpty(departmentName)) {
-                return new Result(0, "第" + (i + 4) + "行的部门名称为空!");
+                return new Result(0, "第" + (i + 2) + "行的岗位名称为空!");
             }
             String supplierName = temp.getSupplierName();
             if (StringUtils.isEmpty(supplierName)) {
-                return new Result(0, "第" + (i + 4) + "行的供应商名称为空!");
+                return new Result(0, "第" + (i + 2) + "行的供应商名称为空!");
             }
             String idCard = temp.getIdCard();
             if (StringUtils.isEmpty(idCard)) {
-                return new Result(0, "第" + (i + 4) + "行的身份证号为空!");
+                return new Result(0, "第" + (i + 2) + "行的身份证号为空!");
             }
             Integer isInterview = temp.getIsInterview();
             if (isInterview == null) {
-                return new Result(0, "第" + (i + 4) + "行的是否参加面试为空!");
+                return new Result(0, "第" + (i + 2) + "行的是否参加面试为空!");
             }
             Integer isPass = temp.getIsPass();
             if (isPass == null) {
-                return new Result(0, "第" + (i + 4) + "行的是否通过为空!");
+                return new Result(0, "第" + (i + 2) + "行的是否通过为空!");
             }
             Integer isReject = temp.getIsReject();
             if (isReject == null) {
-                return new Result(0, "第" + (i + 4) + "行的是否退回为空!");
+                return new Result(0, "第" + (i + 2) + "行的是否退回为空!");
             }
             Integer isReplace = temp.getIsReplace();
             if (isReplace == null) {
-                return new Result(0, "第" + (i + 4) + "行的是否替换为空!");
+                return new Result(0, "第" + (i + 2) + "行的是否替换为空!");
             }
             String replacdStaffIdCard = temp.getReplacdStaffIdCard();
             if (StringUtils.isEmpty(replacdStaffIdCard)) {
                 if (isReplace != 0) {
-                    return new Result(0, "第" + (i + 4) + "行有替换人员时，替换人员证件号必须填写!");
+                    return new Result(0, "第" + (i + 2) + "行有替换人员时，替换人员证件号必须填写!");
                 }
             } else {
                 if (isReplace == 0) {
-                    return new Result(0, "第" + (i + 4) + "行无替换人员时，无需填写替换人员证件号!");
+                    return new Result(0, "第" + (i + 2) + "行无替换人员时，无需填写替换人员证件号!");
                 }
             }
             String reason = temp.getReason();
@@ -376,20 +365,31 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             // 验证关联信息是否存在
             PostInfo postInfo = postInfoService.selectByName(postName);
             if (postInfo == null) {
-                return new Result(0, "第" + (i + 4) + "行的岗位信息【" + postName + "】不存在!");
-            }
-            DepartmentInfo departmentInfo = departmentInfoService.selectByName(departmentName);
-            if (departmentInfo == null) {
-                return new Result(0, "第" + (i + 4) + "行的部门信息【" + departmentName + "】不存在!");
+                return new Result(0, "第" + (i + 2) + "行的岗位信息【" + postName + "】不存在!");
             }
             SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
             if (supplierInfo == null) {
-                return new Result(0, "第" + (i + 4) + "行的供应商信息【" + supplierName + "】不存在!");
+                return new Result(0, "第" + (i + 2) + "行的供应商信息【" + supplierName + "】不存在!");
+            }
+            ReviewInfo reviewInfo = new ReviewInfo();
+            reviewInfo.setPurchaseNo(purchaseNo);
+            List<ReviewInfo> reviewInfos = reviewInfoService.selectBySelective(reviewInfo);
+            if (reviewInfos.size() == 0){
+                return new Result(0, "第" + (i + 2) + "行的采购编号【" + purchaseNo + "】在评审数据中不存在!");
+            } else if (reviewInfos.size() > 1){
+                return new Result(0, "第" + (i + 2) + "行的采购编号【" + purchaseNo + "】在评审数据存在多条!");
+            } else {
+                reviewInfo = reviewInfos.get(0);
+            }
+            ProjectInfo projectInfo = projectInfoService.selectByPrimaryKey(reviewInfo.getProjectId());
+            if (projectInfo == null){
+                return new Result(0, "第" + (i + 2) + "行的采购编号【" + purchaseNo + "】对应的项目编号不存在!");
             }
             // 补全关联信息
             temp.setPostId(postInfo.getPostId());
-            temp.setDepartmentId(departmentInfo.getDepartmentId());
             temp.setSupplierId(supplierInfo.getSupplierId());
+            temp.setProjectId(reviewInfo.getProjectId());
+            temp.setDepartmentId(projectInfo.getDepartmentId());
         }
         /** 第一遍循环先新增数据库不存在的数据 */
         for (InterviewPersonRef record : records) {

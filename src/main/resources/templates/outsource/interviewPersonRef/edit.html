@@ -11,6 +11,14 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
+                    <div class="col-sm-7">
+                        <input name="orderNo" th:field="*{purchaseNo}" id="purchaseNo" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>订单编号：</label>
                     <div class="col-sm-7">
                         <input name="orderNo" th:field="*{orderNo}" id="orderNo" class="form-control" type="text" required>

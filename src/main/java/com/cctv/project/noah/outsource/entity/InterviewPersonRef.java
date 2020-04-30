@@ -11,10 +11,19 @@ import java.util.Date;
  * @author 
  */
 public class InterviewPersonRef implements Serializable {
+
+    public static final String ORDER_NO = "订单编号";
+    public static final String PURCHASE_NO = "采购编号";
+
     /**
      * 自增主键
      */
     private Integer autoId;
+
+    /**
+     * 采购编号
+     */
+    private String purchaseNo;
 
     /**
      * 订单编号：一次面试对应一个订单编号
@@ -42,12 +51,17 @@ public class InterviewPersonRef implements Serializable {
     private String postName;
 
     /**
+     * 项目id
+     */
+    private Integer projectId;
+
+//    @Excel(name = "项目名称", cellType = Excel.ColumnType.NUMERIC)
+//    private String projectName;
+
+    /**
      * 部门id
      */
     private Integer departmentId;
-
-    @Excel(name = "部门名称", cellType = Excel.ColumnType.NUMERIC)
-    private String departmentName;
 
     /**
      * 供应商id
@@ -152,6 +166,14 @@ public class InterviewPersonRef implements Serializable {
 
     public void setAutoId(Integer autoId) {
         this.autoId = autoId;
+    }
+
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo;
     }
 
     public String getOrderNo() {
@@ -306,6 +328,14 @@ public class InterviewPersonRef implements Serializable {
         this.status = status;
     }
 
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
     public Integer getDepartmentId() {
         return departmentId;
     }
@@ -327,6 +357,7 @@ public class InterviewPersonRef implements Serializable {
         }
         InterviewPersonRef other = (InterviewPersonRef) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
+            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
             && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
             && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
             && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
@@ -346,7 +377,7 @@ public class InterviewPersonRef implements Serializable {
             && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()));
+            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()));
     }
 
     @Override
@@ -354,6 +385,7 @@ public class InterviewPersonRef implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getAutoId() == null) ? 0 : getAutoId().hashCode());
+        result = prime * result + ((getPurchaseNo() == null) ? 0 : getPurchaseNo().hashCode());
         result = prime * result + ((getOrderNo() == null) ? 0 : getOrderNo().hashCode());
         result = prime * result + ((getStaffNo() == null) ? 0 : getStaffNo().hashCode());
         result = prime * result + ((getStaffName() == null) ? 0 : getStaffName().hashCode());
@@ -373,7 +405,7 @@ public class InterviewPersonRef implements Serializable {
         result = prime * result + ((getLeaveReason() == null) ? 0 : getLeaveReason().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
+        result = prime * result + ((getProjectId() == null) ? 0 : getProjectId().hashCode());
         return result;
     }
 
@@ -384,6 +416,7 @@ public class InterviewPersonRef implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", autoId=").append(autoId);
+        sb.append(", purchaseNo=").append(purchaseNo);
         sb.append(", orderNo=").append(orderNo);
         sb.append(", staffNo=").append(staffNo);
         sb.append(", staffName=").append(staffName);
@@ -406,19 +439,11 @@ public class InterviewPersonRef implements Serializable {
         sb.append(", leaveReason=").append(leaveReason);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
-        sb.append(", departmentId=").append(departmentId);
-        sb.append(", departmentName=").append(departmentName);
+        sb.append(", projectId=").append(projectId);
+//        sb.append(", projectName=").append(projectName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
     }
 
     public String getSupplierName() {
@@ -444,4 +469,12 @@ public class InterviewPersonRef implements Serializable {
     public void setReplacdStaffIdCard(String replacdStaffIdCard) {
         this.replacdStaffIdCard = replacdStaffIdCard;
     }
+
+//    public String getProjectName() {
+//        return projectName;
+//    }
+//
+//    public void setProjectName(String projectName) {
+//        this.projectName = projectName;
+//    }
 }
