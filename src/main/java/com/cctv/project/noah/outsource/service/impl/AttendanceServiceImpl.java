@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,23 +89,81 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<Attendance> selectBySelective(Attendance attendance){
         return attendanceMapper.selectBySelective(attendance);
     }
+
+    @Override
+    public List<Attendance> selectPublicHolidaysInfo(Attendance attendance){
+        Long statisticsYear = attendance.getStatisticsYear();
+        Long statisticsMonth = attendance.getStatisticsMonth();
+        if (attendance.getStatisticsYear() == null || attendance.getStatisticsMonth() ==null){
+            return new ArrayList<>();
+        }
+        Integer year = Math.toIntExact(statisticsYear);
+        Integer month = Math.toIntExact(statisticsMonth);
+        Date firstDay = getAppointTime(year, month, 0);
+        Date lastDay = getAppointTime(year, month, 1);
+
+        return attendanceMapper.selectPublicHolidaysInfo(firstDay,lastDay);
+    }
     @Override
     public List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount){
         return attendanceMapper.selectAttendanceCount(attendanceCount);
     }
 
 
-    public Integer getNowYear(){
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        return year;
+    public Integer getPrevMonthYear(){
+        Date m = getPrevMonthTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy");
+        String year = format.format(m);
+        return Integer.valueOf(year);
     }
 
     public Integer getPrevMonth(){
-        Calendar cal = Calendar.getInstance();
-        int month = cal.get(Calendar.MONTH);
-        return month;
+        Date m = getPrevMonthTime();
+        SimpleDateFormat format = new SimpleDateFormat("MM");
+        String year = format.format(m);
+        return Integer.valueOf(year);
     }
+    private Date getPrevMonthTime(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, -1);
+        return c.getTime();
+    }
+    public Date getAppointTime(Integer year,Integer month,Integer day){
+        //day 0:first  1:last
+        Calendar cal = Calendar.getInstance();
+        if (year != null && year>0){
+            // 设置年份
+            cal.set(Calendar.YEAR, year);
+        }
+        if (month !=null && month<=12 && month >=1 ){
+            if (day == 0){
+                // 设置月份
+                // cal.set(Calendar.MONTH, month - 1);
+                cal.set(Calendar.MONTH, month -1); //设置当前月的上一个月
+            }else{
+                // 设置月份
+                // cal.set(Calendar.MONTH, month - 1);
+                cal.set(Calendar.MONTH, month); //设置当前月的上一个月
+            }
+
+        }
+        // 获取某月最大天数
+        //int lastDay = cal.getActualMaximum(Calendar.DATE);
+        int lastDay = cal.getMinimum(Calendar.DATE); //获取月份中的最小值，即第一天
+        if (day == 0){
+            // 设置日历中月份的最大天数
+            //cal.set(Calendar.DAY_OF_MONTH, lastDay);
+            cal.set(Calendar.DAY_OF_MONTH, lastDay); //上月的第一天减去1就是当月的最后一天
+        }else{
+            // 设置日历中月份的最大天数
+            //cal.set(Calendar.DAY_OF_MONTH, lastDay);
+            cal.set(Calendar.DAY_OF_MONTH, lastDay - 1); //上月的第一天减去1就是当月的最后一天
+        }
+
+        return cal.getTime();
+    }
+
 
 
     @Override
@@ -140,6 +199,13 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance attendanceDb = attendanceMapper.selectByPrimaryKey(attendanceAutoId);
         if (attendanceDb == null){
             return new Result(0,"无法修改不存在的考勤数据！",true);
+        }
+        Integer departmentId = getDepartmentId();
+        if (departmentId == null){
+            return new Result(0,"权限不足，无法修改！！");
+        }
+        if (departmentId != -1){
+           attendance.setPublicHolidays(null);
         }
         int i = attendanceMapper.update(attendance);
         return new Result(i);

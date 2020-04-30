@@ -57,6 +57,12 @@ public class Attendance extends BaseEntity  implements Serializable {
 
     public String remark;
 
+    public String publicHolidays;
+
+
+    public Date firstDay;
+    public Date lastDay;
+
     /**
      * 创建时间
      */
@@ -64,7 +70,24 @@ public class Attendance extends BaseEntity  implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    public Date getFirstDay() {
+        return firstDay;
+    }
+
+    public void setFirstDay(Date firstDay) {
+        this.firstDay = firstDay;
+    }
+
+    public Date getLastDay() {
+        return lastDay;
+    }
+
+    public void setLastDay(Date lastDay) {
+        this.lastDay = lastDay;
+    }
+
     private Integer departmentId;
+
 
     public Integer getDepartmentId() {
         return departmentId;
@@ -74,6 +97,14 @@ public class Attendance extends BaseEntity  implements Serializable {
         this.departmentId = departmentId;
     }
 
+
+    public String getPublicHolidays() {
+        return publicHolidays;
+    }
+
+    public void setPublicHolidays(String publicHolidays) {
+        this.publicHolidays = publicHolidays;
+    }
 
     @Override
     public String getRemark() {

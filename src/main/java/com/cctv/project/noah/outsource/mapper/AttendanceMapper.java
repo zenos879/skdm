@@ -3,6 +3,8 @@ package com.cctv.project.noah.outsource.mapper;
 import com.cctv.project.noah.outsource.entity.Attendance;
 import com.cctv.project.noah.outsource.entity.AttendanceCount;
 import com.cctv.project.noah.outsource.entity.AttendanceExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,6 +18,8 @@ public interface AttendanceMapper {
     List<Attendance> selectByExample(AttendanceExample example);
 
     List<Attendance> selectBySelective(Attendance attendance);
+
+    List<Attendance> selectPublicHolidaysInfo(Date firstDay,Date lastDay);
 
     List<Attendance> selectByIds(String[] ids);
 
@@ -36,6 +40,8 @@ public interface AttendanceMapper {
      * @return 【Attendance】集合
      */
     public List<Attendance> selectAttendanceList(Attendance attendance);
+
+    public List<Attendance> selectAvailableInfo(Attendance attendance);
 
     /**
      * 新增【Attendance】

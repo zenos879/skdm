@@ -13,7 +13,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									统计年份：<input type="text" name="statisticsYear" th:value="${@attendanceService.getNowYear()}"/>
+									统计年份：<input type="text" name="statisticsYear" th:value="${@attendanceService.getPrevMonthYear()}"/>
 								</li>
 								<li>
 									统计月份：<input type="text" name="statisticsMonth" th:value="${@attendanceService.getPrevMonth()}"/>

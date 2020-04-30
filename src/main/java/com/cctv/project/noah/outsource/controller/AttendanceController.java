@@ -52,7 +52,7 @@ public class AttendanceController extends BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Attendance attendance){
+    public TableDataInfo list(Attendance attendance,Boolean updatePublicHolidays){
         Integer departmentId = attendanceService.getDepartmentId();
         if (departmentId == null){
             return getDataTable(new ArrayList<>());
@@ -61,7 +61,12 @@ public class AttendanceController extends BaseController {
             attendance.setDepartmentId(departmentId);
         }
         startPage();
-        List<Attendance> attendances = attendanceService.selectBySelective(attendance);
+        List<Attendance> attendances;
+        if (updatePublicHolidays){
+            attendances = attendanceService.selectPublicHolidaysInfo(attendance);
+        }else {
+            attendances = attendanceService.selectBySelective(attendance);
+        }
         return getDataTable(attendances);
     }
 

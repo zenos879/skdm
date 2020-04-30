@@ -16,6 +16,8 @@ public interface AttendanceService {
 
     List<Attendance> selectBySelective(Attendance attendance);
 
+    List<Attendance> selectPublicHolidaysInfo(Attendance attendance);
+
     List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount);
 
     List<AttendanceCount> selectAttendanceCountByIds(String ids);

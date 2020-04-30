@@ -13,6 +13,7 @@
         <result property="status"    column="status"    />
         <result property="staffName"    column="staff_name"    />
         <result property="remark"    column="remark"    />
+        <result property="publicHolidays"    column="public_holidays"    />
     </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,11 +85,23 @@
         a.create_time,
         a. STATUS,
         s.staff_name,
-        a.remark
+        a.remark,
+        a.public_holidays
         FROM
         attendance a
         LEFT JOIN staff_info s ON s.staff_no = a.staff_no
     </sql>
+    <select id="selectPublicHolidaysInfo" resultMap="BaseResultMap">
+        <include refid="selectAttendanceVo"/>
+        WHERE
+        a.statistics_year=2020 AND a.statistics_month=3
+        AND ((date_format(s.arrive_date,'%y%m%d')
+        between date_format(#{firstDay},'%y%m%d')
+        and date_format(#{lastDay},'%y%m%d'))
+        OR (date_format(s.leave_date,'%y%m%d')
+        between date_format(#{firstDay},'%y%m%d')
+        and date_format(#{lastDay},'%y%m%d')))
+    </select>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.AttendanceExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -312,6 +325,8 @@
             <if test="createTime != null ">create_time,</if>
             <if test="status != null ">status,</if>
             <if test="staffName != null  and staffName != ''">staff_name,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="publicHolidays != null">public_holidays,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo != null  and orderNo != ''">#{orderNo},</if>
@@ -323,6 +338,8 @@
             <if test="createTime != null ">#{createTime},</if>
             <if test="status != null ">#{status},</if>
             <if test="staffName != null  and staffName != ''">#{staffName},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="publicHolidays != null">#{publicHolidays},</if>
         </trim>
     </insert>
 
@@ -338,12 +355,19 @@
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="status != null ">status = #{status},</if>
             <if test="staffName != null  and staffName != ''">staff_name = #{staffName},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="publicHolidays != null">public_holidays = #{publicHolidays},</if>
         </trim>
         where auto_id = #{autoId}
     </update>
     <update id="update" parameterType="Attendance">
         update attendance
-        set serve_days_expect = #{serveDaysExpect},serve_days_actual = #{serveDaysActual}
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serveDaysExpect != null ">serve_days_expect = #{serveDaysExpect},</if>
+            <if test="serveDaysActual != null ">serve_days_actual = #{serveDaysActual},</if>
+            <if test="publicHolidays != null">public_holidays = #{publicHolidays},</if>
+        </trim>
+
         where auto_id = #{autoId}
     </update>
 
