@@ -27,18 +27,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>
-                        <div class="col-sm-8">
-                            <!--<input th:value="${command.getStatus()}">-->
-                            <select name="status" class="form-control" th:with="type=${@dict.getType('status')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${(''+command.getStatus()) == dict.dictValue}"></option>
-                                <!--<option th:each="dict : ${type}" th:value="${command.getStatus() == dict.dictValue}" th:text="${dict.dictValue}" th:selected="${dict.dictValue == 0}"></option>-->
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="col-sm-12">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--&lt;!&ndash;<input th:value="${command.getStatus()}">&ndash;&gt;-->
+                            <!--<select name="status" class="form-control" th:with="type=${@dict.getType('status')}">-->
+                                <!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:selected="${(''+command.getStatus()) == dict.dictValue}"></option>-->
+                                <!--&lt;!&ndash;<option th:each="dict : ${type}" th:value="${command.getStatus() == dict.dictValue}" th:text="${dict.dictValue}" th:selected="${dict.dictValue == 0}"></option>&ndash;&gt;-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </form>
     </div>

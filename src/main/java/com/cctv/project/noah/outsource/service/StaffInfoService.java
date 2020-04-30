@@ -1,5 +1,6 @@
 package com.cctv.project.noah.outsource.service;
 
+import com.cctv.project.noah.outsource.entity.CurrentPersonCount;
 import com.cctv.project.noah.outsource.entity.StaffInfo;
 
 import java.util.List;
@@ -17,6 +18,10 @@ public interface StaffInfoService {
     Result insertSelective(StaffInfo record);
 
     List<StaffInfo> selectList(StaffInfo record);
+
+    List<CurrentPersonCount> selectCurrentStaff(CurrentPersonCount record);
+
+    List<CurrentPersonCount> selectCurrentStaffByIds(String ids);
 
     List<StaffInfo> selectAll();
 

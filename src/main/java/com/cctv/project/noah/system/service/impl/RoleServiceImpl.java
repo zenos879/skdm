@@ -4,6 +4,7 @@ import com.cctv.project.noah.system.constant.UserConstants;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.entity.SysRole;
 import com.cctv.project.noah.system.entity.SysRoleMenu;
+import com.cctv.project.noah.system.entity.SysUser;
 import com.cctv.project.noah.system.entity.SysUserRole;
 import com.cctv.project.noah.system.exception.BusinessException;
 import com.cctv.project.noah.system.mapper.SysRoleMapper;
@@ -55,6 +56,17 @@ public class RoleServiceImpl implements RoleService {
         return roles;
     }
 
+    @Override
+    public Boolean isProjectManager(SysUser sysUser){
+        Long[] roleIds = sysUser.getRoleIds();
+        for (Long roleId : roleIds) {
+            SysRole sysRole = selectRoleById(roleId);
+            if ("projectManager".equals(sysRole.getRoleKey())){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public List<SysRole> selectRoleList(SysRole role) {
         return sysRoleMapper.selectRoleList(role);

@@ -13,7 +13,6 @@ import com.cctv.project.noah.system.enmus.BusinessType;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -140,7 +139,7 @@ public class AttendanceController extends BaseController {
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<Attendance> util = new ExcelUtil<Attendance>(Attendance.class);
         List<Attendance> attendances = util.importExcel(file.getInputStream());
-        Result result = attendanceService.importPostInfo(attendances);
+        Result result = attendanceService.importAttendance(attendances);
         return toAjax(result);
     }
 

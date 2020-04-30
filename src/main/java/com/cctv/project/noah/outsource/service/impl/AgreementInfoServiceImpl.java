@@ -150,7 +150,9 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     private AgreementInfo completionSupplierName(AgreementInfo agreementInfo){
         Integer supplierId = agreementInfo.getSupplierId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-        agreementInfo.setSupplierName(supplierInfo.getSupplierName());
+        if (supplierInfo != null){
+            agreementInfo.setSupplierName(supplierInfo.getSupplierName());
+        }
         return agreementInfo;
     }
 

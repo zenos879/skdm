@@ -28,7 +28,7 @@ public interface AttendanceService {
 
     List<Attendance> exportCore(List<Attendance> all);
 
-    Result importPostInfo(List<Attendance> attendances);
+    Result importAttendance(List<Attendance> attendances);
 
     Result deleteByIds(String ids);
 }

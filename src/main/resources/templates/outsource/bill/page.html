@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('考勤统计列表')" />
+	<th:block th:include="include :: header('账单查询')" />
 	<th:block th:include="include :: ztree-css" />
 </head>
 <body class="gray-bg">
@@ -13,10 +13,10 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									统计年份：<input type="text" name="statisticsYear" th:value="${@attendanceService.getNowYear()}"/>
+									统计年份：<input type="text" name="statisticsYear" th:value="${@billService.getNowYear()}"/>
 								</li>
 								<li>
-									统计月份：<input type="text" name="statisticsMonth" th:value="${@attendanceService.getPrevMonth()}"/>
+									统计月份：<input type="text" name="statisticsMonth" th:value="${@billService.getPrevMonth()}"/>
 								</li>
 							</ul>
 						</div>
@@ -39,18 +39,18 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
 	<script th:inline="javascript">
-		var prefix = ctx + "outsource/attendance";
+		var prefix = ctx + "outsource/bill";
 		$(function() {
 		    queryUserList();
 		});
 
 		function queryUserList() {
 		    var options = {
-		        url: prefix + "/attendanceCountlist",
+		        url: prefix + "/detailedBill",
 		        // createUrl: prefix + "/add",
 		        // updateUrl: prefix + "/edit/{id}",
 		        // removeUrl: prefix + "/remove",
-		        exportUrl: prefix + "/attendanceCountExport",
+		        exportUrl: prefix + "/export",
 		        // importUrl: prefix + "/importData",
 		        // importTemplateUrl: prefix + "/importTemplate",
 		        // sortName: "autoId",
@@ -58,39 +58,53 @@
 		        modalName: "考勤数据",
 		        columns: [{
 		        	checkbox:true
-				},
-		        {
-		            field: 'autoId',
-		            title: '考勤ID',
-					sortable: true
-		        },
-				{
-					field: 'orderNo',
-					title: '订单编号',
+				},{
+		        	field: 'staffNo',
+					title: '考勤ID',
 					sortable: true
 				},{
-					field: 'staffNo',
-					title: '考勤人ID',
+					field: 'statisticsYear',
+					title: '统计年份',
 					sortable: true
 				},{
-					field: 'staffName',
-					title: '考勤人',
-					sortable: true
-				},{
-					field: 'projectName',
-					title: '项目名称',
+					field: 'statisticsMonth',
+					title: '统计月份',
 					sortable: true
 				},{
 					field: 'departmentName',
 					title: '部门名称',
 					sortable: true
 				},{
+					field: 'projectName',
+					title: '项目名称',
+					sortable: true
+				},{
+					field: 'orderNo',
+					title: '订单编号',
+					sortable: true
+				},{
 					field: 'postName',
 					title: '岗位名称',
 					sortable: true
 				},{
+					field: 'staffName',
+					title: '考勤人',
+					sortable: true
+				},{
 					field: 'supplierName',
 					title: '供应商名称',
+					sortable: true
+				},{
+					field: 'bidPrice',
+					title: '岗位单价',
+					sortable: true
+				},{
+					field: 'serveDaysExpect',
+					title: '应该工作天数',
+					sortable: true
+				},{
+					field: 'serveDaysActual',
+					title: '实际工作天数',
 					sortable: true
 				},{
 					field: 'arriveDate',
@@ -101,12 +115,12 @@
 					title: '离岗日期',
 					sortable: true
 				},{
-					field: 'serveDaysExpect',
-					title: '应该工作天数',
+					field: 'remark',
+					title: '备注',
 					sortable: true
 				},{
-					field: 'serveDaysActual',
-					title: '实际工作天数',
+					field: 'postExpenses',
+					title: '当月人员岗位费用',
 					sortable: true
 				}
 		        ]
@@ -119,9 +133,13 @@
 				$.table.exportExcel();
 				return;
 			}
+			var  statisticsYear = $.table.selectColumns(2);
+			console.log("============第2行数据=========");
+			console.log(statisticsYear);
+			console.log(rows);
 			$.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
 				$.modal.loading("正在导出数据，请稍后...");
-				var data = { "ids": rows.join() };
+				var data = { "ids": rows.join(),"statisticsYear":"","":"" };
 				$.post($.table._option.exportUrl,data, function(result) {
 					if (result.code == web_status.SUCCESS) {
 						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;

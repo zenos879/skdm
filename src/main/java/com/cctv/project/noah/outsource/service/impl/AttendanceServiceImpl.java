@@ -10,6 +10,7 @@ import com.cctv.project.noah.system.core.domain.page.TableSupport;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.entity.SysRole;
 import com.cctv.project.noah.system.entity.SysUser;
+import com.cctv.project.noah.system.mapper.SysRoleMapper;
 import com.cctv.project.noah.system.service.RoleService;
 import com.cctv.project.noah.system.service.UserService;
 import com.cctv.project.noah.system.util.StringUtils;
@@ -39,6 +40,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     UserService userService;
 
     @Autowired
+    SysRoleMapper sysRoleMapper;
+
+    @Autowired
     RoleService roleService;
     Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
     @Override
@@ -55,7 +59,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public Integer getDepartmentId(){
         SysUser sysUser = ShiroUtils.getSysUser();
-        List<SysRole> sysRoles = roleService.selectRolesByUserId(sysUser.getUserId());
+        List<SysRole> sysRoles = sysRoleMapper.selectRolesByUserId(sysUser.getUserId());
         Boolean hasJ = false;
         Boolean hasR = false;
         for (SysRole sysRole : sysRoles) {
@@ -71,8 +75,10 @@ public class AttendanceServiceImpl implements AttendanceService {
             return -1;
         }
         if (hasJ){
-            //TODO 根据用户名获取人员表中的部门ID
-            return 0;
+            StaffInfo staffInfo = new StaffInfo();
+            staffInfo.setStaffNo(Long.valueOf(sysUser.getUserName()));
+            List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
+            return staffInfos.get(0).getDepartmentId();
         }else {
             return null;
         }
@@ -162,7 +168,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return all;
     }
     @Override
-    public Result importPostInfo(List<Attendance> attendances){
+    public Result importAttendance(List<Attendance> attendances){
         for (int i = 0; i < attendances.size(); i++) {
             Attendance attendance = attendances.get(i);
             if (attendance.getAutoId() == null) {
@@ -173,23 +179,25 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
         }
 
+        int success = 0;
         int i = 0;
         StringBuffer warning = new StringBuffer();
         for (Attendance attendance : attendances) {
+            i++;
             Result result = updateBySelective(attendance);
             if (result.warning){
-                warning.append("第").append(i+2).append("行").append("未插入，原因是：<")
+                warning.append("第").append(i+1).append("行").append("未插入，原因是：<")
                         .append(result.info).append("></br>");
                 continue;
             }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
+                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = attendances.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
-        return new Result(i,warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
     @Override
     public Result deleteByIds(String ids) {

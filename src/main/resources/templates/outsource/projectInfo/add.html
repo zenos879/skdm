@@ -26,16 +26,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>
-                        <div class="col-sm-8">
-                            <select name="status" class="form-control" th:with="type=${@dict.getType('status')}">
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="col-sm-12">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--<select name="status" class="form-control" th:with="type=${@dict.getType('status')}">-->
+                                <!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </form>
     </div>

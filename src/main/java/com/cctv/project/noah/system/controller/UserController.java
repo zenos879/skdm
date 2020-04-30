@@ -1,6 +1,8 @@
 package com.cctv.project.noah.system.controller;
 
 import com.cctv.project.noah.ShiroUtils;
+import com.cctv.project.noah.outsource.entity.StaffInfo;
+import com.cctv.project.noah.outsource.service.StaffInfoService;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.constant.UserConstants;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
@@ -39,6 +41,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    StaffInfoService staffInfoService;
 
     /** 页面跳转 */
     @GetMapping()
@@ -118,9 +123,28 @@ public class UserController extends BaseController {
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
+        if (roleService.isProjectManager(user)){
+            if (!hasStaffInfo(user.getUserName())){
+                return error("新增用户'" + user.getLoginName() + "'失败，此人员不存在，无法分配项目经理！");
+            }
+        }
         return toAjax(userService.insertUser(user));
     }
 
+    private Boolean hasStaffInfo(String userName){
+        try {
+            StaffInfo staffInfo = new StaffInfo();
+            staffInfo.setStaffNo(Long.valueOf(userName));
+            List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
+            if (StringUtils.isEmpty(staffInfos)){
+                return false;
+            }else {
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     /**
      * 修改用户
      */

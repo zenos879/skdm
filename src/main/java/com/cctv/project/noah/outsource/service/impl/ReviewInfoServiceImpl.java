@@ -97,7 +97,12 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                 reviewInfo.getPostCount() == reviewInfoDb.getPostCount() ||
                 reviewInfo.getPurchaseNo() == reviewInfoDb.getPurchaseNo()
         ){
-            if (reviewInfo.getReviewDate() == reviewInfoDb.getReviewDate()){
+            Date reviewDbDate = reviewInfoDb.getReviewDate();
+            Date reviewDate = reviewInfo.getReviewDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String db = simpleDateFormat.format(reviewDate);
+            String format = simpleDateFormat.format(reviewDbDate);
+            if (db.equals(format)){
                 return 0;
             }else {
                 return 1;
@@ -147,21 +152,23 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
         }
 
         int i = 0;
+        int success = 0;
         StringBuffer warning = new StringBuffer();
         for (ReviewInfo ReviewInfo : reviewInfos) {
+            i++;
             Result result = insertBySelective(ReviewInfo);
             if (result.warning){
-                warning.append("第").append(i+2).append("行").append("未插入，原因是：<")
+                warning.append("第").append(i+1).append("行").append("未插入，原因是：<")
                         .append(result.info).append("></br>");
                 continue;
             }
             if (result.code<1){
-                return new Result(result.code,"第"+(i+2)+"行出现错误，错误为<"+result.info+"></br>");
+                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
             }
-            i++;
+            success++;
         }
         int size = reviewInfos.size();
-        warning.append("插入成功了"+i+"行，失败了"+(size-i)+"行");
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
         return new Result(i,warning.toString());
     }
     @Override
@@ -207,17 +214,21 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
             Boolean isReviewPersonRef = false;
             String projectName = null;
             String purchaseNo = null;
+            int reviewStart = 0;
+            int reviewPersonStart = 0;
             for (int i = 0; i<lines.size();i++) {
                 String[] line = lines.get(i);
                 List<String> lineList = new LinkedList<>(Arrays.asList(line));
                 if (StringUtils.contains(lineList,reviewInfoHeadersList)){
                     isReviewInfo = true;
                     isReviewPersonRef = false;
+                    reviewStart = i;
                     continue;
                 }
                 if (StringUtils.contains(lineList,reviewPersonRefHeadersList)) {
                     isReviewPersonRef = true;
                     isReviewInfo = false;
+                    reviewPersonStart = i;
                     continue;
                 }
 
@@ -350,7 +361,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
             Result result = new Result();
 
             if (reviewPersonRefInserts.size() != 0){
-                Result resultreviewPersonRef = reviewPersonRefService.importReviewPersonRef(reviewPersonRefInserts);
+                Result resultreviewPersonRef = reviewPersonRefService.importReviewPersonRef(reviewPersonRefInserts,reviewPersonStart);
                 if (resultReviewInfo.code<1 || resultreviewPersonRef.code<1){
                     result.code = 0;
                 }else {
