@@ -109,6 +109,11 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     }
 
     @Override
+    public List<AgreementInfo> selectAll() {
+        return selectList(new AgreementInfo());
+    }
+
+    @Override
     public AgreementInfo selectByPrimaryKey(Integer agreementId) {
         AgreementInfo agreementInfo = agreementInfoMapper.selectByPrimaryKey(agreementId);
         // 补全
@@ -253,12 +258,12 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
                 return new Result(0,"第"+(i+2)+"行的合同结束日期不存在!");
             }
             agreementInfo.setSupplierId(supplierInfo.getSupplierId());
-            agreementInfo.setCreateTime(new Date());
             String agreementNo = agreementInfo.getAgreementNo();
             Integer b = selectBeanByNum(agreementNo);
             if (b > 0){
                 agreementInfoMapper.updateByPrimaryKeySelective(agreementInfo);
             } else {
+                agreementInfo.setCreateTime(new Date());
                 agreementInfoMapper.insertSelective(agreementInfo);
             }
             count = i;

@@ -5,14 +5,17 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-supplierbid-edit" th:object="${supplierBid}">
-        <input type="hidden" name="autoId" th:field="*{autoId}">
+    <form class="form-horizontal m" id="form-supplierbid-edit" th:with="command = ${@supplierBidService.selectByPrimaryKey(id)}">
+        <input type="hidden" name="autoId" th:value="${command.autoId}">
         <div class="col-sm-11">
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                 <div class="col-sm-7">
-                    <input name="supplierName" th:field="*{supplierName}" id="supplierName"
-                           class="form-control" type="text" required>
+<!--                    <input name="supplierName" th:value="${command.supplierName}" id="supplierName"-->
+<!--                           class="form-control" type="text" required>-->
+                    <select name="supplierId" id="supplierId" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                        <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierId}" th:selected="${command.supplierId == supplier.supplierId}"></option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -20,8 +23,11 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
                 <div class="col-sm-7">
-                    <input name="agreementNo" th:field="*{agreementNo}" id="agreementNo"
-                           class="form-control" type="text" required>
+<!--                    <input name="agreementNo" th:value="${command.agreementNo}" id="agreementNo"-->
+<!--                           class="form-control" type="text" required>-->
+                    <select name="agreementId" id="agreementId" class="form-control" th:with="agreements=${@agreementInfoService.selectAll()}">
+                        <option th:each="agreement : ${agreements}" th:text="${agreement.agreementNo}" th:value="${agreement.agreementId}" th:selected="${command.agreementId == agreement.agreementId}"></option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -29,8 +35,11 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
                 <div class="col-sm-7">
-                    <input name="postName" th:field="*{postName}" id="postName"
-                           class="form-control" type="text" required>
+<!--                    <input name="postName" th:value="${command.postName}" id="postName"-->
+<!--                           class="form-control" type="text" required>-->
+                    <select name="postId" id="postId" class="form-control" th:with="posts=${@postInfoService.selectAll()}">
+                        <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}" th:selected="${command.postId == post.postId}"></option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -38,7 +47,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>竞标价钱：</label>
                 <div class="col-sm-7">
-                    <input name="bidPrice" th:field="*{bidPrice}" id="bidPrice"
+                    <input name="bidPrice" th:value="${command.bidPrice}" id="bidPrice"
                            class="form-control" type="text" required>
                 </div>
             </div>

@@ -252,13 +252,13 @@ public class InterviewInfoServiceImpl implements InterviewInfoService {
 //        for (int i = 0; i < records.size(); i++) {
         InterviewInfo interviewInfo = records.get(0);
         // 对表格数据进行判空
-        String orderNo = interviewInfo.getOrderNo();
         String purchaseNo = interviewInfo.getPurchaseNo();
-        if (StringUtils.isEmpty(orderNo)) {
-            return new Result(0, "第2行的" + InterviewInfo.ORDER_NO + "为空!");
-        }
+        String orderNo = interviewInfo.getOrderNo();
         if (StringUtils.isEmpty(purchaseNo)) {
             return new Result(0, "第2行的" + InterviewInfo.PURCHASE_NO + "为空!");
+        }
+        if (StringUtils.isEmpty(orderNo)) {
+            return new Result(0, "第2行的" + InterviewInfo.ORDER_NO + "为空!");
         }
         interviewInfo.setCreateTime(new Date());
         // 判断数据库是否存在该关系
@@ -270,7 +270,7 @@ public class InterviewInfoServiceImpl implements InterviewInfoService {
         //todo 插入面试人员表
         ExcelUtil<InterviewPersonRef> util2 = new ExcelUtil<>(InterviewPersonRef.class);
         List<InterviewPersonRef> interviewPersonRefs = util2.importExcel("", 2, 0, file.getInputStream());
-        result = interviewPersonRefService.importInterviewPersonRef(orderNo, interviewPersonRefs);
+        result = interviewPersonRefService.importInterviewPersonRef(interviewPersonRefs);
 //        }
         if (!StringUtils.isEmpty(msg)) {
             msg = msg + "行未执行，请核对是否重复或输入错误！";

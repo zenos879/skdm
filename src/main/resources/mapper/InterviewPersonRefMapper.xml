@@ -3,6 +3,7 @@
 <mapper namespace="com.cctv.project.noah.outsource.mapper.InterviewPersonRefMapper">
   <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     <id column="auto_id" jdbcType="INTEGER" property="autoId" />
+    <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="staff_no" jdbcType="BIGINT" property="staffNo" />
     <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
@@ -22,7 +23,7 @@
     <result column="leave_reason" jdbcType="VARCHAR" property="leaveReason" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,9 +84,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    auto_id, order_no, staff_no, staff_name, id_card, supplier_id, post_id, is_interview,
-    notify_date, interview_date, is_pass, is_reject, is_replace, replace_staff_no, reason,
-    arrive_date, leave_date, leave_reason, create_time, `status`, department_id
+    auto_id, purchase_no, order_no, staff_no, staff_name, id_card, supplier_id, post_id,
+    is_interview, notify_date, interview_date, is_pass, is_reject, is_replace, replace_staff_no,
+    reason, arrive_date, leave_date, leave_reason, create_time, `status`, project_id
   </sql>
   <select id="selectByExample" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRefExample" resultMap="BaseResultMap">
     select
@@ -129,24 +130,29 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef" useGeneratedKeys="true">
-    insert into interview_person_ref (order_no, staff_no, staff_name,
-      id_card, supplier_id, post_id,
-      is_interview, notify_date, interview_date,
-      is_pass, is_reject, is_replace,
-      replace_staff_no, reason, arrive_date,
-      leave_date, leave_reason, create_time,
-      `status`, department_id)
-    values (#{orderNo,jdbcType=VARCHAR}, #{staffNo,jdbcType=BIGINT}, #{staffName,jdbcType=VARCHAR},
-      #{idCard,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER},
-      #{isInterview,jdbcType=INTEGER}, #{notifyDate,jdbcType=DATE}, #{interviewDate,jdbcType=DATE},
-      #{isPass,jdbcType=INTEGER}, #{isReject,jdbcType=INTEGER}, #{isReplace,jdbcType=INTEGER},
-      #{replaceStaffNo,jdbcType=BIGINT}, #{reason,jdbcType=VARCHAR}, #{arriveDate,jdbcType=DATE},
-      #{leaveDate,jdbcType=DATE}, #{leaveReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{status,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER})
+    insert into interview_person_ref (purchase_no, order_no, staff_no,
+      staff_name, id_card, supplier_id,
+      post_id, is_interview, notify_date,
+      interview_date, is_pass, is_reject,
+      is_replace, replace_staff_no, reason,
+      arrive_date, leave_date, leave_reason,
+      create_time, `status`, project_id
+      )
+    values (#{purchaseNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{staffNo,jdbcType=BIGINT},
+      #{staffName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER},
+      #{postId,jdbcType=INTEGER}, #{isInterview,jdbcType=INTEGER}, #{notifyDate,jdbcType=DATE},
+      #{interviewDate,jdbcType=DATE}, #{isPass,jdbcType=INTEGER}, #{isReject,jdbcType=INTEGER},
+      #{isReplace,jdbcType=INTEGER}, #{replaceStaffNo,jdbcType=BIGINT}, #{reason,jdbcType=VARCHAR},
+      #{arriveDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE}, #{leaveReason,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="auto_id" keyProperty="autoId" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef" useGeneratedKeys="true">
     insert into interview_person_ref
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="purchaseNo != null">
+        purchase_no,
+      </if>
       <if test="orderNo != null">
         order_no,
       </if>
@@ -204,11 +210,14 @@
       <if test="status != null">
         `status`,
       </if>
-      <if test="departmentId != null">
-        department_id,
+      <if test="projectId != null">
+        project_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="purchaseNo != null">
+        #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -266,8 +275,8 @@
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="departmentId != null">
-        #{departmentId,jdbcType=INTEGER},
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -282,6 +291,9 @@
     <set>
       <if test="record.autoId != null">
         auto_id = #{record.autoId,jdbcType=INTEGER},
+      </if>
+      <if test="record.purchaseNo != null">
+        purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=VARCHAR},
@@ -340,8 +352,8 @@
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.departmentId != null">
-        department_id = #{record.departmentId,jdbcType=INTEGER},
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -351,6 +363,7 @@
   <update id="updateByExample" parameterType="map">
     update interview_person_ref
     set auto_id = #{record.autoId,jdbcType=INTEGER},
+      purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       staff_no = #{record.staffNo,jdbcType=BIGINT},
       staff_name = #{record.staffName,jdbcType=VARCHAR},
@@ -370,7 +383,7 @@
       leave_reason = #{record.leaveReason,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       `status` = #{record.status,jdbcType=INTEGER},
-      department_id = #{record.departmentId,jdbcType=INTEGER}
+      project_id = #{record.projectId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -378,6 +391,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     update interview_person_ref
     <set>
+      <if test="purchaseNo != null">
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -435,15 +451,16 @@
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
       </if>
-      <if test="departmentId != null">
-        department_id = #{departmentId,jdbcType=INTEGER},
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
       </if>
     </set>
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cctv.project.noah.outsource.entity.InterviewPersonRef">
     update interview_person_ref
-    set order_no = #{orderNo,jdbcType=VARCHAR},
+    set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
       staff_no = #{staffNo,jdbcType=BIGINT},
       staff_name = #{staffName,jdbcType=VARCHAR},
       id_card = #{idCard,jdbcType=VARCHAR},
@@ -462,7 +479,7 @@
       leave_reason = #{leaveReason,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER},
-      department_id = #{departmentId,jdbcType=INTEGER}
+      project_id = #{projectId,jdbcType=INTEGER}
     where auto_id = #{autoId,jdbcType=INTEGER}
   </update>
 </mapper>

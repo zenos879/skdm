@@ -322,7 +322,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
             supplierBid.setAgreementId(agreementId);
             supplierBid.setPostId(postId);
             supplierBid.setBidPrice(supplierBid.getBidPrice());
-            supplierBid.setCreateTime(new Date());
+
             // 判断数据库是否存在该关系
             Integer autoId = selectBeanExist(supplierBid, true);
             if (autoId > 0){
@@ -337,6 +337,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
                     supplierBidMapper.updateByPrimaryKeySelective(supplierBid);
                 } else {
                     // 关系完全不存在，则新增
+                    supplierBid.setCreateTime(new Date());
                     supplierBidMapper.insertSelective(supplierBid);
                 }
             }

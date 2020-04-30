@@ -43,8 +43,7 @@ public class SupplierBidController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        SupplierBid supplierBid = supplierBidService.selectByPrimaryKey(id);
-        model.addAttribute("supplierBid", supplierBid);
+        model.addAttribute("id", id);
         return prefix+"/edit";
     }
 

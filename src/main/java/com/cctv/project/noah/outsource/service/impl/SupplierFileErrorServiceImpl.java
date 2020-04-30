@@ -272,7 +272,6 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             supplierFileError.setFileError(fileError);
             supplierFileError.setRemark(remark);
             supplierFileError.setHappenDate(happenDate);
-            supplierFileError.setCreateTime(new Date());
             // 判断数据库是否存在该关系
             Integer autoId = selectBeanExist(supplierFileError, true);
             if (autoId > 0){
@@ -287,6 +286,7 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
                     supplierFileErrorMapper.updateByPrimaryKeySelective(supplierFileError);
                 } else {
                     // 关系完全不存在，则新增
+                    supplierFileError.setCreateTime(new Date());
                     supplierFileErrorMapper.insertSelective(supplierFileError);
                 }
             }

@@ -16,6 +16,8 @@ public interface AgreementInfoService {
 
     List<AgreementInfo> selectList(AgreementInfo agreementInfo);
 
+    List<AgreementInfo> selectAll();
+
     AgreementInfo selectByPrimaryKey(Integer agreementId);
 
     AgreementInfo selectByNum(String num);
