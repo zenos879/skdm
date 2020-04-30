@@ -109,6 +109,11 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     }
 
     @Override
+    public List<AgreementInfo> selectAll() {
+        return selectList(new AgreementInfo());
+    }
+
+    @Override
     public AgreementInfo selectByPrimaryKey(Integer agreementId) {
         AgreementInfo agreementInfo = agreementInfoMapper.selectByPrimaryKey(agreementId);
         // 补全

@@ -191,11 +191,15 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 //        Integer departmentId = record.getDepartmentId();
         Integer postId = record.getPostId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-        record.setSupplierName(supplierInfo.getSupplierName());
+        if (supplierInfo != null){
+            record.setSupplierName(supplierInfo.getSupplierName());
+        }
 //        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
 //        record.setDepartmentName(departmentInfo.getDepartmentName());
         PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
-        record.setPostName(postInfo.getPostName());
+        if (postInfo != null){
+            record.setPostName(postInfo.getPostName());
+        }
         Long staffNo = record.getStaffNo();
         if (staffNo == 0) {
             record.setStaffNo(GeneralUtils.generateStaffNo());
