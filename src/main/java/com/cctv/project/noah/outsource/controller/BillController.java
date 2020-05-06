@@ -3,6 +3,7 @@ package com.cctv.project.noah.outsource.controller;
 import com.cctv.project.noah.outsource.entity.ContractBill;
 import com.cctv.project.noah.outsource.entity.DetailedBill;
 import com.cctv.project.noah.outsource.service.BillService;
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
@@ -11,10 +12,8 @@ import com.cctv.project.noah.system.enmus.BusinessType;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,11 +34,40 @@ public class BillController extends BaseController {
 
 
     //计算月度详细账单
+    @RequestMapping("/queryMonthBill")
+    @ResponseBody
+    public TableDataInfo queryMonthBill(DetailedBill bill) {
+        startPage();
+        return getDataTable(billService.findMonthBill(bill));
+    }
+
+    //计算月度详细账单
     @RequestMapping("/detailedBill")
     @ResponseBody
     public TableDataInfo selectAllDetialBill(DetailedBill bill) {
         startPage();
         return getDataTable(billService.selectDetailBillBySelective(bill));
+    }
+
+    @RequestMapping("/saveMonthBill")
+    @ResponseBody
+    @Log(title = "月度考勤数据保存", businessType = BusinessType.INSERT)
+    public AjaxResult saveMonthBill(DetailedBill bill){
+        Result result = billService.saveMonthBill(bill);
+        return toAjax(result);
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model){
+        model.addAttribute("autoId",id);
+        return prefix+"/edit";
+    }
+    @PostMapping("/edit")
+    @ResponseBody
+    @Log(title = "月度账单编辑", businessType = BusinessType.UPDATE)
+    public AjaxResult edit(DetailedBill bill){
+        Result result = billService.updateMonthBill(bill);
+        return toAjax(result);
     }
 
     @PostMapping("/export")
