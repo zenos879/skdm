@@ -4,6 +4,7 @@ import com.cctv.project.noah.system.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ public class SupplierFileError implements Serializable {
     /**
      * 采购编号：对应一次评审
      */
-    @Excel(name = "采购编号", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "采购编号")
     private String purcharNo;
 
     /**
@@ -27,19 +28,19 @@ public class SupplierFileError implements Serializable {
      */
     private Integer supplierId;
 
-    @Excel(name = "供应商名称", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "供应商名称")
     private String supplierName;
 
     /**
      * 文件错误数
      */
-    @Excel(name = "应答文件错误次数", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "应答文件错误次数")
     private Integer fileError;
 
     /**
      * 错误描述
      */
-    @Excel(name = "错误描述", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "错误描述")
     private String remark;
 
     /**
@@ -52,6 +53,7 @@ public class SupplierFileError implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private Integer status;
@@ -100,6 +102,15 @@ public class SupplierFileError implements Serializable {
 
     public Date getHappenDate() {
         return happenDate;
+    }
+
+    public String getFormatHappenDate(){
+        if (this.happenDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(happenDate);
+        return format;
     }
 
     public void setHappenDate(Date happenDate) {

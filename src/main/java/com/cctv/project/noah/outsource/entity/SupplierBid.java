@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.system.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -42,12 +43,13 @@ public class SupplierBid implements Serializable {
     /**
      * 竞标价钱
      */
-    @Excel(name = "竞标价钱", cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "竞标价钱")
     private Float bidPrice;
 
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private Integer status;

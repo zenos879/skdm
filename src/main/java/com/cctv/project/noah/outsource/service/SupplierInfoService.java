@@ -21,6 +21,7 @@ public interface SupplierInfoService {
 
     SupplierInfo selectByName(String name);
 
+    List<SupplierInfo> selectLikeName(String name);
 
     Result updateBySelective(SupplierInfo supplierInfo);
 

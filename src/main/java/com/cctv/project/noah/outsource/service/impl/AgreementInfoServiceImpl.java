@@ -11,8 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service("agreementInfoService")
 public class AgreementInfoServiceImpl implements AgreementInfoService {
@@ -34,7 +36,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     @Override
     public Result deleteByPrimaryKey(Integer agreementId) {
         Result result = new Result();
-        if (agreementId <= 0){
+        if (agreementId <= 0) {
             result.setCode(0);
             result.setInfo("主键不存在，无法删除！");
             return result;
@@ -43,8 +45,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         agreementInfo.setAgreementId(agreementId);
         agreementInfo.setStatus(ModelClass.STATUS_OFF);
         int i = agreementInfoMapper.updateByPrimaryKeySelective(agreementInfo);
-        result.setCode(i);
-        return result;
+        return new Result(i);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
         // 不存在，提示先新增供应商
-        if (supplierInfo == null){
+        if (supplierInfo == null) {
             result.setCode(0);
             result.setInfo("供应商不存在，请先完善供应商信息！");
             return result;
@@ -74,13 +75,13 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         record.setSupplierId(supplierInfo.getSupplierId());
         Integer integer = selectBeanByNum(record.getAgreementNo());
         // 验证关系是否存在
-        if (integer > 0){
+        if (integer > 0) {
             result.setCode(0);
             result.setInfo("合同编号已经存在，无需新增！");
             return result;
         }
         int insert = agreementInfoMapper.insert(record);
-        if (insert < 0){
+        if (insert < 0) {
             result.setCode(0);
             result.setInfo("合同数据新增失败，请重试！");
         }
@@ -97,9 +98,21 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     public List<AgreementInfo> selectList(AgreementInfo agreementInfo) {
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
-        String agreementNo = agreementInfo.getAgreementNo();
-        if (StringUtils.isNotEmpty(agreementNo)){
-            criteria.andAgreementNoLike(agreementNo);
+        String agreementNo = agreementInfo.getAgreementNo().trim();
+        if (StringUtils.isNotEmpty(agreementNo)) {
+            criteria.andAgreementNoLike("%" + agreementNo + "%");
+        }
+        String supplierName = agreementInfo.getSupplierName().trim();
+        if (StringUtils.isNotEmpty(supplierName)) {
+            List<SupplierInfo> supplierInfos = supplierInfoService.selectLikeName(supplierName);
+            if (supplierInfos != null && supplierInfos.size() > 0) {
+                List<Integer> idList = GeneralUtils.getIdsList(supplierInfos, SupplierInfo.class, "supplierId");
+                criteria.andSupplierIdIn(idList);
+            }
+        }
+        Map<String, Object> params = agreementInfo.getParams();
+        if (params.size() > 0) {
+
         }
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         for (AgreementInfo info : agreementInfos) {
@@ -126,7 +139,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         AgreementInfo agreementInfo = new AgreementInfo();
         agreementInfo.setAgreementNo(num);
         List<AgreementInfo> agreementInfos = selectList(agreementInfo);
-        if (agreementInfos.size() > 0){
+        if (agreementInfos.size() > 0) {
             return agreementInfos.get(0);
         }
         return null;
@@ -149,13 +162,14 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     /**
      * 数据库查询结果，补全供应商名称
+     *
      * @param agreementInfo
      * @return
      */
-    private AgreementInfo completionSupplierName(AgreementInfo agreementInfo){
+    private AgreementInfo completionSupplierName(AgreementInfo agreementInfo) {
         Integer supplierId = agreementInfo.getSupplierId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-        if (supplierInfo != null){
+        if (supplierInfo != null) {
             agreementInfo.setSupplierName(supplierInfo.getSupplierName());
         }
         return agreementInfo;
@@ -163,6 +177,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     /**
      * 修改式更新
+     *
      * @param record
      * @return
      */
@@ -170,7 +185,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     public Result updateByPrimaryKeySelective(AgreementInfo record) {
         Result result = new Result();
         Integer agreementId = record.getAgreementId();
-        if (agreementId == 0){
+        if (agreementId == 0) {
             result.setCode(0);
             result.setInfo("主键不存在，不能更新！");
             return result;
@@ -178,7 +193,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
         // 不存在，提示先新增供应商
-        if (supplierInfo == null){
+        if (supplierInfo == null) {
             result.setCode(0);
             result.setInfo("供应商不存在，请先完善供应商信息！");
             return result;
@@ -186,18 +201,18 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         record.setSupplierId(supplierInfo.getSupplierId());
         Integer integer = selectBeanByNum(record.getAgreementNo());
         // 查到有值，并且不相等，则重复，不更新
-        if (integer > 0 && !agreementId.equals(integer)){
+        if (integer > 0 && !agreementId.equals(integer)) {
             result.setCode(0);
             result.setInfo("合同号已经存在，请调整后再提交！");
             return result;
         }
         int i = agreementInfoMapper.updateByPrimaryKeySelective(record);
-        result.setCode(i);
-        return result;
+        return new Result(i);
     }
 
     /**
      * 覆盖式更新
+     *
      * @param record
      * @return
      */
@@ -219,16 +234,17 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     /**
      * 判断合同编号是否存在
+     *
      * @param agreementNo
      * @return
      */
-    private Integer selectBeanByNum(String agreementNo){
+    private Integer selectBeanByNum(String agreementNo) {
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
         criteria.andAgreementNoEqualTo(agreementNo);
 //        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
-        if (agreementInfos.size() > 0){
+        if (agreementInfos.size() > 0) {
             AgreementInfo temp = agreementInfos.get(0);
             Integer agreementId = temp.getAgreementId();
             return agreementId;
@@ -238,36 +254,49 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     @Override
     public Result importAgreementInfo(List<AgreementInfo> agreementInfos) {
-        int count = 0;
+        Result result = new Result();
+        int updateCount = 0;
+        int addCount = 0;
+        StringBuffer msg = new StringBuffer();
         for (int i = 0; i < agreementInfos.size(); i++) {
             AgreementInfo agreementInfo = agreementInfos.get(i);
             if (agreementInfo.getAgreementNo() == null) {
-                return new Result(0,"第"+(i+2)+"行的合同编号为空!");
+                return new Result(0, "第" + (i + 2) + "行的合同编号为空!");
             }
             if (agreementInfo.getSupplierName() == null) {
-                return new Result(0,"第"+(i+2)+"行的供应商名称为空!");
+                return new Result(0, "第" + (i + 2) + "行的供应商名称为空!");
             }
             SupplierInfo supplierInfo = supplierInfoService.selectByName(agreementInfo.getSupplierName());
             if (supplierInfo == null) {
-                return new Result(0,"第"+(i+2)+"行的供应商【" + agreementInfo.getSupplierName() + "】不存在!");
+                return new Result(0, "第" + (i + 2) + "行的供应商【" + agreementInfo.getSupplierName() + "】不存在!");
             }
             if (agreementInfo.getAgreementStart() == null) {
-                return new Result(0,"第"+(i+2)+"行的合同开始日期不存在!");
+                return new Result(0, "第" + (i + 2) + "行的合同开始日期不存在!");
             }
             if (agreementInfo.getAgreementEnd() == null) {
-                return new Result(0,"第"+(i+2)+"行的合同结束日期不存在!");
+                return new Result(0, "第" + (i + 2) + "行的合同结束日期不存在!");
             }
             agreementInfo.setSupplierId(supplierInfo.getSupplierId());
+        }
+        for (int i = 0; i < agreementInfos.size(); i++) {
+            AgreementInfo agreementInfo = agreementInfos.get(i);
             String agreementNo = agreementInfo.getAgreementNo();
             Integer b = selectBeanByNum(agreementNo);
-            if (b > 0){
+            if (b > 0) {
                 agreementInfoMapper.updateByPrimaryKeySelective(agreementInfo);
+                updateCount++;
             } else {
                 agreementInfo.setCreateTime(new Date());
                 agreementInfoMapper.insertSelective(agreementInfo);
+                addCount++;
             }
-            count = i;
         }
-        return new Result(count);
+        if (agreementInfos.size() > 0) {
+            result.setCode(agreementInfos.size());
+            result.setInfo("导入成功，共计导入" + agreementInfos.size() + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
+            return result;
+        } else {
+            return new Result(0);
+        }
     }
 }
