@@ -81,4 +81,52 @@
           </foreach>
         </where>
   </select>
+
+  <select id="findMonthBill" parameterType="com.cctv.project.noah.outsource.entity.DetailedBill" resultMap="BillResultMap">
+    select auto_id,statistics_year,statistics_month,department_name,project_name,order_no,post_name,staff_name,staff_no,supplier_name,bid_price,serve_days_expect,serve_days_actual,public_vacation,arrive_date,leave_date,remark,post_expenses,create_time
+    from month_bill
+    where statistics_year=#{statisticsYear} and statistics_month=#{statisticsMonth}
+
+  </select>
+
+  <select id="findMonthBillById" parameterType="Integer" resultMap="BillResultMap">
+    select auto_id,statistics_year,statistics_month,department_name,project_name,order_no,post_name,staff_name,staff_no,supplier_name,bid_price,serve_days_expect,serve_days_actual,public_vacation,arrive_date,leave_date,remark,post_expenses,create_time
+    from month_bill
+    where auto_id=#{id}
+  </select>
+
+  <update id="updateMonthBill"  parameterType="DetailedBill">
+        update month_bill
+        set post_expenses = #{postExpenses}
+        where auto_id = #{autoId}
+    </update>
+
+  <insert id="saveMonthBill" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="autoId">
+    insert into month_bill(statistics_year,statistics_month,department_name,project_name,order_no,post_name,staff_name,staff_no,supplier_name,bid_price,serve_days_expect,serve_days_actual,public_vacation,arrive_date,leave_date,remark,post_expenses,create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.statisticsYear},
+      #{item.statisticsMonth},
+      #{item.departmentName},
+      #{item.projectName},
+      #{item.orderNo},
+      #{item.postName},
+      #{item.staffName},
+      #{item.staffNo},
+      #{item.supplierName},
+      #{item.bidPrice},
+      #{item.serveDaysExpect},
+      #{item.serveDaysActual},
+      #{item.publicVacation},
+      #{item.arriveDate},
+      #{item.leaveDate},
+      #{item.remark},
+      #{item.postExpenses},
+      now()
+      )
+    </foreach>
+  </insert>
+
+
 </mapper>

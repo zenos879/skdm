@@ -1,157 +1,230 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('账单查询')" />
-	<th:block th:include="include :: ztree-css" />
+    <th:block th:include="include :: header('账单查询')"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
-	<div class="ui-layout-center">
-		<div class="container-div">
-			<div class="row">
-				<div class="col-sm-12 search-collapse">
-					<form id="post-form">
-						<div class="select-list">
-							<ul>
-								<li>
-									统计年份：<input type="text" name="statisticsYear" th:value="${@billService.getNowYear()}"/>
-								</li>
-								<li>
-									统计月份：<input type="text" name="statisticsMonth" th:value="${@billService.getPrevMonth()}"/>
-								</li>
-							</ul>
-						</div>
-					</form>
-				</div>
-				
-		        <div class="btn-group-sm" id="toolbar" role="group">
-		            <a class="btn btn-warning" onclick="_export()">
-			            <i class="fa fa-download"></i> 导出
-			        </a>
-		        </div>
-		        
-		        <div class="col-sm-12 select-table table-striped">
-				    <table id="bootstrap-table" data-mobile-responsive="true"></table>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<th:block th:include="include :: footer" />
-	<th:block th:include="include :: ztree-js" />
-	<script th:inline="javascript">
-		var prefix = ctx + "outsource/bill";
-		$(function() {
-		    queryUserList();
-		});
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="post-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                统计年份：<input type="text" name="statisticsYear" th:value="${@billService.getNowYear()}"/>
+                            </li>
+                            <li>
+                                统计月份：<input type="text" name="statisticsMonth" value="3" />
+<!--                                            th:value="${@billService.getPrevMonth()}"/>-->
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
 
-		function queryUserList() {
-		    var options = {
-		        url: prefix + "/detailedBill",
-		        // createUrl: prefix + "/add",
-		        // updateUrl: prefix + "/edit/{id}",
-		        // removeUrl: prefix + "/remove",
-		        exportUrl: prefix + "/export",
-		        // importUrl: prefix + "/importData",
-		        // importTemplateUrl: prefix + "/importTemplate",
-		        // sortName: "autoId",
-		        // sortOrder: "desc",
-		        modalName: "考勤数据",
-		        columns: [{
-		        	checkbox:true
-				},{
-		        	field: 'staffNo',
-					title: '考勤ID',
-					sortable: true
-				},{
-					field: 'statisticsYear',
-					title: '统计年份',
-					sortable: true
-				},{
-					field: 'statisticsMonth',
-					title: '统计月份',
-					sortable: true
-				},{
-					field: 'departmentName',
-					title: '部门名称',
-					sortable: true
-				},{
-					field: 'projectName',
-					title: '项目名称',
-					sortable: true
-				},{
-					field: 'orderNo',
-					title: '订单编号',
-					sortable: true
-				},{
-					field: 'postName',
-					title: '岗位名称',
-					sortable: true
-				},{
-					field: 'staffName',
-					title: '考勤人',
-					sortable: true
-				},{
-					field: 'supplierName',
-					title: '供应商名称',
-					sortable: true
-				},{
-					field: 'bidPrice',
-					title: '岗位单价',
-					sortable: true
-				},{
-					field: 'serveDaysExpect',
-					title: '应该工作天数',
-					sortable: true
-				},{
-					field: 'serveDaysActual',
-					title: '实际工作天数',
-					sortable: true
-				},{
-					field: 'arriveDate',
-					title: '到岗日期',
-					sortable: true
-				},{
-					field: 'leaveDate',
-					title: '离岗日期',
-					sortable: true
-				},{
-					field: 'remark',
-					title: '备注',
-					sortable: true
-				},{
-					field: 'postExpenses',
-					title: '当月人员岗位费用',
-					sortable: true
-				}
-		        ]
-		    };
-		    $.table.init(options);
-		}
-		function _export() {
-			var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-			if (rows.length == 0) {
-				$.table.exportExcel();
-				return;
-			}
-			var  statisticsYear = $.table.selectColumns(2);
-			console.log("============第2行数据=========");
-			console.log(statisticsYear);
-			console.log(rows);
-			$.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
-				$.modal.loading("正在导出数据，请稍后...");
-				var data = { "ids": rows.join(),"statisticsYear":"","":"" };
-				$.post($.table._option.exportUrl,data, function(result) {
-					if (result.code == web_status.SUCCESS) {
-						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-					} else if (result.code == web_status.WARNING) {
-						$.modal.alertWarning(result.msg)
-					} else {
-						$.modal.alertError(result.msg);
-					}
-					$.modal.closeLoading();
-				});
-			});
-		}
-	</script>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="_export()">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+
+            <div class="btn-group-sm" id="modifyDate" role="group">
+                <a class="btn btn-warning" onclick="modifyDate()">
+                    <i class="fa fa-download"></i> 修改
+                </a>
+            </div>
+
+            <div class="btn-group-sm" id="checkedRight" role="group">
+                <a class="btn btn-warning" onclick="checkedRight()">
+                    <i class="fa fa-download"></i> 核对无误
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "outsource/bill";
+    var monthBillColumns = [{
+        checkbox: true
+    },{
+        field: 'autoId',
+        title: '账单ID',
+        sortable: true
+    },{
+        field: 'statisticsYear',
+        title: '统计年份',
+        sortable: true
+    },{
+        field: 'statisticsMonth',
+        title: '统计月份',
+        sortable: true
+    },{
+        field: 'departmentName',
+        title: '部门名称',
+        sortable: true
+    },{
+        field: 'projectName',
+        title: '项目名称',
+        sortable: true
+    },{
+        field: 'orderNo',
+        title: '订单编号',
+        sortable: true
+    },{
+        field: 'postName',
+        title: '岗位名称',
+        sortable: true
+    },{
+        field: 'staffName',
+        title: '考勤人',
+        sortable: true
+    },{
+        field: 'supplierName',
+        title: '供应商名称',
+        sortable: true
+    },{
+        field: 'bidPrice',
+        title: '岗位单价',
+        sortable: true
+    },{
+        field: 'serveDaysExpect',
+        title: '应该工作天数',
+        sortable: true
+    },{
+        field: 'serveDaysActual',
+        title: '实际工作天数',
+        sortable: true
+    },{
+        field: 'arriveDate',
+        title: '到岗日期',
+        sortable: true
+    }, {
+        field: 'leaveDate',
+        title: '离岗日期',
+        sortable: true
+    }, {
+        field: 'remark',
+        title: '备注',
+        sortable: true
+    },{
+        field: 'postExpenses',
+        title: '当月人员岗位费用',
+        sortable: true
+    },{
+        title: '操作',
+        align: 'center',
+        formatter: function(value, row, index) {
+            var actions = [];
+            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.autoId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+            return actions.join('');
+        }
+    }];
+    $(function () {
+        queryMonthBill();
+    });
+
+
+    //修改数据
+    function modifyDate() {
+        //先将结果保存到库里
+        saveToDB();
+        //然后页面变成可编辑的状态
+        //点击确定后，再次将结果保存到库中
+    }
+
+    //核对无误
+    function checkedRight() {
+        //将数据保存到数据库
+        console.log("=======");
+        saveToDB();
+        //弹框提示保存
+    }
+
+    //将当前结果保存到数据库
+    function saveToDB() {
+        console.log("======222=" + prefix + "/saveMonthBill");
+        // var options2 = {
+        //     url: prefix + "/saveMonthBill",
+        //     modalName: "月度考勤明细",
+        //     columns: monthBillColumns
+        // };
+        // $.table.init(options2);
+        var year = $("input[name='statisticsYear']").val();
+        var month = $("input[name='statisticsMonth']").val();
+        console.log(year+"==="+month);
+        $.ajax({
+            type: "POST",
+            url: prefix + "/saveMonthBill",
+            data: {"statisticsYear": year, "statisticsMonth": month},
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (e) {
+                console.log(e.status);
+            }
+        });
+
+        console.log("=======333");
+    }
+
+    //默认查询账单表中的现有数据
+    function queryMonthBill(){
+        monthBillColumns.push();
+        var options = {
+            url: prefix + "/queryMonthBill",
+            updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "月度考勤明细",
+            columns: monthBillColumns
+        };
+        $.table.init(options);
+    }
+
+    //如果month_bill无数据，则实时关联查询考勤数据，进行账单计算
+    function queryRawData() {
+        var optionsRawBill = {
+            url: prefix + "/detailedBill",
+            modalName: "月度考勤明细",
+            columns: monthBillColumns
+        };
+        $.table.init(optionsRawBill);
+    }
+
+    //单行导出有问题。---对于没有保存的数据，不允许导出。这样单行数据的导出就没问题了。
+    //TODO
+    function _export() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.table.exportExcel();
+            return;
+        }
+        var statisticsYear = $.table.selectColumns(2);
+        console.log("============第2行数据=========");
+        console.log(statisticsYear);
+        console.log(rows);
+        $.modal.confirm("确定导出" + rows.length + "条数据吗？", function () {
+            $.modal.loading("正在导出数据，请稍后...");
+            var data = {"ids": rows.join(), "statisticsYear": "", "": ""};
+            $.post($.table._option.exportUrl, data, function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            });
+        });
+    }
+</script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.cctv.project.noah.outsource.entity.ContractBill;
 import com.cctv.project.noah.outsource.entity.DetailedBill;
 import com.cctv.project.noah.outsource.mapper.BillMapper;
 import com.cctv.project.noah.outsource.service.BillService;
+import com.cctv.project.noah.outsource.service.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,23 @@ public class BillServiceImpl implements BillService {
 
     @Autowired
     public BillMapper billMapper;
+
+    //查询月度账单表
+    @Override
+    public List<DetailedBill> findMonthBill(DetailedBill bill) {
+        return billMapper.findMonthBill(bill);
+    }
+
+    @Override
+    public DetailedBill selectMonthBillById(int id) {
+        return billMapper.findMonthBillById(id);
+    }
+
+    @Override
+    public Result updateMonthBill(DetailedBill bill) {
+        int i = billMapper.updateMonthBill(bill);
+        return new Result(i);
+    }
 
     //查询当月的所有账单
     @Override
@@ -62,7 +80,7 @@ public class BillServiceImpl implements BillService {
         }
     }
 
-    //判断当前人员是否离职
+    //判断当前人员是否新员工或离职
     public boolean isNewerOrLeave(DetailedBill bill) {
         int year = bill.getStatisticsYear();
         int month = bill.getStatisticsMonth();
@@ -99,6 +117,13 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<DetailedBill> selectDetailBillBySelective(DetailedBill bill) {
         return billMapper.selectDetailBillBySelective(bill);
+    }
+
+    @Override
+    public Result saveMonthBill(DetailedBill bill) {
+        List<DetailedBill> toSavedData = selectDetailBillBySelective(bill);
+        int i = billMapper.saveMonthBill(toSavedData);
+        return new Result(i);
     }
 
     //按照id查询账单明细
