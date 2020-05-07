@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.WorkDayMapper">
+    
+    <resultMap type="com.cctv.project.noah.outsource.entity.WorkDay" id="WorkDayResult">
+        <result property="id"    column="id"    />
+        <result property="date"    column="date"    />
+        <result property="isWorkDay"    column="is_work_day"    />
+    </resultMap>
+
+    <sql id="selectWorkDayVo">
+        select id, `date`, is_work_day from work_day
+    </sql>
+
+    <select id="selectWorkDayList" parameterType="WorkDay" resultMap="WorkDayResult">
+        <include refid="selectWorkDayVo"/>
+        <where>  
+            <if test="date != null"> and date = #{date}</if>
+            <if test="isWorkDay != null  and isWorkDay != ''"> and is_work_day = #{isWorkDay}</if>
+        </where>
+    </select>
+    <select id="selectWorkDayByDate" resultMap="WorkDayResult">
+        <include refid="selectWorkDayVo"/>
+        where `date` = #{date}
+    </select>
+
+    <select id="selectHoliday" resultMap="WorkDayResult">
+        <include refid="selectWorkDayVo"/>
+        where `date` between #{start} and #{end}
+    </select>
+
+    <select id="selectWorkDayById" parameterType="Long" resultMap="WorkDayResult">
+        <include refid="selectWorkDayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWorkDay" parameterType="WorkDay">
+        insert into work_day
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="date != null">date,</if>
+            <if test="isWorkDay != null ">is_work_day,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="date != null">#{date},</if>
+            <if test="isWorkDay != null ">#{isWorkDay},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWorkDay" parameterType="WorkDay">
+        update work_day
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="date != null">date = #{date},</if>
+            <if test="isWorkDay != null ">is_work_day = #{isWorkDay},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWorkDayById" parameterType="Long">
+        delete from work_day where id = #{id}
+    </delete>
+
+    <delete id="deleteWorkDayByDate" parameterType="java.lang.String">
+        delete from work_day where `date` = #{date}
+    </delete>
+    <delete id="deleteWorkDayByIds" parameterType="String">
+        delete from work_day where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

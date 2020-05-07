@@ -69,9 +69,9 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getDepartmentName() {
-        if (this.departmentStatus == 0){
-            return CommonUtil.getDelText(departmentName);
-        }
+//        if (this.departmentStatus == 0){
+//            return CommonUtil.getDelText(departmentName);
+//        }
         return departmentName;
     }
 
@@ -88,11 +88,11 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getProjectName() {
-        return projectName;
+        return projectName.trim();
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = projectName;
+        this.projectName = projectName.trim();
     }
 
     public Integer getDepartmentId() {

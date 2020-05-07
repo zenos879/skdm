@@ -55,6 +55,10 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectInfoDb == null){
             return new Result(0,"无法修改不存在的项目！");
         }
+        ProjectInfo projectInfoByName = selectByName(projectInfo.getProjectName());
+        if (projectInfoByName.getProjectId() != projectInfo.getProjectId()){
+            return  new Result(0,"此项目已存在！");
+        }
         int i = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
         return new Result(i);
     }
