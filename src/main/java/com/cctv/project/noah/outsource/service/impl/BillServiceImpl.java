@@ -23,7 +23,8 @@ public class BillServiceImpl implements BillService {
     //查询月度账单表
     @Override
     public List<DetailedBill> findMonthBill(DetailedBill bill) {
-        return billMapper.findMonthBill(bill);
+        List<DetailedBill> list = billMapper.findMonthBill(bill);
+         return list;
     }
 
     @Override
@@ -128,13 +129,12 @@ public class BillServiceImpl implements BillService {
 
     //按照id查询账单明细
     @Override
-    public List<DetailedBill> selectDetailBillByIds(DetailedBill bill, String ids) {
-
+    public List<DetailedBill> findMonthBillByIds(String ids) {
         String[] tmp = ids.split(",");
         for (int i = 0; i < tmp.length; i++) {
             System.out.println(tmp[i]);
         }
-        return billMapper.selectDetailBillByIds(bill.getStatisticsYear(), bill.getStatisticsMonth(), ids.split(","));
+        return billMapper.findMonthBillByIds(ids.split(","));
     }
 
     //查询合同账单明细

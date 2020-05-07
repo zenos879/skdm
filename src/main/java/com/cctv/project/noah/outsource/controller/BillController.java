@@ -10,6 +10,7 @@ import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,8 +38,26 @@ public class BillController extends BaseController {
     @RequestMapping("/queryMonthBill")
     @ResponseBody
     public TableDataInfo queryMonthBill(DetailedBill bill) {
+        int dataType = 1;//默认是Month_bill表中的数据
         startPage();
-        return getDataTable(billService.findMonthBill(bill));
+        List<DetailedBill> list = billService.findMonthBill(bill);
+
+        startPage();
+        //如果month_bill中无数据，则实时关联查询数据，计算结果
+        if (list == null || list.size() == 0) {
+            dataType = 0;
+            list = billService.selectDetailBillBySelective(bill);
+        }
+        return getDataTable(list, dataType);
+    }
+
+    protected TableDataInfo getDataTable(List<?> list, int msg) {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        rspData.setMsg(msg);//查询是否可编辑
+        return rspData;
     }
 
     //计算月度详细账单
@@ -52,20 +71,22 @@ public class BillController extends BaseController {
     @RequestMapping("/saveMonthBill")
     @ResponseBody
     @Log(title = "月度考勤数据保存", businessType = BusinessType.INSERT)
-    public AjaxResult saveMonthBill(DetailedBill bill){
+    public AjaxResult saveMonthBill(DetailedBill bill) {
         Result result = billService.saveMonthBill(bill);
         return toAjax(result);
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("autoId",id);
-        return prefix+"/edit";
+    public String edit(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("autoId", id);
+//        model.addAttribute("postExpenses",postExpenses);
+        return prefix + "/edit";
     }
+
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "月度账单编辑", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(DetailedBill bill){
+    public AjaxResult edit(DetailedBill bill) {
         Result result = billService.updateMonthBill(bill);
         return toAjax(result);
     }
@@ -73,13 +94,13 @@ public class BillController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "月度账单明细", businessType = BusinessType.EXPORT)
-    public AjaxResult export(DetailedBill bill, String ids){
+    public AjaxResult export(DetailedBill bill, String ids) {
         ExcelUtil<DetailedBill> util = new ExcelUtil<>(DetailedBill.class);
         List<DetailedBill> list;
-        if (ids != null){
-            list = billService.selectDetailBillByIds(bill,ids);
-        }else {
-            list = billService.selectDetailBillBySelective(bill);
+        if (ids != null) {
+            list = billService.findMonthBillByIds(ids);
+        } else {
+            list = billService.findMonthBill(bill);
         }
         return util.exportExcel(list, "合同数据");
     }

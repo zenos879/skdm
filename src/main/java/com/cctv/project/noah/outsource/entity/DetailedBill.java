@@ -39,10 +39,10 @@ public class DetailedBill {
     private int publicVacation;
 
     @Excel(name = "到岗日期", width = 30, dateFormat = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date arriveDate;
     @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date leaveDate;
 
     @Excel(name = "备注")
