@@ -26,8 +26,8 @@ public class WorkDay {
   /**
    * 是否工作日，添加的都是休息日，所以都是false
    */
-  private Boolean isWorkDay = false;
-  SimpleDateFormat sdf =   new SimpleDateFormat( "yyyyMMdd" );
+  private Integer type = 1;
+  SimpleDateFormat sdf =   new SimpleDateFormat( "yyyy-MM-dd" );
   public void setStringDate(String date) throws ParseException {
     Date parse = sdf.parse(date);
     this.date = parse;

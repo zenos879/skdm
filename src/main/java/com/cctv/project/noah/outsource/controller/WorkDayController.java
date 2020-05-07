@@ -46,8 +46,8 @@ public class WorkDayController {
 
     @PostMapping(value = "/add")
     @ResponseBody
-    public Result add(String date) {
-        return workDayService.insert(date);
+    public Result add(String date,Integer type) {
+        return workDayService.insert(date,type);
 
     }
 

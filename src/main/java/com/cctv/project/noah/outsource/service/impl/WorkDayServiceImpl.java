@@ -22,13 +22,14 @@ public class WorkDayServiceImpl implements WorkDayService {
         return workDayMapper.selectHoliday(start,end);
     }
     @Override
-    public Result insert(String date){
+    public Result insert(String date,Integer type){
         List<WorkDay> workDays = workDayMapper.selectWorkDayByDate(date);
         WorkDay workDay_ins;
         if (StringUtils.isEmpty(workDays)){
             workDay_ins = new WorkDay();
             try {
                 workDay_ins.setStringDate(date);
+                workDay_ins.setType(type);
             } catch (ParseException e) {
                 return new Result(0,"传入时间格式不正确");
             }
@@ -37,6 +38,7 @@ public class WorkDayServiceImpl implements WorkDayService {
             workDay_ins = workDays.get(0);
             try {
                 workDay_ins.setStringDate(date);
+                workDay_ins.setType(type);
             } catch (ParseException e) {
                 return new Result(0,"传入时间格式不正确");
             }
