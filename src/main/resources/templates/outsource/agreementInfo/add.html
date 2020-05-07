@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('添加合同数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -17,11 +18,8 @@
         <div class="col-sm-11">
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
-<!--                <div class="col-sm-7">-->
-<!--                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>-->
-<!--                </div>-->
                 <div class="col-sm-7">
-                    <select name="supplierName" id="supplierName" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                    <select name="supplierName" id="supplierName" class="selectpicker form-control" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
                         <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierName}"></option>
                     </select>
                 </div>
@@ -31,7 +29,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同开始时间：</label>
                 <div class="col-sm-7">
-                    <input type="text" class="time-input form-control" id="agreementStart" placeholder="开始时间"
+                    <input type="text" class="time-input form-control" id="agreementStart" placeholder="开始时间" maxlength="20"
                            name="agreementStart" required autocomplete="off"/>
                 </div>
             </div>
@@ -48,6 +46,7 @@
     </form>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js" />
 <script type="text/javascript">
     var prefix = ctx + "outsource/agreementInfo";
 

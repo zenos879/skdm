@@ -82,11 +82,12 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         }
         Date agreementStart = record.getAgreementStart();
         Date agreementEnd = record.getAgreementEnd();
-        if (GeneralUtils.compareDate(agreementStart, agreementEnd)){
+        if (GeneralUtils.compareDate(agreementStart, agreementEnd)) {
             result.setCode(0);
             result.setInfo("开始时间必须小于结束时间！");
             return result;
         }
+        record.setCreateTime(new Date());
         int insert = agreementInfoMapper.insert(record);
         if (insert < 0) {
             result.setCode(0);
@@ -109,13 +110,9 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         if (StringUtils.isNotEmpty(agreementNo)) {
             criteria.andAgreementNoLike("%" + agreementNo + "%");
         }
-        String supplierName = agreementInfo.getSupplierName().trim();
-        if (StringUtils.isNotEmpty(supplierName)) {
-            List<SupplierInfo> supplierInfos = supplierInfoService.selectLikeName(supplierName);
-            if (supplierInfos != null && supplierInfos.size() > 0) {
-                List<Integer> idList = GeneralUtils.getIdsList(supplierInfos, SupplierInfo.class, "supplierId");
-                criteria.andSupplierIdIn(idList);
-            }
+        Integer supplierId = agreementInfo.getSupplierId();
+        if (supplierId != null) {
+            criteria.andSupplierIdEqualTo(supplierId);
         }
         Map<String, Object> params = agreementInfo.getParams();
         String beginTime = params.get("beginTime").toString();
@@ -137,7 +134,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     @Override
     public List<AgreementInfo> selectAll() {
-        return selectList(new AgreementInfo());
+        return agreementInfoMapper.selectByExample(new AgreementInfoExample());
     }
 
     @Override
@@ -150,9 +147,10 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     @Override
     public AgreementInfo selectByNum(String num) {
-        AgreementInfo agreementInfo = new AgreementInfo();
-        agreementInfo.setAgreementNo(num);
-        List<AgreementInfo> agreementInfos = selectList(agreementInfo);
+        AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
+        AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
+        criteria.andAgreementNoEqualTo(num);
+        List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         if (agreementInfos.size() > 0) {
             return agreementInfos.get(0);
         }
@@ -222,7 +220,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         }
         Date agreementStart = record.getAgreementStart();
         Date agreementEnd = record.getAgreementEnd();
-        if (GeneralUtils.compareDate(agreementStart, agreementEnd)){
+        if (GeneralUtils.compareDate(agreementStart, agreementEnd)) {
             result.setCode(0);
             result.setInfo("开始时间必须小于结束时间！");
             return result;

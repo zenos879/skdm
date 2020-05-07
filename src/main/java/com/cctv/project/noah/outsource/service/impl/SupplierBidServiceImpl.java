@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service("supplierBidService")
 public class SupplierBidServiceImpl implements SupplierBidService {
@@ -74,23 +75,23 @@ public class SupplierBidServiceImpl implements SupplierBidService {
     public Result insert(SupplierBid record) {
         Result result = new Result();
         // 插入时判断供应商、合同、岗位是否存在
-        String supplierName = record.getSupplierName();
-        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        Integer supplierId = record.getSupplierId();
+        SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
             result.setCode(0);
             result.setInfo("供应商不存在，请先完善供应商信息！");
             return result;
         }
-        String agreementNo = record.getAgreementNo();
-        AgreementInfo agreementInfo = agreementInfoService.selectByNum(agreementNo);
+        Integer agreementId = record.getAgreementId();
+        AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(agreementId);
         if (agreementInfo == null) {
             result.setCode(0);
             result.setInfo("合同编号不存在，请先完善合同信息！");
             return result;
         }
-        String postName = record.getPostName();
-        PostInfo postInfo = postInfoService.selectByName(postName);
+        Integer postId = record.getPostId();
+        PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
         if (postInfo == null) {
             result.setCode(0);
             result.setInfo("岗位名称不存在，请先完善岗位信息！");
@@ -111,7 +112,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
             result.setCode(0);
             result.setInfo("供应商竞标数据新增失败，请重试！");
         }
-        return result;
+        return new Result(1);
     }
 
 //    @Override
@@ -125,14 +126,41 @@ public class SupplierBidServiceImpl implements SupplierBidService {
     public List<SupplierBid> selectList(SupplierBid record) {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
-
-        String supplierName = record.getSupplierName().trim();
-        if (StringUtils.isNotEmpty(supplierName)) {
-            List<SupplierInfo> supplierInfos = supplierInfoService.selectLikeName(supplierName);
-            if (supplierInfos.size() > 0){
-                List<Integer> idList = GeneralUtils.getIdsList(supplierInfos, SupplierInfo.class, "supplierId");
-                criteria.andSupplierIdIn(idList);
+        Integer supplierId = record.getSupplierId();
+        if (supplierId != null) {
+            SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
+            if (supplierInfo != null) {
+                criteria.andSupplierIdEqualTo(supplierId);
             }
+        }
+        Integer agreementId = record.getAgreementId();
+        if (agreementId != null) {
+            AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(agreementId);
+            if (agreementInfo != null) {
+                criteria.andAgreementIdEqualTo(agreementId);
+            }
+        }
+        Integer postId = record.getPostId();
+        if (postId != null) {
+            PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
+            if (postInfo != null) {
+                criteria.andPostIdEqualTo(postId);
+            }
+        }
+        Float bidPrice = record.getBidPrice();
+        if (bidPrice != null) {
+            criteria.andBidPriceEqualTo(bidPrice);
+        }
+        Map<String, Object> params = record.getParams();
+        String beginTime = params.get("beginTime").toString();
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(beginTime)) {
+            Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
+            criteria.andCreateTimeGreaterThanOrEqualTo(date);
+        }
+        String endTime = params.get("endTime").toString();
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(endTime)) {
+            Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
+            criteria.andCreateTimeLessThanOrEqualTo(date);
         }
         List<SupplierBid> supplierBids = supplierBidMapper.selectByExample(supplierBidExample);
         for (SupplierBid supplierBid : supplierBids) {

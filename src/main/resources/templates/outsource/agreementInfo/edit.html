@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改合同数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -14,7 +15,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
                     <div class="col-sm-7">
-                        <input name="agreementNo" th:value="${command.agreementNo}" id="agreementNo"
+                        <input name="agreementNo" th:value="${command.agreementNo}" id="agreementNo" maxlength="20"
                                class="form-control" type="text" required>
                     </div>
                 </div>
@@ -23,7 +24,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                     <div class="col-sm-7">
-                        <select name="supplierName" id="supplierName" class="form-control"
+                        <select name="supplierName" id="supplierName" class="selectpicker form-control" data-live-search="true"
                                 th:with="suppliers=${@supplierInfoService.selectAll()}">
                             <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}"
                                     th:value="${supplier.supplierName}"
@@ -55,6 +56,7 @@
         </div>
     </form>
     <th:block th:include="include :: footer"/>
+    <th:block th:include="include :: bootstrap-select-js" />
     <script th:inline="javascript">
         var prefix = ctx + "outsource/agreementInfo";
 

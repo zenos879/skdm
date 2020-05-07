@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('合同数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
 <!-- 主体内容开始 -->
@@ -15,11 +16,13 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            合同编号：<input type="text" name="agreementNo" id="agreementNo" autocomplete="off"/>
+                            合同编号：<input type="text" name="agreementNo" id="agreementNo" maxlength="20" autocomplete="off"/>
                         </li>
                         <li>
-
-                            供应商名称：<input type="text" name="supplierName" id="supplierName" autocomplete="off"/>
+                            供应商名称：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <option value="">全部</option>
+                            <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
+                        </select>
                         </li>
                         <li class="select-time">
                             <label>合同有效时间段： </label>
@@ -67,9 +70,11 @@
 </div>
 <!-- 主体内容结束 -->
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js" />
+
 <script th:inline="javascript">
-    var client = [[${@dict.getType('client')}]];
-    var isProtect = [[${@dict.getType('is_protect')}]];
+    // var client = [[${@dict.getType('client')}]];
+    // var isProtect = [[${@dict.getType('is_protect')}]];
 
     $(function () {
         queryList();

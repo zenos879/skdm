@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('合同数据')" />
+    <th:block th:include="include :: header('供应商竞标数据')"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <!-- 主体内容开始 -->
@@ -15,11 +16,45 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            供应商名称：<input type="text" name="supplierName" id="supplierName" autocomplete="off"/>
+                            供应商名称：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true"
+                                          th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <option value="">全部</option>
+                            <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}"
+                                    th:value="${supplier.getSupplierId()}"></option>
+                        </select>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            合同号：<select name="agreementId" id="agreementId" class="selectpicker" data-live-search="true"
+                                        th:with="agreements=${@agreementInfoService.selectAll()}">
+                            <option value="">全部</option>
+                            <option th:each="agreement : ${agreements}" th:text="${agreement.agreementNo}"
+                                    th:value="${agreement.agreementId}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            岗位名称：<select name="postId" id="postId" class="selectpicker" data-live-search="true"
+                                         th:with="posts=${@postInfoService.selectAll()}">
+                            <option value="">全部</option>
+                            <option th:each="post : ${posts}" th:text="${post.postName}"
+                                    th:value="${post.postId}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            价格：<input type="text" name="bidPrice" id="bidPrice" maxlength="7" autocomplete="off"/>
+                        </li>
+                        <li class="select-time">
+                            <label>创建时间区间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]" autocomplete="off"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]" autocomplete="off"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -28,19 +63,19 @@
         </div>
         <!-- table开始 -->
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" >
+            <a class="btn btn-success" onclick="$.operate.add()">
                 <i class="fa fa-plus"></i> 新增
             </a>
             <!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >-->
             <!--                    <i class="fa fa-edit"></i> 修改-->
             <!--                </a>-->
-<!--            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >-->
-<!--                <i class="fa fa-remove"></i> 删除-->
-<!--            </a>-->
+            <!--            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >-->
+            <!--                <i class="fa fa-remove"></i> 删除-->
+            <!--            </a>-->
             <a class="btn btn-info" onclick="$.table.importExcel()">
                 <i class="fa fa-upload"></i> 导入
             </a>
-            <a class="btn btn-warning" onclick="exportUser()" >
+            <a class="btn btn-warning" onclick="exportUser()">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -52,12 +87,31 @@
     </div>
 </div>
 <!-- 主体内容结束 -->
-<th:block th:include="include :: footer" />
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+
 <script th:inline="javascript">
-    $(function(){
+    $(function () {
 
         queryList();
     });
+    $("#startTime").change(function () {
+        checkDateTime();
+    })
+    $("#endTime").change(function () {
+        checkDateTime();
+    })
+
+    function checkDateTime() {
+        var sVal = $("#startTime").val();
+        var eVal = $("#endTime").val();
+        if (sVal != "" && eVal != "") {
+            if (eVal < sVal) {
+                alert("结束时间不能小于开始时间");
+                $("#endTime").val("");
+            }
+        }
+    }
 
     function queryList() {
 
@@ -107,7 +161,7 @@
                 {
                     title: '操作',
                     align: 'center',
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.autoId + '\')"><i class="fa fa-edit"></i>修改</a> ');
                         // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.autoId + '\')"><i class="fa fa-remove"></i>删除</a> ');
@@ -124,10 +178,10 @@
             $.table.exportExcel();
             return;
         }
-        $.modal.confirm("确定导出"+rows.length+"条数据吗？", function() {
+        $.modal.confirm("确定导出" + rows.length + "条数据吗？", function () {
             $.modal.loading("正在导出数据，请稍后...");
-            var data = { "ids": rows.join() };
-            $.post($.table._option.exportUrl,data, function(result) {
+            var data = {"ids": rows.join()};
+            $.post($.table._option.exportUrl, data, function (result) {
                 if (result.code == web_status.SUCCESS) {
                     window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
                 } else if (result.code == web_status.WARNING) {
@@ -148,7 +202,8 @@
             <input type="file" id="file" name="file"/>
             <div class="mt10 pt5">
                 <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
-                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+                &nbsp; <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
+                    class="fa fa-file-excel-o"></i> 下载模板</a>
             </div>
             <font color="red" class="pull-left mt10">
                 提示：仅允许导入“xls”或“xlsx”格式文件！

@@ -15,6 +15,8 @@ public interface PostInfoService {
 
     PostInfo selectByName(String name);
 
+    List<PostInfo> selectLikeName(String name);
+
     Result updateBySelective(PostInfo postInfo);
 
     Result insertBySelective(PostInfo postInfo);
