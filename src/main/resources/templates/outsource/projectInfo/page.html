@@ -15,7 +15,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									项目名称：<input type="text" name="projectName" class="selectpicker" data-live-search="true" maxlength="64"/>
+									项目名称：<input type="text" th:value="${projectName}" name="projectName" maxlength="64"/>
 								</li>
 								<li>
 									部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">

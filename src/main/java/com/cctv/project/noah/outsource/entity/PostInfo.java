@@ -77,9 +77,6 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getCategoryName() {
-        if (this.categoryStatus == 0){
-            return CommonUtil.getDelText(categoryName);
-        }
         return categoryName;
     }
 
@@ -96,11 +93,11 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return postName;
+        return postName.trim();
     }
 
     public void setPostName(String postName) {
-        this.postName = postName;
+        this.postName = postName.trim();
     }
 
     public Integer getCategoryId() {

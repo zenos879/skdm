@@ -57,6 +57,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
         if (categoryInfoDb.getCategoryName().equals(categoryInfo.getCategoryName())){
             return new Result(0,"修改必须与之前不同！");
         }
+        CategoryInfo categoryInfoByName = selectByName(categoryInfo.getCategoryName());
+        if (categoryInfoByName.getCategoryId() != categoryInfo.getCategoryId()) {
+            return new Result(0,"此岗位分类已存在！");
+        }
         int i = categoryInfoMapper.updateByPrimaryKeySelective(categoryInfo);
         return new Result(i);
     }

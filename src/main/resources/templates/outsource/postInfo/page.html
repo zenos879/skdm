@@ -3,6 +3,7 @@
 <head>
 	<th:block th:include="include :: header('岗位数据列表')" />
 	<th:block th:include="include :: ztree-css" />
+	<th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
 	<div class="ui-layout-center">
@@ -13,7 +14,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									岗位名称：<input type="text" name="postName"/>
+									岗位名称：<input type="text" name="postName" maxlength="64"/>
 								</li>
 								<li>
 									岗位分类：<select name="categoryId" id="categoryId" class="selectpicker" data-live-search="true" th:with="cates=${@categoryInfoService.selectAll()}">
@@ -60,6 +61,7 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: bootstrap-select-js" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/postInfo";
 
@@ -85,7 +87,8 @@
 		        {
 		            field: 'postId',
 		            title: '岗位ID',
-					sortable: true
+					sortable: true,
+					visible:false
 		        },
 		        {
 		            field: 'postName',

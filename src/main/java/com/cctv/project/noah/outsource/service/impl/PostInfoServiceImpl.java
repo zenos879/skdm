@@ -17,6 +17,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
     @Override
     public List<PostInfo> selectList(PostInfo postInfo){
+        if (!postInfo.checkDateLegitimate()){
+            return new ArrayList<>();
+        }
         return postInfoMapper.selectList(postInfo);
     }
     @Override
@@ -57,6 +61,13 @@ public class PostInfoServiceImpl implements PostInfoService {
             return new Result(0,"岗位分类不能为空！");
         }
         PostInfo postInfoDb = postInfoMapper.selectByPrimaryKey(postId);
+        if (postInfoDb == null || postInfoDb.getStatus() == 0){
+            return new Result(0,"无法修改不存在的岗位！");
+        }
+        PostInfo postInfoByName = selectByName(postInfo.getPostName());
+        if (postInfoByName.getPostId() != postInfo.getPostId()){
+            return new Result(0,"此岗位已存在！");
+        }
         if (postInfoDb == null || postInfoDb.getStatus() == 0){
             return new Result(0,"无法修改不存在的岗位！");
         }
