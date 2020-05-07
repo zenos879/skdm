@@ -67,7 +67,7 @@ public class SupplierFileErrorController extends BaseController {
     @ResponseBody
     @Log(title = "供应商文件错误数据", businessType = BusinessType.INSERT)
     public AjaxResult add(SupplierFileError projectInfo){
-        Result result = supplierFileErrorService.insertSelective(projectInfo);
+        Result result = supplierFileErrorService.insert(projectInfo);
         return toAjax(result);
     }
 

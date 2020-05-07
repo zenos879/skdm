@@ -67,7 +67,7 @@ public class InterviewPersonRefController extends BaseController {
     @ResponseBody
     @Log(title = "面试人员数据", businessType = BusinessType.INSERT)
     public AjaxResult add(InterviewPersonRef projectInfo){
-        Result result = interviewPersonRefService.insertSelective(projectInfo);
+        Result result = interviewPersonRefService.insert(projectInfo);
         return toAjax(result);
     }
 

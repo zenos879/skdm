@@ -127,6 +127,11 @@ public class GeneralUtils {
         return parse;
     }
 
+    public static boolean compareDate(Date d1, Date d2) {
+        boolean b = d1.getTime() >= d2.getTime();
+        return b;
+    }
+
 
     public static void main(String[] args) {
 //        for (int i = 0; i < 100; i++) {

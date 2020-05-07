@@ -4,51 +4,79 @@
     <th:block th:include="include :: header('修改合同数据')"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-agreementinfo-edit" th:with="command = ${@agreementInfoService.selectByPrimaryKey(id)}">
-            <input type="hidden" name="agreementId" th:value="${command.agreementId}">
-            <h4 class="form-header h4">合同数据</h4>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
-                        <div class="col-sm-7">
-                            <input name="agreementNo" th:value="${command.agreementNo}" id="agreementNo" class="form-control" type="text" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
-                        <div class="col-sm-7">
-                            <select name="supplierName" id="supplierName" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
-                                <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierName}" th:selected="${command.supplierId == supplier.supplierId}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同开始时间：</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="time-input form-control time-formate" id="agreementStart" th:value="${command.getFormatStartDate()}" placeholder="合同开始时间" name="agreementStart" required/>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同结束时间：</label>
-                        <div class="col-sm-7">
-                            <input type="text" class="time-input form-control" id="agreementEnd" th:value="${command.getFormatEndDate()}"  placeholder="合同结束时间" name="agreementEnd" required/>
-                        </div>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-agreementinfo-edit"
+          th:with="command = ${@agreementInfoService.selectByPrimaryKey(id)}">
+        <input type="hidden" name="agreementId" th:value="${command.agreementId}">
+        <h4 class="form-header h4">合同数据</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同号：</label>
+                    <div class="col-sm-7">
+                        <input name="agreementNo" th:value="${command.agreementNo}" id="agreementNo"
+                               class="form-control" type="text" required>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-    <th:block th:include="include :: footer" />
-    <script type="text/javascript">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                    <div class="col-sm-7">
+                        <select name="supplierName" id="supplierName" class="form-control"
+                                th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}"
+                                    th:value="${supplier.supplierName}"
+                                    th:selected="${command.supplierId == supplier.supplierId}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同开始时间：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control time-formate" id="agreementStart"
+                               th:value="${command.getFormatStartDate()}" placeholder="合同开始时间" name="agreementStart"
+                               required autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>合同结束时间：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control" id="agreementEnd"
+                               th:value="${command.getFormatEndDate()}" placeholder="合同结束时间" name="agreementEnd"
+                               required autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <th:block th:include="include :: footer"/>
+    <script th:inline="javascript">
         var prefix = ctx + "outsource/agreementInfo";
+
+        // $(function () {
+        //     $("#agreementStart").change(function () {
+        //         checkDateTime();
+        //     })
+        //     $("#agreementEnd").change(function () {
+        //         checkDateTime();
+        //     })
+        //
+        //     function checkDateTime() {
+        //         var sVal = $("#agreementStart").val();
+        //         var eVal = $("#agreementEnd").val();
+        //         if (sVal != "" && eVal != "") {
+        //             if (eVal < sVal) {
+        //                 alert("结束时间不能小于开始时间");
+        //                 $("#agreementEnd").val("");
+        //             }
+        //         }
+        //     }
+        // })
 
         $("#form-agreementinfo-edit").validate({
             onkeyup: false,
@@ -61,5 +89,6 @@
             }
         }
     </script>
+</div>
 </body>
 </html>

@@ -114,12 +114,12 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         return result;
     }
 
-    @Override
-    public Result insertSelective(SupplierBid record) {
-        // todo 扩展方法，暂时不用，用时需要注意去重
-        int i = supplierBidMapper.insertSelective(record);
-        return new Result(i);
-    }
+//    @Override
+//    public Result insertSelective(SupplierBid record) {
+//        // todo 扩展方法，暂时不用，用时需要注意去重
+//        int i = supplierBidMapper.insertSelective(record);
+//        return new Result(i);
+//    }
 
     @Override
     public List<SupplierBid> selectList(SupplierBid record) {

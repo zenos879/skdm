@@ -66,7 +66,7 @@ public class SupplierBidController extends BaseController {
     @ResponseBody
     @Log(title = "供应商竞标数据", businessType = BusinessType.INSERT)
     public AjaxResult add(SupplierBid supplierBid){
-        Result result = supplierBidService.insertSelective(supplierBid);
+        Result result = supplierBidService.insert(supplierBid);
         return toAjax(result);
     }
 

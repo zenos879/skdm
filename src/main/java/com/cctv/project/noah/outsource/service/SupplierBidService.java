@@ -13,7 +13,7 @@ public interface SupplierBidService {
 
     Result insert(SupplierBid record);
 
-    Result insertSelective(SupplierBid record);
+//    Result insertSelective(SupplierBid record);
 
     List<SupplierBid> selectList(SupplierBid record);
 

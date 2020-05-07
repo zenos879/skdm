@@ -80,6 +80,13 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             result.setInfo("合同编号已经存在，无需新增！");
             return result;
         }
+        Date agreementStart = record.getAgreementStart();
+        Date agreementEnd = record.getAgreementEnd();
+        if (GeneralUtils.compareDate(agreementStart, agreementEnd)){
+            result.setCode(0);
+            result.setInfo("开始时间必须小于结束时间！");
+            return result;
+        }
         int insert = agreementInfoMapper.insert(record);
         if (insert < 0) {
             result.setCode(0);
@@ -88,11 +95,11 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         return result;
     }
 
-    @Override
-    public Result insertSelective(AgreementInfo record) {
-        int i = agreementInfoMapper.insertSelective(record);
-        return new Result(i);
-    }
+//    @Override
+//    public Result insertSelective(AgreementInfo record) {
+//        int i = agreementInfoMapper.insertSelective(record);
+//        return new Result(i);
+//    }
 
     @Override
     public List<AgreementInfo> selectList(AgreementInfo agreementInfo) {
@@ -111,8 +118,15 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             }
         }
         Map<String, Object> params = agreementInfo.getParams();
-        if (params.size() > 0) {
-
+        String beginTime = params.get("beginTime").toString();
+        if (StringUtils.isNotEmpty(beginTime)) {
+            Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
+            criteria.andAgreementStartGreaterThanOrEqualTo(date);
+        }
+        String endTime = params.get("endTime").toString();
+        if (StringUtils.isNotEmpty(endTime)) {
+            Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
+            criteria.andAgreementEndLessThanOrEqualTo(date);
         }
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         for (AgreementInfo info : agreementInfos) {
@@ -204,6 +218,13 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         if (integer > 0 && !agreementId.equals(integer)) {
             result.setCode(0);
             result.setInfo("合同号已经存在，请调整后再提交！");
+            return result;
+        }
+        Date agreementStart = record.getAgreementStart();
+        Date agreementEnd = record.getAgreementEnd();
+        if (GeneralUtils.compareDate(agreementStart, agreementEnd)){
+            result.setCode(0);
+            result.setInfo("开始时间必须小于结束时间！");
             return result;
         }
         int i = agreementInfoMapper.updateByPrimaryKeySelective(record);

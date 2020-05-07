@@ -14,7 +14,7 @@ public interface InterviewPersonRefService {
 
     Result insert(InterviewPersonRef record);
 
-    Result insertSelective(InterviewPersonRef record);
+//    Result insertSelective(InterviewPersonRef record);
 
     List<InterviewPersonRef> selectList(InterviewPersonRef record);
 

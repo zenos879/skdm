@@ -69,7 +69,7 @@ public class InterviewInfoController extends BaseController {
     @ResponseBody
     @Log(title = "面试数据", businessType = BusinessType.INSERT)
     public AjaxResult add(InterviewInfo interviewInfo) {
-        Result result = interviewInfoService.insertSelective(interviewInfo);
+        Result result = interviewInfoService.insert(interviewInfo);
         return toAjax(result);
     }
 
