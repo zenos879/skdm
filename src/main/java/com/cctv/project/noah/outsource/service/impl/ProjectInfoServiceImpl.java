@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
     @Override
     public List<ProjectInfo> selectList(ProjectInfo projectInfo){
+        if (!projectInfo.checkDateLegitimate()) {
+            return new ArrayList<>();
+        }
         List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
         return projectInfos;
     }
