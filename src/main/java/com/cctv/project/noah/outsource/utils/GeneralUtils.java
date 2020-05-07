@@ -8,11 +8,18 @@ import com.cctv.project.noah.outsource.service.Result;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GeneralUtils {
     public static Snowflake snowflake;
+
+    public static String YMD = "yyyy-MM-dd";
+    public static String YMD_HMS = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * 逗号隔开的字符串数组，转为List集合
@@ -104,7 +111,21 @@ public class GeneralUtils {
         return result;
     }
 
+    public static String dateToStr(Date date, String format) {
+        DateFormat df = new SimpleDateFormat(format);
+        return df.format(date);
+    }
 
+    public static Date strToDate(String date, String format) {
+        DateFormat df = new SimpleDateFormat(format);
+        Date parse = null;
+        try {
+            parse = df.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return parse;
+    }
 
 
     public static void main(String[] args) {
