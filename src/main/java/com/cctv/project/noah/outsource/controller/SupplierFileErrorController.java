@@ -43,8 +43,7 @@ public class SupplierFileErrorController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        SupplierFileError supplierFileError = supplierFileErrorService.selectByPrimaryKey(id);
-        model.addAttribute("supplierFileError", supplierFileError);
+        model.addAttribute("id", id);
         return prefix+"/edit";
     }
 

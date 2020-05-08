@@ -43,8 +43,7 @@ public class StaffInfoController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        StaffInfo staffInfo = staffInfoService.selectByPrimaryKey(id);
-        model.addAttribute("staffInfo", staffInfo);
+        model.addAttribute("id", id);
         return prefix+"/edit";
     }
 

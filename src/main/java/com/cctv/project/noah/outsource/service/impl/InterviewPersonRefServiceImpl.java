@@ -191,13 +191,13 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 //        Integer departmentId = record.getDepartmentId();
         Integer postId = record.getPostId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-        if (supplierInfo != null){
+        if (supplierInfo != null) {
             record.setSupplierName(supplierInfo.getSupplierName());
         }
 //        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
 //        record.setDepartmentName(departmentInfo.getDepartmentName());
         PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
-        if (postInfo != null){
+        if (postInfo != null) {
             record.setPostName(postInfo.getPostName());
         }
         Long staffNo = record.getStaffNo();
@@ -297,16 +297,18 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 //        staffInfo.setReplaceGroup();
         staffInfo.setReason(record.getReason());
         staffInfo.setArriveDate(record.getArriveDate());
-        staffInfo.setLeaveDate(record.getLeaveDate());
-        staffInfo.setLeaveReason(record.getLeaveReason());
+//        staffInfo.setLeaveDate(record.getLeaveDate());
+//        staffInfo.setLeaveReason(record.getLeaveReason());
         return staffInfo;
     }
 
     @Override
     public Result importInterviewPersonRef(List<InterviewPersonRef> records) {
         Result result = new Result();
-//        int count = 0;
-//        String msg = "";
+        int size = records.size();
+        if (size < 1) {
+            return new Result(0, "表中无数据");
+        }
         for (int i = 0; i < records.size(); i++) {
             InterviewPersonRef temp = records.get(i);
             // 对表格数据进行判空
@@ -378,15 +380,15 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             ReviewInfo reviewInfo = new ReviewInfo();
             reviewInfo.setPurchaseNo(purchaseNo);
             List<ReviewInfo> reviewInfos = reviewInfoService.selectBySelective(reviewInfo);
-            if (reviewInfos.size() == 0){
+            if (reviewInfos.size() == 0) {
                 return new Result(0, "第" + (i + 2) + "行的采购编号【" + purchaseNo + "】在评审数据中不存在!");
-            } else if (reviewInfos.size() > 1){
+            } else if (reviewInfos.size() > 1) {
                 return new Result(0, "第" + (i + 2) + "行的采购编号【" + purchaseNo + "】在评审数据存在多条!");
             } else {
                 reviewInfo = reviewInfos.get(0);
             }
             ProjectInfo projectInfo = projectInfoService.selectByPrimaryKey(reviewInfo.getProjectId());
-            if (projectInfo == null){
+            if (projectInfo == null) {
                 return new Result(0, "第" + (i + 2) + "行的采购编号【" + purchaseNo + "】对应的项目编号不存在!");
             }
             // 补全关联信息
@@ -395,40 +397,52 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             temp.setProjectId(reviewInfo.getProjectId());
             temp.setDepartmentId(projectInfo.getDepartmentId());
         }
-        /** 第一遍循环先新增数据库不存在的数据 */
-        for (InterviewPersonRef record : records) {
+
+        StringBuffer msg = new StringBuffer();
+        int errorCount = 0;
+        int updateCount = 0;
+        int addCount = 0;
+        int addStaffCount = 0;
+        int updateStaffCount = 0;
+        for (int i = 0; i < records.size(); i++) {
+            InterviewPersonRef record = records.get(i);
             // 判断数据库是否存在该信息
             Integer autoId = selectBeanExist(record, true);
-            if (autoId == 0) {
-                // 不存在，则新增,同时生成员工编号
-                record.setStaffNo(GeneralUtils.generateStaffNo());
-                record.setCreateTime(new Date());
-                int i = interviewPersonRefMapper.insertSelective(record);
-            }
-        }
-        /** 第二遍循环，补全替换人员信息，替换人身份证号转为员工编号，同时全部update一遍 */
-        for (InterviewPersonRef record : records) {
             Integer isReplace = record.getIsReplace();
-            Long replaceStaffNo = record.getReplaceStaffNo();
             String replacdStaffIdCard = record.getReplacdStaffIdCard();
-            if (isReplace == 0) {
-                record.setReplaceStaffNo(0L);
-            } else {
-                // 根据替换人身份证号，查找员工编号
-                Long aLong = selectNoByIdCard(replacdStaffIdCard);
-                if (aLong == 0L) {
-                    return new Result(0, "人员信息在导入数据和数据库中都没有找到，人员信息【" + record.toString() + "】");
+            if (autoId == 0) {
+                // 不存在，则新增,同时生成员工编号，需要先确定【是否替换】字段为0
+                if (isReplace != 0) {
+                    errorCount++;
+                    msg.append("第" + i + "行未执行，原因【" + record.getStaffName() + "的信息不存在，为新增人员，不能添加替换人员！】</br>");
+                    continue;
                 } else {
-                    record.setReplaceStaffNo(aLong);
+                    record.setStaffNo(GeneralUtils.generateStaffNo());
+                    record.setCreateTime(new Date());
+                    interviewPersonRefMapper.insertSelective(record);
+                    addCount++;
                 }
+            } else {
+                // 存在，则补全替换人员信息，替换人身份证号转为员工编号
+                if (isReplace == 0) {
+                    record.setReplaceStaffNo(0L);
+                } else {
+                    // 根据替换人身份证号，查找员工编号
+                    Long aLong = selectNoByIdCard(replacdStaffIdCard);
+                    if (aLong == 0L) {
+                        errorCount++;
+                        msg.append("第" + i + "行未执行，原因【替换人员身份证号" + record.getReplacdStaffIdCard() + "未找到对应员工编号，请检查后重试！】</br>");
+                        continue;
+                    } else {
+                        record.setReplaceStaffNo(aLong);
+                    }
+                }
+                // 查询主键，然后更新实体
+                Integer id = selectBeanExist(record, false);
+                record.setAutoId(id);
+                interviewPersonRefMapper.updateByPrimaryKeySelective(record);
+                updateCount++;
             }
-            // 查询主键，然后更新实体
-            Integer id = selectBeanExist(record, false);
-            record.setAutoId(id);
-            interviewPersonRefMapper.updateByPrimaryKeySelective(record);
-        }
-        /** 第三遍循环，插入和更新StaffInfo表，并维护replaceGroup字段 */
-        for (InterviewPersonRef record : records) {
             // 如果isPass=1,需要判断staffInfo表中是否存在，不存在则插入，存在则更新
             if (record.getIsPass() == 1) {
                 StaffInfo staffInfo = generateStaffInfo(record);
@@ -436,10 +450,12 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 if (staffInfos.size() == 0) {
                     staffInfo.setCreateTime(new Date());
                     staffInfoService.insert(staffInfo);
+                    addStaffCount++;
                 } else {
-                    Integer autoId = staffInfos.get(0).getAutoId();
-                    staffInfo.setAutoId(autoId);
+                    Integer staffAutoId = staffInfos.get(0).getAutoId();
+                    staffInfo.setAutoId(staffAutoId);
                     staffInfoService.updateByPrimaryKeySelective(staffInfo);
+                    updateStaffCount++;
                 }
             }
             //如果存在替换人员，还要维护staffInfo表中对应的replaceGroup字段
@@ -452,14 +468,11 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 staffInfoService.updateGroupByStaffNo(tempList);
             }
         }
-
-//        if (!StringUtils.isEmpty(msg)) {
-//            msg = msg + "行未执行，请核对是否重复或输入错误！";
-//        } else {
-//            msg = "共计导入" + count + "条";
-//        }
-//        result.setCode(count);
-        result.setInfo("导入成功");
+        if (msg.length() > 0){
+            msg.append("当前共计导入" + (size - errorCount) + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
+        } else {
+            msg.append("导入成功，共计导入" + size + "条");
+        }
         return result;
     }
 }
