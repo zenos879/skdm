@@ -152,13 +152,22 @@ public class SupplierBidServiceImpl implements SupplierBidService {
             criteria.andBidPriceEqualTo(bidPrice);
         }
         Map<String, Object> params = record.getParams();
-        String beginTime = params.get("beginTime").toString();
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(beginTime)) {
+        /** class="number" 验证不通过时，传过来的对象是null，所以需要特殊处理 */
+        Object beginTime1 = params.get("beginTime");
+        String beginTime = "";
+        if (beginTime1 != null) {
+            beginTime = beginTime1.toString();
+        }
+        if (StringUtils.isNotEmpty(beginTime)) {
             Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
             criteria.andCreateTimeGreaterThanOrEqualTo(date);
         }
-        String endTime = params.get("endTime").toString();
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(endTime)) {
+        Object endTime1 = params.get("endTime");
+        String endTime = "";
+        if (beginTime1 != null) {
+            endTime = endTime1.toString();
+        }
+        if (StringUtils.isNotEmpty(endTime)) {
             Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
             criteria.andCreateTimeLessThanOrEqualTo(date);
         }

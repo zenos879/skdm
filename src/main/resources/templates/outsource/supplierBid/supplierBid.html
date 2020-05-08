@@ -40,7 +40,7 @@
                         </select>
                         </li>
                         <li>
-                            价格：<input type="text" name="bidPrice" id="bidPrice" maxlength="7" autocomplete="off"/>
+                            价格：<input class="number" type="text" name="bidPrice" id="bidPrice" maxlength="7" autocomplete="off"/>
                         </li>
                         <li class="select-time">
                             <label>创建时间区间： </label>
@@ -51,7 +51,7 @@
                                    name="params[endTime]" autocomplete="off"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.searchWithCheck()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
