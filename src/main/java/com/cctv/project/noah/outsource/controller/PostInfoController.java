@@ -11,7 +11,9 @@ import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +32,10 @@ public class PostInfoController extends BaseController {
 
     /** 页面跳转 */
     @GetMapping()
-    public String page() {
+    public String page(String postName, Model model) {
+        if (StringUtils.isNotEmpty(postName)) {
+            model.addAttribute("postName",postName);
+        }
         return prefix + "/page";
     }
 

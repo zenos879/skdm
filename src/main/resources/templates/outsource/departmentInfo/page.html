@@ -13,7 +13,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									部门名称：<input type="text" name="departmentName"/>
+									部门名称：<input type="text" th:value="${departmentName}" name="departmentName" maxlength="64"/>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
@@ -79,7 +79,8 @@
 		        {
 		            field: 'departmentId',
 		            title: '部门ID',
-					sortable: true
+					sortable: true,
+					visible:false
 		        },
 		        {
 		            field: 'departmentName',

@@ -52,11 +52,11 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
     }
 
     public String getDepartmentName() {
-        return departmentName;
+        return departmentName == null?departmentName:departmentName.trim();
     }
 
     public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+        this.departmentName = (departmentName == null?departmentName:departmentName.trim());
     }
 
     public Date getCreateTime() {
