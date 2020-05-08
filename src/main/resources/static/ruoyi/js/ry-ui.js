@@ -480,7 +480,8 @@
     		reset: function(formId) {
             	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
             	$("#" + currentId)[0].reset();
-            	if ($.table._option.type == table_type.bootstrapTable) {
+				$('.selectpicker').selectpicker('refresh');
+				if ($.table._option.type == table_type.bootstrapTable) {
             	    $.btTable.bootstrapTable('refresh');
             	}
             },
