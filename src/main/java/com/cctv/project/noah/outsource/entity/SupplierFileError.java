@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.Date;
  * supplier_file_error
  * @author 
  */
-public class SupplierFileError implements Serializable {
+public class SupplierFileError extends BaseEntity implements Serializable {
     /**
      * 自增主键
      */

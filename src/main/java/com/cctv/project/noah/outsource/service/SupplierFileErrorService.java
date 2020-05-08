@@ -18,6 +18,8 @@ public interface SupplierFileErrorService {
 
     List<SupplierFileError> selectList(SupplierFileError record);
 
+    List<SupplierFileError> selectAll();
+
     List<SupplierFileError> selectByIds(String ids);
 
     SupplierFileError selectByPrimaryKey(Integer autoId);

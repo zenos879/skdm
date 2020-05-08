@@ -47,7 +47,11 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
 
     @Override
     public List<ReviewInfo> selectAll(){
-        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectBySelective(new ReviewInfo());
+        ReviewInfoExample reviewInfoExample = new ReviewInfoExample();
+        ReviewInfoExample.Criteria criteria = reviewInfoExample.createCriteria();
+        reviewInfoExample.setDistinct(true);
+        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectByExample(reviewInfoExample);
+//        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectBySelective(new ReviewInfo());
         return reviewInfos;
     }
 

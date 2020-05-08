@@ -2,18 +2,19 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改人员数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-personInfo-edit" th:object="${personInfo}">
-        <input type="hidden" name="candidateId" th:field="*{candidateId}">
+    <form class="form-horizontal m" id="form-personInfo-edit" th:with="command = ${@staffInfoService.selectByPrimaryKey(id)}">
+        <input type="hidden" name="autoId" th:value="${command.autoId}">
         <h4 class="form-header h4">人员数据</h4>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人名：</label>
                     <div class="col-sm-7">
-                        <input name="candidateName" th:field="*{candidateName}" id="candidateName" class="form-control" type="text" required>
+                        <input name="staffName" th:value="${command.staffName}" id="staffName" class="form-control" type="text" required>
                     </div>
                 </div>
             </div>
@@ -21,15 +22,40 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>身份证号：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:field="*{idCard}" id="idCard" class="form-control" type="text" required>
+                        <input name="idCard" th:value="${command.idCard}" id="idCard" class="form-control" type="text" required>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>电话号：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                     <div class="col-sm-7">
-                        <input name="phone" th:field="*{phone}" id="fileError" class="form-control" type="text" required>
+                        <select name="supplierName" id="supplierName" class="selectpicker form-control" data-live-search="true"
+                                th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}"
+                                    th:value="${supplier.supplierName}"
+                                    th:selected="${command.supplierId == supplier.supplierId}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
+                    <div class="col-sm-7">
+                        <select name="postName" id="postName" class="selectpicker form-control" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+                            <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postName}" th:selected="${command.postId == post.postId}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>部门名称：</label>
+                    <div class="col-sm-7">
+                        <select name="departmentName" id="departmentName" class="selectpicker form-control" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
+                            <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentName}" th:selected="${command.getDepartmentId() == depart.departmentId}"></option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -37,6 +63,8 @@
     </form>
 </div>
 <th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-select-js" />
+
 <script type="text/javascript">
     var prefix = ctx + "outsource/personInfo";
     $("#form-personInfo-edit").validate({
