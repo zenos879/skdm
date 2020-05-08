@@ -29,7 +29,7 @@ public interface BillService {
 //    saveMonthBill
 
     //按照id查询账单列表
-    List<DetailedBill> selectDetailBillByIds(DetailedBill bill,String ids);
+    List<DetailedBill> findMonthBillByIds(String ids);
 
     //查询合同账单明细
     List<ContractBill> selectAllContractBill();

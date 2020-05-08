@@ -12,6 +12,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
 
     @Override
     public List<CategoryInfo> selectBySelective(CategoryInfo categoryInfo){
+        if (!categoryInfo.checkDateLegitimate()) {
+            return new ArrayList<>();
+        }
         return categoryInfoMapper.selectBySelective(categoryInfo);
     }
     @Override
@@ -56,6 +60,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
         }
         if (categoryInfoDb.getCategoryName().equals(categoryInfo.getCategoryName())){
             return new Result(0,"修改必须与之前不同！");
+        }
+        CategoryInfo categoryInfoByName = selectByName(categoryInfo.getCategoryName());
+        if (categoryInfoByName.getCategoryId() != categoryInfo.getCategoryId()) {
+            return new Result(0,"此岗位分类已存在！");
         }
         int i = categoryInfoMapper.updateByPrimaryKeySelective(categoryInfo);
         return new Result(i);

@@ -1,7 +1,10 @@
 package com.cctv.project.noah.outsource.service.impl;
 
 
-import com.cctv.project.noah.outsource.entity.*;
+import com.cctv.project.noah.outsource.entity.CategoryInfo;
+import com.cctv.project.noah.outsource.entity.DepartmentInfo;
+import com.cctv.project.noah.outsource.entity.PostInfo;
+import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import com.cctv.project.noah.outsource.mapper.CategoryInfoMapper;
 import com.cctv.project.noah.outsource.mapper.DepartmentInfoMapper;
 import com.cctv.project.noah.outsource.mapper.PostInfoMapper;
@@ -14,6 +17,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,68 +30,66 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Autowired
     CategoryInfoMapper categoryInfoMapper;
 
-    public List<PostInfo> selectAll() {
+    public List<PostInfo> selectAll(){
         return postInfoMapper.selectList(new PostInfo());
     }
-
     @Override
-    public List<PostInfo> selectList(PostInfo postInfo) {
+    public List<PostInfo> selectList(PostInfo postInfo){
+        if (!postInfo.checkDateLegitimate()){
+            return new ArrayList<>();
+        }
         return postInfoMapper.selectList(postInfo);
     }
-
     @Override
-    public List<PostInfo> selectByIds(String ids) {
+    public List<PostInfo> selectByIds(String ids){
         return postInfoMapper.selectByIds(ids.split(","));
     }
-
     @Override
-    public PostInfo selectByName(String name) {
+    public PostInfo selectByName(String name){
         return postInfoMapper.selectByName(name);
     }
 
     @Override
     public List<PostInfo> selectLikeName(String name) {
-        PostInfoExample postInfoExample = new PostInfoExample();
-        PostInfoExample.Criteria criteria = postInfoExample.createCriteria();
-        criteria.andPostNameLike("%" + name + "%");
-        List<PostInfo> postInfos = postInfoMapper.selectByExample(postInfoExample);
-        if (postInfos.size() > 0) {
-            return postInfos;
-        }
-        return null;
+        return postInfoMapper.selectLikeName(name);
     }
-
     @Override
-    public Result updateBySelective(PostInfo postInfo) {
+    public Result updateBySelective(PostInfo postInfo){
         Integer postId = postInfo.getPostId();
         if (postId == null) {
-            return new Result(0, "id为空,无法修改！");
+            return new Result(0,"id为空,无法修改！");
         }
         if (StringUtils.isEmpty(postInfo.getPostName())) {
-            return new Result(0, "岗位名称不能为空！");
+            return new Result(0,"岗位名称不能为空！");
         }
         if (postInfo.getCategoryId() == null) {
-            return new Result(0, "岗位分类不能为空！");
+            return new Result(0,"岗位分类不能为空！");
         }
         PostInfo postInfoDb = postInfoMapper.selectByPrimaryKey(postId);
-        if (postInfoDb == null || postInfoDb.getStatus() == 0) {
-            return new Result(0, "无法修改不存在的岗位！");
+        if (postInfoDb == null || postInfoDb.getStatus() == 0){
+            return new Result(0,"无法修改不存在的岗位！");
+        }
+        PostInfo postInfoByName = selectByName(postInfo.getPostName());
+        if (postInfoByName.getPostId() != postInfo.getPostId()){
+            return new Result(0,"此岗位已存在！");
+        }
+        if (postInfoDb == null || postInfoDb.getStatus() == 0){
+            return new Result(0,"无法修改不存在的岗位！");
         }
         int i = postInfoMapper.updateByPrimaryKeySelective(postInfo);
         return new Result(i);
     }
-
     @Override
-    public Result insertBySelective(PostInfo postInfo) {
+    public Result insertBySelective(PostInfo postInfo){
         if (StringUtils.isEmpty(postInfo.getPostName())) {
-            return new Result(0, "岗位名称不能为空！");
+            return new Result(0,"岗位名称不能为空！");
         }
         if (postInfo.getCategoryId() == null) {
-            return new Result(0, "岗位分类不能为空！");
+            return new Result(0,"岗位分类不能为空！");
         }
         PostInfo postInfoDB = postInfoMapper.selectByName(postInfo.getPostName());
         if (postInfoDB != null) {
-            return new Result(0, "此岗位已存在！", true);
+            return new Result(0,"此岗位已存在！",true);
         }
         postInfo.setCreateTime(new Date());
         int i = postInfoMapper.insertSelective(postInfo);
@@ -96,18 +98,18 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
 
     @Override
-    public Result importPostInfo(List<PostInfo> postInfos) {
+    public Result importPostInfo(List<PostInfo> postInfos){
         for (int i = 0; i < postInfos.size(); i++) {
             PostInfo postInfo = postInfos.get(i);
             if (postInfo.getPostName() == null) {
-                return new Result(0, "第" + (i + 2) + "行的岗位名称为空!");
+                return new Result(0,"第"+(i+2)+"行的岗位名称为空!");
             }
             if (postInfo.getCategoryName() == null) {
-                return new Result(0, "第" + (i + 2) + "行的岗位分类为空!");
+                return new Result(0,"第"+(i+2)+"行的岗位分类为空!");
             }
             CategoryInfo categoryInfo = categoryInfoMapper.selectByName(postInfo.getCategoryName().trim());
             if (categoryInfo == null) {
-                return new Result(0, "第" + (i + 2) + "行的岗位分类不存在!");
+                return new Result(0,"第"+(i+2)+"行的岗位分类不存在!");
             }
             postInfo.setCategoryId(categoryInfo.getCategoryId());
             postInfo.setCreateTime(new Date());
@@ -118,26 +120,24 @@ public class PostInfoServiceImpl implements PostInfoService {
         for (PostInfo postInfo : postInfos) {
             i++;
             Result result = insertBySelective(postInfo);
-            if (result.warning) {
-                warning.append("第").append(i + 1).append("行的").append(postInfo.getPostName()).append("未插入，原因是：<")
+            if (result.warning){
+                warning.append("第").append(i+1).append("行的").append(postInfo.getPostName()).append("未插入，原因是：<")
                         .append(result.info).append("></br>");
                 continue;
             }
-            if (result.code < 1) {
-                return new Result(result.code, "第" + (i + 1) + "行出现错误，错误为<" + result.info + "></br>");
+            if (result.code<1){
+                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
             }
             success++;
         }
         int size = postInfos.size();
-        warning.append("插入成功了" + success + "行，失败了" + (size - success) + "行");
-        return new Result(success, warning.toString());
+        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+        return new Result(success,warning.toString());
     }
-
     @Override
-    public PostInfo selectByPrimaryKey(Integer projectId) {
+    public PostInfo selectByPrimaryKey(Integer projectId){
         return postInfoMapper.selectByPrimaryKey(projectId);
     }
-
     @Override
     public Result deleteByIds(String ids) {
         Integer[] idArray = Convert.toIntArray(ids);
@@ -145,21 +145,21 @@ public class PostInfoServiceImpl implements PostInfoService {
         int faild = 0;
         for (Integer id : idArray) {
             Result result = deleteById(id);
-            if (result.code < 1) {
+            if (result.code<1){
                 faild++;
             }
             success++;
         }
-        return new Result(success, "删除成功了" + success + "条，失败了" + faild + "条！");
+        return new Result(success,"删除成功了"+success+"条，失败了"+faild+"条！");
     }
 
-    private Result deleteById(Integer id) {
-        if (id == null) {
-            return new Result(0, "id不能为空！");
+    private Result deleteById(Integer id){
+        if (id == null){
+            return new Result(0,"id不能为空！");
         }
         PostInfo postInfo = postInfoMapper.selectByPrimaryKey(id);
         if (postInfo == null) {
-            return new Result(0, "无法删除不存在岗位！");
+            return new Result(0,"无法删除不存在岗位！");
         }
         int i = postInfoMapper.deleteByPrimaryKey(id);
         return new Result(i);

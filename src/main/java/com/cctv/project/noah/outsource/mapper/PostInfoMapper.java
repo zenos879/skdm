@@ -34,7 +34,7 @@ public interface PostInfoMapper {
 
     PostInfo selectByName(String name);
 
-
+    List<PostInfo> selectLikeName(String name);
 
     int updateByExampleSelective(@Param("record") PostInfo record, @Param("example") PostInfoExample example);
 

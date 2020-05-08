@@ -10,6 +10,6 @@ public interface BillMapper {
     DetailedBill findMonthBillById(int id);
     int updateMonthBill(DetailedBill bill);
     List<DetailedBill> selectDetailBillBySelective(DetailedBill bill);
-    List<DetailedBill> selectDetailBillByIds(Integer statisticsYear,Integer statisticsMonth,String[] ids);
+    List<DetailedBill> findMonthBillByIds(String[] ids);
     int saveMonthBill(List<DetailedBill> list);
 }

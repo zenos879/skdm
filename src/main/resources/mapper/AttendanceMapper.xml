@@ -187,6 +187,30 @@
       a.`statistics_year` = #{statisticsYear}
     AND a.statistics_month = #{statisticsMonth}
   </select>
+    <select id="selectPrevMonthInfo" resultMap="BaseResultMap">
+        SELECT
+        auto_id,
+        order_no,
+        staff_no,
+        #{statisticsYear} statistics_year,
+        #{statisticsMonth} statistics_month,
+        '0' serve_days_expect,
+        '0' serve_days_actual,
+        create_time,
+        staff_name,
+        '' AS remark,
+        '0' AS public_holidays
+        FROM
+        staff_info
+        WHERE
+        (
+        arrive_date &lt;= #{arriveDateMax}
+        OR leave_date BETWEEN #{leaveDateMin}
+        AND #{leaveDateMax}
+        )
+        ORDER BY
+        staff_no DESC
+    </select>
   <select id="selectAttendanceCountByIds" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
 
       <include refid="selectCount"/>

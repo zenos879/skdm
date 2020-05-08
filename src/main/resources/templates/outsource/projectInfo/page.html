@@ -3,6 +3,7 @@
 <head>
 	<th:block th:include="include :: header('项目数据列表')" />
 	<th:block th:include="include :: ztree-css" />
+	<th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
 	<div class="ui-layout-center">
@@ -14,7 +15,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									项目名称：<input type="text" name="projectName"/>
+									项目名称：<input type="text" th:value="${projectName}" name="projectName" maxlength="64"/>
 								</li>
 								<li>
 									部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
@@ -66,6 +67,8 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: bootstrap-select-js" />
+	<th:block th:include="include :: typeahead-js" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/projectInfo";
 		var _status = [[${@dict.getType('status')}]];
@@ -92,7 +95,8 @@
 		        {
 		            field: 'projectId',
 		            title: '项目id',
-					sortable: true
+					sortable: true,
+					visible:false
 		        },
 		        {
 		            field: 'projectName',
@@ -155,6 +159,7 @@
 			});
 		}
 	</script>
+
 </body>
 <!-- 导入区域 -->
 <script id="importTpl" type="text/template">

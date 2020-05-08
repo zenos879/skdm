@@ -5,9 +5,9 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-reviewPersonRef-edit" th:with="detailedBill = ${@billService.selectMonthBillById(autoId)}">
+    <form class="form-horizontal m" id="form-bill-edit" th:with="command = ${@billService.selectMonthBillById(autoId)}">
         <h4 class="form-header h4">月度账单明细</h4>
-        <input type="hidden" name="autoId" th:value="${detailedBill.getAutoId()}">
+        <input type="hidden" name="autoId" th:value="${command.getAutoId()}">
         <div class="row">
 
             <div class="col-sm-12">
@@ -17,7 +17,7 @@
                         <!--<select name="candidateId" id="candidateId" class="form-control"  th:with="persons=${@personInfoService.selectAll()}">-->
                         <!--<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}" th:selected="${command.getSupplierId() == person.getCandidateId()}"></option>-->
                         <!--</select>-->
-                        <input name="personName" id="staffName" placeholder="请输入人员名" th:value="${detailedBill.getStaffName()}" class="form-control" type="text" maxlength="20" required>
+                        <input name="staffName" id="staffName" placeholder="请输入人员名" th:value="${command.getStaffName()}" class="form-control" type="text" maxlength="20" required>
 
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>当月岗位花费：</label>
                     <div class="col-sm-8">
-                        <input name="personName" id="postExpenses" placeholder="当月岗位花费" th:value="${detailedBill.getPostExpenses()}" class="form-control" type="text" maxlength="20" required>
+                        <input name="postExpenses" id="postExpenses" placeholder="当月岗位花费" th:value="${command.getPostExpenses()}" class="form-control" type="text" maxlength="20" required>
                     </div>
                 </div>
             </div>
@@ -39,14 +39,14 @@
 <script type="text/javascript">
     var prefix = ctx + "outsource/bill";
 
-    $("#form-reviewPersonRef-edit").validate({
+    $("#form-bill-edit").validate({
         onkeyup: false,
         focusCleanup: true,
     });
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/edit", $('#form-reviewPersonRef-edit').serialize());
+            $.operate.save(prefix + "/edit", $('#form-bill-edit').serialize());
         }
     }
 </script>

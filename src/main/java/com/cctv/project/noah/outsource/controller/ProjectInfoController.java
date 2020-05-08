@@ -9,6 +9,7 @@ import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,10 @@ public class ProjectInfoController extends BaseController {
 
     /** 页面跳转 */
     @GetMapping()
-    public String page() {
+    public String page(String projectName,Model model) {
+        if (StringUtils.isNotEmpty(projectName)){
+            model.addAttribute("projectName",projectName);
+        }
         return prefix + "/page";
     }
 
