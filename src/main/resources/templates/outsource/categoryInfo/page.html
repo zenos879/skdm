@@ -13,7 +13,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									岗位分类名称：<input type="text" name="categoryName"/>
+									岗位分类名称：<input type="text" name="categoryName" maxlength="64"/>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
@@ -79,7 +79,8 @@
 		        {
 		            field: 'categoryId',
 		            title: '岗位分类ID',
-					sortable: true
+					sortable: true,
+					visible:false
 		        },
 		        {
 		            field: 'categoryName',

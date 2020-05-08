@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('修改项目')" />
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -13,7 +14,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目名称：</label>
                         <div class="col-sm-8">
-                            <input name="projectName" id="projectName" placeholder="请输入项目名称" th:value="${command.getProjectName()}" class="form-control" type="text" maxlength="20" required>
+                            <input name="projectName" id="projectName" placeholder="请输入项目名称" th:value="${command.getProjectName()}" class="form-control" type="text" maxlength="64" required>
                         </div>
                     </div>
                 </div>
@@ -21,7 +22,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>部门名称：</label>
                         <div class="col-sm-8">
-                            <select name="departmentId" id="departmentId" class="form-control" th:with="departs=${@departmentInfoService.selectAll()}">
+                            <select name="departmentId" id="departmentId" class="form-control selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
                                 <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}" th:selected="${command.getDepartmentId() == depart.departmentId}"></option>
                             </select>
                         </div>
@@ -43,6 +44,7 @@
         </form>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-select-js" />
     <script type="text/javascript">
         var prefix = ctx + "outsource/projectInfo";
 

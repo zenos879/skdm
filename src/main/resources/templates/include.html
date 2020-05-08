@@ -147,3 +147,14 @@
     <script th:src="@{/other_plugin/reorder/bootstrap-table-reorder.js}"></script>
     <script th:src="@{/other_plugin/reorder/jquery.tablednd.js}"></script>
 </div>
+
+<div th:fragment="workday-js-css">
+    <link th:href="@{/css/fullcalendar.min.css}" rel='stylesheet'/>
+    <link th:href="@{/css/fullcalendar.print.min.css}" rel='stylesheet' media='print'/>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/moment.min.js}"></script>
+    <script th:src="@{/js/lunar.js}"></script>
+    <script th:src="@{/js/fullcalendar.js}"></script>
+    <script th:src="@{/js/zh-cn.js}"></script>
+    <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+</div>

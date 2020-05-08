@@ -1,11 +1,10 @@
 package com.cctv.project.noah.system.core.domain;
 
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Entity基类
@@ -107,5 +106,16 @@ public class BaseEntity implements Serializable {
 
     public void setParams(Map<String, Object> params) {
         this.params = params;
+    }
+
+    public Boolean checkDateLegitimate(){
+        String beginTime = (String) this.getParams().get("beginTime");
+        String endTime = (String) this.getParams().get("endTime");
+        if (StringUtils.isNotEmpty(beginTime) &&
+                StringUtils.isNotEmpty(endTime)&&
+                beginTime.compareTo(endTime)>0){
+            return false;
+        }
+        return true;
     }
 }

@@ -106,6 +106,12 @@
     from post_info
     where post_name = #{postName,jdbcType=VARCHAR}
   </select>
+  <select id="selectLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from post_info
+    where post_name like concat('%', #{postName}, '%')
+  </select>
   <select id="selectByCategroyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
