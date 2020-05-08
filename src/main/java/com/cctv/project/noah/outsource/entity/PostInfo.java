@@ -93,11 +93,11 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return postName.trim();
+        return postName == null?postName:postName.trim();
     }
 
     public void setPostName(String postName) {
-        this.postName = postName.trim();
+        this.postName = (postName == null?postName:postName.trim());
     }
 
     public Integer getCategoryId() {

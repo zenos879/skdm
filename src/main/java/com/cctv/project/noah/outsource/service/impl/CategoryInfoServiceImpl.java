@@ -12,6 +12,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
 
     @Override
     public List<CategoryInfo> selectBySelective(CategoryInfo categoryInfo){
+        if (!categoryInfo.checkDateLegitimate()) {
+            return new ArrayList<>();
+        }
         return categoryInfoMapper.selectBySelective(categoryInfo);
     }
     @Override

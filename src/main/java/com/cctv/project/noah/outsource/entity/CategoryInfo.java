@@ -52,11 +52,11 @@ public class CategoryInfo extends BaseEntity implements Serializable {
     }
 
     public String getCategoryName() {
-        return categoryName;
+        return categoryName == null?categoryName:categoryName.trim();
     }
 
     public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+        this.categoryName = (categoryName == null?categoryName:categoryName.trim());
     }
 
     public Date getCreateTime() {

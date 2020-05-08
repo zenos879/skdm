@@ -88,11 +88,11 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getProjectName() {
-        return projectName.trim();
+        return projectName == null?projectName:projectName.trim();
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = projectName.trim();
+        this.projectName = (projectName == null?projectName:projectName.trim());
     }
 
     public Integer getDepartmentId() {
