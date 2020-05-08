@@ -91,12 +91,12 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
         return result;
     }
 
-    @Override
-    public Result insertSelective(SupplierFileError record) {
-        // todo 扩展方法，暂时不用，用时需要注意去重
-        int i = supplierFileErrorMapper.insertSelective(record);
-        return new Result(i);
-    }
+//    @Override
+//    public Result insertSelective(SupplierFileError record) {
+//        // todo 扩展方法，暂时不用，用时需要注意去重
+//        int i = supplierFileErrorMapper.insertSelective(record);
+//        return new Result(i);
+//    }
 
     @Override
     public List<SupplierFileError> selectList(SupplierFileError record) {
@@ -219,7 +219,6 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
         criteria.andSupplierIdEqualTo(supplierId);
         criteria.andPurcharNoEqualTo(purcharNo);
         criteria.andHappenDateEqualTo(happenDate);
-//        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         if (errorCount){
             Integer fileError = supplierFileError.getFileError();
             criteria.andFileErrorEqualTo(fileError);
@@ -236,9 +235,12 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
     @Override
     public Result importSupplierFileError(List<SupplierFileError> records) {
         Result result = new Result();
-        int count = 0;
-        String msg = "";
-        for (int i = 0; i < records.size(); i++) {
+        int errorCount = 0;
+        int addCount = 0;
+        int updateCount = 0;
+        StringBuffer msg = new StringBuffer();
+        int size = records.size();
+        for (int i = 0; i < size; i++) {
             SupplierFileError supplierFileError = records.get(i);
             String purcharNo = supplierFileError.getPurcharNo();
             if (purcharNo == null) {
@@ -272,10 +274,14 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             supplierFileError.setFileError(fileError);
             supplierFileError.setRemark(remark);
             supplierFileError.setHappenDate(happenDate);
+        }
+        for (int i = 0; i < records.size(); i++) {
+            SupplierFileError supplierFileError = records.get(i);
             // 判断数据库是否存在该关系
             Integer autoId = selectBeanExist(supplierFileError, true);
             if (autoId > 0){
-                msg = msg + "[" + (i + 2) + "]";
+                msg.append("[" + (i + 2) + "]");
+                errorCount++;
                 continue;
             } else {
                 // 不存在，则判断价格是否更改
@@ -284,21 +290,15 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
                     // 关系存在，价格更改则更新价格
                     supplierFileError.setAutoId(autoId);
                     supplierFileErrorMapper.updateByPrimaryKeySelective(supplierFileError);
+                    updateCount++;
                 } else {
                     // 关系完全不存在，则新增
                     supplierFileError.setCreateTime(new Date());
                     supplierFileErrorMapper.insertSelective(supplierFileError);
+                    addCount++;
                 }
             }
-            count = i;
         }
-        if (!StringUtils.isEmpty(msg)){
-            msg = msg + "行未执行，请核对是否重复或输入错误！";
-        } else {
-            msg = "共计导入" + count + "条";
-        }
-        result.setCode(count);
-        result.setInfo(msg);
-        return result;
+        return GeneralUtils.getAllMsg(msg, size, errorCount, addCount, updateCount);
     }
 }

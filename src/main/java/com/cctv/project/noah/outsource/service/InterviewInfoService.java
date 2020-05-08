@@ -18,7 +18,7 @@ public interface InterviewInfoService {
 
     Result insert(InterviewInfo record);
 
-    Result insertSelective(InterviewInfo record);
+//    Result insertSelective(InterviewInfo record);
 
     List<InterviewInfo> selectList(InterviewInfo record);
 

@@ -12,7 +12,7 @@ public interface AgreementInfoService {
 
     Result insert(AgreementInfo record);
 
-    Result insertSelective(AgreementInfo record);
+//    Result insertSelective(AgreementInfo record);
 
     List<AgreementInfo> selectList(AgreementInfo agreementInfo);
 

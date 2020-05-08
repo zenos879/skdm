@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.Date;
  * agreementInfo
  * @author 
  */
-public class AgreementInfo implements Serializable {
+public class AgreementInfo extends BaseEntity implements Serializable {
     /**
      * 自增主键,合同id
      */
@@ -51,6 +52,7 @@ public class AgreementInfo implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     private Integer status;

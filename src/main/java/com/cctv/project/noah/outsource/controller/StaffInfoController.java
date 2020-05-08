@@ -67,7 +67,7 @@ public class StaffInfoController extends BaseController {
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.INSERT)
     public AjaxResult add(StaffInfo projectInfo){
-        Result result = staffInfoService.insertSelective(projectInfo);
+        Result result = staffInfoService.insert(projectInfo);
         return toAjax(result);
     }
 

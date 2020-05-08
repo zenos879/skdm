@@ -14,7 +14,7 @@ public interface SupplierFileErrorService {
 
     Result insert(SupplierFileError record);
 
-    Result insertSelective(SupplierFileError record);
+//    Result insertSelective(SupplierFileError record);
 
     List<SupplierFileError> selectList(SupplierFileError record);
 

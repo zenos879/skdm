@@ -84,12 +84,12 @@ public class InterviewInfoServiceImpl implements InterviewInfoService {
         return result;
     }
 
-    @Override
-    public Result insertSelective(InterviewInfo record) {
-        // todo 扩展方法，暂时不用，用时需要注意去重
-        int i = interviewInfoMapper.insertSelective(record);
-        return new Result(i);
-    }
+//    @Override
+//    public Result insertSelective(InterviewInfo record) {
+//        // todo 扩展方法，暂时不用，用时需要注意去重
+//        int i = interviewInfoMapper.insertSelective(record);
+//        return new Result(i);
+//    }
 
     @Override
     public List<InterviewInfo> selectList(InterviewInfo record) {

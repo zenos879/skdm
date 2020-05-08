@@ -68,7 +68,7 @@ public class AgreementInfoController extends BaseController {
     @ResponseBody
     @Log(title = "合同数据", businessType = BusinessType.INSERT)
     public AjaxResult add(AgreementInfo projectInfo){
-        Result result = agreementInfoService.insertSelective(projectInfo);
+        Result result = agreementInfoService.insert(projectInfo);
         return toAjax(result);
     }
 
