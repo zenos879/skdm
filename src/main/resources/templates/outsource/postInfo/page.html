@@ -14,7 +14,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									岗位名称：<input type="text" name="postName" maxlength="64"/>
+									岗位名称：<input type="text" th:value="${postName}" name="postName" maxlength="64"/>
 								</li>
 								<li>
 									岗位分类：<select name="categoryId" id="categoryId" class="selectpicker" data-live-search="true" th:with="cates=${@categoryInfoService.selectAll()}">
@@ -97,7 +97,12 @@
 		        },
 		        {
 		            field: 'categoryName',
-		            title: '岗位分类'
+		            title: '岗位分类',
+					formatter: function(value, row, index) {
+						var actions = [];
+						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"')\">"+value+"</a>");
+						return  actions.join('')
+					}
 		        },
 		        {
 		            field: 'createTime',
@@ -138,6 +143,10 @@
 					$.modal.closeLoading();
 				});
 			});
+		}
+
+		function showDetail(value){
+			$.modal.openTab("岗位分类",ctx+"outsource/categroyInfo?categoryName="+value);
 		}
 	</script>
 </body>
