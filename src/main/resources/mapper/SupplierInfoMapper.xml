@@ -139,7 +139,7 @@
       <if test="contactEmail != null and contactEmail != ''">
         and contact_email like concat('%', #{contactEmail}, '%')
       </if>
-      <if test="isSubsidiary != null and isSubsidiary != ''">
+      <if test="isSubsidiary != null">
         and is_subsidiary = #{isSubsidiary,jdbcType=TINYINT}
       </if>
       <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->

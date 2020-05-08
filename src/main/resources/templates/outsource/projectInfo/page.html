@@ -105,7 +105,12 @@
 		        },
 		        {
 		            field: 'departmentName',
-		            title: '部门名称'
+		            title: '部门名称',
+					formatter: function(value, row, index) {
+						var actions = [];
+						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"')\">"+value+"</a>");
+						return actions.join('');
+					}
 		        },
 		        {
 		            field: 'createTime',
@@ -157,6 +162,9 @@
 					$.modal.closeLoading();
 				});
 			});
+		}
+		function showDetail(value){
+			$.modal.openTab("部门",ctx+"outsource/departmentInfo?departmentName="+value);
 		}
 	</script>
 
