@@ -1,10 +1,12 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.utils.CommonUtil;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import org.springframework.web.jsf.FacesContextUtils;
 
 import java.io.Serializable;
@@ -52,15 +54,6 @@ public class PostInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
-    public Boolean hasNull(){
-        return this.categoryId == null || StringUtils.isEmpty(this.postName);
-    }
-
-    public Boolean notNull(){
-        return !hasNull();
-    }
-
     public Integer getCategoryStatus() {
         return categoryStatus;
     }
@@ -78,11 +71,11 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getCategoryName() {
-        return categoryName;
+        return categoryName == null?categoryName:categoryName.trim();
     }
 
     public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+        this.categoryName = (categoryName == null?categoryName:categoryName.trim());
     }
 
     public Integer getPostId() {
@@ -109,10 +102,12 @@ public class PostInfo extends BaseEntity implements Serializable {
         this.categoryId = categoryId;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -164,23 +159,44 @@ public class PostInfo extends BaseEntity implements Serializable {
         return sb.toString();
     }
 
-
-    public Boolean checkLegitimate() {
+    public Boolean hasNull(){
+        Result result = hasNullResult();
+        return result.code>0?false:true;
+    }
+    public Boolean notNull(){
+        return !hasNull();
+    }
+    @Override
+    public Result hasNullResult(){
+        if (categoryId == null && StringUtils.isEmpty(categoryName)){
+            return new Result(0,"岗位分类不能为空！");
+        }
+        if (StringUtils.isEmpty(postName)) {
+            return new Result(0,"项目名称不能为空！");
+        }
+        return new Result(1);
+    }
+    @Override
+    public Result checkLegitimateResult(){
         if (!super.checkDateLegitimate()) {
-            return false;
+            return new Result(0,"时间格式不正确");
         }
-        if (this.postName!=null && this.postName.length()>64){
-            return false;
+        if (this.getPostName() != null && this.getPostName().length()>64){
+            return new Result(0,"岗位名称长度不能大于64！");
         }
-        if (this.categoryId!= null && String.valueOf(categoryId).length()>11){
-            return false;
+        if (this.getCategoryId() != null && String.valueOf(this.getCategoryId()).length()>11){
+            return new Result(0,"岗位分类id长度不能大于11！");
         }
         if (this.categoryName!=null && categoryName.length()>64){
-            return false;
+            return new Result(0,"岗位分类名称长度不能大于64");
         }
-        return true;
+        return new Result(1);
     }
     public Boolean checkIllegal(){
         return !checkLegitimate();
+    }
+    public Boolean checkLegitimate(){
+        Result result = checkLegitimateResult();
+        return result.code>0?true:false;
     }
 }

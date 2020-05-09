@@ -66,7 +66,7 @@ public class DepartmentInfoServiceImpl implements DepartmentInfoService {
             return new Result(0,"修改必须与之前不同！");
         }
         DepartmentInfo departmentInfoByName = selectByName(departmentInfo.getDepartmentName());
-        if (departmentInfoByName.getDepartmentId() != departmentInfo.getDepartmentId()){
+        if (!departmentInfoByName.getDepartmentId().equals(departmentInfo.getDepartmentId())){
             return new Result(0,"此部门已存在！");
         }
         int i = departmentInfoMapper.updateByPrimaryKeySelective(departmentInfo);

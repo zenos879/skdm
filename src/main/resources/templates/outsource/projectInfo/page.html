@@ -15,7 +15,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									项目名称：<input type="text" th:value="${projectName}" id="projectName" name="projectName" maxlength="64"/>
+									项目名称：<input type="text" th:value="${projectName}" id="projectName" name="projectName" maxlength="64" />
 								</li>
 								<li>
 									部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
@@ -25,9 +25,9 @@
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
-									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" autocomplete="off"/>
 									<span>-</span>
-									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" autocomplete="off"/>
 								</li>
 								<li>
 									<a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -67,7 +67,6 @@
 	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/projectInfo";
-		var _status = [[${@dict.getType('status')}]];
 
 		$(function() {
 		    queryUserList();
@@ -164,14 +163,18 @@
 
 			if (!$.common.isEmpty(startTime) && !isDate(startTime)) {
 				$.modal.alertError("开始时间格式不正确");
+				$("#startTime").val('');
 				return;
 			}
 			if (!$.common.isEmpty(endTime) && !isDate(endTime)) {
 				$.modal.alertError("结束时间格式不正确");
+				$("#endTime").val('');
 				return;
 			}
 			if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
 				$.modal.alertError("开始时间必须大于结束时间");
+				$("#startTime").val('');
+				$("#endTime").val('');
 				return;
 			}
 			$.table.search();

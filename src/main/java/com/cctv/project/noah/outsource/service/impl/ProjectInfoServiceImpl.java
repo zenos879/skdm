@@ -48,7 +48,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
             if (projectInfo == null){
                 return projectInfoMapper.selectList(new ProjectInfo());
             }
-            if (!projectInfo.checkLegitimate()) {
+            if (projectInfo.checkIllegal()) {
                 return new ArrayList<>();
             }
             List<ProjectInfo> projectInfos = projectInfoMapper.selectList(projectInfo);
@@ -62,7 +62,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     public List<ProjectInfo> selectByIds(String ids){
 
         try {
-            if (ids == null){
+            if (StringUtils.isEmpty(ids)){
                 return new ArrayList<>();
             }
             ids = ids.trim();

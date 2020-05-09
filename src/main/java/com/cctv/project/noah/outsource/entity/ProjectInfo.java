@@ -103,10 +103,12 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         this.departmentId = departmentId;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -163,15 +165,17 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     public Boolean notNull(){
         return !hasNull();
     }
+    @Override
     public Result hasNullResult(){
         if (departmentId == null && StringUtils.isEmpty(departmentName)){
             return new Result(0,"部门不能为空！");
         }
-        if (projectName == null) {
+        if (StringUtils.isEmpty(projectName)) {
             return new Result(0,"项目名称不能为空！");
         }
         return new Result(1);
     }
+    @Override
     public Result checkLegitimateResult(){
         if (!super.checkDateLegitimate()) {
             return new Result(0,"时间格式不正确");
@@ -179,7 +183,7 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         if (this.getProjectName() != null && this.getProjectName().length()>64){
            return new Result(0,"项目名称长度不能大于64！");
         }
-        if (this.getDepartmentId() != null && String.valueOf(this.getProjectId()).length()>11){
+        if (this.getDepartmentId() != null && String.valueOf(this.getDepartmentId()).length()>11){
             return new Result(0,"部门id长度不能大于11！");
         }
         if (this.departmentName!=null && departmentName.length()>64){
@@ -195,15 +199,5 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         return result.code>0?true:false;
     }
 
-    public Result beforeUpdateCheck(){
-        Result resultHasNull = this.hasNullResult();
-        if (resultHasNull.code<1){
-            return resultHasNull;
-        }
-        Result resultCheck = this.checkLegitimateResult();
-        if (resultCheck.code<1){
-            return resultCheck;
-        }
-        return new Result(1);
-    }
+
 }

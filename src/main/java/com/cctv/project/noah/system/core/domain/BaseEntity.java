@@ -1,5 +1,6 @@
 package com.cctv.project.noah.system.core.domain;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -133,5 +134,22 @@ public class BaseEntity implements Serializable {
             return false;
         }
         return true;
+    }
+    public Result hasNullResult(){
+        return null;
+    }
+    public Result checkLegitimateResult(){
+        return null;
+    }
+    public Result beforeUpdateCheck(){
+        Result resultHasNull = this.hasNullResult();
+        if (resultHasNull.code<1){
+            return resultHasNull;
+        }
+        Result resultCheck = this.checkLegitimateResult();
+        if (resultCheck.code<1){
+            return resultCheck;
+        }
+        return new Result(1);
     }
 }

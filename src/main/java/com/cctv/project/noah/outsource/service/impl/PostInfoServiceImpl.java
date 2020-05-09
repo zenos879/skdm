@@ -46,6 +46,9 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Override
     public List<PostInfo> selectList(PostInfo postInfo){
         try {
+            if (postInfo == null) {
+                return postInfoMapper.selectList(new PostInfo());
+            }
             if (postInfo.checkIllegal()){
                 return new ArrayList<>();
             }
@@ -118,24 +121,16 @@ public class PostInfoServiceImpl implements PostInfoService {
             if (postId == null) {
                 return new Result(0,"id为空,无法修改！");
             }
-            if (StringUtils.isEmpty(postInfo.getPostName())) {
-                return new Result(0,"岗位名称不能为空！");
-            }
-            if (postInfo.getCategoryId() == null) {
-                return new Result(0,"岗位分类不能为空！");
-            }
-            if (postInfo.getPostName().length()>64) {
-                return new Result(0,"岗位名称长度不能大于64！");
-            }
-            if (postInfo.checkIllegal()) {
-                return new Result(0,"有参数非法！");
+            Result result = postInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
             }
             PostInfo postInfoDb = postInfoMapper.selectByPrimaryKey(postId);
             if (postInfoDb == null){
                 return new Result(0,"无法修改不存在的岗位！");
             }
             PostInfo postInfoByName = selectByName(postInfo.getPostName());
-            if (postInfoByName!=null && postInfoByName.getPostId() != postInfo.getPostId()){
+            if (postInfoByName!=null && !postInfoByName.getPostId().equals(postInfo.getPostId())){
                 return new Result(0,"此岗位已存在！");
             }
             int i = postInfoMapper.updateByPrimaryKeySelective(postInfo);
@@ -147,62 +142,87 @@ public class PostInfoServiceImpl implements PostInfoService {
     }
     @Override
     public Result insertBySelective(PostInfo postInfo){
-        if (StringUtils.isEmpty(postInfo.getPostName())) {
-            return new Result(0,"岗位名称不能为空！");
+        try {
+            if (postInfo == null) {
+                return new Result(0,"传入数据错误！");
+            }
+            Result result = postInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            PostInfo postInfoDB = selectByName(postInfo.getPostName());
+            if (postInfoDB != null) {
+                return new Result(0,"此岗位已存在！",true);
+            }
+            CategoryInfo categoryInfo = categoryInfoMapper.selectByPrimaryKey(postInfo.getCategoryId());
+            if (categoryInfo == null){
+                return new Result(0,"此岗位分类不存在！");
+            }
+            postInfo.setCreateTime(new Date());
+            int i = postInfoMapper.insertSelective(postInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("[ERROR]---"+e);
+            return new Result(0,"插入失败");
         }
-        if (postInfo.getCategoryId() == null) {
-            return new Result(0,"岗位分类不能为空！");
-        }
-        PostInfo postInfoDB = selectByName(postInfo.getPostName());
-        if (postInfoDB != null) {
-            return new Result(0,"此岗位已存在！",true);
-        }
-        postInfo.setCreateTime(new Date());
-        int i = postInfoMapper.insertSelective(postInfo);
-        return new Result(i);
 
     }
 
     @Override
     public Result importPostInfo(List<PostInfo> postInfos){
-        for (int i = 0; i < postInfos.size(); i++) {
-            PostInfo postInfo = postInfos.get(i);
-            if (postInfo.getPostName() == null) {
-                return new Result(0,"第"+(i+2)+"行的岗位名称为空!");
+        try {
+            if (StringUtils.isEmpty(postInfos)) {
+                return new Result(0,"未从文件中读取到数据！");
             }
-            if (postInfo.getCategoryName() == null) {
-                return new Result(0,"第"+(i+2)+"行的岗位分类为空!");
+            for (int i = 0; i < postInfos.size(); i++) {
+                PostInfo postInfo = postInfos.get(i);
+                Result result = postInfo.beforeUpdateCheck();
+                if (result.code<1){
+                    return new Result(0,"第"+(i+2)+"行的"+result.info);
+                }
+                CategoryInfo categoryInfo = categoryInfoMapper.selectByName(postInfo.getCategoryName());
+                if (categoryInfo == null) {
+                    return new Result(0,"第"+(i+2)+"行的岗位分类不存在!");
+                }
+                postInfo.setCategoryId(categoryInfo.getCategoryId());
+                postInfo.setCreateTime(new Date());
             }
-            CategoryInfo categoryInfo = categoryInfoMapper.selectByName(postInfo.getCategoryName().trim());
-            if (categoryInfo == null) {
-                return new Result(0,"第"+(i+2)+"行的岗位分类不存在!");
+            int success = 0;
+            int i = 0;
+            StringBuffer warning = new StringBuffer();
+            for (PostInfo postInfo : postInfos) {
+                i++;
+                Result result = insertBySelective(postInfo);
+                if (result.warning){
+                    warning.append("第").append(i+1).append("行的").append(postInfo.getPostName()).append("未插入，原因是：<")
+                            .append(result.info).append("></br>");
+                    continue;
+                }
+                if (result.code<1){
+                    return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
+                }
+                success++;
             }
-            postInfo.setCategoryId(categoryInfo.getCategoryId());
-            postInfo.setCreateTime(new Date());
+            int size = postInfos.size();
+            warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+            return new Result(success,warning.toString());
+        } catch (Exception e) {
+            logger.error("[ERROR]---"+e);
+            return new Result(0,"导入失败！");
         }
-        int success = 0;
-        int i = 0;
-        StringBuffer warning = new StringBuffer();
-        for (PostInfo postInfo : postInfos) {
-            i++;
-            Result result = insertBySelective(postInfo);
-            if (result.warning){
-                warning.append("第").append(i+1).append("行的").append(postInfo.getPostName()).append("未插入，原因是：<")
-                        .append(result.info).append("></br>");
-                continue;
-            }
-            if (result.code<1){
-                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
-            }
-            success++;
-        }
-        int size = postInfos.size();
-        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
-        return new Result(success,warning.toString());
     }
     @Override
     public PostInfo selectByPrimaryKey(Integer projectId){
-        return postInfoMapper.selectByPrimaryKey(projectId);
+        try {
+            if (projectId == null) {
+                return null;
+            }
+            PostInfo postInfo = postInfoMapper.selectByPrimaryKey(projectId);
+            return postInfo;
+        } catch (Exception e) {
+            logger.error("[ERROR]---"+e);
+            return null;
+        }
     }
     @Override
     public Result deleteByIds(String ids) {
