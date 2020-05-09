@@ -20,13 +20,34 @@
             return this.optional(element) || /^[0-9 A-Za-z]{5,20}$/.test(value);
         }, "Please specify a valid postcode");
 
-        $.validator.addMethod("number", function (value, element) {
-            var pattern = /^(([1-9][0-9]*\.[0-9][0-9]*)|([0]\.[0-9][0-9]*)|([1-9][0-9]*)|([0]{1}))$/;
-            if (!pattern.test(value)) {
-                $(element).data('error-msg', '请输入正确的金额！');
+        $.validator.addMethod("money", function (value, element) {
+            // var pattern = /^(([1-9][0-9]*\.[0-9][0-9]*)|([0]\.[0-9][0-9]*)|([1-9][0-9]*)|([0]{1}))$/;
+            // var pattern = /^(?!(0{1,4}(((\\.0{0,2})?))$))([1-9]{1}[0-9]{0,3}|0)(\\.[0-9]{1,2})?$/;
+            var pattern = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+            if (value != null && value != '' && !pattern.test(value)) {
+                $(element).data('error-msg', '请输入8位数以内的正确金额！');
                 return false;
             }
-            var num = (value.split(',')).length;
+            // var num = (value.split(',')).length;
+            // alert(num);
+            // if (num > 7) {
+            //     $(element).data('error-msg', '最多输入7位数字！');
+            //     return false;
+            // }
+            // this.optional(element)
+
+            return true;
+        }, function (params, element) {
+            return $(element).data('error-msg');
+        });
+
+        $.validator.addMethod("number", function (value, element) {
+            var pattern = /^\d+$/;
+            if (!pattern.test(value)) {
+                $(element).data('error-msg', '请输入正确的数字！');
+                return false;
+            }
+            var num = value.length;
             if (num > 7) {
                 $(element).data('error-msg', '最多输入7位数字！');
                 return false;
@@ -48,7 +69,7 @@
             } else {
                 return this.optional(element) || value.match(/^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/);
             }
-        }, "Please enter a valid date.");
+        }, "请输入正确格式的日期.");
 
         /*自定义js函数验证
          * <input type="text" name="xxx" customvalid="xxxFn(element)" title="xxx" />

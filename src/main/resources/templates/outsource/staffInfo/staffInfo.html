@@ -15,10 +15,49 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                人名：<input type="text" name="staffName" id="staffName" autocomplete="off"/>
+                                采购编号：<input type="text" name="purchaseNo" autocomplete="off"/>
+                            </li>
+                            <li>
+                                订单编号：<input type="text" name="orderNo" id="orderNo" autocomplete="off"/>
+                            </li>
+                            <li>
+                                员工编号：<input type="text" name="staffNo" id="staffNo" autocomplete="off"/>
+                            </li>
+                            <li>
+                                人员姓名：<input type="text" name="staffName" id="staffName" autocomplete="off"/>
                             </li>
                             <li>
                                 身份证号：<input type="text" name="idCard" id="idCard" autocomplete="off"/>
+                            </li>
+                            <li>
+                                项目：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectId}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                供应商名称：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                岗位名称：<select name="postId" id="postId" class="selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                是否替换：<select name="isReplace" th:with="type=${@dict.getType('isReject')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>

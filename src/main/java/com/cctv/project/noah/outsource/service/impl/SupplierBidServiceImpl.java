@@ -112,7 +112,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
             result.setCode(0);
             result.setInfo("供应商竞标数据新增失败，请重试！");
         }
-        return new Result(1);
+        return new Result(insert);
     }
 
 //    @Override
@@ -128,24 +128,24 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
         Integer supplierId = record.getSupplierId();
         if (supplierId != null) {
-            SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-            if (supplierInfo != null) {
-                criteria.andSupplierIdEqualTo(supplierId);
-            }
+//            SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
+//            if (supplierInfo != null) {
+            criteria.andSupplierIdEqualTo(supplierId);
+//            }
         }
         Integer agreementId = record.getAgreementId();
         if (agreementId != null) {
-            AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(agreementId);
-            if (agreementInfo != null) {
-                criteria.andAgreementIdEqualTo(agreementId);
-            }
+//            AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(agreementId);
+//            if (agreementInfo != null) {
+            criteria.andAgreementIdEqualTo(agreementId);
+//            }
         }
         Integer postId = record.getPostId();
         if (postId != null) {
-            PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
-            if (postInfo != null) {
-                criteria.andPostIdEqualTo(postId);
-            }
+//            PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
+//            if (postInfo != null) {
+            criteria.andPostIdEqualTo(postId);
+//            }
         }
         Float bidPrice = record.getBidPrice();
         if (bidPrice != null) {

@@ -127,6 +127,10 @@ public class GeneralUtils {
         return parse;
     }
 
+    public static boolean compareStrDate(String beginTime, String endTime) {
+        return strToDate(beginTime, YMD).getTime() > strToDate(endTime, YMD).getTime();
+    }
+
     public static boolean compareDate(Date d1, Date d2) {
         boolean b = d1.getTime() >= d2.getTime();
         return b;

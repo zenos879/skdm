@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('添加供应商文件错误数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -10,7 +11,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
                 <div class="col-sm-7">
-                    <input name="purcharNo" id="purcharNo" class="form-control" type="text" required>
+                    <input name="purcharNo" id="purcharNo" class="form-control" type="text" required maxlength="20">
                 </div>
             </div>
         </div>
@@ -18,7 +19,10 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                 <div class="col-sm-7">
-                    <input name="supplierName" id="supplierName" class="form-control" type="text" required>
+                    <select name="supplierId" id="supplierId" class="selectpicker form-control" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                        <option value="">请选择</option>
+                        <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierId}"></option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -26,7 +30,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>应答文件错误次数：</label>
                 <div class="col-sm-7">
-                    <input name="fileError" id="fileError" class="form-control" type="text" required>
+                    <input name="fileError" id="fileError" class="number form-control" type="text" required maxlength="7">
                 </div>
             </div>
         </div>
@@ -34,7 +38,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>错误描述：</label>
                 <div class="col-sm-7">
-                    <input name="remark" id="remark" class="form-control" type="text" required>
+                    <input name="remark" id="remark" class="form-control" type="text" required maxlength="200">
                 </div>
             </div>
         </div>
@@ -43,13 +47,14 @@
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>发生日期：</label>
                 <div class="col-sm-7">
                     <input type="text" class="datetime-input form-control" id="happenDate" placeholder="发生日期"
-                           name="happenDate" required/>
+                           name="happenDate" required  readonly="readonly"/>
                 </div>
             </div>
         </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js" />
 <script type="text/javascript">
     var prefix = ctx + "outsource/supplierFileError";
 
