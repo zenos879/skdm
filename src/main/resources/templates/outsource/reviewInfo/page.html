@@ -13,10 +13,14 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									采购编号：<input type="text" name="purchaseNo"/>
+									采购编号：<input type="text" maxlength="64" name="purchaseNo"/>
 								</li>
 								<li>
-									采购总人数：<input type="text" name="postCount"/>
+									<label class="col-sm-5 control-label" style="line-height: 30px">采购总人数：</label>
+									<div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
+										<input type="text" name="postCount" maxlength="11"/>
+									</div>
+									<!--采购总人数：<input type="text" name="postCount"/>-->
 								</li>
 								<li>
 									岗位：<select name="postId" id="postId" class="selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
@@ -39,7 +43,8 @@
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
-									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+									<input type="text"
+										   class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
 									<span>-</span>
 									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
 								</li>

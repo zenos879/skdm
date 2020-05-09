@@ -32,7 +32,7 @@ public interface PostInfoMapper {
 
     PostInfo selectByPrimaryKey(Integer postId);
 
-    PostInfo selectByName(String name);
+    List<PostInfo> selectByName(String name);
 
     List<PostInfo> selectLikeName(String name);
 

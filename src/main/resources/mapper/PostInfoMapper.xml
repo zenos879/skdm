@@ -105,6 +105,7 @@
     <include refid="Base_Column_List" />
     from post_info
     where post_name = #{postName,jdbcType=VARCHAR}
+    order by post_id
   </select>
   <select id="selectLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select

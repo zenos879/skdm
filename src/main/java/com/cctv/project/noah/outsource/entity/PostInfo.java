@@ -5,6 +5,7 @@ import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.web.jsf.FacesContextUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -161,5 +162,25 @@ public class PostInfo extends BaseEntity implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+
+    public Boolean checkLegitimate() {
+        if (!super.checkDateLegitimate()) {
+            return false;
+        }
+        if (this.postName!=null && this.postName.length()>64){
+            return false;
+        }
+        if (this.categoryId!= null && String.valueOf(categoryId).length()>11){
+            return false;
+        }
+        if (this.categoryName!=null && categoryName.length()>64){
+            return false;
+        }
+        return true;
+    }
+    public Boolean checkIllegal(){
+        return !checkLegitimate();
     }
 }

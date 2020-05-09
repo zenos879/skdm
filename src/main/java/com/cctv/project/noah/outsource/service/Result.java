@@ -1,13 +1,20 @@
 package com.cctv.project.noah.outsource.service;
 
-public class Result {
+public class Result<T> {
     //1：成功  0：失败  2：警告
     public Integer code;
     public String info;
+    public T data;
     // true 警告  false 不警告
     public Boolean warning = false;
 
     public Result() {
+    }
+
+    public Result(Integer code, String info, T data) {
+        this.code = code;
+        this.info = info;
+        this.data = data;
     }
 
     public Result(Integer code, String info) {
@@ -59,4 +66,11 @@ public class Result {
         this.info = info;
     }
 
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 }

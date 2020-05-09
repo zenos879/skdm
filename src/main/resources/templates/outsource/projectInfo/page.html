@@ -15,7 +15,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									项目名称：<input type="text" th:value="${projectName}" name="projectName" maxlength="64"/>
+									项目名称：<input type="text" th:value="${projectName}" id="projectName" name="projectName" maxlength="64"/>
 								</li>
 								<li>
 									部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
@@ -23,11 +23,6 @@
 										<option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}"></option>
 									</select>
 								</li>
-								<!--<li>-->
-									<!--状态：<select name="status" th:with="type=${@dict.getType('status')}">-->
-									<!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
-									<!--</select>-->
-								<!--</li>-->
 								<li class="select-time">
 									<label>创建时间： </label>
 									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
@@ -35,7 +30,7 @@
 									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
 								</li>
 								<li>
-									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 								</li>
 							</ul>
@@ -69,6 +64,7 @@
 	<th:block th:include="include :: ztree-js" />
 	<th:block th:include="include :: bootstrap-select-js" />
 	<th:block th:include="include :: typeahead-js" />
+	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/projectInfo";
 		var _status = [[${@dict.getType('status')}]];
@@ -108,6 +104,9 @@
 		            title: '部门名称',
 					formatter: function(value, row, index) {
 						var actions = [];
+						if (value == null){
+							value = '';
+						}
 						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"')\">"+value+"</a>");
 						return actions.join('');
 					}
@@ -117,15 +116,6 @@
 		            title: '创建时间',
 		            sortable: true
 		        },
-				// {
-				// 	field: 'status',
-				// 	title: '状态',
-				// 	sortable: true,
-				// 	formatter:function(value,row,index){
-				// 		return $.table.selectDictLabel(_status, value);
-				// 		// return value;
-				// 	}
-				// },
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -165,6 +155,26 @@
 		}
 		function showDetail(value){
 			$.modal.openTab("部门",ctx+"outsource/departmentInfo?departmentName="+value);
+		}
+		function _search() {
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+			// var projectName = $("#projectName").val();
+			// var departmentId = $("#departmentId").val();
+
+			if (!$.common.isEmpty(startTime) && !isDate(startTime)) {
+				$.modal.alertError("开始时间格式不正确");
+				return;
+			}
+			if (!$.common.isEmpty(endTime) && !isDate(endTime)) {
+				$.modal.alertError("结束时间格式不正确");
+				return;
+			}
+			if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
+				$.modal.alertError("开始时间必须大于结束时间");
+				return;
+			}
+			$.table.search();
 		}
 	</script>
 

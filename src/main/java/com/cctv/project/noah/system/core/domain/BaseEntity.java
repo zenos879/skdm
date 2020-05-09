@@ -4,6 +4,8 @@ import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -109,11 +111,25 @@ public class BaseEntity implements Serializable {
     }
 
     public Boolean checkDateLegitimate(){
+        if (this.getParams() == null){
+            return true;
+        }
         String beginTime = (String) this.getParams().get("beginTime");
         String endTime = (String) this.getParams().get("endTime");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtils.isNotEmpty(beginTime) &&
                 StringUtils.isNotEmpty(endTime)&&
                 beginTime.compareTo(endTime)>0){
+            return false;
+        }
+        try {
+            if (StringUtils.isNotEmpty(beginTime)){
+                simpleDateFormat.parse(beginTime);
+            }
+            if (StringUtils.isNotEmpty(endTime)){
+                simpleDateFormat.parse(endTime);
+            }
+        } catch (ParseException e) {
             return false;
         }
         return true;

@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                         <div class="col-sm-8">
-                            <input name="supplierName" id="supplierName" placeholder="请输入供应商名称" class="form-control" type="text" maxlength="20" required>
+                            <input name="supplierName" id="supplierName" placeholder="请输入供应商名称" class="form-control" type="text" maxlength="64" required>
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"></span>联系人：</label>
                         <div class="col-sm-8">
-                            <input name="contactName" id="contactName" placeholder="请输入联系人" class="form-control" type="text" maxlength="20">
+                            <input name="contactName" id="contactName" placeholder="请输入联系人" class="form-control" type="text" maxlength="64">
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"></span>联系电话：</label>
                         <div class="col-sm-8">
-                            <input name="contactTel" id="contactTel" placeholder="请输入联系电话" class="form-control" type="text" maxlength="20">
+                            <input name="contactTel" id="contactTel" placeholder="请输入联系电话" class="form-control" type="text" maxlength="64">
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"></span>联系邮箱：</label>
                         <div class="col-sm-8">
-                            <input name="contactEmail" id="contactEmail" placeholder="请输入联系邮箱" class="form-control" type="text" maxlength="20">
+                            <input name="contactEmail" id="contactEmail" placeholder="请输入联系邮箱" class="form-control" type="text" maxlength="64">
                         </div>
                     </div>
                 </div>
@@ -61,6 +61,14 @@
         $("#form-supplier-add").validate({
             onkeyup: false,
             focusCleanup: true,
+            rules:{
+                contactTel:{
+                    digits:true,
+                },
+                contactEmail:{
+                    email:true
+                },
+            },
         });
 
         function submitHandler() {

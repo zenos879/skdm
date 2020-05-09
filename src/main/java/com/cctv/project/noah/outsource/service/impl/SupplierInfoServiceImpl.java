@@ -11,6 +11,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +66,9 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
 
     @Override
     public List<SupplierInfo> selectBySelective(SupplierInfo supplierInfo) {
+        if (!supplierInfo.checkDateLegitimate()) {
+            return new ArrayList<>();
+        }
         return supplierInfoMapper.selectBySelective(supplierInfo);
     }
 
@@ -91,6 +95,13 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
         }
         if (supplierInfoDb.equals(supplierInfo)) {
             return new Result(0, "修改必须与之前不同！");
+        }
+        if (supplierInfoDb.equals(supplierInfo)) {
+            return new Result(0, "修改必须与之前不同！");
+        }
+        SupplierInfo supplierInfoByName = selectByName(supplierInfo.getSupplierName());
+        if (supplierInfoByName.getSupplierId() != supplierInfo.getSupplierId()){
+            return new Result(0, "此供应商已存在！");
         }
         int i = supplierInfoMapper.updateByPrimaryKeySelective(supplierInfo);
         return new Result(i);

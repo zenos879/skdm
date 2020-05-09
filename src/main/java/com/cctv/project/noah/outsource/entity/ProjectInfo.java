@@ -1,13 +1,16 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.utils.CommonUtil;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -69,14 +72,11 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getDepartmentName() {
-//        if (this.departmentStatus == 0){
-//            return CommonUtil.getDelText(departmentName);
-//        }
-        return departmentName;
+        return departmentName == null?departmentName:departmentName.trim();
     }
 
     public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+        this.departmentName = (departmentName == null?departmentName:departmentName.trim());
     }
 
     public Integer getProjectId() {
@@ -111,14 +111,6 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         this.createTime = createTime;
     }
 
-    public Boolean hasNull(){
-        return this.departmentId == null ||
-                (StringUtils.isEmpty(this.projectName) && this.projectId == null);
-    }
-
-    public Boolean notNull(){
-        return !hasNull();
-    }
 
     @Override
     public boolean equals(Object that) {
@@ -162,5 +154,56 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public Boolean hasNull(){
+        Result result = hasNullResult();
+        return result.code>0?false:true;
+    }
+    public Boolean notNull(){
+        return !hasNull();
+    }
+    public Result hasNullResult(){
+        if (departmentId == null && StringUtils.isEmpty(departmentName)){
+            return new Result(0,"部门不能为空！");
+        }
+        if (projectName == null) {
+            return new Result(0,"项目名称不能为空！");
+        }
+        return new Result(1);
+    }
+    public Result checkLegitimateResult(){
+        if (!super.checkDateLegitimate()) {
+            return new Result(0,"时间格式不正确");
+        }
+        if (this.getProjectName() != null && this.getProjectName().length()>64){
+           return new Result(0,"项目名称长度不能大于64！");
+        }
+        if (this.getDepartmentId() != null && String.valueOf(this.getProjectId()).length()>11){
+            return new Result(0,"部门id长度不能大于11！");
+        }
+        if (this.departmentName!=null && departmentName.length()>64){
+            return new Result(0,"部门名称长度不能大于64");
+        }
+        return new Result(1);
+    }
+    public Boolean checkIllegal(){
+        return !checkLegitimate();
+    }
+    public Boolean checkLegitimate(){
+        Result result = checkLegitimateResult();
+        return result.code>0?true:false;
+    }
+
+    public Result beforeUpdateCheck(){
+        Result resultHasNull = this.hasNullResult();
+        if (resultHasNull.code<1){
+            return resultHasNull;
+        }
+        Result resultCheck = this.checkLegitimateResult();
+        if (resultCheck.code<1){
+            return resultCheck;
+        }
+        return new Result(1);
     }
 }

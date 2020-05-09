@@ -76,35 +76,35 @@ public class SupplierInfo extends BaseEntity implements Serializable {
     }
 
     public String getSupplierName() {
-        return supplierName;
+        return supplierName == null? supplierName:supplierName.trim();
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (supplierName == null? supplierName:supplierName.trim());
     }
 
     public String getContactName() {
-        return contactName;
+        return contactName == null?contactName:contactName.trim();
     }
 
     public void setContactName(String contactName) {
-        this.contactName = contactName;
+        this.contactName = (contactName == null?contactName:contactName.trim());
     }
 
     public String getContactTel() {
-        return contactTel;
+        return contactTel == null?contactTel:contactTel.trim();
     }
 
     public void setContactTel(String contactTel) {
-        this.contactTel = contactTel;
+        this.contactTel = (contactTel == null?contactTel:contactTel.trim());
     }
 
     public String getContactEmail() {
-        return contactEmail;
+        return contactEmail == null?contactEmail:contactEmail.trim();
     }
 
     public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
+        this.contactEmail = (contactEmail == null?contactEmail:contactEmail.trim());
     }
 
     public Integer getIsSubsidiary() {
