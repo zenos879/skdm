@@ -135,12 +135,61 @@ public class BaseEntity implements Serializable {
         }
         return true;
     }
+
+    /**
+     * 检测非空属性并返回信息
+     * @return
+     */
     public Result hasNullResult(){
         return null;
     }
+
+    /**
+     *  检测合法属性并返回信息
+     * @return
+     */
     public Result checkLegitimateResult(){
         return null;
     }
+
+    /**
+     *  检测空属性 返回boolean
+     * @return
+     */
+    public Boolean hasNull(){
+        Result result = hasNullResult();
+        return result.code>0?false:true;
+    }
+
+    /**
+     * 检测非空属性 返回boolean
+     * @return
+     */
+    public Boolean notNull(){
+        return !hasNull();
+    }
+
+    /**
+     * 检测属性非法 返回boolean
+     * @return
+     */
+    public Boolean checkIllegal(){
+        return !checkLegitimate();
+    }
+
+    /**
+     *  检测数据合法  返回boolean
+     * @return
+     */
+    public Boolean checkLegitimate(){
+        Result result = checkLegitimateResult();
+        return result.code>0?true:false;
+    }
+
+    /**
+     *  修改前检测非空和非法
+     * @return
+     */
     public Result beforeUpdateCheck(){
         Result resultHasNull = this.hasNullResult();
         if (resultHasNull.code<1){

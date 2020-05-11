@@ -9,6 +9,7 @@ import com.cctv.project.noah.outsource.mapper.CategoryInfoMapper;
 import com.cctv.project.noah.outsource.mapper.DepartmentInfoMapper;
 import com.cctv.project.noah.outsource.mapper.PostInfoMapper;
 import com.cctv.project.noah.outsource.mapper.ProjectInfoMapper;
+import com.cctv.project.noah.outsource.service.CategoryInfoService;
 import com.cctv.project.noah.outsource.service.PostInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
@@ -25,13 +26,16 @@ import java.util.Date;
 import java.util.List;
 
 @Service("postInfoService")
-public class PostInfoServiceImpl implements PostInfoService {
+public class PostInfoServiceImpl extends BaseService implements PostInfoService {
 
     @Autowired
     PostInfoMapper postInfoMapper;
 
     @Autowired
     CategoryInfoMapper categoryInfoMapper;
+
+    @Autowired
+    CategoryInfoService categoryInfoService;
 
     Logger logger = LoggerFactory.getLogger(PostInfoServiceImpl.class);
     public List<PostInfo> selectAll(){
@@ -62,19 +66,7 @@ public class PostInfoServiceImpl implements PostInfoService {
     @Override
     public List<PostInfo> selectByIds(String ids){
         try {
-            if (StringUtils.isEmpty(ids)){
-                return new ArrayList<>();
-            }
-            ids = ids.trim();
-            List<String> idList = Arrays.asList(ids.split(","));
-            for (String id : idList) {
-                try {
-                    Integer.valueOf(id);
-                } catch (NumberFormatException e) {
-                    logger.error("传入的id不合法，不合法id为<"+id+">");
-                    idList.remove(id);
-                }
-            }
+            List<String> idList = checkIds(ids);
             List<PostInfo> postInfos = postInfoMapper.selectByIds(idList.toArray(new String[idList.size()]));
             return StringUtils.isNotEmpty(postInfos)?postInfos:new ArrayList<>();
         } catch (Exception e) {
@@ -162,7 +154,7 @@ public class PostInfoServiceImpl implements PostInfoService {
             int i = postInfoMapper.insertSelective(postInfo);
             return new Result(i);
         } catch (Exception e) {
-            logger.error("[ERROR]---"+e);
+            logger.error("【ERROR】---"+e);
             return new Result(0,"插入失败");
         }
 
@@ -180,7 +172,7 @@ public class PostInfoServiceImpl implements PostInfoService {
                 if (result.code<1){
                     return new Result(0,"第"+(i+2)+"行的"+result.info);
                 }
-                CategoryInfo categoryInfo = categoryInfoMapper.selectByName(postInfo.getCategoryName());
+                CategoryInfo categoryInfo = categoryInfoService.selectByName(postInfo.getCategoryName());
                 if (categoryInfo == null) {
                     return new Result(0,"第"+(i+2)+"行的岗位分类不存在!");
                 }

@@ -9,6 +9,8 @@ import com.cctv.project.noah.outsource.service.CategoryInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,104 +19,170 @@ import java.util.Date;
 import java.util.List;
 
 @Service("categoryInfoService")
-public class CategoryInfoServiceImpl implements CategoryInfoService {
+public class CategoryInfoServiceImpl extends BaseService implements CategoryInfoService {
     @Autowired
     CategoryInfoMapper categoryInfoMapper;
 
     @Autowired
     PostInfoMapper postInfoMapper;
 
+    Logger logger = LoggerFactory.getLogger(CategoryInfoServiceImpl.class);
+
     @Override
     public List<CategoryInfo> selectAll(){
-        return categoryInfoMapper.selectBySelective(new CategoryInfo());
+        try {
+            List<CategoryInfo> categoryInfos = categoryInfoMapper.selectBySelective(new CategoryInfo());
+            return StringUtils.isNotEmpty(categoryInfos)?categoryInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public List<CategoryInfo> selectBySelective(CategoryInfo categoryInfo){
-        if (!categoryInfo.checkDateLegitimate()) {
+        try {
+            if (categoryInfo == null) {
+                return selectAll();
+            }
+            if (categoryInfo.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            List<CategoryInfo> categoryInfos = categoryInfoMapper.selectBySelective(categoryInfo);
+            return StringUtils.isNotEmpty(categoryInfos)?categoryInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
             return new ArrayList<>();
         }
-        return categoryInfoMapper.selectBySelective(categoryInfo);
     }
     @Override
     public List<CategoryInfo> selectByIds(String ids){
-        return categoryInfoMapper.selectByIds(ids.split(","));
+        try {
+            List<String> list = checkIds(ids);
+            List<CategoryInfo> categoryInfos = categoryInfoMapper.selectByIds(list.toArray(new String[list.size()]));
+            return StringUtils.isNotEmpty(categoryInfos)?categoryInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public CategoryInfo selectByName(String name){
-        return categoryInfoMapper.selectByName(name);
+        try {
+            if (StringUtils.isEmpty(name)) {
+                return null;
+            }
+            name = name.trim();
+            List<CategoryInfo> categoryInfos = categoryInfoMapper.selectByName(name);
+            return StringUtils.isNotEmpty(categoryInfos)?categoryInfos.get(0):null;
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return null;
+        }
     }
     @Override
     public Result updateBySelective(CategoryInfo categoryInfo){
-        Integer categoryId = categoryInfo.getCategoryId();
-        if (categoryId == null) {
-            return new Result(0,"id为空,无法修改！");
+        try {
+            if (categoryInfo == null) {
+                return new Result(0,"传入数据错误！");
+            }
+            Integer categoryId = categoryInfo.getCategoryId();
+            if (categoryId == null) {
+                return new Result(0,"id为空,无法修改！");
+            }
+            Result result = categoryInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            CategoryInfo categoryInfoDb = categoryInfoMapper.selectByPrimaryKey(categoryId);
+            if (categoryInfoDb == null){
+                return new Result(0,"无法修改不存在的岗位分类！");
+            }
+            CategoryInfo categoryInfoByName = selectByName(categoryInfo.getCategoryName());
+            if (categoryInfoByName!=null && !categoryInfoByName.getCategoryId().equals(categoryInfo.getCategoryId())) {
+                return new Result(0,"此岗位分类已存在！");
+            }
+            int i = categoryInfoMapper.updateByPrimaryKeySelective(categoryInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new Result(0,"修改失败！");
         }
-        if (StringUtils.isEmpty(categoryInfo.getCategoryName())) {
-            return new Result(0,"岗位分类名称不能为空！");
-        }
-        CategoryInfo categoryInfoDb = categoryInfoMapper.selectByPrimaryKey(categoryId);
-        if (categoryInfoDb == null){
-            return new Result(0,"无法修改不存在的岗位分类！");
-        }
-        if (categoryInfoDb.getCategoryName().equals(categoryInfo.getCategoryName())){
-            return new Result(0,"修改必须与之前不同！");
-        }
-        CategoryInfo categoryInfoByName = selectByName(categoryInfo.getCategoryName());
-        if (categoryInfoByName.getCategoryId() != categoryInfo.getCategoryId()) {
-            return new Result(0,"此岗位分类已存在！");
-        }
-        int i = categoryInfoMapper.updateByPrimaryKeySelective(categoryInfo);
-        return new Result(i);
     }
     @Override
     public Result insertBySelective(CategoryInfo categoryInfo){
-        if (StringUtils.isEmpty(categoryInfo.getCategoryName())) {
-            return new Result(0,"岗位分类名称不能为空！");
+        try {
+            if (categoryInfo == null) {
+                return new Result(0,"传入数据错误！");
+            }
+            Result result = categoryInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            CategoryInfo categoryInfoDb = selectByName(categoryInfo.getCategoryName());
+            if (categoryInfoDb != null) {
+                return new Result(0,"此岗位分类已存在！",true);
+            }
+            categoryInfo.setCreateTime(new Date());
+            int i = categoryInfoMapper.insertSelective(categoryInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return new Result(0,"插入失败");
         }
-        CategoryInfo categoryInfoDb = categoryInfoMapper.selectByName(categoryInfo.getCategoryName());
-        if (categoryInfoDb != null) {
-            return new Result(0,"此岗位分类已存在！",true);
-        }
-        categoryInfo.setCreateTime(new Date());
-        int i = categoryInfoMapper.insertSelective(categoryInfo);
-        return new Result(i);
 
     }
 
     @Override
     public Result importCategoryInfo(List<CategoryInfo> categoryInfos){
-        for (int i = 0; i < categoryInfos.size(); i++) {
-            CategoryInfo categoryInfo = categoryInfos.get(i);
-            if (categoryInfo.getCategoryName() == null) {
-                return new Result(0,"第"+(i+2)+"行的岗位分类名称为空!");
+        try {
+            if (StringUtils.isEmpty(categoryInfos)) {
+                return new Result(0,"未从文件中读取到数据！");
             }
-            categoryInfo.setCreateTime(new Date());
+            for (int i = 0; i < categoryInfos.size(); i++) {
+                CategoryInfo categoryInfo = categoryInfos.get(i);
+                Result result = categoryInfo.beforeUpdateCheck();
+                if (result.code<1){
+                    return new Result(0,"第"+(i+2)+"行的"+result.info);
+                }
+                categoryInfo.setCreateTime(new Date());
+            }
+            int success = 0;
+            int i = 0;
+            StringBuffer warning = new StringBuffer();
+            for (CategoryInfo categoryInfo : categoryInfos) {
+                i++;
+                Result result = insertBySelective(categoryInfo);
+                if (result.warning){
+                    warning.append("第").append(i+1).append("行的").append(categoryInfo.getCategoryName()).append("未插入，原因是：<")
+                            .append(result.info).append("></br>");
+                    continue;
+                }
+                if (result.code<1){
+                    return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
+                }
+                success++;
+            }
+            int size = categoryInfos.size();
+            warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+            return new Result(success,warning.toString());
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return new Result(0,"导入失败");
         }
-        int success = 0;
-        int i = 0;
-        StringBuffer warning = new StringBuffer();
-        for (CategoryInfo categoryInfo : categoryInfos) {
-            i++;
-            Result result = insertBySelective(categoryInfo);
-            if (result.warning){
-                warning.append("第").append(i+1).append("行的").append(categoryInfo.getCategoryName()).append("未插入，原因是：<")
-                        .append(result.info).append("></br>");
-                continue;
-            }
-            if (result.code<1){
-                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
-            }
-            success++;
-        }
-        int size = categoryInfos.size();
-        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
-        return new Result(success,warning.toString());
     }
     @Override
     public CategoryInfo selectByPrimaryKey(Integer id){
-        return categoryInfoMapper.selectByPrimaryKey(id);
+        try {
+            if (id == null) {
+                return null;
+            }
+            return categoryInfoMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return null;
+        }
     }
     @Override
     public Result deleteByIds(String ids) {

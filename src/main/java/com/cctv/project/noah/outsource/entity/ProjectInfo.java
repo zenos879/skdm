@@ -157,14 +157,6 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         sb.append("]");
         return sb.toString();
     }
-
-    public Boolean hasNull(){
-        Result result = hasNullResult();
-        return result.code>0?false:true;
-    }
-    public Boolean notNull(){
-        return !hasNull();
-    }
     @Override
     public Result hasNullResult(){
         if (departmentId == null && StringUtils.isEmpty(departmentName)){
@@ -190,13 +182,6 @@ public class ProjectInfo extends BaseEntity implements Serializable{
             return new Result(0,"部门名称长度不能大于64");
         }
         return new Result(1);
-    }
-    public Boolean checkIllegal(){
-        return !checkLegitimate();
-    }
-    public Boolean checkLegitimate(){
-        Result result = checkLegitimateResult();
-        return result.code>0?true:false;
     }
 
 

@@ -26,7 +26,7 @@ public interface DepartmentInfoMapper {
 
     DepartmentInfo selectByPrimaryKey(Integer departmentId);
 
-    DepartmentInfo selectByName(String departmentName);
+    List<DepartmentInfo> selectByName(String departmentName);
 
     int updateByExampleSelective(@Param("record") DepartmentInfo record, @Param("example") DepartmentInfoExample example);
 

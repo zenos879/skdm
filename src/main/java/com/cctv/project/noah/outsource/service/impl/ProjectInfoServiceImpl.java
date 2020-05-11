@@ -5,6 +5,7 @@ import com.cctv.project.noah.outsource.entity.DepartmentInfo;
 import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import com.cctv.project.noah.outsource.mapper.DepartmentInfoMapper;
 import com.cctv.project.noah.outsource.mapper.ProjectInfoMapper;
+import com.cctv.project.noah.outsource.service.DepartmentInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.core.domain.text.Convert;
@@ -23,13 +24,16 @@ import java.util.List;
 import static javax.swing.UIManager.get;
 
 @Service("projectInfoService")
-public class ProjectInfoServiceImpl implements ProjectInfoService {
+public class ProjectInfoServiceImpl extends BaseService implements ProjectInfoService {
 
     @Autowired
     ProjectInfoMapper projectInfoMapper;
 
     @Autowired
     DepartmentInfoMapper departmentInfoMapper;
+
+    @Autowired
+    DepartmentInfoService departmentInfoService;
 
     Logger logger = LoggerFactory.getLogger(ProjectInfoServiceImpl.class);
     @Override
@@ -62,19 +66,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     public List<ProjectInfo> selectByIds(String ids){
 
         try {
-            if (StringUtils.isEmpty(ids)){
-                return new ArrayList<>();
-            }
-            ids = ids.trim();
-            List<String> list = Arrays.asList(ids.split(","));
-            for (String id : list) {
-                try {
-                    Integer.valueOf(id);
-                } catch (NumberFormatException e) {
-                    logger.error("传入的id不合法，不合法id为<"+id+">");
-                    list.remove(id);
-                }
-            }
+            List<String> list = checkIds(ids);
             List<ProjectInfo> projectInfos = projectInfoMapper.selectByIds(list.toArray(new String[list.size()]));
             return StringUtils.isNotEmpty(projectInfos)?projectInfos:new ArrayList<>();
         } catch (Exception e) {
@@ -165,7 +157,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
                 if (result.code<1){
                     return new Result(0,"第"+(i+2)+"行的"+result.info);
                 }
-                DepartmentInfo departmentInfo = departmentInfoMapper.selectByName(projectInfo.getDepartmentName());
+                DepartmentInfo departmentInfo = departmentInfoService.selectByName(projectInfo.getDepartmentName());
                 if (departmentInfo == null) {
                     return new Result(0,"第"+(i+2)+"行的部门不存在或已删除!");
                 }

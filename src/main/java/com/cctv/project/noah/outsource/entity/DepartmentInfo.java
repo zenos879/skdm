@@ -1,7 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -59,10 +61,12 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
         this.departmentName = (departmentName == null?departmentName:departmentName.trim());
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -107,4 +111,23 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+    @Override
+    public Result hasNullResult(){
+        if (StringUtils.isEmpty(departmentName)) {
+            return new Result(0,"部门名称不能为空！");
+        }
+        return new Result(1);
+    }
+    @Override
+    public Result checkLegitimateResult(){
+        if (!super.checkDateLegitimate()) {
+            return new Result(0,"时间格式不正确");
+        }
+        if (this.getDepartmentName() != null && this.getDepartmentName().length()>64){
+            return new Result(0,"岗位名称长度不能大于64！");
+        }
+        return new Result(1);
+    }
+
 }

@@ -17,12 +17,12 @@
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
-									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" autocomplete="off" readonly="readonly"/>
 									<span>-</span>
-									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" autocomplete="off" readonly="readonly"/>
 								</li>
 								<li>
-									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 								</li>
 							</ul>
@@ -54,6 +54,7 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/departmentInfo";
 
@@ -137,6 +138,30 @@
 				});
 			});
 		}
+        function _search() {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            // var projectName = $("#projectName").val();
+            // var departmentId = $("#departmentId").val();
+
+            if (!$.common.isEmpty(startTime) && !isDate(startTime)) {
+                $.modal.alertError("开始时间格式不正确");
+                $("#startTime").val('');
+                return;
+            }
+            if (!$.common.isEmpty(endTime) && !isDate(endTime)) {
+                $.modal.alertError("结束时间格式不正确");
+                $("#endTime").val('');
+                return;
+            }
+            if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
+                $.modal.alertError("开始时间必须大于结束时间");
+                $("#startTime").val('');
+                $("#endTime").val('');
+                return;
+            }
+            $.table.search();
+        }
 	</script>
 </body>
 <!-- 导入区域 -->
