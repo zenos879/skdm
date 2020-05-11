@@ -50,8 +50,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         staffInfo.setAutoId(id);
         staffInfo.setStatus(ModelClass.STATUS_OFF);
         int i = staffInfoMapper.updateByPrimaryKeySelective(staffInfo);
-        result.setCode(i);
-        return result;
+        return new Result(i);
     }
 
     /**
@@ -75,9 +74,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     @Override
     public Result insert(StaffInfo record) {
         Result result = new Result();
-        // 插入时判断人名是否存在
-        String name = record.getStaffName();
-
+        // 插入时判断是否存在
         Integer b = selectBeanExist(record, false);
         // 验证关系是否存在
         if (b > 0) {
@@ -91,7 +88,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             result.setCode(0);
             result.setInfo("人员数据新增失败，请重试！");
         }
-        return result;
+        return new Result(insert);
     }
 
 //    @Override
@@ -105,8 +102,16 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     public List<StaffInfo> selectList(StaffInfo record) {
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-        Long staffNo = record.getStaffNo();
-        if (staffNo != null) {
+        String purchaseNo = record.getPurchaseNo();
+        if (StringUtils.isNotEmpty(purchaseNo)) {
+            criteria.andPurchaseNoLike("%" + purchaseNo + "%");
+        }
+        String orderNo = record.getOrderNo();
+        if (StringUtils.isNotEmpty(orderNo)) {
+            criteria.andOrderNoLike("%" + orderNo + "%");
+        }
+        String staffNo = record.getStaffNo();
+        if (StringUtils.isNotEmpty(staffNo)) {
             criteria.andStaffNoEqualTo(staffNo);
         }
         String staffName = record.getStaffName();
@@ -117,9 +122,25 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         if (StringUtils.isNotEmpty(idCard)) {
             criteria.andIdCardLike(idCard);
         }
+        Integer projectId = record.getProjectId();
+        if (projectId != null) {
+            criteria.andProjectIdEqualTo(projectId);
+        }
+        Integer supplierId = record.getSupplierId();
+        if (supplierId != null) {
+            criteria.andSupplierIdEqualTo(supplierId);
+        }
         Integer departmentId = record.getDepartmentId();
         if (departmentId != null) {
             criteria.andDepartmentIdEqualTo(departmentId);
+        }
+        Integer postId = record.getPostId();
+        if (postId != null) {
+            criteria.andPostIdEqualTo(postId);
+        }
+        Integer isReplace = record.getIsReplace();
+        if (isReplace != null) {
+            criteria.andIsReplaceEqualTo(isReplace);
         }
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         for (StaffInfo staffInfo : staffInfos) {
@@ -141,7 +162,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
 
     @Override
     public List<StaffInfo> selectAll() {
-        return selectList(new StaffInfo());
+        StaffInfoExample staffInfoExample = new StaffInfoExample();
+        StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        return staffInfoMapper.selectByExample(staffInfoExample);
     }
 
     @Override
@@ -155,7 +178,6 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         }
         return staffInfos;
     }
-
 
     @Override
     public StaffInfo selectByPrimaryKey(Integer id) {
@@ -189,21 +211,22 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         Integer departmentId = record.getDepartmentId();
         Integer postId = record.getPostId();
         ProjectInfo projectInfo = projectInfoService.selectByPrimaryKey(projectId);
-        if (projectInfo != null){
+        if (projectInfo != null) {
             record.setProjectName(projectInfo.getProjectName());
         }
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
-        if (supplierInfo != null){
+        if (supplierInfo != null) {
             record.setSupplierName(supplierInfo.getSupplierName());
         }
         DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
-        if (departmentInfo != null){
+        if (departmentInfo != null) {
             record.setDepartmentName(departmentInfo.getDepartmentName());
         }
         PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
-        if (postInfo != null){
+        if (postInfo != null) {
             record.setPostName(postInfo.getPostName());
         }
+
         return record;
     }
 
@@ -229,8 +252,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             return result;
         }
         int i = staffInfoMapper.updateByPrimaryKeySelective(record);
-        result.setCode(i);
-        return result;
+        return new Result(i);
     }
 
     @Override
@@ -246,10 +268,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
      * @return
      */
     @Override
-    public Result updateGroupByStaffNo(List<Long> staffNos) {
+    public Result updateGroupByStaffNo(Integer groupId, List<String> staffNos) {
         StaffInfo staffInfo = new StaffInfo();
-        Integer integer = groupMax();
-        staffInfo.setReplaceGroup(integer + 1);
+        staffInfo.setReplaceGroup(groupId);
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
         criteria.andStaffNoIn(staffNos);
@@ -264,7 +285,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
      * @return 返回主键
      */
     private Integer selectBeanExist(StaffInfo staffInfo, boolean other) {
-        Long staffNo = staffInfo.getStaffNo();
+        String staffNo = staffInfo.getStaffNo();
         String idCard = staffInfo.getIdCard();
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();

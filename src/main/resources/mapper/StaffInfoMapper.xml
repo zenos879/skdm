@@ -5,7 +5,7 @@
     <id column="auto_id" jdbcType="INTEGER" property="autoId"/>
       <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo"/>
-    <result column="staff_no" jdbcType="BIGINT" property="staffNo"/>
+    <result column="staff_no" jdbcType="VARCHAR" property="staffNo"/>
     <result column="staff_name" jdbcType="VARCHAR" property="staffName"/>
     <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
       <result column="project_id" jdbcType="INTEGER" property="projectId" />
@@ -188,7 +188,7 @@
       is_replace, replace_group, reason,
       arrive_date, leave_date, leave_reason,
       create_time, `status`)
-    values (#{purchaseNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{staffNo,jdbcType=BIGINT},
+    values (#{purchaseNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{staffNo,jdbcType=VARCHAR},
       #{staffName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER},
       #{supplierId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER},
       #{isReplace,jdbcType=INTEGER}, #{replaceGroup,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR},
@@ -259,7 +259,7 @@
                 #{orderNo,jdbcType=VARCHAR},
             </if>
             <if test="staffNo != null">
-                #{staffNo,jdbcType=BIGINT},
+                #{staffNo,jdbcType=VARCHAR},
             </if>
             <if test="staffName != null">
                 #{staffName,jdbcType=VARCHAR},
@@ -325,7 +325,7 @@
                 order_no = #{record.orderNo,jdbcType=VARCHAR},
             </if>
             <if test="record.staffNo != null">
-                staff_no = #{record.staffNo,jdbcType=BIGINT},
+                staff_no = #{record.staffNo,jdbcType=VARCHAR},
             </if>
             <if test="record.staffName != null">
                 staff_name = #{record.staffName,jdbcType=VARCHAR},
@@ -379,7 +379,7 @@
         set auto_id = #{record.autoId,jdbcType=INTEGER},
         purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
         order_no = #{record.orderNo,jdbcType=VARCHAR},
-        staff_no = #{record.staffNo,jdbcType=BIGINT},
+        staff_no = #{record.staffNo,jdbcType=VARCHAR},
         staff_name = #{record.staffName,jdbcType=VARCHAR},
         id_card = #{record.idCard,jdbcType=VARCHAR},
         project_id = #{record.projectId,jdbcType=INTEGER},
@@ -408,7 +408,7 @@
                 order_no = #{orderNo,jdbcType=VARCHAR},
             </if>
             <if test="staffNo != null">
-                staff_no = #{staffNo,jdbcType=BIGINT},
+                staff_no = #{staffNo,jdbcType=VARCHAR},
             </if>
             <if test="staffName != null">
                 staff_name = #{staffName,jdbcType=VARCHAR},
@@ -459,7 +459,7 @@
     update staff_info
     set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
-      staff_no = #{staffNo,jdbcType=BIGINT},
+      staff_no = #{staffNo,jdbcType=VARCHAR},
       staff_name = #{staffName,jdbcType=VARCHAR},
       id_card = #{idCard,jdbcType=VARCHAR},
       project_id = #{projectId,jdbcType=INTEGER},

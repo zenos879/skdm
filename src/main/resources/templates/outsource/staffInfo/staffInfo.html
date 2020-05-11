@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('供应商文件错误数据')" />
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
     <!-- 主体内容开始 -->
@@ -15,19 +16,19 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                采购编号：<input type="text" name="purchaseNo" autocomplete="off"/>
+                                采购编号：<input type="text" name="purchaseNo" autocomplete="off" maxlength="20"/>
                             </li>
                             <li>
-                                订单编号：<input type="text" name="orderNo" id="orderNo" autocomplete="off"/>
+                                订单编号：<input type="text" name="orderNo" id="orderNo" autocomplete="off" maxlength="20"/>
                             </li>
                             <li>
-                                员工编号：<input type="text" name="staffNo" id="staffNo" autocomplete="off"/>
+                                员工编号：<input type="text" name="staffNo" id="staffNo" autocomplete="off" maxlength="20"/>
                             </li>
                             <li>
-                                人员姓名：<input type="text" name="staffName" id="staffName" autocomplete="off"/>
+                                人员姓名：<input type="text" name="staffName" id="staffName" autocomplete="off" maxlength="8"/>
                             </li>
                             <li>
-                                身份证号：<input type="text" name="idCard" id="idCard" autocomplete="off"/>
+                                身份证号：<input type="text" name="idCard" id="idCard" class="idcard" autocomplete="off" maxlength="18"/>
                             </li>
                             <li>
                                 项目：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
@@ -60,7 +61,10 @@
                             </select>
                             </li>
                             <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                替换分组：<input type="text" name="replaceGroup" id="replaceGroup" autocomplete="off" maxlength="18"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.searchWithCheck()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
@@ -94,9 +98,10 @@
         </div>
     </div>
     <!-- 主体内容结束 -->
-<th:block th:include="include :: footer" />
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-    var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
+    var isReject = [[${@dict.getType('isReject')}]];
     $(function(){
         queryList();
     });
@@ -164,7 +169,7 @@
                     title: '是否替换',
                     sortable: true,
                     formatter:function(value,row,index){
-                        return $.table.selectDictLabel(isNotifyInterview, value);
+                        return $.table.selectDictLabel(isReject, value);
                     }
                 },
                 {

@@ -2,19 +2,21 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改人员数据')"/>
-    <th:block th:include="include :: bootstrap-select-css" />
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-personInfo-edit" th:with="command = ${@staffInfoService.selectByPrimaryKey(id)}">
+    <form class="form-horizontal m" id="form-personInfo-edit"
+          th:with="command = ${@staffInfoService.selectByPrimaryKey(id)}">
         <input type="hidden" name="autoId" th:value="${command.autoId}">
         <h4 class="form-header h4">人员数据</h4>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人名：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人员姓名：</label>
                     <div class="col-sm-7">
-                        <input name="staffName" th:value="${command.staffName}" id="staffName" class="form-control" type="text" required>
+                        <input name="staffName" th:value="${command.staffName}" id="staffName" class="form-control"
+                               type="text" required readonly>
                     </div>
                 </div>
             </div>
@@ -22,7 +24,17 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>身份证号：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:value="${command.idCard}" id="idCard" class="form-control" type="text" required>
+                        <input name="idCard" th:value="${command.idCard}" id="idCard" class="form-control" type="text"
+                               required readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目名称：</label>
+                    <div class="col-sm-7">
+                        <input name="idCard" th:value="${command.projectName}" id="projectName" class="form-control" type="text"
+                               required readonly>
                     </div>
                 </div>
             </div>
@@ -30,22 +42,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                     <div class="col-sm-7">
-                        <select name="supplierName" id="supplierName" class="selectpicker form-control" data-live-search="true"
-                                th:with="suppliers=${@supplierInfoService.selectAll()}">
-                            <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}"
-                                    th:value="${supplier.supplierName}"
-                                    th:selected="${command.supplierId == supplier.supplierId}"></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
-                    <div class="col-sm-7">
-                        <select name="postName" id="postName" class="selectpicker form-control" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
-                            <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postName}" th:selected="${command.postId == post.postId}"></option>
-                        </select>
+                        <input name="idCard" th:value="${command.supplierName}" id="supplierName" class="form-control" type="text"
+                               required readonly>
                     </div>
                 </div>
             </div>
@@ -53,17 +51,47 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>部门名称：</label>
                     <div class="col-sm-7">
-                        <select name="departmentName" id="departmentName" class="selectpicker form-control" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
-                            <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentName}" th:selected="${command.getDepartmentId() == depart.departmentId}"></option>
+                        <input name="idCard" th:value="${command.departmentName}" id="departmentName" class="form-control" type="text"
+                               required readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
+                    <div class="col-sm-7">
+                        <input name="idCard" th:value="${command.postName}" id="postName" class="form-control" type="text"
+                               required readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否替换：</label>
+                    <div class="col-sm-7">
+                        <select name="isReplace" th:with="type=${@dict.getType('isReject')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"
+                                    th:selected="${(command.isReplace + '') == dict.dictValue}"></option>
                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>替换人员身份证号：</label>
+                    <div class="col-sm-7">
+                        <input name="replacdStaffIdCard" th:value="${command.replacdStaffIdCard}" id="replacdStaffIdCard" class="hidden form-control" type="text"
+                               required readonly>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 
 <script type="text/javascript">
     var prefix = ctx + "outsource/personInfo";

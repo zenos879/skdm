@@ -37,7 +37,7 @@ public interface StaffInfoService {
 
     Result updateByPrimaryKey(StaffInfo record);
 
-    Result updateGroupByStaffNo(List<Long> staffNo);
+    Result updateGroupByStaffNo(Integer groupId, List<String> staffNo);
 
 //    Result importStaffInfo(List<StaffInfo> records);
 }

@@ -134,7 +134,7 @@ public class UserController extends BaseController {
     private Boolean hasStaffInfo(String userName){
         try {
             StaffInfo staffInfo = new StaffInfo();
-            staffInfo.setStaffNo(Long.valueOf(userName));
+            staffInfo.setStaffNo(userName);
             List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
             if (StringUtils.isEmpty(staffInfos)){
                 return false;

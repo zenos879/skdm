@@ -41,8 +41,8 @@ public class AttendanceCount{
     private String staffName;
 
     @Excel(name = "考勤人ID")
-    @JsonSerialize(using = JsonLongSerializer.class)
-    private Long staffNo;
+//    @JsonSerialize(using = JsonLongSerializer.class)
+    private String staffNo;
 
     /**
      * 到岗日期
@@ -79,11 +79,11 @@ public class AttendanceCount{
         this.staffName = staffName;
     }
 
-    public Long getStaffNo() {
+    public String getStaffNo() {
         return staffNo;
     }
 
-    public void setStaffNo(Long staffNo) {
+    public void setStaffNo(String staffNo) {
         this.staffNo = staffNo;
     }
 

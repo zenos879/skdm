@@ -372,52 +372,62 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoEqualTo(Long value) {
+        public Criteria andStaffNoEqualTo(String value) {
             addCriterion("staff_no =", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotEqualTo(Long value) {
+        public Criteria andStaffNoNotEqualTo(String value) {
             addCriterion("staff_no <>", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoGreaterThan(Long value) {
+        public Criteria andStaffNoGreaterThan(String value) {
             addCriterion("staff_no >", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoGreaterThanOrEqualTo(Long value) {
+        public Criteria andStaffNoGreaterThanOrEqualTo(String value) {
             addCriterion("staff_no >=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoLessThan(Long value) {
+        public Criteria andStaffNoLessThan(String value) {
             addCriterion("staff_no <", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoLessThanOrEqualTo(Long value) {
+        public Criteria andStaffNoLessThanOrEqualTo(String value) {
             addCriterion("staff_no <=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoIn(List<Long> values) {
+        public Criteria andStaffNoLike(String value) {
+            addCriterion("staff_no like", value, "staffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNoNotLike(String value) {
+            addCriterion("staff_no not like", value, "staffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNoIn(List<String> values) {
             addCriterion("staff_no in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotIn(List<Long> values) {
+        public Criteria andStaffNoNotIn(List<String> values) {
             addCriterion("staff_no not in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoBetween(Long value1, Long value2) {
+        public Criteria andStaffNoBetween(String value1, String value2) {
             addCriterion("staff_no between", value1, value2, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotBetween(Long value1, Long value2) {
+        public Criteria andStaffNoNotBetween(String value1, String value2) {
             addCriterion("staff_no not between", value1, value2, "staffNo");
             return (Criteria) this;
         }
@@ -1052,52 +1062,62 @@ public class InterviewPersonRefExample {
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoEqualTo(Long value) {
+        public Criteria andReplaceStaffNoEqualTo(String value) {
             addCriterion("replace_staff_no =", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoNotEqualTo(Long value) {
+        public Criteria andReplaceStaffNoNotEqualTo(String value) {
             addCriterion("replace_staff_no <>", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoGreaterThan(Long value) {
+        public Criteria andReplaceStaffNoGreaterThan(String value) {
             addCriterion("replace_staff_no >", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoGreaterThanOrEqualTo(Long value) {
+        public Criteria andReplaceStaffNoGreaterThanOrEqualTo(String value) {
             addCriterion("replace_staff_no >=", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoLessThan(Long value) {
+        public Criteria andReplaceStaffNoLessThan(String value) {
             addCriterion("replace_staff_no <", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoLessThanOrEqualTo(Long value) {
+        public Criteria andReplaceStaffNoLessThanOrEqualTo(String value) {
             addCriterion("replace_staff_no <=", value, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoIn(List<Long> values) {
+        public Criteria andReplaceStaffNoLike(String value) {
+            addCriterion("replace_staff_no like", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoNotLike(String value) {
+            addCriterion("replace_staff_no not like", value, "replaceStaffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceStaffNoIn(List<String> values) {
             addCriterion("replace_staff_no in", values, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoNotIn(List<Long> values) {
+        public Criteria andReplaceStaffNoNotIn(List<String> values) {
             addCriterion("replace_staff_no not in", values, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoBetween(Long value1, Long value2) {
+        public Criteria andReplaceStaffNoBetween(String value1, String value2) {
             addCriterion("replace_staff_no between", value1, value2, "replaceStaffNo");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceStaffNoNotBetween(Long value1, Long value2) {
+        public Criteria andReplaceStaffNoNotBetween(String value1, String value2) {
             addCriterion("replace_staff_no not between", value1, value2, "replaceStaffNo");
             return (Criteria) this;
         }

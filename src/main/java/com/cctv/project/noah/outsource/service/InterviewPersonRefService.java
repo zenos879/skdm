@@ -24,7 +24,7 @@ public interface InterviewPersonRefService {
 
     List<InterviewPersonRef> selectByName(String name);
 
-    Long selectNoByIdCard(String idCard);
+    String selectNoByIdCard(String idCard);
 
     Result updateByPrimaryKeySelective(InterviewPersonRef record);
 

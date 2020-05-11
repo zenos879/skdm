@@ -31,8 +31,7 @@ public class StaffInfo implements Serializable {
     /**
      * 面试人员员工编号
      */
-    @Excel(name = "员工编号")
-    private Long staffNo;
+    private String staffNo;
 
     /**
      * 人员名字
@@ -79,6 +78,8 @@ public class StaffInfo implements Serializable {
      */
     @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
     private Integer isReplace;
+
+    private String replacdStaffIdCard;
 
     /**
      * 替换的人员分组
@@ -147,11 +148,11 @@ public class StaffInfo implements Serializable {
         this.orderNo = orderNo;
     }
 
-    public Long getStaffNo() {
+    public String getStaffNo() {
         return staffNo;
     }
 
-    public void setStaffNo(Long staffNo) {
+    public void setStaffNo(String staffNo) {
         this.staffNo = staffNo;
     }
 
@@ -383,5 +384,13 @@ public class StaffInfo implements Serializable {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public String getReplacdStaffIdCard() {
+        return replacdStaffIdCard;
+    }
+
+    public void setReplacdStaffIdCard(String replacdStaffIdCard) {
+        this.replacdStaffIdCard = replacdStaffIdCard;
     }
 }

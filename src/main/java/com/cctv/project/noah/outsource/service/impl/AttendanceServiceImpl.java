@@ -77,7 +77,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         if (hasJ){
             StaffInfo staffInfo = new StaffInfo();
-            staffInfo.setStaffNo(Long.valueOf(sysUser.getUserName()));
+            staffInfo.setStaffNo(sysUser.getUserName());
             List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
             return staffInfos.get(0).getDepartmentId();
         }else {
