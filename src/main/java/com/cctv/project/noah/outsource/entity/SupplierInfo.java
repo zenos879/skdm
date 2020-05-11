@@ -1,8 +1,11 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -177,4 +180,53 @@ public class SupplierInfo extends BaseEntity implements Serializable {
         sb.append("]");
         return sb.toString();
     }
+
+    @Override
+    public Result hasNullResult(){
+        if (StringUtils.isEmpty(this.getSupplierName())) {
+            return new Result(0,"供应商名称不能为空！");
+        }
+        if (this.getIsSubsidiary() == null){
+            return new Result(0,"是否附属公司不合法,其<不能为空并且只能为0或1>！");
+        }
+        return new Result(1);
+    }
+    @Override
+    public Result checkLegitimateResult(){
+        if (!super.checkDateLegitimate()) {
+            return new Result(0,"时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length()>64){
+            return new Result(0,"供应商名称长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getContactEmail())){
+            if (this.getContactEmail().length()>64) {
+                return new Result(0,"联系人邮箱长度不能大于64！");
+            }
+            if (!StringUtils.isEmail(this.getContactEmail())){
+                return new Result(0,"联系人邮箱格式不正确！");
+            }
+        }
+        if (StringUtils.isNotEmpty(this.getContactName()) && this.getContactName().length()>64){
+            return new Result(0,"联系人名称长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getContactTel())){
+            if (this.getContactTel().length()>64) {
+                return new Result(0,"联系人电话长度不能大于64！");
+            }
+            if (!StringUtils.isInteger(this.getContactTel())){
+                return new Result(0,"联系人电话必须为正整数！");
+            }
+        }
+        if (this.getIsSubsidiary() != null){
+            if (String.valueOf(this.getIsSubsidiary()).length()>1){
+                new Result(0,"是否为附属公司的长度不能大于11！");
+            }
+            if (this.getIsSubsidiary()!=0 && this.getIsSubsidiary() != 1){
+                return new Result(0,"是否为附属公司的值只能为0或1！");
+            }
+        }
+        return new Result(1);
+    }
+
 }

@@ -4,7 +4,7 @@
     <th:block th:include="include :: header('供应商数据列表')"/>
     <th:block th:include="include :: ztree-css"/>
     <th:block th:include="include :: bootstrap-select-css"/>
-    <th:block th:include="include :: zy-common"/>
+
 </head>
 <body class="gray-bg">
 <div class="ui-layout-center">
@@ -16,54 +16,36 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                        <label class="col-sm-5 control-label" style="line-height: 30px">供应商名称：</label>
-                                        <div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
-                                            <input type="text" maxlength="64" name="supplierName"
-                                                   th:value="${supplierName}"/>
-                                        </div>
+                                供应商名称：<input type="text" maxlength="64" name="supplierName" th:value="${supplierName}"/>
                             </li>
                             <li>
-                                        <label class="col-sm-5 control-label" style="line-height: 30px">联系人：</label>
-                                        <div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
-                                            <input type="text" maxlength="64" name="contactName"/>
-                                        </div>
+                                联系人名称：<input type="text" maxlength="64" name="contactName"/>
                             </li>
                             <li>
-                                        <label class="col-sm-5 control-label" style="line-height: 30px">联系电话：</label>
-                                        <div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
-                                            <input type="text" maxlength="64" class="form-control" name="contactTel"/>
-                                        </div>
+                                联系人电话：<input type="text" maxlength="20"  id="contactTel" name="contactTel"/>
                             </li>
                             <li>
-                                        <label class="col-sm-5 control-label" style="line-height: 30px">联系邮箱：</label>
-                                        <div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
-                                            <input type="text" maxlength="64" class="form-control" name="contactEmail"/>
-                                        </div>
+                                联系人邮箱： <input type="text" maxlength="64" id="contactEmail" name="contactEmail"/>
                             </li>
                             <li>
-                                        <label class="col-sm-5 control-label" style="line-height: 30px">是否是附属公司：</label>
-                                        <div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
-                                            <select name="isSubsidiary" class="form-control"
+                                是否附属公司： <select name="isSubsidiary"
                                                     th:with="type=${@dict.getType('isSubsidiary')}">
                                                 <option value="">所有</option>
                                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
                                                         th:value="${dict.dictValue}"></option>
                                             </select>
-                                        </div>
                             </li>
                             <li class="select-time">
-                                        <label>创建时间： </label>
-                                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                                   name="params[beginTime]"/>
-                                        <span>-</span>
-                                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                                   name="params[endTime]"/>
+                                <label>创建时间： </label>
+                                    <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                           name="params[beginTime]"  autocomplete="off" readonly="readonly"/>
+                                <span>-</span>
+                                    <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                           name="params[endTime]"  autocomplete="off" readonly="readonly"/>
                             </li>
                             <li>
-                                        <a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i
-                                                class="fa fa-search"></i>&nbsp;搜索</a>
-                                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                         <!--<div class="col-sm-12 search-collapse">-->
@@ -236,6 +218,7 @@
 
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: zy-common" />
 <script th:inline="javascript">
     var prefix = ctx + "outsource/supplierInfo";
     var isSubsidiary = [[${@dict.getType('isSubsidiary')}]];
@@ -344,25 +327,58 @@
         });
     }
 
-    $("#post-form").validate({
-        onkeyup: false,
-        focusCleanup: true,
-        rules: {
-            contactTel: {
-                digits: true
-            },
-            contactEmail: {
-                email: true
-            },
-        }
-    });
+    // $("#post-form").validate({
+    //     onkeyup: false,
+    //     focusCleanup: true,
+    //     rules: {
+    //         contactTel: {
+    //             digits: true
+    //         },
+    //         contactEmail: {
+    //             email: true
+    //         },
+    //     }
+    // });
 
     function _search() {
-        if ($.validate.form()) {
-            $.table.search()
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        String.prototype.trim = function() { return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '')};
+        // var projectName = $("#projectName").val();
+        // var departmentId = $("#departmentId").val();
+
+        if (!$.common.isEmpty(startTime) && !isDate(startTime)) {
+            $.modal.alertError("开始时间格式不正确");
+            $("#startTime").val('');
+            return;
+        }
+        if (!$.common.isEmpty(endTime) && !isDate(endTime)) {
+            $.modal.alertError("结束时间格式不正确");
+            $("#endTime").val('');
+            return;
+        }
+        if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
+            $.modal.alertError("开始时间必须大于结束时间");
+            $("#startTime").val('');
+            $("#endTime").val('');
+            return;
         }
 
+        var contactTel = $("#contactTel").val().trim();
+        var contactEmail = $("#contactEmail").val().trim();
+        if (!$.common.isEmpty(contactTel) && !isNumber(contactTel)){
+            $.modal.alertError("请输入正确格式的联系人电话号码！");
+            return;
+        }
+        if (!$.common.isEmpty(contactEmail) &&!isEmail(contactEmail)) {
+            $.modal.alertError("请输入正确格式的联系人邮箱！");
+            return;
+        }
+        $.table.search();
+
     }
+
+
 
 </script>
 

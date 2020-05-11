@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Entity基类
@@ -115,14 +116,10 @@ public class BaseEntity implements Serializable {
         if (this.getParams() == null){
             return true;
         }
+
         String beginTime = (String) this.getParams().get("beginTime");
         String endTime = (String) this.getParams().get("endTime");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        if (StringUtils.isNotEmpty(beginTime) &&
-                StringUtils.isNotEmpty(endTime)&&
-                beginTime.compareTo(endTime)>0){
-            return false;
-        }
         try {
             if (StringUtils.isNotEmpty(beginTime)){
                 simpleDateFormat.parse(beginTime);
@@ -133,6 +130,12 @@ public class BaseEntity implements Serializable {
         } catch (ParseException e) {
             return false;
         }
+        if (StringUtils.isNotEmpty(beginTime) &&
+                StringUtils.isNotEmpty(endTime)&&
+                beginTime.compareTo(endTime)>0){
+            return false;
+        }
+
         return true;
     }
 

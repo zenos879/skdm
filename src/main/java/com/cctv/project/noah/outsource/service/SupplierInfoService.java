@@ -9,7 +9,6 @@ import java.util.List;
 @Service
 public interface SupplierInfoService {
 
-    int insert(SupplierInfo record);
 
     SupplierInfo selectByPrimaryKey(Integer supplierId);
 

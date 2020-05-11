@@ -8,6 +8,8 @@ import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.SupplierInfoService;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,33 +18,40 @@ import java.util.Date;
 import java.util.List;
 
 @Service("supplierInfoService")
-public class SupplierInfoServiceImpl implements SupplierInfoService {
+public class SupplierInfoServiceImpl extends BaseService implements SupplierInfoService {
 
     @Autowired
     SupplierInfoMapper supplierInfoMapper;
 
-
-    @Override
-    public int insert(SupplierInfo record) {
-        return supplierInfoMapper.insert(record);
-    }
-
+    Logger logger = LoggerFactory.getLogger(SupplierInfoServiceImpl.class);
 
     @Override
     public SupplierInfo selectByPrimaryKey(Integer supplierId) {
-        return supplierInfoMapper.selectByPrimaryKey(supplierId);
+        try {
+            if (supplierId == null) {
+                return null;
+            }
+            return supplierInfoMapper.selectByPrimaryKey(supplierId);
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return null;
+        }
     }
 
     @Override
     public SupplierInfo selectByName(String name) {
-        SupplierInfoExample supplierInfoExample = new SupplierInfoExample();
-        SupplierInfoExample.Criteria criteria = supplierInfoExample.createCriteria();
-        criteria.andSupplierNameEqualTo(name);
-        List<SupplierInfo> supplierInfos = supplierInfoMapper.selectByExample(supplierInfoExample);
-        if (supplierInfos.size() > 0) {
-            return supplierInfos.get(0);
+        try {
+            if (StringUtils.isEmpty(name)) {
+                return null;
+            }
+            name = name.trim();
+            List<SupplierInfo> supplierInfos = supplierInfoMapper.selectByName(name);
+            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos.get(0):null;
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return null;
         }
-        return null;
+
     }
 
     @Override
@@ -60,103 +69,135 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
 
     @Override
     public List<SupplierInfo> selectAll() {
-        List<SupplierInfo> supplierInfos = supplierInfoMapper.selectBySelective(new SupplierInfo());
-        return supplierInfos;
+        try {
+            List<SupplierInfo> supplierInfos = supplierInfoMapper.selectBySelective(new SupplierInfo());
+            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public List<SupplierInfo> selectBySelective(SupplierInfo supplierInfo) {
-        if (!supplierInfo.checkDateLegitimate()) {
+        try {
+            if (supplierInfo == null) {
+                return selectAll();
+            }
+            if (supplierInfo.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            List<SupplierInfo> supplierInfos = supplierInfoMapper.selectBySelective(supplierInfo);
+            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
             return new ArrayList<>();
         }
-        return supplierInfoMapper.selectBySelective(supplierInfo);
     }
 
     @Override
     public List<SupplierInfo> selectByIds(String ids) {
-        return supplierInfoMapper.selectByIds(ids.split(","));
+        try {
+            List<String> list = checkIds(ids);
+            List<SupplierInfo> supplierInfos = supplierInfoMapper.selectByIds(list.toArray(new String[list.size()]));
+            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public Result updateBySelective(SupplierInfo supplierInfo) {
-        Integer supplierId = supplierInfo.getSupplierId();
-        if (supplierId == null) {
-            return new Result(0, "id为空,无法修改！");
+        try {
+            if (supplierInfo == null){
+                return new Result(0,"传入数据错误！");
+            }
+            Integer supplierId = supplierInfo.getSupplierId();
+            if (supplierId == null) {
+                return new Result(0, "id为空,无法修改！");
+            }
+            Result result = supplierInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            SupplierInfo supplierInfoDb = supplierInfoMapper.selectByPrimaryKey(supplierId);
+            if (supplierInfoDb == null) {
+                return new Result(0, "无法修改不存在的供应商！");
+            }
+            SupplierInfo supplierInfoByName = selectByName(supplierInfo.getSupplierName());
+            if (supplierInfoByName!=null&& !supplierInfoByName.getSupplierId().equals(supplierInfo.getSupplierId())){
+                return new Result(0, "此供应商已存在！");
+            }
+            int i = supplierInfoMapper.updateByPrimaryKeySelective(supplierInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new Result(0,"修改失败！");
         }
-        if (StringUtils.isEmpty(supplierInfo.getSupplierName())) {
-            return new Result(0, "供应商名称不能为空！");
-        }
-        if (supplierInfo.getIsSubsidiary() == null) {
-            return new Result(0, "是否附属公司不能为null！");
-        }
-        SupplierInfo supplierInfoDb = supplierInfoMapper.selectByPrimaryKey(supplierId);
-        if (supplierInfoDb == null) {
-            return new Result(0, "无法修改不存在的供应商！");
-        }
-        if (supplierInfoDb.equals(supplierInfo)) {
-            return new Result(0, "修改必须与之前不同！");
-        }
-        if (supplierInfoDb.equals(supplierInfo)) {
-            return new Result(0, "修改必须与之前不同！");
-        }
-        SupplierInfo supplierInfoByName = selectByName(supplierInfo.getSupplierName());
-        if (supplierInfoByName.getSupplierId() != supplierInfo.getSupplierId()){
-            return new Result(0, "此供应商已存在！");
-        }
-        int i = supplierInfoMapper.updateByPrimaryKeySelective(supplierInfo);
-        return new Result(i);
     }
 
     @Override
     public Result insertBySelective(SupplierInfo supplierInfo) {
-        if (StringUtils.isEmpty(supplierInfo.getSupplierName())) {
-            return new Result(0, "供应商名称不能为空！");
+        try {
+            if (supplierInfo == null) {
+                return new Result(0,"传入数据错误！");
+            }
+            Result result = supplierInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            SupplierInfo supplierInfoDb = selectByName(supplierInfo.getSupplierName());
+            if (supplierInfoDb != null) {
+                return new Result(0, "此供应商已存在！", true);
+            }
+            supplierInfo.setCreateTime(new Date());
+            int i = supplierInfoMapper.insertSelective(supplierInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return new Result(0,"插入失败");
         }
-        if (supplierInfo.getIsSubsidiary() == null) {
-            return new Result(0, "是否附属公司不能为null！");
-        }
-
-        SupplierInfo supplierInfoDb = supplierInfoMapper.selectByName(supplierInfo.getSupplierName());
-        if (supplierInfoDb != null) {
-            return new Result(0, "此供应商已存在！", true);
-        }
-        supplierInfo.setCreateTime(new Date());
-        int i = supplierInfoMapper.insertSelective(supplierInfo);
-        return new Result(i);
 
     }
 
     @Override
     public Result importSupplierInfo(List<SupplierInfo> supplierInfos) {
-        for (int i = 0; i < supplierInfos.size(); i++) {
-            SupplierInfo supplierInfo = supplierInfos.get(i);
-            if (supplierInfo.getSupplierName() == null) {
-                return new Result(0, "第" + (i + 2) + "行的供应商名称为空!");
+        try {
+            if (StringUtils.isEmpty(supplierInfos)) {
+                return new Result(0,"未从文件中读取到数据！");
             }
-            if (supplierInfo.getIsSubsidiary() == null) {
-                return new Result(0, "第" + (i + 2) + "行的<是否为附属公司>为空!");
+            for (int i = 0; i < supplierInfos.size(); i++) {
+                SupplierInfo supplierInfo = supplierInfos.get(i);
+                Result result = supplierInfo.beforeUpdateCheck();
+                if (result.code<1){
+                    return new Result(0,"第"+(i+2)+"行的"+result.info);
+                }
+                supplierInfo.setCreateTime(new Date());
             }
-            supplierInfo.setCreateTime(new Date());
+            int success = 0;
+            int i = 0;
+            StringBuffer warning = new StringBuffer();
+            for (SupplierInfo supplierInfo : supplierInfos) {
+                i++;
+                Result result = insertBySelective(supplierInfo);
+                if (result.warning) {
+                    warning.append("第").append(i + 1).append("行的").append(supplierInfo.getSupplierName()).append("未插入，原因是：<")
+                            .append(result.info).append("></br>");
+                    continue;
+                }
+                if (result.code < 1) {
+                    return new Result(result.code, "第" + (i + 1) + "行出现错误，错误为<" + result.info + "></br>");
+                }
+                success++;
+            }
+            int size = supplierInfos.size();
+            warning.append("插入成功了" + success + "行，失败了" + (size - success) + "行");
+            return new Result(success, warning.toString());
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return new Result(0,"导入失败");
         }
-        int success = 0;
-        int i = 0;
-        StringBuffer warning = new StringBuffer();
-        for (SupplierInfo supplierInfo : supplierInfos) {
-            i++;
-            Result result = insertBySelective(supplierInfo);
-            if (result.warning) {
-                warning.append("第").append(i + 1).append("行的").append(supplierInfo.getSupplierName()).append("未插入，原因是：<")
-                        .append(result.info).append("></br>");
-                continue;
-            }
-            if (result.code < 1) {
-                return new Result(result.code, "第" + (i + 1) + "行出现错误，错误为<" + result.info + "></br>");
-            }
-            success++;
-        }
-        int size = supplierInfos.size();
-        warning.append("插入成功了" + success + "行，失败了" + (size - success) + "行");
-        return new Result(success, warning.toString());
     }
 
     @Override

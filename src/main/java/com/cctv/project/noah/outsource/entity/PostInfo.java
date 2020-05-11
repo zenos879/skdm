@@ -160,11 +160,11 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
     @Override
     public Result hasNullResult(){
-        if (categoryId == null && StringUtils.isEmpty(categoryName)){
+        if (this.getCategoryId() == null && StringUtils.isEmpty(this.getCategoryName())){
             return new Result(0,"岗位分类不能为空！");
         }
-        if (StringUtils.isEmpty(postName)) {
-            return new Result(0,"项目名称不能为空！");
+        if (StringUtils.isEmpty(this.getPostName())) {
+            return new Result(0,"岗位名称不能为空！");
         }
         return new Result(1);
     }
@@ -173,13 +173,13 @@ public class PostInfo extends BaseEntity implements Serializable {
         if (!super.checkDateLegitimate()) {
             return new Result(0,"时间格式不正确");
         }
-        if (this.getPostName() != null && this.getPostName().length()>64){
+        if (StringUtils.isNotEmpty(this.getPostName()) && this.getPostName().length()>64){
             return new Result(0,"岗位名称长度不能大于64！");
         }
         if (this.getCategoryId() != null && String.valueOf(this.getCategoryId()).length()>11){
             return new Result(0,"岗位分类id长度不能大于11！");
         }
-        if (this.categoryName!=null && categoryName.length()>64){
+        if (StringUtils.isNotEmpty(this.getCategoryName()) && this.getCategoryName().length()>64){
             return new Result(0,"岗位分类名称长度不能大于64");
         }
         return new Result(1);

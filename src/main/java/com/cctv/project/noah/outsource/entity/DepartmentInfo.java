@@ -114,7 +114,7 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
 
     @Override
     public Result hasNullResult(){
-        if (StringUtils.isEmpty(departmentName)) {
+        if (StringUtils.isEmpty(this.getDepartmentName())) {
             return new Result(0,"部门名称不能为空！");
         }
         return new Result(1);
@@ -124,8 +124,8 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
         if (!super.checkDateLegitimate()) {
             return new Result(0,"时间格式不正确");
         }
-        if (this.getDepartmentName() != null && this.getDepartmentName().length()>64){
-            return new Result(0,"岗位名称长度不能大于64！");
+        if (StringUtils.isNotEmpty(this.getDepartmentName()) && this.getDepartmentName().length()>64){
+            return new Result(0,"部门名称长度不能大于64！");
         }
         return new Result(1);
     }

@@ -5,6 +5,8 @@ import com.cctv.project.noah.system.core.domain.text.StrFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 字符串工具类
@@ -353,5 +355,24 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             }
         }
         return contains;
+    }
+
+    static Pattern isInteger = Pattern.compile("^[-\\+]?[\\d]*$");
+    static Pattern isNumeric = Pattern.compile("[0-9]*");
+    static Pattern isEmail = Pattern.compile("^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$");
+    static Pattern isEmail2 = Pattern.compile("[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$");
+
+
+
+    public static boolean isInteger(String str) {
+        return isInteger.matcher(str).matches();
+    }
+
+    public static boolean isNumeric(String string){
+        return isNumeric.matcher(string).matches();
+    }
+
+    public static boolean isEmail(String str) {
+        return isEmail2.matcher(str).matches();
     }
 }

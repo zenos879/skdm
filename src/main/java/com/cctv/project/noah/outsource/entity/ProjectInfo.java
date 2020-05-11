@@ -159,10 +159,10 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
     @Override
     public Result hasNullResult(){
-        if (departmentId == null && StringUtils.isEmpty(departmentName)){
+        if (this.getDepartmentId() == null && StringUtils.isEmpty(this.getDepartmentName())){
             return new Result(0,"部门不能为空！");
         }
-        if (StringUtils.isEmpty(projectName)) {
+        if (StringUtils.isEmpty(this.getProjectName())) {
             return new Result(0,"项目名称不能为空！");
         }
         return new Result(1);
@@ -172,13 +172,13 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         if (!super.checkDateLegitimate()) {
             return new Result(0,"时间格式不正确");
         }
-        if (this.getProjectName() != null && this.getProjectName().length()>64){
+        if (StringUtils.isNotEmpty(this.getProjectName()) && this.getProjectName().length()>64){
            return new Result(0,"项目名称长度不能大于64！");
         }
         if (this.getDepartmentId() != null && String.valueOf(this.getDepartmentId()).length()>11){
             return new Result(0,"部门id长度不能大于11！");
         }
-        if (this.departmentName!=null && departmentName.length()>64){
+        if (StringUtils.isNotEmpty(this.getDepartmentName()) && this.getDepartmentName().length()>64){
             return new Result(0,"部门名称长度不能大于64");
         }
         return new Result(1);

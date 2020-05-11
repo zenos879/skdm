@@ -21,3 +21,15 @@ function dateCompare(startdate, enddate) {
     }
 
 }
+
+function isNumber(value) {
+    if ($.common.isEmpty(value)){
+        return false;
+    }
+    var r = /^\+?[1-9][0-9]*$/;
+    return r.test(value);
+}
+function isEmail(str){
+    var re=/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+    return re.test(str);
+}
