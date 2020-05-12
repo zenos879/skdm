@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
                         <div class="col-sm-8">
-                            <input name="purchaseNo" id="purchaseNo" th:value="${command.purchaseNo}" placeholder="请输入采购编号" class="form-control" type="text" maxlength="20" required>
+                            <input name="purchaseNo" id="purchaseNo" th:value="${command.purchaseNo}" placeholder="请输入采购编号" class="form-control" type="text" maxlength="64" required>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <!--<select name="candidateId" id="candidateId" class="form-control"  th:with="persons=${@personInfoService.selectAll()}">-->
                                 <!--<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}" th:selected="${command.getSupplierId() == person.getCandidateId()}"></option>-->
                             <!--</select>-->
-                            <input name="personName" id="personName" placeholder="请输入人员名" th:value="${command.getPersonName()}" class="form-control" type="text" maxlength="20" required>
+                            <input name="personName" id="personName" placeholder="请输入人员名" th:value="${command.getPersonName()}" class="form-control" type="text" maxlength="64" required>
 
                         </div>
                     </div>

@@ -157,25 +157,10 @@
   </select>
   <select id="selectByRepeat" parameterType="com.cctv.project.noah.outsource.entity.ReviewPersonRef" resultMap="BaseResultMap">
     <include refid="selectJoin"></include>
-    <where>
-      <if test="purchaseNo != null and purchaseNo != ''">
-        AND r.purchase_no = #{purchaseNo}
-      </if>
-      <if test="supplierId != null">
+        where r.purchase_no = #{purchaseNo}
         AND r.supplier_id = #{supplierId,jdbcType=INTEGER}
-      </if>
-      <if test="postId != null">
-        AND r.post_id = #{postId,jdbcType=INTEGER}
-      </if>
-      <if test="personName != null">
         AND r.person_name = #{personName}
-      </if>
-      <if test="isNotifyInterview != null">
         AND r.is_notify_interview = #{isNotifyInterview,jdbcType=TINYINT}
-      </if>
-    </where>
-
-
   </select>
 
 

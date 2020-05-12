@@ -31,11 +31,15 @@ public class ReviewInfoController extends BaseController {
     ReviewInfoService reviewInfoService;
 
     /** 页面跳转 */
+//    @GetMapping()
+//    public String page(String reviewName,Model model) {
+//        if (StringUtils.isNotEmpty(reviewName)){
+//            model.addAttribute("reviewName",reviewName);
+//        }
+//        return prefix + "/page";
+//    }
     @GetMapping()
-    public String page(String reviewName,Model model) {
-        if (StringUtils.isNotEmpty(reviewName)){
-            model.addAttribute("reviewName",reviewName);
-        }
+    public String page(){
         return prefix + "/page";
     }
 

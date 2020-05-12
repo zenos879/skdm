@@ -13,7 +13,7 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									采购编号：<input type="text" name="purchaseNo"/>
+									采购编号：<input type="text" name="purchaseNo" maxlength="64"/>
 								</li>
 								<li>
 									供应商：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
@@ -22,7 +22,7 @@
 								</select>
 								</li>
 								<li>
-									人员：<input type="text" name="personName"/>
+									人员：<input type="text" name="personName" maxlength="64WWW"/>
 									<!--<select name="candidateId" id="candidateId" class="selectpicker" data-live-search="true" th:with="persons=${@personInfoService.selectAll()}">-->
 									<!--<option value="">全部</option>-->
 									<!--<option th:each="person : ${persons}" th:text="${person.getCandidateName()}" th:value="${person.getCandidateId()}"></option>-->
@@ -44,12 +44,12 @@
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
-									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" autocomplete="off" readonly="readonly"/>
 									<span>-</span>
-									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" autocomplete="off" readonly="readonly"/>
 								</li>
 								<li>
-									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 								</li>
 							</ul>
@@ -64,9 +64,9 @@
 					<!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">-->
 						<!--<i class="fa fa-remove"></i> 删除-->
 					<!--</a>-->
-		            <a class="btn btn-info" onclick="$.table.importExcel()">
-			            <i class="fa fa-upload"></i> 导入
-			        </a>
+		            <!--<a class="btn btn-info" onclick="$.table.importExcel()">-->
+			            <!--<i class="fa fa-upload"></i> 导入-->
+			        <!--</a>-->
 		            <a class="btn btn-warning" onclick="_export()">
 			            <i class="fa fa-download"></i> 导出
 			        </a>
@@ -81,6 +81,7 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/reviewPersonRef";
 		var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
@@ -184,6 +185,30 @@
 					$.modal.closeLoading();
 				});
 			});
+		}
+		function _search() {
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+
+			if (!$.common.isEmpty(startTime) && !isDate(startTime)) {
+				$.modal.alertError("创建时间开始时间格式不正确");
+				$("#startTime").val('');
+				return;
+			}
+			if (!$.common.isEmpty(endTime) && !isDate(endTime)) {
+				$.modal.alertError("创建时间结束时间格式不正确");
+				$("#endTime").val('');
+				return;
+			}
+
+			if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
+				$.modal.alertError("创建时间开始时间必须小于结束时间");
+				$("#startTime").val('');
+				$("#endTime").val('');
+				return;
+			}
+			$.table.search();
+
 		}
 	</script>
 </body>

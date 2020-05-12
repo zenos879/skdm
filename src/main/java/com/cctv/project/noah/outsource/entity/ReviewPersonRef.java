@@ -1,7 +1,9 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -71,19 +73,19 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public String getSupplierName() {
-        return supplierName;
+        return StringUtils.isNotEmpty(supplierName)?supplierName.trim():supplierName;
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (StringUtils.isNotEmpty(supplierName)?supplierName.trim():supplierName);
     }
 
     public String getPersonName() {
-        return personName;
+        return StringUtils.isNotEmpty(personName)?personName.trim():personName;
     }
 
     public void setPersonName(String personName) {
-        this.personName = personName;
+        this.personName = (StringUtils.isNotEmpty(personName)?personName.trim():personName);
     }
 
     public Integer getAutoId() {
@@ -103,19 +105,19 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return postName;
+        return StringUtils.isNotEmpty(postName)?postName.trim():postName;
     }
 
     public void setPostName(String postName) {
-        this.postName = postName;
+        this.postName = (StringUtils.isNotEmpty(postName)?postName.trim():postName);
     }
 
     public String getPurchaseNo() {
-        return purchaseNo;
+        return StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo;
     }
 
     public void setPurchaseNo(String purchaseNo) {
-        this.purchaseNo = purchaseNo;
+        this.purchaseNo = (StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo);
     }
 
     public Integer getSupplierId() {
@@ -201,5 +203,61 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public Result hasNullResult(){
+        if (StringUtils.isEmpty(this.getPurchaseNo())) {
+            return new Result(0,"采购编号不能为空！");
+        }
+        if (this.getPostId() == null && StringUtils.isEmpty(this.getPostName())){
+            return new Result(0,"岗位不能为空！");
+        }
+        if (this.getSupplierId() == null && StringUtils.isEmpty(this.getSupplierName())){
+            return new Result(0,"供应商不能为空！");
+        }
+        if (this.getPersonName() == null){
+            return new Result(0,"人名不能为空！");
+        }
+        if (this.getIsNotifyInterview() == null){
+            return new Result(0,"是否通知面试不合法<不能为空且只能为0或1>");
+        }
+        return new Result(1);
+    }
+
+
+    @Override
+    public Result checkLegitimateResult(){
+        if (!super.checkDateLegitimate()) {
+            return new Result(0,"创建时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getPurchaseNo()) && this.getPurchaseNo().length()>64){
+            return new Result(0,"采购编号长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getPostName()) && this.getPostName().length()>64){
+            return new Result(0,"岗位名称长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length()>64){
+            return new Result(0,"供应商名称长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getPersonName()) && this.getPersonName().length()>64){
+            return new Result(0,"人名长度不能大于64！");
+        }
+        if (this.getPostId() !=null && String.valueOf(this.getPostId()).length()>11){
+            return new Result(0,"岗位id长度不能大于11！");
+        }
+        if (this.getSupplierId() !=null && String.valueOf(this.getSupplierId()).length()>11){
+            return new Result(0,"供应商id长度不能大于11！");
+        }
+        if (this.getIsNotifyInterview() !=null){
+            if(String.valueOf(this.getIsNotifyInterview()).length()>11){
+                return new Result(0,"是否通知面试长度不能大于11！");
+            }
+            if (this.getIsNotifyInterview()!=0 && this.getIsNotifyInterview()!=1){
+                return new Result(0,"是否通知面试不合法<不能为空且只能为0或1>");
+            }
+        }
+
+        return new Result(1);
     }
 }

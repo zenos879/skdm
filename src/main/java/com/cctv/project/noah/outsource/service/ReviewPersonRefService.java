@@ -5,8 +5,6 @@ import com.cctv.project.noah.outsource.entity.ReviewPersonRef;
 import java.util.List;
 
 public interface ReviewPersonRefService {
-    int insert(ReviewPersonRef record);
-
     ReviewPersonRef selectByPrimaryKey(Integer autoId);
 
     List<ReviewPersonRef> selectAll();

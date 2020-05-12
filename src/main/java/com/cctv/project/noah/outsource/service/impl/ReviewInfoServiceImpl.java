@@ -103,7 +103,6 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
         if (postInfo == null){
             return new Result(0,"岗位不存在!");
         }
-        reviewInfo.setPostId(postInfo.getPostId());
         ProjectInfo projectInfo = projectInfoService.selectByPrimaryKey(reviewInfo.getProjectId());
         if (projectInfo == null){
             return new Result(0,"项目不存在!");

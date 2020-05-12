@@ -84,19 +84,19 @@ public class ReviewInfo extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return postName;
+        return StringUtils.isNotEmpty(postName)?postName.trim():postName;
     }
 
     public void setPostName(String postName) {
-        this.postName = postName;
+        this.postName = (StringUtils.isNotEmpty(postName)?postName.trim():postName);
     }
 
     public String getProjectName() {
-        return projectName;
+        return StringUtils.isNotEmpty(projectName)?projectName.trim():projectName;
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = projectName;
+        this.projectName = (StringUtils.isNotEmpty(projectName)?projectName.trim():projectName);
     }
 
     public Integer getAutoId() {
@@ -108,11 +108,11 @@ public class ReviewInfo extends BaseEntity implements Serializable {
     }
 
     public String getPurchaseNo() {
-        return purchaseNo;
+        return StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo;
     }
 
     public void setPurchaseNo(String purchaseNo) {
-        this.purchaseNo = purchaseNo;
+        this.purchaseNo = (StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo);
     }
 
     public Integer getPostId() {

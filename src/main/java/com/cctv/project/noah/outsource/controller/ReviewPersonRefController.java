@@ -47,7 +47,8 @@ public class ReviewPersonRefController extends BaseController {
     @ResponseBody
     public TableDataInfo list(ReviewPersonRef reviewPersonRef){
         startPage();
-        return getDataTable(reviewPersonRefService.selectBySelective(reviewPersonRef));
+        List<ReviewPersonRef> reviewPersonRefs = reviewPersonRefService.selectBySelective(reviewPersonRef);
+        return getDataTable(reviewPersonRefs);
     }
 
     @PostMapping("/edit")
