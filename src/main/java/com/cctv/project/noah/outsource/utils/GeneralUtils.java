@@ -81,7 +81,7 @@ public class GeneralUtils {
      * @param fieldName
      * @return
      */
-    public static List<Integer> getIdsList(List<?> beanList, Class<?> beanClass, String fieldName) {
+    public static List<Integer> getIntList(List<?> beanList, Class<?> beanClass, String fieldName) {
         List<Integer> result = new ArrayList<>();
         if (beanList == null || beanList.size() < 1) {
             return null;
@@ -100,6 +100,44 @@ public class GeneralUtils {
                     Object o2 = fields[pos].get(o1);
                     int id = Integer.parseInt(o2.toString());
                     result.add(id);
+                } catch (Exception e) {
+                    System.out.println("[error]Reason is:" + e.getMessage());
+                }
+            }
+        }
+        if (result.size() < 1) {
+            return null;
+        }
+        return result;
+    }
+
+    /**
+     * 从实体集合中获取指定属性集合
+     *
+     * @param beanList
+     * @param beanClass
+     * @param fieldName
+     * @return
+     */
+    public static List<String> getStrList(List<?> beanList, Class<?> beanClass, String fieldName) {
+        List<String> result = new ArrayList<>();
+        if (beanList == null || beanList.size() < 1) {
+            return null;
+        }
+        if (StringUtils.isNoneBlank(fieldName)) {
+            Field[] fields = beanClass.getDeclaredFields();
+            int pos;
+            for (pos = 0; pos < fields.length; pos++) {
+                if (fieldName.equals(fields[pos].getName())) {
+                    break;
+                }
+            }
+            for (Object o1 : beanList) {
+                try {
+                    fields[pos].setAccessible(true);
+                    Object o2 = fields[pos].get(o1);
+                    String col = o2.toString();
+                    result.add(col);
                 } catch (Exception e) {
                     System.out.println("[error]Reason is:" + e.getMessage());
                 }
@@ -156,7 +194,7 @@ public class GeneralUtils {
 //        personList.add(person);
 //        personList.add(person2);
 
-//        System.out.println(getIdsList(personList, StaffInfo.class, "autoId"));
+//        System.out.println(getIntList(personList, StaffInfo.class, "autoId"));
 
 
     }

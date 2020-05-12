@@ -4,7 +4,9 @@ import com.cctv.project.noah.system.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * staff_info
@@ -79,7 +81,9 @@ public class StaffInfo implements Serializable {
     @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
     private Integer isReplace;
 
-    private String replacdStaffIdCard;
+    private String beReplacdStaffIdCard;
+
+    private String beReplacdStaffName;
 
     /**
      * 替换的人员分组
@@ -232,12 +236,30 @@ public class StaffInfo implements Serializable {
         return arriveDate;
     }
 
+    public String getFormatArriveDate(){
+        if (this.arriveDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(arriveDate);
+        return format;
+    }
+
     public void setArriveDate(Date arriveDate) {
         this.arriveDate = arriveDate;
     }
 
     public Date getLeaveDate() {
         return leaveDate;
+    }
+
+    public String getFormatLeaveDate(){
+        if (this.leaveDate == null){
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(leaveDate);
+        return format;
     }
 
     public void setLeaveDate(Date leaveDate) {
@@ -386,11 +408,19 @@ public class StaffInfo implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public String getReplacdStaffIdCard() {
-        return replacdStaffIdCard;
+    public String getBeReplacdStaffIdCard() {
+        return beReplacdStaffIdCard;
     }
 
-    public void setReplacdStaffIdCard(String replacdStaffIdCard) {
-        this.replacdStaffIdCard = replacdStaffIdCard;
+    public void setBeReplacdStaffIdCard(String beReplacdStaffIdCard) {
+        this.beReplacdStaffIdCard = beReplacdStaffIdCard;
+    }
+
+    public String getBeReplacdStaffName() {
+        return beReplacdStaffName;
+    }
+
+    public void setBeReplacdStaffName(String beReplacdStaffName) {
+        this.beReplacdStaffName = beReplacdStaffName;
     }
 }

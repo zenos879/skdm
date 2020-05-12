@@ -9,7 +9,9 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service("staffInfoService")
@@ -144,7 +146,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         }
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         for (StaffInfo staffInfo : staffInfos) {
-            completionCandidateName(staffInfo);
+            completionCandidateName(staffInfo, false);
         }
         return staffInfos;
     }
@@ -174,15 +176,31 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         criteria.andStaffNameLike(record);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         for (StaffInfo staffInfo : staffInfos) {
-            completionCandidateName(staffInfo);
+            completionCandidateName(staffInfo, false);
         }
         return staffInfos;
     }
 
     @Override
+    public String selectByIdCard(String idCard) {
+        if (StringUtils.isNotEmpty(idCard)) {
+            StaffInfoExample staffInfoExample = new StaffInfoExample();
+            StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+            criteria.andIdCardEqualTo(idCard);
+            List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+            if (staffInfos.size() > 0) {
+                return staffInfos.get(0).getStaffName();
+            } else {
+                return "未找到该身份证号对应的人员信息";
+            }
+        }
+        return "";
+    }
+
+    @Override
     public StaffInfo selectByPrimaryKey(Integer id) {
         StaffInfo staffInfo = staffInfoMapper.selectByPrimaryKey(id);
-        completionCandidateName(staffInfo);
+        completionCandidateName(staffInfo, false);
         return staffInfo;
     }
 
@@ -194,7 +212,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         criteria.andAutoIdIn(idList);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         for (StaffInfo staffInfo : staffInfos) {
-            completionCandidateName(staffInfo);
+            completionCandidateName(staffInfo, false);
         }
         return staffInfos;
     }
@@ -205,7 +223,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
      * @param record
      * @return
      */
-    private StaffInfo completionCandidateName(StaffInfo record) {
+    private StaffInfo completionCandidateName(StaffInfo record, boolean withList) {
         Integer projectId = record.getProjectId();
         Integer supplierId = record.getSupplierId();
         Integer departmentId = record.getDepartmentId();
@@ -226,13 +244,26 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         if (postInfo != null) {
             record.setPostName(postInfo.getPostName());
         }
-
+        String beReId = "无";
+        String beReName = "（无）";
+        if (record.getIsReplace() > 0) {
+            // 根据分组编号查询被替换人身份证号
+            Integer autoId = record.getAutoId();
+            Integer replaceGroup = record.getReplaceGroup();
+            if (replaceGroup != null && replaceGroup != 0 && (autoId + 1) != replaceGroup) {
+                StaffInfoExample staffInfoExample = new StaffInfoExample();
+                StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+                criteria.andAutoIdEqualTo(replaceGroup - 1);
+                List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+                if (staffInfos.size() > 0) {
+                    beReId = staffInfos.get(0).getIdCard();
+                    beReName = "(" + staffInfos.get(0).getStaffName() + ")";
+                }
+            }
+        }
+        record.setBeReplacdStaffIdCard(beReId);
+        record.setBeReplacdStaffName(beReName);
         return record;
-    }
-
-    @Override
-    public Integer groupMax() {
-        return staffInfoMapper.groupMax();
     }
 
     @Override
@@ -251,6 +282,22 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             result.setInfo("人员（身份证号）已经存在，请调整后再提交！");
             return result;
         }
+        // 验证传进来的替换人员身份证号是否都存在
+        String beReplacdStaffIdCard = record.getBeReplacdStaffIdCard().trim();
+        StaffInfo tempBean = new StaffInfo();
+        tempBean.setIdCard(beReplacdStaffIdCard);
+        Integer integer = selectBeanExist(tempBean, false);
+        if (integer == 0) {
+            result.setCode(0);
+            result.setInfo("被替换人员身份证号未找到匹配的信息！");
+            return result;
+        } else {
+            // 更新分组
+            List<String> templist = new ArrayList<>();
+            templist.add(record.getIdCard());
+            templist.add(beReplacdStaffIdCard);
+            updateGroupByStaffNo(integer + 1, templist);
+        }
         int i = staffInfoMapper.updateByPrimaryKeySelective(record);
         return new Result(i);
     }
@@ -264,16 +311,16 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     /**
      * 更新替换分组信息
      *
-     * @param staffNos 被替换人和替换人的员工编号
+     * @param idCards 被替换人和替换人的身份证号
      * @return
      */
     @Override
-    public Result updateGroupByStaffNo(Integer groupId, List<String> staffNos) {
+    public Result updateGroupByStaffNo(Integer groupId, List<String> idCards) {
         StaffInfo staffInfo = new StaffInfo();
         staffInfo.setReplaceGroup(groupId);
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-        criteria.andStaffNoIn(staffNos);
+        criteria.andIdCardIn(idCards);
         int i = staffInfoMapper.updateByExampleSelective(staffInfo, staffInfoExample);
         return new Result(i);
     }
@@ -285,11 +332,11 @@ public class StaffInfoServiceImpl implements StaffInfoService {
      * @return 返回主键
      */
     private Integer selectBeanExist(StaffInfo staffInfo, boolean other) {
-        String staffNo = staffInfo.getStaffNo();
+//        String staffNo = staffInfo.getStaffNo();
         String idCard = staffInfo.getIdCard();
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-        criteria.andStaffNoEqualTo(staffNo);
+//        criteria.andStaffNoEqualTo(staffNo);
         criteria.andIdCardEqualTo(idCard);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         if (staffInfos.size() > 0) {

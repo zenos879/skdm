@@ -27,9 +27,9 @@ public interface StaffInfoService {
 
     List<StaffInfo> selectByName(String record);
 
-    List<StaffInfo> selectByIds(String ids);
+    String selectByIdCard(String record);
 
-    Integer groupMax();
+    List<StaffInfo> selectByIds(String ids);
 
     StaffInfo selectByPrimaryKey(Integer autoId);
 
