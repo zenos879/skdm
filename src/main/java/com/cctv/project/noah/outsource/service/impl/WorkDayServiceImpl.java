@@ -4,12 +4,14 @@ import com.cctv.project.noah.outsource.entity.WorkDay;
 import com.cctv.project.noah.outsource.mapper.WorkDayMapper;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.WorkDayService;
+import com.cctv.project.noah.outsource.utils.CommonUtil;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @Service("workDayService")
@@ -51,6 +53,22 @@ public class WorkDayServiceImpl implements WorkDayService {
     public Result delete(String date){
         return new Result(workDayMapper.deleteWorkDayByDate(date));
     }
+
+    public List<WorkDay> getHolidaysByMonth(Integer year,Integer month){
+        Date first = CommonUtil.getAppointTime(year, month, 0);
+        Date last = CommonUtil.getAppointTime(year, month, 1);
+        return findHolidays(String.valueOf(year), String.valueOf(month));
+    }
+    public Integer getHolidaysByMonthDays(Integer year,Integer month){
+        return getHolidaysByMonth(year,month).size();
+    }
+    public Integer getWorkdaysByMonthDays(Integer year,Integer month){
+        Date appointTime = CommonUtil.getAppointTime(year, month, 0);
+        Integer monthDays = CommonUtil.getMonthDays(appointTime);
+        return monthDays - getHolidaysByMonth(year,month).size();
+    }
+
+
 
 
 }
