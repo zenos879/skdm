@@ -277,7 +277,7 @@
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
       <if test="record.staffNo != null">
-        staff_no = #{record.staffNo,jdbcType=INTEGER},
+        staff_no = #{record.staffNo,jdbcType=VARCHAR},
       </if>
       <if test="record.statisticsYear != null">
         statistics_year = #{record.statisticsYear,jdbcType=SMALLINT},
@@ -321,7 +321,7 @@
     update attendance
     set auto_id = #{record.autoId,jdbcType=BIGINT},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
-      staff_no = #{record.staffNo,jdbcType=INTEGER},
+      staff_no = #{record.staffNo,jdbcType=VARCHAR},
       statistics_year = #{record.statisticsYear,jdbcType=SMALLINT},
       statistics_month = #{record.statisticsMonth,jdbcType=TINYINT},
       arrive_date = #{record.arriveDate,jdbcType=DATE},

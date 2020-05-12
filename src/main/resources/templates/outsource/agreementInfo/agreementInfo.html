@@ -26,14 +26,14 @@
                         </li>
                         <li class="select-time">
                             <label>合同有效时间段： </label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                   name="params[beginTime]" autocomplete="off"/>
+                            <input type="text" class="date time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]" autocomplete="off" readonly="readonly"/>
                             <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                   name="params[endTime]" autocomplete="off"/>
+                            <input type="text" class="date time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]" autocomplete="off" readonly="readonly"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.searchWithCheck()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -80,10 +80,22 @@
         queryList();
     });
     $("#startTime").change(function () {
-        checkDateTime();
+        // var sVal = $("#startTime").val();
+        // if (CheckUtil.checkDate(sVal)){
+            checkDateTime();
+        // } else {
+        //     alert("时间格式不正确！");
+        //     $("#startTime").val('');
+        // }
     })
     $("#endTime").change(function () {
-        checkDateTime();
+        // var eVal = $("#endTime").val();
+        // if (CheckUtil.checkDate(eVal)){
+            checkDateTime();
+        // } else {
+        //     alert("时间格式不正确！");
+        //     $("#endTime").val('');
+        // }
     })
 
     function checkDateTime() {
@@ -92,7 +104,7 @@
         if (sVal != "" && eVal != "") {
             if (eVal < sVal){
                 alert("结束时间不能小于开始时间");
-                $("#endTime").val("");
+                $("#endTime").val('');
             }
         }
     }

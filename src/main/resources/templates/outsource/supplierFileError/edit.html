@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改供应商文件错误数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -13,7 +14,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
                     <div class="col-sm-7">
-                        <input name="purcharNo" th:value="${command.purcharNo}" id="purcharNo" class="form-control" type="text" required>
+                        <input name="purcharNo" th:value="${command.purcharNo}" id="purcharNo" class="form-control" type="text" required maxlength="20">
                     </div>
                 </div>
             </div>
@@ -21,9 +22,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                     <div class="col-sm-7">
-<!--                        <input name="supplierName" th:value="${supplierName}" id="supplierName" class="form-control" type="text" required>-->
-                        <select name="supplierName" id="supplierName" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
-                            <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierName}" th:selected="${command.supplierId == supplier.supplierId}"></option>
+                        <select name="supplierId" id="supplierId" class="selectpicker form-control" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierId}" th:selected="${command.supplierId == supplier.supplierId}"></option>
                         </select>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>应答文件错误次数：</label>
                     <div class="col-sm-7">
-                        <input name="fileError" th:value="${command.fileError}" id="fileError" class="form-control" type="text" required>
+                        <input name="fileError" th:value="${command.fileError}" id="fileError" class="number form-control" type="text" required maxlength="7">
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>错误描述：</label>
                     <div class="col-sm-7">
-                        <input name="remark" th:value="${command.remark}" id="remark" class="form-control" type="text" required>
+                        <input name="remark" th:value="${command.remark}" id="remark" class="form-control" type="text" required maxlength="200">
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>发生日期：</label>
                     <div class="col-sm-7">
-                        <input type="text" class="time-input form-control" id="happenDate" th:value="${command.getFormatHappenDate()}" placeholder="发生日期" name="happenDate" required/>
+                        <input type="text" class="time-input form-control" id="happenDate" th:value="${command.getFormatHappenDate()}" placeholder="发生日期" name="happenDate" required  readonly="readonly"/>
                     </div>
                 </div>
             </div>
@@ -56,6 +56,7 @@
     </form>
 </div>
 <th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-select-js" />
 <script type="text/javascript">
     var prefix = ctx + "outsource/supplierFileError";
     $("#form-supplierfileerror-edit").validate({

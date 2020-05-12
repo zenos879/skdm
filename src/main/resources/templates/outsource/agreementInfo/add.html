@@ -20,6 +20,7 @@
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                 <div class="col-sm-7">
                     <select name="supplierName" id="supplierName" class="selectpicker form-control" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                        <option value="">请选择</option>
                         <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierName}"></option>
                     </select>
                 </div>

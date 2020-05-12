@@ -6,8 +6,12 @@ import com.cctv.project.noah.outsource.entity.AttendanceExample;
 
 import java.util.Date;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
+
+@Service
 public interface AttendanceMapper {
     long countByExample(AttendanceExample example);
 

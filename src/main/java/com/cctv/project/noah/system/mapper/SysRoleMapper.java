@@ -1,9 +1,11 @@
 package com.cctv.project.noah.system.mapper;
 
 import com.cctv.project.noah.system.entity.SysRole;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface SysRoleMapper {
     int deleteByPrimaryKey(Long roleId);
 

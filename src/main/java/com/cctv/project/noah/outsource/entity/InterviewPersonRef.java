@@ -34,7 +34,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 面试人员员工编号
      */
-    private Long staffNo;
+    private String staffNo;
 
     /**
      * 人员名字
@@ -118,7 +118,7 @@ public class InterviewPersonRef implements Serializable {
     /**
      * 替换人的员工编号
      */
-    private Long replaceStaffNo;
+    private String replaceStaffNo;
 
     @Excel(name = "替换人员身份证号（非替换则为空）")
     private String replacdStaffIdCard;
@@ -184,11 +184,11 @@ public class InterviewPersonRef implements Serializable {
         this.orderNo = orderNo;
     }
 
-    public Long getStaffNo() {
+    public String getStaffNo() {
         return staffNo;
     }
 
-    public void setStaffNo(Long staffNo) {
+    public void setStaffNo(String staffNo) {
         this.staffNo = staffNo;
     }
 
@@ -272,11 +272,11 @@ public class InterviewPersonRef implements Serializable {
         this.isReplace = isReplace;
     }
 
-    public Long getReplaceStaffNo() {
+    public String getReplaceStaffNo() {
         return replaceStaffNo;
     }
 
-    public void setReplaceStaffNo(Long replaceStaffNo) {
+    public void setReplaceStaffNo(String replaceStaffNo) {
         this.replaceStaffNo = replaceStaffNo;
     }
 

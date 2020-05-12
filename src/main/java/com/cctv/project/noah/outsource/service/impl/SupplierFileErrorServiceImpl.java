@@ -68,16 +68,15 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
     public Result insert(SupplierFileError record) {
         Result result = new Result();
         // 插入时判断供应商是否存在
-        String supplierName = record.getSupplierName();
-        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        Integer supplierId = record.getSupplierId();
+        SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
             result.setCode(0);
             result.setInfo("供应商不存在，请先完善供应商信息！");
             return result;
         }
-
-        record.setSupplierId(supplierInfo.getSupplierId());
+        record.setSupplierId(supplierId);
         Integer b = selectBeanExist(record, false);
         // 验证关系是否存在
         if (b > 0) {
@@ -90,7 +89,7 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             result.setCode(0);
             result.setInfo("供应商文件错误数据新增失败，请重试！");
         }
-        return result;
+        return new Result(insert);
     }
 
 //    @Override
@@ -113,12 +112,20 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             criteria.andSupplierIdEqualTo(supplierId);
         }
         Map<String, Object> params = record.getParams();
-        String beginTime = params.get("beginTime").toString();
+        Object beginTime1 = params.get("beginTime");
+        String beginTime = "";
+        if (beginTime1 != null) {
+            beginTime = beginTime1.toString();
+        }
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(beginTime)) {
             Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
             criteria.andHappenDateGreaterThanOrEqualTo(date);
         }
-        String endTime = params.get("endTime").toString();
+        Object endTime1 = params.get("endTime");
+        String endTime = "";
+        if (endTime1 != null) {
+            endTime = endTime1.toString();
+        }
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(endTime)) {
             Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
             criteria.andHappenDateLessThanOrEqualTo(date);
@@ -197,15 +204,14 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             result.setInfo("主键不存在，不能更新！");
             return result;
         }
-        String supplierName = record.getSupplierName();
-        SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+        Integer supplierId = record.getSupplierId();
+        SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
             result.setCode(0);
             result.setInfo("供应商不存在，请先完善供应商信息！");
             return result;
         }
-        record.setSupplierId(supplierInfo.getSupplierId());
         Integer resId = selectBeanExist(record, false);
         // 查到有值，并且不相等，则重复，不更新
         if (resId > 0 && !id.equals(resId)) {

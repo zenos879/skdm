@@ -43,11 +43,11 @@ public class GeneralUtils {
      *
      * @return
      */
-    public static Long generateStaffNo() {
+    public static String generateStaffNo() {
         if (snowflake == null) {
             snowflake = IdUtil.createSnowflake(1, 1);
         }
-        return snowflake.nextId();
+        return snowflake.nextId() + "";
     }
 
     /**
@@ -127,6 +127,10 @@ public class GeneralUtils {
         return parse;
     }
 
+    public static boolean compareStrDate(String beginTime, String endTime) {
+        return strToDate(beginTime, YMD).getTime() > strToDate(endTime, YMD).getTime();
+    }
+
     public static boolean compareDate(Date d1, Date d2) {
         boolean b = d1.getTime() >= d2.getTime();
         return b;
@@ -134,21 +138,26 @@ public class GeneralUtils {
 
 
     public static void main(String[] args) {
-//        for (int i = 0; i < 100; i++) {
-//            System.out.println(GeneralUtils.generateStaffNo());
-//        }
-        List<StaffInfo> personList = null;
-        StaffInfo person = new StaffInfo();
+        /** 1 */
+        for (int i = 0; i < 100; i++) {
+            System.out.println(GeneralUtils.generateStaffNo());
+        }
+
+        /** 2 */
+//        List<StaffInfo> personList = null;
+//        StaffInfo person = new StaffInfo();
 //        person.setAutoId(1);
 //        person.setStaffNo(11111L);
 
-        StaffInfo person2 = new StaffInfo();
+//        StaffInfo person2 = new StaffInfo();
 //        person2.setAutoId(2);
 //        person2.setStaffNo(22222L);
 
 //        personList.add(person);
 //        personList.add(person2);
 
-        System.out.println(getIdsList(personList, StaffInfo.class, "autoId"));
+//        System.out.println(getIdsList(personList, StaffInfo.class, "autoId"));
+
+
     }
 }

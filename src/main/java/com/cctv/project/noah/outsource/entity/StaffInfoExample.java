@@ -372,52 +372,62 @@ public class StaffInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoEqualTo(Long value) {
+        public Criteria andStaffNoEqualTo(String value) {
             addCriterion("staff_no =", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotEqualTo(Long value) {
+        public Criteria andStaffNoNotEqualTo(String value) {
             addCriterion("staff_no <>", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoGreaterThan(Long value) {
+        public Criteria andStaffNoGreaterThan(String value) {
             addCriterion("staff_no >", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoGreaterThanOrEqualTo(Long value) {
+        public Criteria andStaffNoGreaterThanOrEqualTo(String value) {
             addCriterion("staff_no >=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoLessThan(Long value) {
+        public Criteria andStaffNoLessThan(String value) {
             addCriterion("staff_no <", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoLessThanOrEqualTo(Long value) {
+        public Criteria andStaffNoLessThanOrEqualTo(String value) {
             addCriterion("staff_no <=", value, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoIn(List<Long> values) {
+        public Criteria andStaffNoLike(String value) {
+            addCriterion("staff_no like", value, "staffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNoNotLike(String value) {
+            addCriterion("staff_no not like", value, "staffNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStaffNoIn(List<String> values) {
             addCriterion("staff_no in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotIn(List<Long> values) {
+        public Criteria andStaffNoNotIn(List<String> values) {
             addCriterion("staff_no not in", values, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoBetween(Long value1, Long value2) {
+        public Criteria andStaffNoBetween(String value1, String value2) {
             addCriterion("staff_no between", value1, value2, "staffNo");
             return (Criteria) this;
         }
 
-        public Criteria andStaffNoNotBetween(Long value1, Long value2) {
+        public Criteria andStaffNoNotBetween(String value1, String value2) {
             addCriterion("staff_no not between", value1, value2, "staffNo");
             return (Criteria) this;
         }

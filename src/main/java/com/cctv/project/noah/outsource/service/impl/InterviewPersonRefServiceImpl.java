@@ -105,7 +105,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             return result;
         }
         // 生成员工编号
-        Long aLong = GeneralUtils.generateStaffNo();
+        String aLong = GeneralUtils.generateStaffNo();
         record.setStaffNo(aLong);
         int insert = interviewPersonRefMapper.insert(record);
         if (insert < 0) {
@@ -154,7 +154,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     }
 
     @Override
-    public Long selectNoByIdCard(String idCard) {
+    public String selectNoByIdCard(String idCard) {
         InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
         InterviewPersonRefExample.Criteria criteria = interviewPersonRefExample.createCriteria();
         criteria.andIdCardEqualTo(idCard);
@@ -163,7 +163,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             InterviewPersonRef interviewPersonRef = interviewPersonRefs.get(0);
             return interviewPersonRef.getStaffNo();
         }
-        return 0L;
+        return "0";
     }
 
     @Override
@@ -200,8 +200,8 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         if (postInfo != null) {
             record.setPostName(postInfo.getPostName());
         }
-        Long staffNo = record.getStaffNo();
-        if (staffNo == 0) {
+        String staffNo = record.getStaffNo();
+        if (StringUtils.isEmpty(staffNo) || "0".equals(staffNo)) {
             record.setStaffNo(GeneralUtils.generateStaffNo());
         }
         return record;
@@ -358,8 +358,8 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                     return new Result(0, "第" + (i + 2) + "行有替换人员时，替换人员证件号必须填写!");
                 }
             } else {
-                if (isReplace == 0) {
-                    return new Result(0, "第" + (i + 2) + "行无替换人员时，无需填写替换人员证件号!");
+                if (isReplace == 0 || isPass == 0) {
+                    return new Result(0, "第" + (i + 2) + "行,面试未通过或者无替换人员时，无需填写替换人员证件号!");
                 }
             }
             String reason = temp.getReason();
@@ -425,11 +425,11 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             } else {
                 // 存在，则补全替换人员信息，替换人身份证号转为员工编号
                 if (isReplace == 0) {
-                    record.setReplaceStaffNo(0L);
+                    record.setReplaceStaffNo("0");
                 } else {
                     // 根据替换人身份证号，查找员工编号
-                    Long aLong = selectNoByIdCard(replacdStaffIdCard);
-                    if (aLong == 0L) {
+                    String aLong = selectNoByIdCard(replacdStaffIdCard);
+                    if (StringUtils.isEmpty(aLong) || "0".equals(aLong)) {
                         errorCount++;
                         msg.append("第" + i + "行未执行，原因【替换人员身份证号" + record.getReplacdStaffIdCard() + "未找到对应员工编号，请检查后重试！】</br>");
                         continue;
@@ -457,18 +457,24 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                     staffInfoService.updateByPrimaryKeySelective(staffInfo);
                     updateStaffCount++;
                 }
-            }
-            //如果存在替换人员，还要维护staffInfo表中对应的replaceGroup字段
-            if (record.getIsReplace() != 0) {
-                Long staffNo = record.getStaffNo();
-                Long replaceStaffNo = record.getReplaceStaffNo();
-                List<Long> tempList = new ArrayList<>();
-                tempList.add(staffNo);
-                tempList.add(replaceStaffNo);
-                staffInfoService.updateGroupByStaffNo(tempList);
+                //如果存在替换人员，还要维护staffInfo表中对应的replaceGroup字段
+                if (record.getIsReplace() != 0) {
+                    Integer staffAutoId = staffInfo.getAutoId();
+                    if (staffAutoId == null) {
+                        staffInfos = staffInfoService.selectList(staffInfo);
+                        staffAutoId = staffInfos.get(0).getAutoId();
+                        staffInfo.setAutoId(staffAutoId);
+                    }
+                    String staffNo = record.getStaffNo();
+                    String replaceStaffNo = record.getReplaceStaffNo();
+                    List<String> tempList = new ArrayList<>();
+                    tempList.add(staffNo);
+                    tempList.add(replaceStaffNo);
+                    staffInfoService.updateGroupByStaffNo(staffAutoId + 1, tempList);
+                }
             }
         }
-        if (msg.length() > 0){
+        if (msg.length() > 0) {
             msg.append("当前共计导入" + (size - errorCount) + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
         } else {
             msg.append("导入成功，共计导入" + size + "条");

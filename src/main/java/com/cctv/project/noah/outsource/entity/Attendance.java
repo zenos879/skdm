@@ -30,8 +30,8 @@ public class Attendance extends BaseEntity  implements Serializable {
 
     /** 考勤人id */
     @Excel(name = "考勤人id")
-    @JsonSerialize(using = JsonLongSerializer.class)
-    private Long staffNo;
+//    @JsonSerialize(using = JsonLongSerializer.class)
+    private String staffNo;
 
     /** 统计年份 */
     @Excel(name = "统计年份")
@@ -140,11 +140,11 @@ public class Attendance extends BaseEntity  implements Serializable {
     public String getOrderNo() {
         return orderNo;
     }
-    public void setStaffNo(Long staffNo) {
+    public void setStaffNo(String staffNo) {
         this.staffNo = staffNo;
     }
 
-    public Long getStaffNo() {
+    public String getStaffNo() {
         return staffNo;
     }
     public void setStatisticsYear(Long statisticsYear) {
