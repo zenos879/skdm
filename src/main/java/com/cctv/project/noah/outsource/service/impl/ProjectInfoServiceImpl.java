@@ -107,8 +107,12 @@ public class ProjectInfoServiceImpl extends BaseService implements ProjectInfoSe
                 return new Result(0,"无法修改不存在的项目！");
             }
             ProjectInfo projectInfoByName = selectByName(projectInfo.getProjectName());
-            if (projectInfoByName!=null && projectInfoByName.getProjectId() != projectInfo.getProjectId()){
+            if (projectInfoByName!=null && !projectInfoByName.getProjectId().equals(projectInfo.getProjectId())){
                 return  new Result(0,"此项目已存在！");
+            }
+            DepartmentInfo departmentInfo = departmentInfoMapper.selectByPrimaryKey(projectInfo.getDepartmentId());
+            if (departmentInfo == null) {
+                return new Result(0,"此部门不存在！");
             }
             int i = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
             return new Result(i);

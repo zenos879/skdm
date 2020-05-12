@@ -4,7 +4,6 @@
     <th:block th:include="include :: header('供应商数据列表')"/>
     <th:block th:include="include :: ztree-css"/>
     <th:block th:include="include :: bootstrap-select-css"/>
-
 </head>
 <body class="gray-bg">
 <div class="ui-layout-center">
@@ -358,7 +357,7 @@
             return;
         }
         if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
-            $.modal.alertError("开始时间必须大于结束时间");
+            $.modal.alertError("开始时间必须小于结束时间");
             $("#startTime").val('');
             $("#endTime").val('');
             return;

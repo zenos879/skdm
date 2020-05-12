@@ -13,13 +13,10 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									采购编号：<input type="text" maxlength="64" name="purchaseNo"/>
+									采购编号：<input type="text" maxlength="64" id="purchaseNo" name="purchaseNo"/>
 								</li>
 								<li>
-									<label class="col-sm-5 control-label" style="line-height: 30px">采购总人数：</label>
-									<div class="col-sm-7" style="margin-left: 0px;padding-left: 0px;">
-										<input type="text" name="postCount" maxlength="11"/>
-									</div>
+									岗位需求数：<input type="text" name="postCount" id="postCount" maxlength="5"/>
 									<!--采购总人数：<input type="text" name="postCount"/>-->
 								</li>
 								<li>
@@ -37,19 +34,19 @@
 								</li>
 								<li class="select-time">
 									<label>评审日期： </label>
-									<input type="text" class="time-input" id="reviewBeginDate" placeholder="开始时间" name="params[reviewBeginDate]"/>
+									<input type="text" class="time-input" id="reviewBeginDate" placeholder="开始时间" name="params[reviewBeginDate]" autocomplete="off" readonly="readonly"/>
 									<span>-</span>
-									<input type="text" class="time-input" id="reviewEndDate" placeholder="结束时间" name="params[reviewEndDate]"/>
+									<input type="text" class="time-input" id="reviewEndDate" placeholder="结束时间" name="params[reviewEndDate]" autocomplete="off" readonly="readonly"/>
 								</li>
 								<li class="select-time">
 									<label>创建时间： </label>
 									<input type="text"
-										   class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+										   class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" autocomplete="off" readonly="readonly"/>
 									<span>-</span>
-									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" autocomplete="off" readonly="readonly"/>
 								</li>
 								<li>
-									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 								</li>
 							</ul>
@@ -81,11 +78,13 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/reviewInfo";
 		// var isSubsidiary = [[${@dict.getType('isSubsidiary')}]];
 		$(function() {
 		    queryUserList();
+		    // alert("s s  ".trim());
 		});
 
 		function queryUserList() {
@@ -125,7 +124,7 @@
 					sortable: true
 				},{
 					field: 'postCount',
-					title: '采购总人数',
+					title: '岗位需求数',
 					sortable: true,
 				},{
 					field: 'reviewDate',
@@ -181,6 +180,58 @@
 					$.modal.closeLoading();
 				});
 			});
+		}
+		function _search() {
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+			var reviewBeginDate = $("#reviewBeginDate").val();
+			var reviewEndDate = $("#reviewEndDate").val();
+			// var projectName = $("#projectName").val();
+			// var departmentId = $("#departmentId").val();
+
+			if (!$.common.isEmpty(startTime) && !isDate(startTime)) {
+				$.modal.alertError("创建时间开始时间格式不正确");
+				$("#startTime").val('');
+				return;
+			}
+			if (!$.common.isEmpty(endTime) && !isDate(endTime)) {
+				$.modal.alertError("创建时间结束时间格式不正确");
+				$("#endTime").val('');
+				return;
+			}
+
+			if (!$.common.isEmpty(startTime) && !$.common.isEmpty(endTime) && !dateCompare(startTime,endTime)){
+				$.modal.alertError("创建时间开始时间必须小于结束时间");
+				$("#startTime").val('');
+				$("#endTime").val('');
+				return;
+			}
+			if (!$.common.isEmpty(reviewBeginDate) && !isDate(reviewBeginDate)) {
+				$.modal.alertError("评审日期开始时间格式不正确");
+				$("#reviewBeginDate").val('');
+				return;
+			}
+			if (!$.common.isEmpty(reviewEndDate) && !isDate(reviewEndDate)) {
+				$.modal.alertError("评审日期结束时间格式不正确");
+				$("#reviewEndDate").val('');
+				return;
+			}
+			if (!$.common.isEmpty(reviewBeginDate) && !$.common.isEmpty(reviewEndDate) && !dateCompare(reviewBeginDate,reviewEndDate)){
+				$.modal.alertError("评审日期开始时间必须小于结束时间");
+				$("#reviewBeginDate").val('');
+				$("#reviewEndDate").val('');
+				return;
+			}
+			// String.prototype.trim = function() { return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '')};
+			var postCount = $("#postCount").val();
+			// console.log(postCount);
+			postCount = postCount.trim()
+			if (!$.common.isEmpty(postCount) && !isNumber(postCount)){
+				$.modal.alertError("岗位需求数必须为正整数！");
+				return;
+			}
+			$.table.search();
+
 		}
 	</script>
 </body>

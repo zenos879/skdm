@@ -113,12 +113,15 @@ public class BaseEntity implements Serializable {
     }
 
     public Boolean checkDateLegitimate(){
+        return checkDateLegitimate("beginTime","endTime");
+    }
+    public Boolean checkDateLegitimate(String beginKey,String endKey){
         if (this.getParams() == null){
             return true;
         }
 
-        String beginTime = (String) this.getParams().get("beginTime");
-        String endTime = (String) this.getParams().get("endTime");
+        String beginTime = (String) this.getParams().get(beginKey);
+        String endTime = (String) this.getParams().get(endKey);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (StringUtils.isNotEmpty(beginTime)){

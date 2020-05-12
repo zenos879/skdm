@@ -13,12 +13,10 @@ function dateCompare(startdate, enddate) {
     var lktime = new Date(arrs[0], arrs[1], arrs[2]);
     var lktimes = lktime.getTime();
 
-    if (starttimes >= lktimes) {
-        return false;
-    }
-    else {
-        return true;
-    }
+    // console.log(starttimes)
+    // console.log(lktimes)
+    // console.log(starttimes >= lktimes)
+    return starttimes <= lktimes;
 
 }
 

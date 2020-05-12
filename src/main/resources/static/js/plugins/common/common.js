@@ -6,6 +6,7 @@ function isDate(str)
     return (d.getFullYear()==r[1]&&(d.getMonth()+1)==r[3]&&d.getDate()==r[4]);
 }
 function dateCompare(startdate, enddate) {
+    console.log("dateCompare")
     var arr = startdate.split("-");
     var starttime = new Date(arr[0], arr[1], arr[2]);
     var starttimes = starttime.getTime();
@@ -13,6 +14,9 @@ function dateCompare(startdate, enddate) {
     var lktime = new Date(arrs[0], arrs[1], arrs[2]);
     var lktimes = lktime.getTime();
 
+    console.log(starttimes)
+    console.log(lktimes)
+    console.log(starttimes >= lktimes)
     if (starttimes >= lktimes) {
         return false;
     }

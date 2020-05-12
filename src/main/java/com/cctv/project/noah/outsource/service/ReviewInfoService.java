@@ -8,8 +8,6 @@ import java.util.List;
 public interface ReviewInfoService {
 
 
-    int insert(ReviewInfo record);
-
     ReviewInfo selectByPrimaryKey(Integer reviewId);
 
     List<ReviewInfo> selectAll();

@@ -1,19 +1,20 @@
 package com.cctv.project.noah.outsource.utils;
 
+import com.cctv.project.noah.system.config.Global;
+import com.cctv.project.noah.system.core.domain.AjaxResult;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,7 +85,10 @@ public class PoiUtil {
             logger.error("解析excel文档流有误。", e);
         } finally {
             try {
-                file.close();
+                if (file!=null){
+                    file.close();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -112,12 +116,20 @@ public class PoiUtil {
                 }
                 list.add(obj);
             }
-            wb.close();
+//            wb.close();
             logger.info("读取excel，成功将其转成Object数组");
             return list;
         } catch (Exception e) {
             logger.error("解析excel文档流有误。", e);
             return null;
+        }finally {
+            if (wb != null) {
+                try {
+                    wb.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 
@@ -222,6 +234,97 @@ public class PoiUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static AjaxResult downLoadExcelTempLate(List<String[]> keyList, String fileName) {
+        Workbook wb = null;
+        fileName = encodingFilename(fileName);
+
+        //判断文件类型 03或是07
+        if (isExcel2007(fileName)) {
+            wb = new SXSSFWorkbook();
+        }
+        if (isExcel2003(fileName)) {
+            wb = new HSSFWorkbook();
+        }
+        //创建sheet
+        Sheet sheet = wb.createSheet();
+
+        CellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setBorderRight(BorderStyle.THIN);
+        style.setRightBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setLeftBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+        style.setBorderTop(BorderStyle.THIN);
+        style.setTopBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBottomBorderColor(IndexedColors.GREY_50_PERCENT.getIndex());
+        Font dataFont = wb.createFont();
+        dataFont.setFontName("Arial");
+        dataFont.setFontHeightInPoints((short) 10);
+        style.setFont(dataFont);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        style.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        Font headerFont = wb.createFont();
+        headerFont.setFontName("Arial");
+        headerFont.setFontHeightInPoints((short) 10);
+        headerFont.setBold(true);
+        headerFont.setColor(IndexedColors.WHITE.getIndex());
+        style.setFont(headerFont);
+        //创建第一行，存放key
+        int line = 0;
+        for (int j = 0; j < keyList.size(); j++) {
+
+            if (j!=0 && j%2 == 1){
+                line++;
+            }
+            Row row = sheet.createRow(line);
+            for (int i = 0; i < keyList.get(j).length; i++) {
+                Cell cell = row.createCell(i);
+                cell.setCellStyle(style);
+                cell.setCellValue(keyList.get(j)[i]);
+            }
+            line++;
+        }
+        OutputStream out = null;
+        String filename = encodingFilename(fileName);
+        try {
+            out = new FileOutputStream(getAbsoluteFile(filename));
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (wb != null) {
+                try {
+                    wb.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return AjaxResult.success(filename);
+    }
+    public static String getAbsoluteFile(String filename) {
+        String downloadPath = Global.getDownloadPath() + filename;
+        File desc = new File(downloadPath);
+        if (!desc.getParentFile().exists()) {
+            desc.getParentFile().mkdirs();
+        }
+        return downloadPath;
+    }
+    public static String encodingFilename(String filename) {
+        filename = UUID.randomUUID().toString() + "_" + filename + ".xlsx";
+        return filename;
     }
 
 

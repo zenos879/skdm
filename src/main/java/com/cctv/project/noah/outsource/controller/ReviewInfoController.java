@@ -10,6 +10,7 @@ import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +32,10 @@ public class ReviewInfoController extends BaseController {
 
     /** 页面跳转 */
     @GetMapping()
-    public String page() {
+    public String page(String reviewName,Model model) {
+        if (StringUtils.isNotEmpty(reviewName)){
+            model.addAttribute("reviewName",reviewName);
+        }
         return prefix + "/page";
     }
 
@@ -103,8 +108,14 @@ public class ReviewInfoController extends BaseController {
     @ResponseBody
     @GetMapping("/importTemplate")
     public AjaxResult importTemplate() {
-        ExcelUtil<ReviewInfo> util = new ExcelUtil<ReviewInfo>(ReviewInfo.class);
-        return util.importTemplateExcel("评审数据");
+//        ExcelUtil<ReviewInfo> util = new ExcelUtil<ReviewInfo>(ReviewInfo.class);
+//        return util.importTemplateExcel("评审数据");
+        String[] reviewInfoHeaders = {"项目名称","采购编号","岗位","岗位需求数","评审日期"};
+        String[] reviewPersonRefHeaders = {"人名","岗位","供应商名称","是否通知面试"};
+        List<String []> list = new ArrayList<>();
+        list.add(reviewInfoHeaders);
+        list.add(reviewPersonRefHeaders);
+        return PoiUtil.downLoadExcelTempLate(list,"评审数据");
     }
 
     @RequestMapping("/remove")

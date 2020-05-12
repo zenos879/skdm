@@ -8,6 +8,8 @@ import com.cctv.project.noah.outsource.utils.PoiUtil;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.apache.commons.lang3.builder.ToStringExclude;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("reviewInfoService")
-public class ReviewInfoServiceImpl implements ReviewInfoService {
+public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoService {
 
     @Autowired
     ReviewInfoMapper reviewInfoMapper;
@@ -34,146 +36,186 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
 
     @Autowired
     ReviewPersonRefService reviewPersonRefService;
-    @Override
-    public int insert(ReviewInfo record) {
-        return reviewInfoMapper.insert(record);
-    }
 
+    Logger logger = LoggerFactory.getLogger(DepartmentInfoServiceImpl.class);
 
     @Override
     public ReviewInfo selectByPrimaryKey(Integer reviewId) {
-        return reviewInfoMapper.selectByPrimaryKey(reviewId);
+        try {
+            if (reviewId == null) {
+                return null;
+            }
+            return reviewInfoMapper.selectByPrimaryKey(reviewId);
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return null;
+        }
     }
 
     @Override
     public List<ReviewInfo> selectAll(){
-        ReviewInfoExample reviewInfoExample = new ReviewInfoExample();
-        ReviewInfoExample.Criteria criteria = reviewInfoExample.createCriteria();
-        reviewInfoExample.setDistinct(true);
-        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectByExample(reviewInfoExample);
-//        List<ReviewInfo> reviewInfos = reviewInfoMapper.selectBySelective(new ReviewInfo());
-        return reviewInfos;
+        try {
+            List<ReviewInfo> reviewInfos = selectBySelective(new ReviewInfo());
+            return StringUtils.isNotEmpty(reviewInfos)?reviewInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public List<ReviewInfo> selectBySelective(ReviewInfo reviewInfo){
-        return reviewInfoMapper.selectBySelective(reviewInfo);
+        try {
+            if (reviewInfo == null) {
+                return selectAll();
+            }
+            if (reviewInfo.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            List<ReviewInfo> reviewInfos = reviewInfoMapper.selectBySelective(reviewInfo);
+            return StringUtils.isNotEmpty(reviewInfos)?reviewInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
     }
     @Override
     public List<ReviewInfo> selectByIds(String ids){
-        return reviewInfoMapper.selectByIds(ids.split(","));
-    }
-
-
-    private Boolean reviewInfoNotNull(ReviewInfo reviewInfo){
-        return StringUtils.isNotEmpty(reviewInfo.getPurchaseNo()) &&
-                StringUtils.isNotNull(reviewInfo.getPostCount()) &&
-                (StringUtils.isNotNull(reviewInfo.getPostId())||StringUtils.isNotEmpty(reviewInfo.getPostName())) &&
-                (StringUtils.isNotNull(reviewInfo.getProjectId())||StringUtils.isNotEmpty(reviewInfo.getProjectName())) &&
-                StringUtils.isNotNull(reviewInfo.getReviewDate());
-    }
-    private Boolean reviewInfoNull(ReviewInfo reviewInfo){
-        return !reviewInfoNotNull(reviewInfo);
-    }
-    @Override
-    public Result updateBySelective(ReviewInfo reviewInfo){
-        Integer reviewId = reviewInfo.getAutoId();
-        if (reviewId == null) {
-            return new Result(0,"id为空,无法修改！");
-        }
-        if (reviewInfoNull(reviewInfo)) {
-            return new Result(0,"*号标识项为必填项！");
-        }
-        ReviewInfo reviewInfoDb = reviewInfoMapper.selectByPrimaryKey(reviewId);
-        if (reviewInfoDb == null){
-            return new Result(0,"无法修改不存在的评审数据！");
-        }
-        if (reviewInfoDb.equals(reviewInfo)){
-            return new Result(0,"修改必须与之前不同！");
-        }
-        int i = reviewInfoMapper.updateByPrimaryKeySelective(reviewInfo);
-        return new Result(i);
-    }
-    //0：全部重复 1：只有评审日期不重复 2：除评审日期外还有不重复
-    private Integer checkReviewInfoRepeat(ReviewInfo reviewInfoDb,ReviewInfo reviewInfo){
-        if (reviewInfo.getProjectId() == reviewInfoDb.getProjectId() ||
-                reviewInfo.getPostId() == reviewInfoDb.getPostId() ||
-                reviewInfo.getPostCount() == reviewInfoDb.getPostCount() ||
-                reviewInfo.getPurchaseNo() == reviewInfoDb.getPurchaseNo()
-        ){
-            Date reviewDbDate = reviewInfoDb.getReviewDate();
-            Date reviewDate = reviewInfo.getReviewDate();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String db = simpleDateFormat.format(reviewDate);
-            String format = simpleDateFormat.format(reviewDbDate);
-            if (db.equals(format)){
-                return 0;
-            }else {
-                return 1;
-            }
-        }else {
-            return 2;
+        try {
+            List<String> list = checkIds(ids);
+            List<ReviewInfo> reviewInfos = reviewInfoMapper.selectByIds(list.toArray(new String[list.size()]));
+            return StringUtils.isNotEmpty(reviewInfos)?reviewInfos:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
         }
     }
-    @Override
-    public Result insertBySelective(ReviewInfo reviewInfo){
-        if (reviewInfoNull(reviewInfo)) {
-            return new Result(0,"*号标识项为必填项！");
-        }
+    private Result checkLegitimateResult(ReviewInfo reviewInfo){
         List<ReviewInfo> reviewInfos = reviewInfoMapper.selectByRepeat(reviewInfo);
-        if (reviewInfos.size()!=0){
+        if (StringUtils.isNotEmpty(reviewInfos)){
             for (ReviewInfo info : reviewInfos) {
-                Integer repeat = checkReviewInfoRepeat(reviewInfo, info);
-                if (repeat == 0){
+                if (!info.getAutoId().equals(reviewInfo.getAutoId())){
                     return new Result(0,"此评审数据已存在！",true);
                 }
             }
         }
-        reviewInfo.setCreateTime(new Date());
-        int i = reviewInfoMapper.insertSelective(reviewInfo);
-        return new Result(i);
+        PostInfo postInfo = postInfoService.selectByPrimaryKey(reviewInfo.getPostId());
+        if (postInfo == null){
+            return new Result(0,"岗位不存在!");
+        }
+        reviewInfo.setPostId(postInfo.getPostId());
+        ProjectInfo projectInfo = projectInfoService.selectByPrimaryKey(reviewInfo.getProjectId());
+        if (projectInfo == null){
+            return new Result(0,"项目不存在!");
+        }
+        return new Result(1);
+    }
+    private Boolean checkIllegal(ReviewInfo reviewInfo){
+        Result result = checkLegitimateResult(reviewInfo);
+        return result.code == 0;
+    }
+
+    @Override
+    public Result updateBySelective(ReviewInfo reviewInfo){
+        try {
+            if (reviewInfo == null){
+                return new Result(0,"传入数据错误！");
+            }
+            Integer reviewId = reviewInfo.getAutoId();
+            if (reviewId == null) {
+                return new Result(0,"id为空,无法修改！");
+            }
+            Result result = reviewInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            ReviewInfo reviewInfoDb = reviewInfoMapper.selectByPrimaryKey(reviewId);
+            if (reviewInfoDb == null){
+                return new Result(0,"无法修改不存在的评审数据！");
+            }
+            Result resultRepeat = checkLegitimateResult(reviewInfo);
+            if (resultRepeat.code < 1){
+                return resultRepeat;
+            }
+            int i = reviewInfoMapper.updateByPrimaryKeySelective(reviewInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new Result(0,"修改失败！");
+        }
+    }
+    @Override
+    public Result insertBySelective(ReviewInfo reviewInfo){
+        try {
+            if (reviewInfo == null) {
+                return new Result(0,"传入数据错误！");
+            }
+            Result result = reviewInfo.beforeUpdateCheck();
+            if (result.code<1){
+                return result;
+            }
+            Result resultRepeat = checkLegitimateResult(reviewInfo);
+            if (resultRepeat.code < 1){
+                return resultRepeat;
+            }
+            reviewInfo.setCreateTime(new Date());
+            int i = reviewInfoMapper.insertSelective(reviewInfo);
+            return new Result(i);
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return new Result(0,"插入失败");
+        }
 
     }
 
     @Override
     public Result importReviewInfo(List<ReviewInfo> reviewInfos){
-        for (int i = 0; i < reviewInfos.size(); i++) {
-            ReviewInfo reviewInfo = reviewInfos.get(i);
-            if (reviewInfoNull(reviewInfo)){
-                return new Result(0,"所有项都是必填项，第"+(i+2)+"行的有未填项!");
+        try {
+            if (StringUtils.isEmpty(reviewInfos)) {
+                return new Result(0,"未从文件中读取到数据！");
             }
-            PostInfo postInfo = postInfoService.selectByName(reviewInfo.getPostName());
-            if (postInfo == null){
-                return new Result(0,"第"+(i+2)+"行的岗位不存在!");
+            for (int i = 0; i < reviewInfos.size(); i++) {
+                ReviewInfo reviewInfo = reviewInfos.get(i);
+                Result result = reviewInfo.beforeUpdateCheck();
+                if (result.code<1){
+                    return new Result(0,"第"+(i+2)+"行的"+result.info);
+                }
+                PostInfo postInfo = postInfoService.selectByName(reviewInfo.getPostName());
+                if (postInfo == null){
+                    return new Result(0,"第"+(i+2)+"行的岗位不存在!");
+                }
+                reviewInfo.setPostId(postInfo.getPostId());
+                ProjectInfo projectInfo = projectInfoService.selectByName(reviewInfo.getProjectName());
+                if (projectInfo == null){
+                    return new Result(0,"第"+(i+2)+"行的项目不存在!");
+                }
+                reviewInfo.setProjectId(projectInfo.getProjectId());
+                reviewInfo.setCreateTime(new Date());
             }
-            reviewInfo.setPostId(postInfo.getPostId());
-            ProjectInfo projectInfo = projectInfoService.selectByName(reviewInfo.getProjectName());
-            if (projectInfo == null){
-                return new Result(0,"第"+(i+2)+"行的项目不存在!");
-            }
-            reviewInfo.setProjectId(projectInfo.getProjectId());
-            reviewInfo.setCreateTime(new Date());
-        }
 
-        int i = 0;
-        int success = 0;
-        StringBuffer warning = new StringBuffer();
-        for (ReviewInfo ReviewInfo : reviewInfos) {
-            i++;
-            Result result = insertBySelective(ReviewInfo);
-            if (result.warning){
-                warning.append("第").append(i+1).append("行").append("未插入，原因是：<")
-                        .append(result.info).append("></br>");
-                continue;
+            int i = 0;
+            int success = 0;
+            StringBuffer warning = new StringBuffer();
+            for (ReviewInfo ReviewInfo : reviewInfos) {
+                i++;
+                Result result = insertBySelective(ReviewInfo);
+                if (result.warning){
+                    warning.append("第").append(i+1).append("行").append("未插入，原因是：<")
+                            .append(result.info).append("></br>");
+                    continue;
+                }
+                if (result.code<1){
+                    return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
+                }
+                success++;
             }
-            if (result.code<1){
-                return new Result(result.code,"第"+(i+1)+"行出现错误，错误为<"+result.info+"></br>");
-            }
-            success++;
+            int size = reviewInfos.size();
+            warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+            return new Result(success,warning.toString());
+        } catch (Exception e) {
+            logger.error("【ERROR】---"+e);
+            return new Result(0,"导入失败");
         }
-        int size = reviewInfos.size();
-        warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
-        return new Result(i,warning.toString());
     }
     @Override
     public Result deleteByIds(String ids) {
@@ -212,6 +254,8 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
         List<String> reviewPersonRefHeadersList = new ArrayList<>(Arrays.asList(reviewPersonRefHeaders));
         List<ReviewInfo> reviewInfoInserts = new ArrayList<>();
         List<ReviewPersonRef> reviewPersonRefInserts = new ArrayList<>();
+        List<String> excelReviewList = new ArrayList<>();
+        List<String> excelReviewPersonList = new ArrayList<>();
         try {
             List<String[]> lines = PoiUtil.readExcel(file);
             Boolean isReviewInfo = true;
@@ -224,12 +268,14 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                 String[] line = lines.get(i);
                 List<String> lineList = new LinkedList<>(Arrays.asList(line));
                 if (StringUtils.contains(lineList,reviewInfoHeadersList)){
+                    excelReviewList = lineList;
                     isReviewInfo = true;
                     isReviewPersonRef = false;
                     reviewStart = i;
                     continue;
                 }
                 if (StringUtils.contains(lineList,reviewPersonRefHeadersList)) {
+                    excelReviewPersonList = lineList;
                     isReviewPersonRef = true;
                     isReviewInfo = false;
                     reviewPersonStart = i;
@@ -243,7 +289,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                         continue;
                     }
                     ReviewInfo reviewInfo = new ReviewInfo();
-                    String project_name = lineList.get(reviewInfoHeadersList.indexOf("项目名称"));
+                    String project_name = lineList.get(excelReviewList.indexOf("项目名称"));
                     if (StringUtils.isEmpty(project_name)){
                         return new Result(0,"第"+(i+1)+"行的项目名称不能为空！");
                     }
@@ -260,7 +306,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                     }
                     reviewInfo.setProjectId(projectInfo.getProjectId());
                     reviewInfo.setProjectName(projectName);
-                    String purchase_no = lineList.get(reviewInfoHeadersList.indexOf("采购编号"));
+                    String purchase_no = lineList.get(excelReviewList.indexOf("采购编号"));
                     if (StringUtils.isEmpty(purchase_no)){
                         return new Result(0,"第"+(i+1)+"行的采购编号不能为空！");
                     }
@@ -272,7 +318,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                         }
                     }
                     reviewInfo.setPurchaseNo(purchase_no);
-                    String postName = lineList.get(reviewInfoHeadersList.indexOf("岗位"));
+                    String postName = lineList.get(excelReviewList.indexOf("岗位"));
                     if (StringUtils.isEmpty(postName)){
                         return new Result(0,"第"+(i+1)+"行的岗位不能为空！");
                     }
@@ -282,16 +328,16 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                     }
                     reviewInfo.setPostId(postInfo.getPostId());
                     reviewInfo.setPostName(postName);
-                    String postCount = lineList.get(reviewInfoHeadersList.indexOf("岗位需求数"));
+                    String postCount = lineList.get(excelReviewList.indexOf("岗位需求数"));
                     if (StringUtils.isEmpty(postCount)){
                         return new Result(0,"第"+(i+1)+"行的岗位需求数不能为空！");
                     }
                     try {
                         reviewInfo.setPostCount(Integer.valueOf(postCount));
                     } catch (NumberFormatException e) {
-                        return new Result(0,"第"+(i+1)+"行的岗位需求数格式不是数字！");
+                        return new Result(0,"第"+(i+1)+"行的岗位需求数必须是数字！");
                     }
-                    String reviewDate = lineList.get(reviewInfoHeadersList.indexOf("评审日期"));
+                    String reviewDate = lineList.get(excelReviewList.indexOf("评审日期"));
                     if (StringUtils.isEmpty(postCount)){
                         return new Result(0,"第"+(i+1)+"行的评审日期不能为空！");
                     }
@@ -308,12 +354,12 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                 }
                 if (isReviewPersonRef){
                     ReviewPersonRef reviewPersonRef = new ReviewPersonRef();
-                    String personName = lineList.get(reviewPersonRefHeadersList.indexOf("人名"));
+                    String personName = lineList.get(excelReviewPersonList.indexOf("人名"));
                     if (StringUtils.isEmpty(personName)){
                         return new Result(0,"第"+(i+1)+"行的人名不能为空！");
                     }
                     reviewPersonRef.setPersonName(personName);
-                    String postName = lineList.get(reviewPersonRefHeadersList.indexOf("岗位"));
+                    String postName = lineList.get(excelReviewPersonList.indexOf("岗位"));
                     if (StringUtils.isEmpty(postName)){
                         return new Result(0,"第"+(i+1)+"行的岗位不能为空！");
                     }
@@ -323,7 +369,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                     }
                     reviewPersonRef.setPostId(postInfo.getPostId());
                     reviewPersonRef.setPostName(postName);
-                    String supplierName = lineList.get(reviewPersonRefHeadersList.indexOf("供应商名称"));
+                    String supplierName = lineList.get(excelReviewPersonList.indexOf("供应商名称"));
                     if (StringUtils.isEmpty(supplierName)){
                         return new Result(0,"第"+(i+1)+"行的供应商名称不能为空！");
                     }
@@ -333,7 +379,7 @@ public class ReviewInfoServiceImpl implements ReviewInfoService {
                     }
                     reviewPersonRef.setSupplierId(supplierInfo.getSupplierId());
                     reviewPersonRef.setSupplierName(supplierName);
-                    String isNotifyInterview = lineList.get(reviewPersonRefHeadersList.indexOf("是否通知面试"));
+                    String isNotifyInterview = lineList.get(excelReviewPersonList.indexOf("是否通知面试"));
                     if (StringUtils.isEmpty(isNotifyInterview)){
                         return new Result(0,"第"+(i+1)+"行的<是否通知面试>不能为空！");
                     }

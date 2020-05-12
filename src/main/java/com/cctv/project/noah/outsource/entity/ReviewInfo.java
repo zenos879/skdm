@@ -1,10 +1,13 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -216,5 +219,56 @@ public class ReviewInfo extends BaseEntity implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+    @Override
+    public Result hasNullResult(){
+        if (StringUtils.isEmpty(this.getPurchaseNo())) {
+            return new Result(0,"采购编号不能为空！");
+        }
+        if (this.getPostId() == null && StringUtils.isEmpty(this.getPostName())){
+            return new Result(0,"岗位不能为空！");
+        }
+        if (this.getProjectId() == null && StringUtils.isEmpty(this.getProjectName())){
+            return new Result(0,"项目不能为空！");
+        }
+        if (this.getReviewDate() == null){
+            return new Result(0,"评审日期不合法<不能为空且必须符合（年年年年-月月-日日）的格式>");
+        }
+        if (this.getPostCount() == null){
+            return new Result(0,"岗位需求数不合法<不能为空且必须为正整数");
+        }
+
+        return new Result(1);
+    }
+
+
+    @Override
+    public Result checkLegitimateResult(){
+        if (!super.checkDateLegitimate()) {
+            return new Result(0,"创建时间格式不正确");
+        }
+        if (!super.checkDateLegitimate("reviewBeginDate","reviewEndDate")){
+            return new Result(0,"评审日期时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getPurchaseNo()) && this.getPurchaseNo().length()>64){
+            return new Result(0,"采购编号长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getPostName()) && this.getPostName().length()>64){
+            return new Result(0,"岗位名称长度不能大于64！");
+        }
+        if (StringUtils.isNotEmpty(this.getProjectName()) && this.getProjectName().length()>64){
+            return new Result(0,"项目名称长度不能大于64！");
+        }
+        if (this.getPostId() !=null && String.valueOf(this.getPostId()).length()>11){
+            return new Result(0,"岗位id长度不能大于11！");
+        }
+        if (this.getProjectId() !=null && String.valueOf(this.getProjectId()).length()>11){
+            return new Result(0,"项目id长度不能大于11！");
+        }
+        if (this.getProjectId() !=null && String.valueOf(this.getProjectId()).length()>11){
+            return new Result(0,"岗位需求数长度不能大于11！");
+        }
+
+        return new Result(1);
     }
 }
