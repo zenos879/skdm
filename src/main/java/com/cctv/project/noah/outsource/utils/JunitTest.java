@@ -14,12 +14,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={NoahApplication.class})// 指定启动类
 public class JunitTest {
     @Autowired
     WorkDayMapper workDayMapper;
+
+    @Test
+    public void test_1(){
+        String[] reviewInfoHeaders = {"项目名称","采购编号","岗位","岗位需求数","评审日期"};
+        String[] reviewPersonRefHeaders = {"人名","岗位","供应商名称","是否通知面试"};
+        List<String []> list = new ArrayList<>();
+        list.add(reviewInfoHeaders);
+        list.add(reviewPersonRefHeaders);
+        PoiUtil.downLoadExcelTempLate(list,"aaa.xlsx");
+    }
     @Test
     public void test(){
         System.out.println("test");
@@ -405,6 +417,7 @@ public class JunitTest {
                 e.printStackTrace();
             }
             Integer type = jsonObject.getInteger("type");
+            workDay.setType(type);
             if (type != 0 ){
                 workDayMapper.insertWorkDay(workDay);
             }

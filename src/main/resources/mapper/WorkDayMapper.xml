@@ -30,6 +30,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectWorkDayVo"/>
         where `date` between #{start} and #{end}
     </select>
+    <select id="selectHolidayByType" resultMap="WorkDayResult">
+        <include refid="selectWorkDayVo"/>
+        where `date` between #{start} and #{end} and
+        `type` = #{type}
+    </select>
 
     <select id="selectWorkDayById" parameterType="Long" resultMap="WorkDayResult">
         <include refid="selectWorkDayVo"/>
