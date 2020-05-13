@@ -358,6 +358,8 @@
                                     layer.close(index);
                                     $.modal.enable();
                                     $.modal.alertError(result.msg);
+                                    //情况错误文件
+                                    layero.find('#file').val("");
                                 }
                             }
                         });
