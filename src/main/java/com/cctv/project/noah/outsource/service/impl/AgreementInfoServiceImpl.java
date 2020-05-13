@@ -62,38 +62,34 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     @Override
     public Result insert(AgreementInfo record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
+            return result;
+        }
         // 插入时，先判断供应商是否存在
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先完善供应商信息！");
-            return result;
+            return new Result(0, "供应商不存在，请先完善供应商信息！");
         }
         record.setSupplierId(supplierInfo.getSupplierId());
         Integer integer = selectBeanByNum(record.getAgreementNo());
         // 验证关系是否存在
         if (integer > 0) {
-            result.setCode(0);
-            result.setInfo("合同编号已经存在，无需新增！");
-            return result;
+            return new Result(0, "合同编号已经存在，无需新增！");
         }
         Date agreementStart = record.getAgreementStart();
         Date agreementEnd = record.getAgreementEnd();
         if (GeneralUtils.compareDate(agreementStart, agreementEnd)) {
-            result.setCode(0);
-            result.setInfo("开始时间必须小于结束时间！");
-            return result;
+            return new Result(0, "开始时间必须小于结束时间！");
         }
         record.setCreateTime(new Date());
         int insert = agreementInfoMapper.insert(record);
-        if (insert < 0) {
-            result.setCode(0);
-            result.setInfo("合同数据新增失败，请重试！");
-        }
-        return result;
+        return new Result(insert);
     }
 
 //    @Override
@@ -210,35 +206,33 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
      */
     @Override
     public Result updateByPrimaryKeySelective(AgreementInfo record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null！");
+        }
         Integer agreementId = record.getAgreementId();
         if (agreementId == 0) {
-            result.setCode(0);
-            result.setInfo("主键不存在，不能更新！");
+            return new Result(0, "主键不存在，不能更新！");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
             return result;
         }
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先完善供应商信息！");
-            return result;
+            return new Result(0, "供应商不存在，请先完善供应商信息！");
         }
         record.setSupplierId(supplierInfo.getSupplierId());
         Integer integer = selectBeanByNum(record.getAgreementNo());
         // 查到有值，并且不相等，则重复，不更新
         if (integer > 0 && !agreementId.equals(integer)) {
-            result.setCode(0);
-            result.setInfo("合同号已经存在，请调整后再提交！");
-            return result;
+            return new Result(0, "合同号已经存在，请调整后再提交！");
         }
         Date agreementStart = record.getAgreementStart();
         Date agreementEnd = record.getAgreementEnd();
         if (GeneralUtils.compareDate(agreementStart, agreementEnd)) {
-            result.setCode(0);
-            result.setInfo("开始时间必须小于结束时间！");
-            return result;
+            return new Result(0, "开始时间必须小于结束时间！");
         }
         int i = agreementInfoMapper.updateByPrimaryKeySelective(record);
         return new Result(i);
@@ -276,7 +270,6 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
         criteria.andAgreementNoEqualTo(agreementNo);
-//        criteria.andStatusEqualTo(ModelClass.STATUS_ON);
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);
         if (agreementInfos.size() > 0) {
             AgreementInfo temp = agreementInfos.get(0);
@@ -288,32 +281,44 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
 
     @Override
     public Result importAgreementInfo(List<AgreementInfo> agreementInfos) {
-        Result result = new Result();
+        if (agreementInfos == null || agreementInfos.isEmpty()) {
+            return new Result(0, "未从文件中读取到数据！");
+        }
         int updateCount = 0;
         int addCount = 0;
         StringBuffer msg = new StringBuffer();
         for (int i = 0; i < agreementInfos.size(); i++) {
             AgreementInfo agreementInfo = agreementInfos.get(i);
-            if (agreementInfo.getAgreementNo() == null) {
+            String agreementNo = agreementInfo.getAgreementNo();
+            if (agreementNo == null) {
                 return new Result(0, "第" + (i + 2) + "行的合同编号为空!");
             }
-            if (agreementInfo.getSupplierName() == null) {
+            String supplierName = agreementInfo.getSupplierName();
+            if (supplierName == null) {
                 return new Result(0, "第" + (i + 2) + "行的供应商名称为空!");
             }
-            SupplierInfo supplierInfo = supplierInfoService.selectByName(agreementInfo.getSupplierName());
-            if (supplierInfo == null) {
-                return new Result(0, "第" + (i + 2) + "行的供应商【" + agreementInfo.getSupplierName() + "】不存在!");
-            }
-            if (agreementInfo.getAgreementStart() == null) {
+            Date agreementStart = agreementInfo.getAgreementStart();
+            if (agreementStart == null) {
                 return new Result(0, "第" + (i + 2) + "行的合同开始日期不存在!");
             }
-            if (agreementInfo.getAgreementEnd() == null) {
+            Date agreementEnd = agreementInfo.getAgreementEnd();
+            if (agreementEnd == null) {
                 return new Result(0, "第" + (i + 2) + "行的合同结束日期不存在!");
+            }
+            Result result = agreementInfo.beforeUpdateCheck();
+            if (result.getCode() < 1) {
+                result.setPreInfo("第" + (i + 2) + "行输入有误，原因：");
+                return result;
+            }
+            SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+            if (supplierInfo == null) {
+                return new Result(0, "第" + (i + 2) + "行的供应商【" + supplierName + "】不存在!");
             }
             agreementInfo.setSupplierId(supplierInfo.getSupplierId());
         }
         for (int i = 0; i < agreementInfos.size(); i++) {
             AgreementInfo agreementInfo = agreementInfos.get(i);
+
             String agreementNo = agreementInfo.getAgreementNo();
             Integer b = selectBeanByNum(agreementNo);
             if (b > 0) {
@@ -325,12 +330,6 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
                 addCount++;
             }
         }
-        if (agreementInfos.size() > 0) {
-            result.setCode(agreementInfos.size());
-            result.setInfo("导入成功，共计导入" + agreementInfos.size() + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
-            return result;
-        } else {
-            return new Result(0);
-        }
+        return new Result(agreementInfos.size(), "导入成功，共计导入" + agreementInfos.size() + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
     }
 }

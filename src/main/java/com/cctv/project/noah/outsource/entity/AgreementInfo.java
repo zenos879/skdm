@@ -1,7 +1,10 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -10,7 +13,8 @@ import java.util.Date;
 
 /**
  * agreementInfo
- * @author 
+ *
+ * @author
  */
 public class AgreementInfo extends BaseEntity implements Serializable {
     /**
@@ -52,7 +56,7 @@ public class AgreementInfo extends BaseEntity implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     private Integer status;
@@ -96,15 +100,16 @@ public class AgreementInfo extends BaseEntity implements Serializable {
     }
 
     public String getFormatStartDate() {
-        if (this.agreementStart == null){
+        if (this.agreementStart == null) {
             return null;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String format = simpleDateFormat.format(agreementStart);
         return format;
     }
+
     public String getFormatEndDate() {
-        if (this.agreementEnd == null){
+        if (this.agreementEnd == null) {
             return null;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -113,15 +118,16 @@ public class AgreementInfo extends BaseEntity implements Serializable {
     }
 
 
-
     public void setAgreementEnd(Date agreementEnd) {
         this.agreementEnd = agreementEnd;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -147,12 +153,12 @@ public class AgreementInfo extends BaseEntity implements Serializable {
         }
         AgreementInfo other = (AgreementInfo) that;
         return (this.getAgreementId() == null ? other.getAgreementId() == null : this.getAgreementId().equals(other.getAgreementId()))
-            && (this.getAgreementNo() == null ? other.getAgreementNo() == null : this.getAgreementNo().equals(other.getAgreementNo()))
-            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getAgreementStart() == null ? other.getAgreementStart() == null : this.getAgreementStart().equals(other.getAgreementStart()))
-            && (this.getAgreementEnd() == null ? other.getAgreementEnd() == null : this.getAgreementEnd().equals(other.getAgreementEnd()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+                && (this.getAgreementNo() == null ? other.getAgreementNo() == null : this.getAgreementNo().equals(other.getAgreementNo()))
+                && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+                && (this.getAgreementStart() == null ? other.getAgreementStart() == null : this.getAgreementStart().equals(other.getAgreementStart()))
+                && (this.getAgreementEnd() == null ? other.getAgreementEnd() == null : this.getAgreementEnd().equals(other.getAgreementEnd()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -193,5 +199,42 @@ public class AgreementInfo extends BaseEntity implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    @Override
+    public Result hasNullResult() {
+        if (this.getAgreementNo() == null && StringUtils.isEmpty(this.getAgreementNo())) {
+            return new Result(0, "合同编号不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getSupplierName())) {
+            return new Result(0, "供应商名称不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getFormatStartDate())) {
+            return new Result(0, "合同开始时间不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getFormatEndDate())) {
+            return new Result(0, "合同结束时间不能为空！");
+        }
+        return new Result(1);
+    }
+
+    @Override
+    public Result checkLegitimateResult() {
+        if (!super.checkDateLegitimate()) {
+            return new Result(0, "时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getAgreementNo()) && this.getAgreementNo().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "合同编号【" + this.getAgreementNo() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "！");
+        }
+        if (this.getSupplierId() != null && String.valueOf(this.getSupplierId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "供应商id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        if (StringUtils.isNotEmpty(this.getFormatStartDate())){
+
+        }
+        return new Result(1);
     }
 }
