@@ -24,6 +24,8 @@ public class GeneralUtils {
 
     private static Pattern MATCH_DATE = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s(((0?[0-9])|([1][0-9])|([2][0-4]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$");
 
+    private static Pattern MATCH_MONEY = Pattern.compile("^\\d{0,7}$");//0-7位非负整数
+
     /**
      * 逗号隔开的字符串数组，转为List集合
      *
@@ -69,7 +71,7 @@ public class GeneralUtils {
             sb.append("行未执行，原因【数据行已存在】</br>");
             sb.append("当前共计导入" + (allCount - errorCount) + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
         } else {
-            sb.append("导入成功，共计导入" + allCount + "条");
+            sb.append("导入成功，共计导入" + allCount + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
         }
         result.setCode(allCount - errorCount);
         result.setInfo(sb.toString());
@@ -187,11 +189,19 @@ public class GeneralUtils {
         if (StringUtils.isEmpty(datetime)) {
             return false;
         }
-        Pattern compile = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s(((0?[0-9])|([1][0-9])|([2][0-4]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$");
-        boolean matches = compile.matcher(datetime).matches();
+        boolean matches = MATCH_DATE.matcher(datetime).matches();
         return matches;
     }
 
+    /**
+     * 验证金额格式（0-7位非负整数）是否正确
+     * @param money
+     * @return
+     */
+    public static boolean checkMoney(Float money) {
+        boolean matches = MATCH_MONEY.matcher(money.toString()).matches();
+        return matches;
+    }
 
     public static void main(String[] args) {
         /** 1 */
