@@ -102,38 +102,43 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     public List<AgreementInfo> selectList(AgreementInfo agreementInfo) {
         AgreementInfoExample agreementInfoExample = new AgreementInfoExample();
         AgreementInfoExample.Criteria criteria = agreementInfoExample.createCriteria();
-        String agreementNo = agreementInfo.getAgreementNo();
-        if (StringUtils.isNotEmpty(agreementNo)) {
-            agreementNo = agreementNo.trim();
-            criteria.andAgreementNoLike("%" + agreementNo + "%");
-        }
-        Integer supplierId = agreementInfo.getSupplierId();
-        if (supplierId != null) {
-            criteria.andSupplierIdEqualTo(supplierId);
-        }
-        Map<String, Object> params = agreementInfo.getParams();
-        Object beginTime1 = params.get("beginTime");
-        String beginTime = "";
-        if (beginTime1 != null) {
-            beginTime = beginTime1.toString();
-        }
-        if (StringUtils.isNotEmpty(beginTime)) {
-            Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
-            criteria.andAgreementStartGreaterThanOrEqualTo(date);
-        }
-        Object endTime1 = params.get("endTime");
-        String endTime = "";
-        if (endTime1 != null) {
-            endTime = endTime1.toString();
-        }
-        if (StringUtils.isNotEmpty(endTime)) {
-            Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
-            criteria.andAgreementEndLessThanOrEqualTo(date);
-        }
-        // 前端已做限制，但是曾经测试一版，onchange事件没有触发，最终未找到原因，以下逻辑用于双重保险
-        if (StringUtils.isNotEmpty(beginTime) && StringUtils.isNotEmpty(endTime)) {
-            if (GeneralUtils.compareStrDate(beginTime, endTime)) {
-                return null;
+        if (agreementInfo != null){
+            if (agreementInfo.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            String agreementNo = agreementInfo.getAgreementNo();
+            if (StringUtils.isNotEmpty(agreementNo)) {
+                agreementNo = agreementNo.trim();
+                criteria.andAgreementNoLike("%" + agreementNo + "%");
+            }
+            Integer supplierId = agreementInfo.getSupplierId();
+            if (supplierId != null) {
+                criteria.andSupplierIdEqualTo(supplierId);
+            }
+            Map<String, Object> params = agreementInfo.getParams();
+            Object beginTime1 = params.get("beginTime");
+            String beginTime = "";
+            if (beginTime1 != null) {
+                beginTime = beginTime1.toString();
+            }
+            if (StringUtils.isNotEmpty(beginTime)) {
+                Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
+                criteria.andAgreementStartGreaterThanOrEqualTo(date);
+            }
+            Object endTime1 = params.get("endTime");
+            String endTime = "";
+            if (endTime1 != null) {
+                endTime = endTime1.toString();
+            }
+            if (StringUtils.isNotEmpty(endTime)) {
+                Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
+                criteria.andAgreementEndLessThanOrEqualTo(date);
+            }
+            // 前端已做限制，但是曾经测试一版，onchange事件没有触发，最终未找到原因，以下逻辑用于双重保险
+            if (StringUtils.isNotEmpty(beginTime) && StringUtils.isNotEmpty(endTime)) {
+                if (GeneralUtils.compareStrDate(beginTime, endTime)) {
+                    return null;
+                }
             }
         }
         List<AgreementInfo> agreementInfos = agreementInfoMapper.selectByExample(agreementInfoExample);

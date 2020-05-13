@@ -232,9 +232,6 @@ public class AgreementInfo extends BaseEntity implements Serializable {
         if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length() > ModelClass.ATTR_NAME_LENGTH) {
             return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
         }
-        if (StringUtils.isNotEmpty(this.getFormatStartDate())){
-
-        }
         return new Result(1);
     }
 }

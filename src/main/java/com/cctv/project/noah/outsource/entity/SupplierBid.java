@@ -98,6 +98,10 @@ public class SupplierBid extends BaseEntity implements Serializable {
         return bidPrice;
     }
 
+    public Integer getIntBidPrice() {
+        return bidPrice.intValue();
+    }
+
     public void setBidPrice(Float bidPrice) {
         this.bidPrice = bidPrice;
     }
@@ -199,7 +203,7 @@ public class SupplierBid extends BaseEntity implements Serializable {
 
     @Override
     public Result hasNullResult() {
-        if (this.getAgreementNo() == null && StringUtils.isEmpty(this.getAgreementNo())) {
+        if (this.getAgreementId() == null && StringUtils.isEmpty(this.getAgreementNo())) {
             return new Result(0, "合同编号不能为空！");
         }
         if (this.getSupplierId() == null && StringUtils.isEmpty(this.getSupplierName())) {
@@ -222,8 +226,8 @@ public class SupplierBid extends BaseEntity implements Serializable {
         if (this.getAgreementId() != null && String.valueOf(this.getAgreementId()).length() > ModelClass.ATTR_ID_LENGTH) {
             return new Result(0, "合同id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
         }
-        if (StringUtils.isNotEmpty(this.getAgreementNo()) && this.getAgreementNo().length() > ModelClass.ATTR_NAME_LENGTH) {
-            return new Result(0, "合同编号【" + this.getAgreementNo() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "！");
+        if (StringUtils.isNotEmpty(this.getAgreementNo()) && this.getAgreementNo().length() > ModelClass.ATTR_NUM_LENGTH) {
+            return new Result(0, "合同编号【" + this.getAgreementNo() + "】长度不能大于" + ModelClass.ATTR_NUM_LENGTH + "！");
         }
         if (this.getSupplierId() != null && String.valueOf(this.getSupplierId()).length() > ModelClass.ATTR_ID_LENGTH) {
             return new Result(0, "供应商id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
@@ -232,13 +236,13 @@ public class SupplierBid extends BaseEntity implements Serializable {
             return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
         }
         if (this.getPostId() != null && String.valueOf(this.getPostId()).length() > ModelClass.ATTR_ID_LENGTH) {
-            return new Result(0, "供应商id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+            return new Result(0, "岗位id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
         }
         if (StringUtils.isNotEmpty(this.getPostName()) && this.getPostName().length() > ModelClass.ATTR_NAME_LENGTH) {
-            return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+            return new Result(0, "岗位名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
         }
-        if (this.getBidPrice() != null && !GeneralUtils.checkMoney(bidPrice)){
-            return new Result(0, "竞标价格【" + this.getBidPrice() + "】应为小于等于7位的非负整数！");
+        if (this.getBidPrice() != null && !GeneralUtils.checkMoney(this.getIntBidPrice())) {
+            return new Result(0, "竞标价格【" + this.getIntBidPrice() + "】应为小于等于7位的非负整数！");
         }
         return new Result(1);
     }

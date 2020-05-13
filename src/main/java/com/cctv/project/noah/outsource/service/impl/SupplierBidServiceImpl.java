@@ -120,50 +120,55 @@ public class SupplierBidServiceImpl implements SupplierBidService {
     public List<SupplierBid> selectList(SupplierBid record) {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
-        Integer supplierId = record.getSupplierId();
-        if (supplierId != null) {
+        if (record != null){
+            if (record.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            Integer supplierId = record.getSupplierId();
+            if (supplierId != null) {
 //            SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
 //            if (supplierInfo != null) {
-            criteria.andSupplierIdEqualTo(supplierId);
+                criteria.andSupplierIdEqualTo(supplierId);
 //            }
-        }
-        Integer agreementId = record.getAgreementId();
-        if (agreementId != null) {
+            }
+            Integer agreementId = record.getAgreementId();
+            if (agreementId != null) {
 //            AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(agreementId);
 //            if (agreementInfo != null) {
-            criteria.andAgreementIdEqualTo(agreementId);
+                criteria.andAgreementIdEqualTo(agreementId);
 //            }
-        }
-        Integer postId = record.getPostId();
-        if (postId != null) {
+            }
+            Integer postId = record.getPostId();
+            if (postId != null) {
 //            PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
 //            if (postInfo != null) {
-            criteria.andPostIdEqualTo(postId);
+                criteria.andPostIdEqualTo(postId);
 //            }
-        }
-        Float bidPrice = record.getBidPrice();
-        if (bidPrice != null) {
-            criteria.andBidPriceEqualTo(bidPrice);
-        }
-        Map<String, Object> params = record.getParams();
-        /** class="number" 验证不通过时，传过来的对象是null，所以需要特殊处理 */
-        Object beginTime1 = params.get("beginTime");
-        String beginTime = "";
-        if (beginTime1 != null) {
-            beginTime = beginTime1.toString();
-        }
-        if (StringUtils.isNotEmpty(beginTime)) {
-            Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
-            criteria.andCreateTimeGreaterThanOrEqualTo(date);
-        }
-        Object endTime1 = params.get("endTime");
-        String endTime = "";
-        if (beginTime1 != null) {
-            endTime = endTime1.toString();
-        }
-        if (StringUtils.isNotEmpty(endTime)) {
-            Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
-            criteria.andCreateTimeLessThanOrEqualTo(date);
+            }
+            Float bidPrice = record.getBidPrice();
+            if (bidPrice != null) {
+                criteria.andBidPriceEqualTo(bidPrice);
+            }
+            Map<String, Object> params = record.getParams();
+            /** class="number" 验证不通过时，传过来的对象是null，所以需要特殊处理 */
+            Object beginTime1 = params.get("beginTime");
+            String beginTime = "";
+            if (beginTime1 != null) {
+                beginTime = beginTime1.toString();
+            }
+            if (StringUtils.isNotEmpty(beginTime)) {
+                Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
+                criteria.andCreateTimeGreaterThanOrEqualTo(date);
+            }
+            Object endTime1 = params.get("endTime");
+            String endTime = "";
+            if (beginTime1 != null) {
+                endTime = endTime1.toString();
+            }
+            if (StringUtils.isNotEmpty(endTime)) {
+                Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
+                criteria.andCreateTimeLessThanOrEqualTo(date);
+            }
         }
         List<SupplierBid> supplierBids = supplierBidMapper.selectByExample(supplierBidExample);
         for (SupplierBid supplierBid : supplierBids) {
@@ -343,7 +348,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
             }
             Float bidPrice = supplierBid.getBidPrice();
             if (bidPrice == null) {
-                return new Result(0, "第" + (i + 2) + "行的竞标价钱为空!");
+                return new Result(0, "第" + (i + 2) + "行的竞标价钱为空或输入格式不正确，请输入7位以内的非负整数!");
             }
             Result result = supplierBid.beforeUpdateCheck();
             if (result.getCode() < 1) {

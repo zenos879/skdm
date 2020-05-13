@@ -1,8 +1,12 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -10,7 +14,8 @@ import java.util.Date;
 
 /**
  * supplier_file_error
- * @author 
+ *
+ * @author
  */
 public class SupplierFileError extends BaseEntity implements Serializable {
     /**
@@ -54,7 +59,7 @@ public class SupplierFileError extends BaseEntity implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     private Integer status;
@@ -93,10 +98,12 @@ public class SupplierFileError extends BaseEntity implements Serializable {
         this.fileError = fileError;
     }
 
+    @Override
     public String getRemark() {
         return remark;
     }
 
+    @Override
     public void setRemark(String remark) {
         this.remark = remark;
     }
@@ -105,8 +112,8 @@ public class SupplierFileError extends BaseEntity implements Serializable {
         return happenDate;
     }
 
-    public String getFormatHappenDate(){
-        if (this.happenDate == null){
+    public String getFormatHappenDate() {
+        if (this.happenDate == null) {
             return null;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -118,10 +125,12 @@ public class SupplierFileError extends BaseEntity implements Serializable {
         this.happenDate = happenDate;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -147,13 +156,13 @@ public class SupplierFileError extends BaseEntity implements Serializable {
         }
         SupplierFileError other = (SupplierFileError) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            && (this.getPurcharNo() == null ? other.getPurcharNo() == null : this.getPurcharNo().equals(other.getPurcharNo()))
-            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getFileError() == null ? other.getFileError() == null : this.getFileError().equals(other.getFileError()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getHappenDate() == null ? other.getHappenDate() == null : this.getHappenDate().equals(other.getHappenDate()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+                && (this.getPurcharNo() == null ? other.getPurcharNo() == null : this.getPurcharNo().equals(other.getPurcharNo()))
+                && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+                && (this.getFileError() == null ? other.getFileError() == null : this.getFileError().equals(other.getFileError()))
+                && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+                && (this.getHappenDate() == null ? other.getHappenDate() == null : this.getHappenDate().equals(other.getHappenDate()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -196,5 +205,48 @@ public class SupplierFileError extends BaseEntity implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    @Override
+    public Result hasNullResult() {
+        if (StringUtils.isEmpty(this.getPurcharNo())) {
+            return new Result(0, "采购编号不能为空！");
+        }
+        if (this.getSupplierId() == null && StringUtils.isEmpty(this.getSupplierName())) {
+            return new Result(0, "供应商不能为空！");
+        }
+        if (this.getFileError() == null) {
+            return new Result(0, "错误文件数不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getRemark())) {
+            return new Result(0, "错误描述不能为空！");
+        }
+        if (this.getHappenDate() == null){
+            return new Result(0, "发生日期不能为空！");
+        }
+        return new Result(1);
+    }
+
+    @Override
+    public Result checkLegitimateResult() {
+        if (!super.checkDateLegitimate()) {
+            return new Result(0, "时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getPurcharNo()) && this.getPurcharNo().length() > ModelClass.ATTR_NUM_LENGTH) {
+            return new Result(0, "采购编号【" + this.getPurcharNo() + "】长度不能大于" + ModelClass.ATTR_NUM_LENGTH + "！");
+        }
+        if (this.getSupplierId() != null && String.valueOf(this.getSupplierId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "供应商id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        if (this.getFileError() != null && !GeneralUtils.checkMoney(this.getFileError())) {
+            return new Result(0, "错误文件数【" + this.getFileError() + "】应为小于等于7位的非负整数！");
+        }
+        if (StringUtils.isNotEmpty(this.getRemark()) && this.getRemark().length() > ModelClass.ATTR_TEXT_LENGTH) {
+            return new Result(0, "错误描述【" + this.getRemark() + "】长度不能大于" + ModelClass.ATTR_TEXT_LENGTH + "!");
+        }
+        return new Result(1);
     }
 }

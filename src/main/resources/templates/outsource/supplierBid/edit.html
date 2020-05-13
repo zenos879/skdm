@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>竞标价钱：</label>
                 <div class="col-sm-7">
-                    <input name="bidPrice" th:value="${command.bidPrice}" id="bidPrice" maxlength="7"
+                    <input name="bidPrice" th:value="${command.getIntBidPrice()}" id="bidPrice" maxlength="7"
                            class="money form-control" type="text" required>
                 </div>
             </div>

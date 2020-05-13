@@ -9,6 +9,7 @@ import com.cctv.project.noah.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -66,29 +67,27 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
 
     @Override
     public Result insert(SupplierFileError record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
+            return result;
+        }
         // 插入时判断供应商是否存在
         Integer supplierId = record.getSupplierId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先完善供应商信息！");
-            return result;
+            return new Result(0, "供应商不存在，请先完善供应商信息！");
         }
         record.setSupplierId(supplierId);
         Integer b = selectBeanExist(record, false);
         // 验证关系是否存在
         if (b > 0) {
-            result.setCode(0);
-            result.setInfo("关系已经存在，无需新增！");
-            return result;
+            return new Result(0, "关系已经存在，无需新增！");
         }
         int insert = supplierFileErrorMapper.insert(record);
-        if (insert < 0) {
-            result.setCode(0);
-            result.setInfo("供应商文件错误数据新增失败，请重试！");
-        }
         return new Result(insert);
     }
 
@@ -103,32 +102,37 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
     public List<SupplierFileError> selectList(SupplierFileError record) {
         SupplierFileErrorExample supplierFileErrorExample = new SupplierFileErrorExample();
         SupplierFileErrorExample.Criteria criteria = supplierFileErrorExample.createCriteria();
-        String purcharNo = record.getPurcharNo();
-        if (StringUtils.isNotEmpty(purcharNo)) {
-            criteria.andPurcharNoEqualTo(purcharNo);
-        }
-        Integer supplierId = record.getSupplierId();
-        if (supplierId != null) {
-            criteria.andSupplierIdEqualTo(supplierId);
-        }
-        Map<String, Object> params = record.getParams();
-        Object beginTime1 = params.get("beginTime");
-        String beginTime = "";
-        if (beginTime1 != null) {
-            beginTime = beginTime1.toString();
-        }
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(beginTime)) {
-            Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
-            criteria.andHappenDateGreaterThanOrEqualTo(date);
-        }
-        Object endTime1 = params.get("endTime");
-        String endTime = "";
-        if (endTime1 != null) {
-            endTime = endTime1.toString();
-        }
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(endTime)) {
-            Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
-            criteria.andHappenDateLessThanOrEqualTo(date);
+        if (record != null) {
+            if (record.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            String purcharNo = record.getPurcharNo();
+            if (StringUtils.isNotEmpty(purcharNo)) {
+                criteria.andPurcharNoEqualTo(purcharNo);
+            }
+            Integer supplierId = record.getSupplierId();
+            if (supplierId != null) {
+                criteria.andSupplierIdEqualTo(supplierId);
+            }
+            Map<String, Object> params = record.getParams();
+            Object beginTime1 = params.get("beginTime");
+            String beginTime = "";
+            if (beginTime1 != null) {
+                beginTime = beginTime1.toString();
+            }
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(beginTime)) {
+                Date date = GeneralUtils.strToDate(beginTime, GeneralUtils.YMD);
+                criteria.andHappenDateGreaterThanOrEqualTo(date);
+            }
+            Object endTime1 = params.get("endTime");
+            String endTime = "";
+            if (endTime1 != null) {
+                endTime = endTime1.toString();
+            }
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(endTime)) {
+                Date date = GeneralUtils.strToDate(endTime, GeneralUtils.YMD);
+                criteria.andHappenDateLessThanOrEqualTo(date);
+            }
         }
         List<SupplierFileError> supplierFileErrors = supplierFileErrorMapper.selectByExample(supplierFileErrorExample);
         for (SupplierFileError supplierFileError : supplierFileErrors) {
@@ -197,31 +201,30 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
 
     @Override
     public Result updateByPrimaryKeySelective(SupplierFileError record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null！");
+        }
         Integer id = record.getAutoId();
         if (id == 0) {
-            result.setCode(0);
-            result.setInfo("主键不存在，不能更新！");
+            return new Result(0, "主键不存在，不能更新！");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
             return result;
         }
         Integer supplierId = record.getSupplierId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先完善供应商信息！");
-            return result;
+            return new Result(0, "供应商不存在，请先完善供应商信息！");
         }
         Integer resId = selectBeanExist(record, false);
         // 查到有值，并且不相等，则重复，不更新
         if (resId > 0 && !id.equals(resId)) {
-            result.setCode(0);
-            result.setInfo("关系已经存在，请调整后再提交！");
-            return result;
+            return new Result(0, "关系已经存在，请调整后再提交！");
         }
         int i = supplierFileErrorMapper.updateByPrimaryKeySelective(record);
-        result.setCode(i);
-        return result;
+        return new Result(i);
     }
 
     @Override
@@ -260,12 +263,11 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
 
     @Override
     public Result importSupplierFileError(List<SupplierFileError> records) {
-        Result result = new Result();
         int errorCount = 0;
         int addCount = 0;
         int updateCount = 0;
-        StringBuffer msg = new StringBuffer();
         int size = records.size();
+        StringBuffer msg = new StringBuffer();
         for (int i = 0; i < size; i++) {
             SupplierFileError supplierFileError = records.get(i);
             String purcharNo = supplierFileError.getPurcharNo();
@@ -287,6 +289,11 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             Date happenDate = supplierFileError.getHappenDate();
             if (happenDate == null) {
                 return new Result(0, "第" + (i + 2) + "行的发生日期为空!");
+            }
+            Result result = supplierFileError.beforeUpdateCheck();
+            if (result.getCode() < 1) {
+                result.setPreInfo("第" + (i + 2) + "行输入有误，原因：");
+                return result;
             }
             // 判断供应商是否存在
             SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
@@ -310,7 +317,7 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
                 errorCount++;
                 continue;
             } else {
-                // 不存在，则判断价格是否更改
+                // 不存在，则判断错误文件数是否更改
                 autoId = selectBeanExist(supplierFileError, false);
                 if (autoId > 0) {
                     // 关系存在，价格更改则更新价格
