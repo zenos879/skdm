@@ -30,6 +30,8 @@ public interface WorkDayMapper {
 
     public List<WorkDay> selectHoliday(String start,String end);
 
+    public List<WorkDay> selectHolidayByType(String start,String end,Integer type);
+
     public List<WorkDay> selectWorkDayByDate(String date);
 
     /**

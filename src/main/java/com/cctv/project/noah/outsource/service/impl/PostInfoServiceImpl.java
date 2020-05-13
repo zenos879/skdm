@@ -125,7 +125,7 @@ public class PostInfoServiceImpl extends BaseService implements PostInfoService 
             if (postInfoByName!=null && !postInfoByName.getPostId().equals(postInfo.getPostId())){
                 return new Result(0,"此岗位已存在！");
             }
-            CategoryInfo categoryInfo = categoryInfoService.selectByName(postInfo.getCategoryName());
+            CategoryInfo categoryInfo = categoryInfoService.selectByPrimaryKey(postInfo.getCategoryId());
             if (categoryInfo == null) {
                 return new Result(0,"此岗位分类不存在!");
             }

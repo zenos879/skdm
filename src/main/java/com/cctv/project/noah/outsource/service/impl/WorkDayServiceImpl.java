@@ -23,6 +23,11 @@ public class WorkDayServiceImpl implements WorkDayService {
     public List<WorkDay> findHolidays(String start, String end){
         return workDayMapper.selectHoliday(start,end);
     }
+
+    @Override
+    public List<WorkDay> selectHolidayByType(String start, String end, Integer type){
+        return workDayMapper.selectHolidayByType(start,end,type);
+    }
     @Override
     public Result insert(String date,Integer type){
         List<WorkDay> workDays = workDayMapper.selectWorkDayByDate(date);
@@ -53,16 +58,26 @@ public class WorkDayServiceImpl implements WorkDayService {
     public Result delete(String date){
         return new Result(workDayMapper.deleteWorkDayByDate(date));
     }
-
-    public List<WorkDay> getHolidaysByMonth(Integer year,Integer month){
+    @Override
+    public List<WorkDay> getHolidaysByMonth(Integer year, Integer month){
         Date first = CommonUtil.getAppointTime(year, month, 0);
         Date last = CommonUtil.getAppointTime(year, month, 1);
         return findHolidays(String.valueOf(year), String.valueOf(month));
     }
-    public Integer getHolidaysByMonthDays(Integer year,Integer month){
+    @Override
+    public Integer getHolidaysByMonthDays(Integer year, Integer month){
         return getHolidaysByMonth(year,month).size();
     }
-    public Integer getWorkdaysByMonthDays(Integer year,Integer month){
+    @Override
+    public Integer getPublicHolidaysByMonthDays(Integer year, Integer month){
+        Date first = CommonUtil.getAppointTime(year, month, 0);
+        Date last = CommonUtil.getAppointTime(year, month, 1);
+        List<WorkDay> workDays = selectHolidayByType(String.valueOf(year), String.valueOf(month), 2);
+        return workDays.size();
+    }
+
+    @Override
+    public Integer getWorkdaysByMonthDays(Integer year, Integer month){
         Date appointTime = CommonUtil.getAppointTime(year, month, 0);
         Integer monthDays = CommonUtil.getMonthDays(appointTime);
         return monthDays - getHolidaysByMonth(year,month).size();
