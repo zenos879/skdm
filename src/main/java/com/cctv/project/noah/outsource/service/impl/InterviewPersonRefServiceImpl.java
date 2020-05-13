@@ -80,39 +80,35 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 
     @Override
     public Result insert(InterviewPersonRef record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
+            return result;
+        }
         // 插入时判断供应商是否存在
         String supplierName = record.getSupplierName();
         SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
         if (supplierInfo == null) {
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先添加供应商！");
-            return result;
+            return new Result(0, "供应商不存在，请先添加供应商！");
         }
         // 插入时判断岗位是否存在
         String postName = record.getPostName();
         PostInfo postInfo = postInfoService.selectByName(postName);
         if (postInfo == null) {
-            result.setCode(0);
-            result.setInfo("岗位不存在，请先添加岗位！");
-            return result;
+            return new Result(0, "岗位不存在，请先添加岗位！");
         }
         Integer b = selectBeanExist(record, false);
         // 验证关系是否存在
         if (b > 0) {
-            result.setCode(0);
-            result.setInfo("关系已经存在，无需新增！");
-            return result;
+            return new Result(0, "关系已经存在，无需新增！");
         }
         // 生成员工编号
         String aLong = GeneralUtils.generateStaffNo();
         record.setStaffNo(aLong);
         int insert = interviewPersonRefMapper.insert(record);
-        if (insert < 0) {
-            result.setCode(0);
-            result.setInfo("人名文件错误数据新增失败，请重试！");
-        }
-        return result;
+        return new Result(insert);
     }
 
 //    @Override
@@ -126,9 +122,36 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
     public List<InterviewPersonRef> selectList(InterviewPersonRef record) {
         InterviewPersonRefExample interviewPersonRefExample = new InterviewPersonRefExample();
         InterviewPersonRefExample.Criteria criteria = interviewPersonRefExample.createCriteria();
-        String staffName = record.getStaffName();
-        if (StringUtils.isNotEmpty(staffName)) {
-            criteria.andStaffNameEqualTo(staffName);
+        if (record != null) {
+            if (record.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            String purchaseNo = record.getPurchaseNo();
+            if (StringUtils.isNotEmpty(purchaseNo)) {
+                criteria.andPurchaseNoLike("%" + purchaseNo + "%");
+            }
+            String orderNo = record.getOrderNo();
+            if (StringUtils.isNotEmpty(orderNo)) {
+                criteria.andOrderNoLike("%" + orderNo + "%");
+            }
+            String staffName = record.getStaffName();
+            if (StringUtils.isNotEmpty(staffName)) {
+                criteria.andStaffNameEqualTo(staffName);
+            }
+            String idCard = record.getIdCard();
+            if (StringUtils.isNotEmpty(idCard)) {
+                criteria.andIdCardEqualTo(idCard);
+            }
+            Integer isInterview = record.getIsInterview();
+            if (isInterview != null){
+                criteria.andIsInterviewEqualTo(isInterview);
+            }
+            // todo
+            // todo
+            // todo
+            // todo
+            // todo
+            // todo
         }
         List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
         for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
@@ -231,11 +254,15 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 
     @Override
     public Result updateByPrimaryKeySelective(InterviewPersonRef record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null！");
+        }
         Integer id = record.getAutoId();
         if (id == 0) {
-            result.setCode(0);
-            result.setInfo("主键不存在，不能更新！");
+            return new Result(0, "主键不存在，不能更新！");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
             return result;
         }
         Integer resId = selectBeanExist(record, false);
@@ -304,7 +331,6 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 
     @Override
     public Result importInterviewPersonRef(List<InterviewPersonRef> records) {
-        Result result = new Result();
         int size = records.size();
         if (size < 1) {
             return new Result(0, "表中无数据");
@@ -366,8 +392,13 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             if (StringUtils.isEmpty(reason)) {
                 temp.setReason("");
             }
-            Date arriveDate = temp.getArriveDate();
-            temp.setArriveDate(arriveDate);
+//            Date arriveDate = temp.getArriveDate();
+//            temp.setArriveDate(arriveDate);
+            Result result = temp.beforeUpdateCheck();
+            if (result.getCode() < 1) {
+                result.setPreInfo("第" + (i + 2) + "行输入有误，原因：");
+                return result;
+            }
             // 验证关联信息是否存在
             PostInfo postInfo = postInfoService.selectByName(postName);
             if (postInfo == null) {
@@ -474,11 +505,11 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 }
             }
         }
-        if (msg.length() > 0) {
-            msg.append("当前共计导入" + (size - errorCount) + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
-        } else {
-            msg.append("导入成功，共计导入" + size + "条");
-        }
-        return result;
+//        if (msg.length() > 0) {
+//            msg.append("当前共计导入" + (size - errorCount) + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
+//        } else {
+//            msg.append("导入成功，共计导入" + size + "条");
+//        }
+        return GeneralUtils.getAllMsg(msg, size, errorCount, addCount, updateCount);
     }
 }

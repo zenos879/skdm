@@ -203,18 +203,18 @@ public class AgreementInfo extends BaseEntity implements Serializable {
 
     @Override
     public Result hasNullResult() {
-        if (this.getAgreementNo() == null && StringUtils.isEmpty(this.getAgreementNo())) {
+        if (StringUtils.isEmpty(this.getAgreementNo())) {
             return new Result(0, "合同编号不能为空！");
         }
         if (StringUtils.isEmpty(this.getSupplierName())) {
             return new Result(0, "供应商名称不能为空！");
         }
-        if (StringUtils.isEmpty(this.getFormatStartDate())) {
-            return new Result(0, "合同开始时间不能为空！");
-        }
-        if (StringUtils.isEmpty(this.getFormatEndDate())) {
-            return new Result(0, "合同结束时间不能为空！");
-        }
+//        if (StringUtils.isEmpty(this.getFormatStartDate())) {
+//            return new Result(0, "合同开始时间不能为空！");
+//        }
+//        if (StringUtils.isEmpty(this.getFormatEndDate())) {
+//            return new Result(0, "合同结束时间不能为空！");
+//        }
         return new Result(1);
     }
 

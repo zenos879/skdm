@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
                     <div class="col-sm-7">
-                        <input name="orderNo" th:value="${command.purchaseNo}" id="purchaseNo" class="form-control" type="text" required>
+                        <input name="orderNo" th:value="${command.purchaseNo}" id="purchaseNo" class="form-control" type="text" required maxlength="20"/>
                     </div>
                 </div>
             </div>
@@ -22,15 +22,15 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>订单编号：</label>
                     <div class="col-sm-7">
-                        <input name="orderNo" th:value="${command.orderNo}" id="orderNo" class="form-control" type="text" required>
+                        <input name="orderNo" th:value="${command.orderNo}" id="orderNo" class="form-control" type="text" required maxlength="20"/>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人名：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人员名称：</label>
                     <div class="col-sm-7">
-                        <input name="staffName" th:value="${command.staffName}" id="staffName" class="form-control" type="text" required>
+                        <input name="staffName" th:value="${command.staffName}" id="staffName" class="form-control" type="text" required maxlength="8"/>
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>不符合岗位要求的原因及建议：</label>
                     <div class="col-sm-7">
-                        <input name="reason" th:value="${command.reason}" id="reason" class="form-control" type="text" required>
+                        <input name="reason" th:value="${command.reason}" id="reason" class="form-control" type="text" required maxlength="256"/>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('添加面试人员数据')"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -46,7 +47,7 @@
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>通知面试日期：</label>
                 <div class="col-sm-7">
                     <input type="text" class="datetime-input form-control" id="notifyDate" placeholder="通知面试日期"
-                           name="notifyDate" required/>
+                           name="notifyDate" required readonly="readonly"/>
                 </div>
             </div>
         </div>
@@ -55,7 +56,7 @@
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>参加面试日期：</label>
                 <div class="col-sm-7">
                     <input type="text" class="datetime-input form-control" id="interviewDate" placeholder="参加面试日期"
-                           name="interviewDate" required/>
+                           name="interviewDate" required readonly="readonly"/>
                 </div>
             </div>
         </div>
@@ -96,7 +97,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>不符合岗位要求的原因及建议：</label>
                 <div class="col-sm-7">
-                    <input name="reason" id="reason" class="form-control" type="text" required>
+                    <input name="reason" id="reason" class="form-control" type="text" required maxlength="256">
                 </div>
             </div>
         </div>
@@ -105,13 +106,14 @@
                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>到岗日期：</label>
                 <div class="col-sm-7">
                     <input type="text" class="datetime-input form-control" id="arriveDate" placeholder="到岗日期"
-                           name="arriveDate" required/>
+                           name="arriveDate" required readonly="readonly"/>
                 </div>
             </div>
         </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js" />
 <script type="text/javascript">
     var prefix = ctx + "/outsource/interviewPersonRef";
 

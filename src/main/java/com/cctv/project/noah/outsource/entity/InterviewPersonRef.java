@@ -1,7 +1,12 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +15,7 @@ import java.util.Date;
  * interview_person_ref
  * @author 
  */
-public class InterviewPersonRef implements Serializable {
+public class InterviewPersonRef extends BaseEntity implements Serializable {
 
     public static final String ORDER_NO = "订单编号";
     public static final String PURCHASE_NO = "采购编号";
@@ -54,9 +59,6 @@ public class InterviewPersonRef implements Serializable {
      * 项目id
      */
     private Integer projectId;
-
-//    @Excel(name = "项目名称", cellType = Excel.ColumnType.NUMERIC)
-//    private String projectName;
 
     /**
      * 部门id
@@ -312,10 +314,12 @@ public class InterviewPersonRef implements Serializable {
         this.leaveReason = leaveReason;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -470,11 +474,64 @@ public class InterviewPersonRef implements Serializable {
         this.replacdStaffIdCard = replacdStaffIdCard;
     }
 
-//    public String getProjectName() {
-//        return projectName;
-//    }
-//
-//    public void setProjectName(String projectName) {
-//        this.projectName = projectName;
-//    }
+    @Override
+    public Result hasNullResult() {
+        if (StringUtils.isEmpty(this.getPurchaseNo())){
+            return new Result(0, "采购编号不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getOrderNo())){
+            return new Result(0, "订单编号不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getStaffName())){
+            return new Result(0, "人员名称不能为空！");
+        }
+        if (this.getSupplierId() == null && StringUtils.isEmpty(this.getSupplierName())) {
+            return new Result(0, "供应商不能为空！");
+        }
+        if (this.getPostId() == null && StringUtils.isEmpty(this.getPostName())) {
+            return new Result(0, "岗位不能为空！");
+        }
+        return new Result(1);
+    }
+
+    @Override
+    public Result checkLegitimateResult() {
+        if (!super.checkDateLegitimate()) {
+            return new Result(0, "时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getPurchaseNo()) && this.getPurchaseNo().length() > ModelClass.ATTR_NUM_LENGTH) {
+            return new Result(0, "采购编号【" + this.getPurchaseNo() + "】长度不能大于" + ModelClass.ATTR_NUM_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getStaffNo()) && this.getStaffNo().length() > ModelClass.ATTR_NUM_LENGTH) {
+            return new Result(0, "人员编号【" + this.getStaffNo() + "】长度不能大于" + ModelClass.ATTR_NUM_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getStaffName()) && this.getStaffName().length() > ModelClass.ATTR_PERSON_NAME_LENGTH) {
+            return new Result(0, "人员名称【" + this.getStaffName() + "】长度不能大于" + ModelClass.ATTR_PERSON_NAME_LENGTH + "！");
+        }
+        if (this.getSupplierId() != null && String.valueOf(this.getSupplierId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "供应商id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        if (this.getPostId() != null && String.valueOf(this.getPostId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "岗位id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getPostName()) && this.getPostName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "岗位名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        if (this.getIdCard() != null && this.getIdCard().length() > ModelClass.ATTR_ID_CARD_LENGTH) {
+            return new Result(0, "身份证号【" + this.getIdCard() + "】长度不能大于" + ModelClass.ATTR_ID_CARD_LENGTH + "！");
+        }
+        if (this.getReplacdStaffIdCard() != null && this.getReplacdStaffIdCard().length() > ModelClass.ATTR_ID_CARD_LENGTH) {
+            return new Result(0, "替换人员身份证号【" + this.getReplacdStaffIdCard() + "】长度不能大于" + ModelClass.ATTR_ID_CARD_LENGTH + "！");
+        }
+        if (this.getReason() != null && this.getReason().length() > ModelClass.ATTR_TEXT_LENGTH) {
+            return new Result(0, "不符合原因【" + this.getReason() + "】长度不能大于" + ModelClass.ATTR_TEXT_LENGTH + "！");
+        }
+        if (this.getLeaveReason() != null && this.getLeaveReason().length() > ModelClass.ATTR_TEXT_LENGTH) {
+            return new Result(0, "离岗原因【" + this.getLeaveReason() + "】长度不能大于" + ModelClass.ATTR_TEXT_LENGTH + "！");
+        }
+        return new Result(1);
+    }
 }
