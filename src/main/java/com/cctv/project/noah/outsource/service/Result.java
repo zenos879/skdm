@@ -30,9 +30,9 @@ public class Result<T> {
 
     public Result(Integer code) {
         this.code = code;
-        if (code == 0){
+        if (code == 0) {
             this.info = "操作失败！";
-        }else {
+        } else {
             this.info = "操作成功！";
         }
     }
@@ -64,6 +64,14 @@ public class Result<T> {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public void setPreInfo(String preInfo) {
+        this.info = preInfo + this.info;
+    }
+
+    public void setPoxInfo(String poxInfo) {
+        this.info += poxInfo;
     }
 
     public T getData() {

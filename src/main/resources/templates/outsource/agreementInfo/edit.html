@@ -39,7 +39,7 @@
                     <div class="col-sm-7">
                         <input type="text" class="time-input form-control time-formate" id="agreementStart"
                                th:value="${command.getFormatStartDate()}" placeholder="合同开始时间" name="agreementStart"
-                               required autocomplete="off"/>
+                               required autocomplete="off" readonly="readonly"/>
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                     <div class="col-sm-7">
                         <input type="text" class="time-input form-control" id="agreementEnd"
                                th:value="${command.getFormatEndDate()}" placeholder="合同结束时间" name="agreementEnd"
-                               required autocomplete="off"/>
+                               required autocomplete="off" readonly="readonly"/>
                     </div>
                 </div>
             </div>

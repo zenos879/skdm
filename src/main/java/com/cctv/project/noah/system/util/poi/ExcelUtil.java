@@ -1,5 +1,6 @@
 package com.cctv.project.noah.system.util.poi;
 
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.annotation.Excels;
 import com.cctv.project.noah.system.config.Global;
@@ -299,7 +300,12 @@ public class ExcelUtil<T> {
                         val = Convert.toBigDecimal(val);
                     } else if (Date.class == fieldType) {
                         if (val instanceof String) {
-                            val = DateUtils.parseDate(val);
+                            boolean b = GeneralUtils.checkDateStr(val.toString());
+                            if (b){
+                                val = DateUtils.parseDate(val);
+                            } else {
+                                throw new Exception("日期【" + val + "】格式不正确，请参照以下格式“YYYY-MM-DD HH:mm:ss”和“YYYY-MM-DD”");
+                            }
                         } else if (val instanceof Double) {
                             val = DateUtil.getJavaDate((Double) val);
                         }

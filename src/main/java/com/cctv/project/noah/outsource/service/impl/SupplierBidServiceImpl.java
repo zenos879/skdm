@@ -73,29 +73,29 @@ public class SupplierBidServiceImpl implements SupplierBidService {
 
     @Override
     public Result insert(SupplierBid record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
+            return result;
+        }
         // 插入时判断供应商、合同、岗位是否存在
         Integer supplierId = record.getSupplierId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         // 不存在，提示先新增供应商
         if (supplierInfo == null) {
-            result.setCode(0);
-            result.setInfo("供应商不存在，请先完善供应商信息！");
-            return result;
+            return new Result(0, "供应商不存在，请先完善供应商信息！");
         }
         Integer agreementId = record.getAgreementId();
         AgreementInfo agreementInfo = agreementInfoService.selectByPrimaryKey(agreementId);
         if (agreementInfo == null) {
-            result.setCode(0);
-            result.setInfo("合同编号不存在，请先完善合同信息！");
-            return result;
+            return new Result(0, "合同编号不存在，请先完善合同信息！");
         }
         Integer postId = record.getPostId();
         PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
         if (postInfo == null) {
-            result.setCode(0);
-            result.setInfo("岗位名称不存在，请先完善岗位信息！");
-            return result;
+            return new Result(0, "岗位名称不存在，请先完善岗位信息！");
         }
         record.setSupplierId(supplierInfo.getSupplierId());
         record.setAgreementId(agreementInfo.getAgreementId());
@@ -103,15 +103,9 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         Integer b = selectBeanExist(record, false);
         // 验证关系是否存在
         if (b > 0) {
-            result.setCode(0);
-            result.setInfo("关系已经存在，无需新增！");
-            return result;
+            return new Result(0, "关系已经存在，无需新增！");
         }
         int insert = supplierBidMapper.insert(record);
-        if (insert < 0) {
-            result.setCode(0);
-            result.setInfo("供应商竞标数据新增失败，请重试！");
-        }
         return new Result(insert);
     }
 
@@ -243,11 +237,15 @@ public class SupplierBidServiceImpl implements SupplierBidService {
 
     @Override
     public Result updateByPrimaryKeySelective(SupplierBid record) {
-        Result result = new Result();
+        if (record == null) {
+            return new Result(0, "传入数据为null！");
+        }
         Integer autoId = record.getAutoId();
         if (autoId == 0) {
-            result.setCode(0);
-            result.setInfo("主键不存在，不能更新！");
+            return new Result(0, "主键不存在，不能更新！");
+        }
+        Result result = record.beforeUpdateCheck();
+        if (result.code < 1) {
             return result;
         }
         String supplierName = record.getSupplierName();
@@ -331,29 +329,38 @@ public class SupplierBidServiceImpl implements SupplierBidService {
         StringBuffer msg = new StringBuffer();
         for (int i = 0; i < size; i++) {
             SupplierBid supplierBid = records.get(i);
-            if (supplierBid.getSupplierName() == null) {
+            String supplierName = supplierBid.getSupplierName();
+            if (supplierName == null) {
                 return new Result(0, "第" + (i + 2) + "行的供应商名称为空!");
             }
-            if (supplierBid.getAgreementNo() == null) {
+            String agreementNo = supplierBid.getAgreementNo();
+            if (agreementNo == null) {
                 return new Result(0, "第" + (i + 2) + "行的合同号为空!");
             }
-            if (supplierBid.getPostName() == null) {
+            String postName = supplierBid.getPostName();
+            if (postName == null) {
                 return new Result(0, "第" + (i + 2) + "行的岗位名称为空!");
             }
-            if (supplierBid.getBidPrice() == null) {
+            Float bidPrice = supplierBid.getBidPrice();
+            if (bidPrice == null) {
                 return new Result(0, "第" + (i + 2) + "行的竞标价钱为空!");
             }
-            SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierBid.getSupplierName());
+            Result result = supplierBid.beforeUpdateCheck();
+            if (result.getCode() < 1) {
+                result.setPreInfo("第" + (i + 2) + "行输入有误，原因：");
+                return result;
+            }
+            SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
             if (supplierInfo == null) {
-                return new Result(0, "第" + (i + 2) + "行的供应商【" + supplierBid.getSupplierName() + "】不存在!");
+                return new Result(0, "第" + (i + 2) + "行的供应商【" + supplierName + "】不存在!");
             }
-            AgreementInfo agreementInfo = agreementInfoService.selectByNum(supplierBid.getAgreementNo());
+            AgreementInfo agreementInfo = agreementInfoService.selectByNum(agreementNo);
             if (agreementInfo == null) {
-                return new Result(0, "第" + (i + 2) + "行的合同号【" + supplierBid.getAgreementNo() + "】不存在!");
+                return new Result(0, "第" + (i + 2) + "行的合同号【" + agreementNo + "】不存在!");
             }
-            PostInfo postInfo = postInfoService.selectByName(supplierBid.getPostName());
+            PostInfo postInfo = postInfoService.selectByName(postName);
             if (postInfo == null) {
-                return new Result(0, "第" + (i + 2) + "行的岗位【" + supplierBid.getPostName() + "】不存在!");
+                return new Result(0, "第" + (i + 2) + "行的岗位【" + postName + "】不存在!");
             }
             Integer supplierId = supplierInfo.getSupplierId();
             Integer agreementId = agreementInfo.getAgreementId();
