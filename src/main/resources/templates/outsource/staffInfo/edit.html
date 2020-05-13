@@ -8,7 +8,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-personInfo-edit"
           th:with="command = ${@staffInfoService.selectByPrimaryKey(id)}">
-        <input type="hidden" name="autoId" th:value="${command.autoId}">
+        <input type="hidden" id="autoId" name="autoId" th:value="${command.autoId}">
         <h4 class="form-header h4">人员数据</h4>
         <div class="row">
             <div class="col-sm-12">
@@ -33,7 +33,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目名称：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:value="${command.projectName}" id="projectName" class="form-control" type="text"
+                        <input name="projectName" th:value="${command.projectName}" id="projectName"
+                               class="form-control" type="text"
                                required readonly>
                     </div>
                 </div>
@@ -42,7 +43,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:value="${command.supplierName}" id="supplierName" class="form-control" type="text"
+                        <input name="supplierName" th:value="${command.supplierName}" id="supplierName"
+                               class="form-control" type="text"
                                required readonly>
                     </div>
                 </div>
@@ -51,7 +53,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>部门名称：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:value="${command.departmentName}" id="departmentName" class="form-control" type="text"
+                        <input name="departmentName" th:value="${command.departmentName}" id="departmentName"
+                               class="form-control" type="text"
                                required readonly>
                     </div>
                 </div>
@@ -60,7 +63,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:value="${command.postName}" id="postName" class="form-control" type="text"
+                        <input name="postName" th:value="${command.postName}" id="postName" class="form-control"
+                               type="text"
                                required readonly>
                     </div>
                 </div>
@@ -68,7 +72,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否替换：</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-7" id="isReplaceSelect">
                         <select name="isReplace" th:with="type=${@dict.getType('isReject')}">
                             <option value="">所有</option>
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -80,13 +84,54 @@
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>替换人员身份证号：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>被替换人员身份证号：</label>
                     <div class="col-sm-7">
-                        <input name="replacdStaffIdCard" th:value="${command.replacdStaffIdCard}" id="replacdStaffIdCard" class="hidden form-control" type="text"
-                               required readonly>
+                        <input name="beReplacdStaffIdCard" th:value="${command.beReplacdStaffIdCard}"
+                               th:text="${command.beReplacdStaffIdCard} + ${command.beReplacdStaffName}"
+                               id="beReplacdStaffIdCard" class="form-control" type="text"
+                               required>
                     </div>
                 </div>
             </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">不符合岗位要求的原因及建议：</label>
+                    <div class="col-sm-7">
+                        <input name="reason" th:value="${command.reason}"
+                               id="reason" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>到岗日期：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control" id="arriveDate"
+                               th:value="${command.getFormatArriveDate()}" placeholder="到岗日期" name="arriveDate"
+                               required autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">离岗日期：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="time-input form-control" id="leaveDate"
+                               th:value="${command.getFormatLeaveDate()}" placeholder="离岗日期" name="leaveDate"
+                               autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">离岗原因：</label>
+                    <div class="col-sm-7">
+                        <input name="leaveReason" th:value="${command.leaveReason}"
+                               id="leaveReason" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </form>
 </div>
@@ -94,14 +139,40 @@
 <th:block th:include="include :: bootstrap-select-js"/>
 
 <script type="text/javascript">
-    var prefix = ctx + "outsource/personInfo";
+    var prefix = ctx + "outsource/staffInfo";
+
+    function checkValidate() {
+        // 获取是否替换的值
+        var result = $('#isReplaceSelect select').val();
+        // 获取被替换人员的值
+        var idCard = $("#beReplacdStaffIdCard").val();
+        if (result == null || result == "" || result == 'undefined') {
+            alert("未选择【是否替换】");
+            return false;
+        } else if (result == "0") {
+            if (idCard != null && idCard != "" && idCard != 'undefined') {
+                alert("无替换，无需填写被替换人身份证号！");
+                return false;
+            }
+        } else {
+            if (idCard == null && idCard == "" && idCard == 'undefined') {
+                alert("有替换时，被替换人身份证号必填");
+                return false;
+            }
+        }
+        return true;
+
+    }
+
     $("#form-personInfo-edit").validate({
         onkeyup: false,
         focusCleanup: true,
     });
 
+
     function submitHandler() {
-        if ($.validate.form()) {
+        var temp = checkValidate();
+        if ($.validate.form() && temp) {
             $.operate.save(prefix + "/edit", $('#form-personInfo-edit').serialize());
         }
     }

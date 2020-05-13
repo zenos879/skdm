@@ -465,11 +465,11 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                         staffAutoId = staffInfos.get(0).getAutoId();
                         staffInfo.setAutoId(staffAutoId);
                     }
-                    String staffNo = record.getStaffNo();
-                    String replaceStaffNo = record.getReplaceStaffNo();
+                    String idCard = record.getIdCard();
+                    String replaceIdCard = record.getReplacdStaffIdCard();
                     List<String> tempList = new ArrayList<>();
-                    tempList.add(staffNo);
-                    tempList.add(replaceStaffNo);
+                    tempList.add(idCard);
+                    tempList.add(replaceIdCard);
                     staffInfoService.updateGroupByStaffNo(staffAutoId + 1, tempList);
                 }
             }
