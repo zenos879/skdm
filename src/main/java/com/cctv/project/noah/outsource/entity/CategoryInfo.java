@@ -61,12 +61,11 @@ public class CategoryInfo extends BaseEntity implements Serializable {
         this.categoryName = (categoryName == null?categoryName:categoryName.trim());
     }
 
-    @Override
+
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

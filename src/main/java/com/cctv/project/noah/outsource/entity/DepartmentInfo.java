@@ -61,12 +61,10 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
         this.departmentName = (departmentName == null?departmentName:departmentName.trim());
     }
 
-    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

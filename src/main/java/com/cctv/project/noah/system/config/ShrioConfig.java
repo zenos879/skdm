@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
+import org.apache.shiro.crypto.AesCipherService;
 import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -25,6 +26,7 @@ import javax.servlet.Filter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Key;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -38,6 +40,8 @@ import java.util.Map;
 public class ShrioConfig {
 
     public static final String PREMISSION_STRING = "perms[\"{0}\"]";
+
+
 
     /**
      * Session超时时间，单位为毫秒（默认30分钟）
@@ -258,10 +262,14 @@ public class ShrioConfig {
      * 记住我
      */
     public CookieRememberMeManager rememberMeManager() {
+        AesCipherService aesCipherService = new AesCipherService();
+        aesCipherService.setKeySize(128);
+        Key key = aesCipherService.generateNewKey();
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey(Base64.decode("fCq+/xW488hMTCD+cmJ3aQ=="));
+        cookieRememberMeManager.setCipherKey(key.getEncoded());
         return cookieRememberMeManager;
+
     }
 
 

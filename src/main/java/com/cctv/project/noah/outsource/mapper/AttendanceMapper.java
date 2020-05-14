@@ -29,6 +29,12 @@ public interface AttendanceMapper {
 
     List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount);
 
+    List<AttendanceCount> selectAttendanceCountBySelective(AttendanceCount attendanceCount);
+
+    List<AttendanceCount> selectAttendanceCountAll();
+
+    List<Attendance> selectPrevMonthInfo(Integer statisticsYear,Integer statisticsMonth,Date first,Date last);
+
     List<AttendanceCount> selectAttendanceCountByIds(String[] ids);
 
     Attendance selectByPrimaryKey(Long autoId);
@@ -45,7 +51,9 @@ public interface AttendanceMapper {
      */
     public List<Attendance> selectAttendanceList(Attendance attendance);
 
-    public List<Attendance> selectAvailableInfo(Attendance attendance);
+    public List<Attendance> selectByRepeat(Attendance attendance);
+
+//    public List<Attendance> selectAvailableInfo(Attendance attendance);
 
     /**
      * 新增【Attendance】

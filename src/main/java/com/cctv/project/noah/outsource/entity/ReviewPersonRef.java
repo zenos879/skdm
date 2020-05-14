@@ -250,10 +250,7 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
             return new Result(0,"供应商id长度不能大于11！");
         }
         if (this.getIsNotifyInterview() !=null){
-            if(String.valueOf(this.getIsNotifyInterview()).length()>11){
-                return new Result(0,"是否通知面试长度不能大于11！");
-            }
-            if (this.getIsNotifyInterview()!=0 && this.getIsNotifyInterview()!=1){
+            if(this.getIsNotifyInterview()<0 || this.getIsNotifyInterview()>127 || (this.getIsNotifyInterview()!=0 && this.getIsNotifyInterview()!=1)){
                 return new Result(0,"是否通知面试不合法<不能为空且只能为0或1>");
             }
         }

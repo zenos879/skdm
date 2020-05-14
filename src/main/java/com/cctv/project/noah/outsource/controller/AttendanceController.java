@@ -61,12 +61,7 @@ public class AttendanceController extends BaseController {
             attendance.setDepartmentId(departmentId);
         }
         startPage();
-        List<Attendance> attendances;
-        if (updatePublicHolidays){
-            attendances = attendanceService.selectPublicHolidaysInfo(attendance);
-        }else {
-            attendances = attendanceService.selectBySelective(attendance);
-        }
+        List<Attendance> attendances = attendanceService.selectBySelective(attendance);
         return getDataTable(attendances);
     }
 
@@ -153,6 +148,12 @@ public class AttendanceController extends BaseController {
     public AjaxResult importTemplate() {
         ExcelUtil<Attendance> util = new ExcelUtil<Attendance>(Attendance.class);
         return util.importTemplateExcel("考勤数据");
+    }
+
+    @ResponseBody
+    @RequestMapping("/copy")
+    public AjaxResult copy() {
+        return toAjax(attendanceService.copyPrevMonthInfo());
     }
 
     @RequestMapping("/remove")

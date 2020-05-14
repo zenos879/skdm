@@ -13,11 +13,28 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									统计年份：<input type="text" name="statisticsYear" th:value="${@attendanceService.getPrevMonthYear()}"/>
+									订单编号：<input type="text" name="orderNo" id="orderNo" maxlength="64"/>
+								</li>
+								<li>
+									<!--TODO与人员表关联-->
+									考勤人id：<input type="text" name="staffNo" id="staffNo" maxlength="20"/>
+								</li>
+								<li>
+									统计年份：<input type="text" name="statisticsYear" id="statisticsYear" maxlength="4" th:value="${@attendanceService.getPrevMonthYear()}"/>
 								</li>
 								<li>
 									<!--统计月份：<input type="text" name="statisticsMonth" th:value="${@attendanceService.getPrevMonth()}"/>-->
-									统计月份：<input type="text" name="statisticsMonth" value="3"/>
+									统计月份：<input type="text" name="statisticsMonth" id="statisticsMonth" maxlength="2" value="3"/>
+								</li>
+								<li>
+									应该工作天数：<input type="text" maxlength="2" name="serveDaysExpect" id="serveDaysExpect"/>
+								</li>
+								<li>
+									实际工作天数：<input type="text" maxlength="2" name="serveDaysActual" id="serveDaysActual"/>
+								</li>
+								<li>
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="_seach()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 								</li>
 							</ul>
 						</div>
@@ -39,6 +56,7 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/attendance";
 		$(function() {
@@ -134,6 +152,60 @@
 					$.modal.closeLoading();
 				});
 			});
+		}
+		function _seach() {
+			if ($("#updatePublicHolidays").val() == 1){
+				var year = $("#statisticsYear").val();
+				var month = $("#statisticsMonth").val();
+				if ($.common.isEmpty(year) || $.common.isEmpty(month)){
+					$.modal.alertWarning("修改公共假期时，统计年份和统计月份必填!");
+					return;
+				}
+			}
+			var statisticsYear = $("#statisticsYear").val().trim();
+			var statisticsMonth = $("#statisticsMonth").val().trim();
+			var serveDaysExpect = $("#serveDaysExpect").val().trim();
+			var serveDaysActual = $("#serveDaysActual").val().trim();
+			if (!$.common.isEmpty(statisticsYear) && !isNumber(statisticsYear)){
+				$.modal.alertError("统计年数数必须为正整数！");
+				return;
+			}
+			if (!$.common.isEmpty(statisticsMonth)){
+				if (!isNumber(statisticsMonth)){
+					$.modal.alertError("统计月数必须为正整数！");
+					return;
+				}
+				var _int = parseInt(statisticsMonth);
+				if (_int>12){
+					$.modal.alertError("统计月数不能大于12！");
+					return
+				}
+			}
+			if (!$.common.isEmpty(serveDaysExpect)){
+				if (!isNumber(serveDaysExpect)){
+					$.modal.alertError("应该工作天数必须为正整数！");
+					return;
+				}
+				var _int = parseInt(serveDaysExpect);
+				if (_int>31){
+					$.modal.alertError("应该工作天不能大于31！");
+					return;
+				}
+			}
+			if (!$.common.isEmpty(serveDaysActual)){
+				console.log("aaaaaaaaaaaaaa"+serveDaysActual);
+				if (!isNumber(serveDaysActual)){
+					$.modal.alertError("实际工作天数必须为正整数！");
+					return;
+				}
+				var _int = parseInt(serveDaysActual);
+				console.log(_int);
+				if (_int>31){
+					$.modal.alertError("实际工作天不能大于31！");
+					return;
+				}
+			}
+			$.table.search()
 		}
 	</script>
 </body>

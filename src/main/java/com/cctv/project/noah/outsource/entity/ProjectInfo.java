@@ -103,12 +103,10 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         this.departmentId = departmentId;
     }
 
-    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

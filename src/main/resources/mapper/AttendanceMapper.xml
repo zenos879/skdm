@@ -85,8 +85,7 @@
         a.create_time,
         a. STATUS,
         s.staff_name,
-        a.remark,
-        a.public_holidays
+        a.remark
         FROM
         attendance a
         LEFT JOIN staff_info s ON s.staff_no = a.staff_no
@@ -133,13 +132,22 @@
 
     where a.auto_id = #{autoId,jdbcType=BIGINT}
   </select>
+    <select id="selectByRepeat" parameterType="Attendance" resultMap="BaseResultMap">
+
+      <include refid="selectAttendanceVo"/>
+
+      where a.order_no = #{orderNo}
+        and a.staff_no = #{staffNo}
+        and a.statistics_year = #{statisticsYear}
+        and a.statistics_month = #{statisticsMonth}
+  </select>
     <select id="selectAttendanceList" parameterType="Attendance" resultMap="BaseResultMap">
 
         <include refid="selectAttendanceVo"/>
 
         <where>
             <if test="orderNo != null  and orderNo != ''"> and a.order_no = #{orderNo}</if>
-            <if test="staffNo != null "> and a.staff_no = #{staffNo}</if>
+            <if test="staffNo != null and staffNo != '' "> and a.staff_no = #{staffNo}</if>
             <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
             <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
             <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
@@ -187,6 +195,30 @@
       a.`statistics_year` = #{statisticsYear}
     AND a.statistics_month = #{statisticsMonth}
   </select>
+    <select id="selectAttendanceCountBySelective" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
+        <include refid="selectCount"/>
+        <where>
+            <if test="orderNo != null  and orderNo != ''"> and a.order_no like concat('%', #{orderNo}, '%')</if>
+            <if test="staffNo != null and staffNo != ''"> and a.staff_no like concat('%', #{staffNo}, '%')</if>
+            <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
+            <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
+            <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
+            <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
+            <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
+            <if test="status != null "> and a.status = #{status}</if>
+            <if test="staffName != null  and staffName != ''"> and s.staff_name = #{staffName}</if>
+            <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    <select id="selectAttendanceCountAll" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
+        <include refid="selectCount"/>
+    </select>
+
     <select id="selectPrevMonthInfo" resultMap="BaseResultMap">
         SELECT
         auto_id,
@@ -197,16 +229,15 @@
         '0' serve_days_expect,
         '0' serve_days_actual,
         create_time,
-        staff_name,
         '' AS remark,
         '0' AS public_holidays
         FROM
         staff_info
         WHERE
         (
-        arrive_date &lt;= #{arriveDateMax}
-        OR leave_date BETWEEN #{leaveDateMin}
-        AND #{leaveDateMax}
+        date_format(arrive_date,'%y%m%d') &lt;= date_format(#{last},'%y%m%d')
+        OR date_format(leave_date,'%y%m%d') BETWEEN date_format(#{first},'%y%m%d')
+        AND date_format(#{last},'%y%m%d')
         )
         ORDER BY
         staff_no DESC
@@ -223,11 +254,10 @@
   <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.Attendance" resultMap="BaseResultMap">
 
       <include refid="selectAttendanceVo"/>
-
       <where>
           <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
           <if test="orderNo != null  and orderNo != ''"> and a.order_no like concat('%', #{orderNo}, '%')</if>
-          <if test="staffNo != null "> and a.staff_no = #{staffNo}</if>
+          <if test="staffNo != null and staffNo != ''"> and a.staff_no like concat('%', #{staffNo}, '%')</if>
           <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
           <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
           <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
@@ -341,16 +371,14 @@
         insert into attendance
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderNo != null  and orderNo != ''">order_no,</if>
-            <if test="staffNo != null ">staff_no,</if>
+            <if test="staffNo != null and staffNo != ''">staff_no,</if>
             <if test="statisticsYear != null ">statistics_year,</if>
             <if test="statisticsMonth != null ">statistics_month,</if>
             <if test="serveDaysExpect != null ">serve_days_expect,</if>
             <if test="serveDaysActual != null ">serve_days_actual,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="status != null ">status,</if>
-            <if test="staffName != null  and staffName != ''">staff_name,</if>
             <if test="remark != null  and remark != ''">remark,</if>
-            <if test="publicHolidays != null">public_holidays,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo != null  and orderNo != ''">#{orderNo},</if>
@@ -361,9 +389,7 @@
             <if test="serveDaysActual != null ">#{serveDaysActual},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="status != null ">#{status},</if>
-            <if test="staffName != null  and staffName != ''">#{staffName},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="publicHolidays != null">#{publicHolidays},</if>
         </trim>
     </insert>
 
@@ -371,7 +397,7 @@
         update attendance
         <trim prefix="SET" suffixOverrides=",">
             <if test="orderNo != null  and orderNo != ''">order_no = #{orderNo},</if>
-            <if test="staffNo != null ">staff_no = #{staffNo},</if>
+            <if test="staffNo != null and staffNo != ''">staff_no = #{staffNo},</if>
             <if test="statisticsYear != null ">statistics_year = #{statisticsYear},</if>
             <if test="statisticsMonth != null ">statistics_month = #{statisticsMonth},</if>
             <if test="serveDaysExpect != null ">serve_days_expect = #{serveDaysExpect},</if>
@@ -380,18 +406,17 @@
             <if test="status != null ">status = #{status},</if>
             <if test="staffName != null  and staffName != ''">staff_name = #{staffName},</if>
             <if test="remark != null  and remark != ''">remark = #{remark},</if>
-            <if test="publicHolidays != null">public_holidays = #{publicHolidays},</if>
         </trim>
+
         where auto_id = #{autoId}
     </update>
     <update id="update" parameterType="Attendance">
         update attendance
         <trim prefix="SET" suffixOverrides=",">
-            <if test="serveDaysExpect != null ">serve_days_expect = #{serveDaysExpect},</if>
-            <if test="serveDaysActual != null ">serve_days_actual = #{serveDaysActual},</if>
-            <if test="publicHolidays != null">public_holidays = #{publicHolidays},</if>
+            serve_days_actual = #{serveDaysActual},
+            <if test="serveDaysExpect != null ">serve_days_expect = #{serveDaysExpect}</if>
+            <if test="remark != null and remark !=''">remark = #{remark}</if>
         </trim>
-
         where auto_id = #{autoId}
     </update>
 
