@@ -22,36 +22,36 @@ public class AttendanceCount extends Attendance {
     private String supplierName;
 
     public String getProjectName() {
-        return projectName;
+        return StringUtils.isNotEmpty(projectName)?projectName.replaceAll(" ",""):projectName;
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = projectName;
+        this.projectName = (StringUtils.isNotEmpty(projectName)?projectName.replaceAll(" ",""):projectName);
     }
 
     public String getDepartmentName() {
-        return departmentName;
+        return StringUtils.isNotEmpty(departmentName)?departmentName.replaceAll(" ",""):departmentName;
     }
 
     public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+        this.departmentName = (StringUtils.isNotEmpty(departmentName)?departmentName.replaceAll(" ",""):departmentName);
     }
 
 
     public String getPostName() {
-        return postName;
+        return StringUtils.isNotEmpty(postName)?postName.replaceAll(" ",""):postName;
     }
 
     public void setPostName(String postName) {
-        this.postName = postName;
+        this.postName = (StringUtils.isNotEmpty(postName)?postName.replaceAll(" ",""):postName);
     }
 
     public String getSupplierName() {
-        return supplierName;
+        return StringUtils.isNotEmpty(supplierName)?supplierName.replaceAll(" ",""):supplierName;
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (StringUtils.isNotEmpty(supplierName)?supplierName.replaceAll(" ",""):supplierName);
     }
 
     @Override

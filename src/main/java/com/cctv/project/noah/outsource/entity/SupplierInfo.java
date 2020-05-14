@@ -79,35 +79,35 @@ public class SupplierInfo extends BaseEntity implements Serializable {
     }
 
     public String getSupplierName() {
-        return supplierName == null? supplierName:supplierName.trim();
+        return supplierName == null? supplierName:supplierName.replaceAll(" ", "");
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = (supplierName == null? supplierName:supplierName.trim());
+        this.supplierName = (supplierName == null? supplierName:supplierName.replaceAll(" ", ""));
     }
 
     public String getContactName() {
-        return contactName == null?contactName:contactName.trim();
+        return contactName == null?contactName:contactName.replaceAll(" ", "");
     }
 
     public void setContactName(String contactName) {
-        this.contactName = (contactName == null?contactName:contactName.trim());
+        this.contactName = (contactName == null?contactName:contactName.replaceAll(" ", ""));
     }
 
     public String getContactTel() {
-        return contactTel == null?contactTel:contactTel.trim();
+        return contactTel == null?contactTel:contactTel.replaceAll(" ", "");
     }
 
     public void setContactTel(String contactTel) {
-        this.contactTel = (contactTel == null?contactTel:contactTel.trim());
+        this.contactTel = (contactTel == null?contactTel:contactTel.replaceAll(" ", ""));
     }
 
     public String getContactEmail() {
-        return contactEmail == null?contactEmail:contactEmail.trim();
+        return contactEmail == null?contactEmail:contactEmail.replaceAll(" ", "");
     }
 
     public void setContactEmail(String contactEmail) {
-        this.contactEmail = (contactEmail == null?contactEmail:contactEmail.trim());
+        this.contactEmail = (contactEmail == null?contactEmail:contactEmail.replaceAll(" ", ""));
     }
 
     public Integer getIsSubsidiary() {

@@ -63,7 +63,7 @@
 						<i class="fa fa-download"></i> 导出核心数据
 					</a>
 					<a class="btn btn-success" onclick="_copy()">
-						<i class="fa fa-download"></i> 复制考勤模板
+						<i class="fa fa-download"></i> 生成考勤模板
 					</a>
 		        </div>
 		        
@@ -210,7 +210,9 @@
 			});
 		}
 		function _copy() {
-			$.operate.submit($.table._option.copyUrl, "post", "json");
+			$.modal.confirm("确定生成本月模板吗？", function() {
+				$.operate.submit($.table._option.copyUrl, "post", "json");
+			});
 		}
 		function _seach() {
 			if ($("#updatePublicHolidays").val() == 1){
@@ -265,6 +267,13 @@
 				}
 			}
 			$.table.search()
+		}
+		function showDetail(value,flag){
+			if (flag == 'supplier'){
+				$.modal.openTab("供应商数据",ctx+"outsource/supplierInfo?supplierName="+value);
+			} else if (flag == 'post') {
+				$.modal.openTab("岗位数据",ctx+"outsource/postInfo?postName="+value);
+			}
 		}
 	</script>
 </body>

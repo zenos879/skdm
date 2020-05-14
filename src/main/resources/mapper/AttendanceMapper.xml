@@ -392,6 +392,13 @@
             <if test="remark != null  and remark != ''">#{remark},</if>
         </trim>
     </insert>
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="autoId">
+        insert into attendance (order_no,staff_no,statistics_year,statistics_month,serve_days_expect,serve_days_actual,create_time,status,remark)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.order_no},#{item.staff_no},#{item.statistics_year},#{item.statistics_month},#{item.serve_days_expect},#{item.serve_days_actual},#{item.create_time},#{item.status},#{item.remark})
+        </foreach>
+    </insert>
 
     <update id="updateAttendance" parameterType="Attendance">
         update attendance

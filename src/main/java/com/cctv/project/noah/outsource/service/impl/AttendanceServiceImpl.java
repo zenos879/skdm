@@ -350,6 +350,10 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
 //                return new Result(0,"人员表中存在错误数据，请联系管理员！</br>错误为<"+resultRepeat.info+">");
                 return resultRepeat;
             }
+            Integer nowYear = getNowYear();
+            Integer nowMonth = getNowMonth();
+            Integer workdaysByMonthDays = workDayService.getWorkdaysByMonthDays(nowYear, nowMonth);
+            attendance.setServeDaysExpect(Long.valueOf(workdaysByMonthDays));
             attendance.setCreateTime(new Date());
             int i = attendanceMapper.insertAttendance(attendance);
             return new Result(i);
@@ -419,13 +423,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         }
     }
     public List<Attendance> selectPrevMonthInfo(Integer year,Integer month){
-        Integer workdaysByMonthDays = workDayService.getWorkdaysByMonthDays(year, month);
         Date first = CommonUtil.getAppointTime(year, month, 0);
         Date last = CommonUtil.getAppointTime(year, month, 1);
         List<Attendance> attendances = attendanceMapper.selectPrevMonthInfo(year, month, first, last);
-        for (Attendance attendance : attendances) {
-            attendance.setServeDaysExpect(Long.valueOf(workdaysByMonthDays));
-        }
+//        for (Attendance attendance : attendances) {
+//            attendance.setServeDaysExpect(Long.valueOf(workdaysByMonthDays));
+//        }
         return StringUtils.isNotEmpty(attendances)?attendances:new ArrayList<>();
     }
     @Override

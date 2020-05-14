@@ -111,12 +111,12 @@ public class Attendance extends BaseEntity  implements Serializable {
 
     @Override
     public String getRemark() {
-        return StringUtils.isEmpty(remark)?remark:remark.trim();
+        return StringUtils.isEmpty(remark)?remark:remark.replaceAll(" ", "");
     }
 
     @Override
     public void setRemark(String remark) {
-        this.remark = (StringUtils.isEmpty(remark)?remark:remark.trim());
+        this.remark = (StringUtils.isEmpty(remark)?remark:remark.replaceAll(" ", ""));
     }
 
 //    @Override
@@ -137,18 +137,18 @@ public class Attendance extends BaseEntity  implements Serializable {
         return autoId;
     }
     public void setOrderNo(String orderNo) {
-        this.orderNo = (StringUtils.isNotEmpty(orderNo)?orderNo.trim():orderNo);
+        this.orderNo = (StringUtils.isNotEmpty(orderNo)?orderNo.replaceAll(" ", ""):orderNo);
     }
 
     public String getOrderNo() {
-        return StringUtils.isNotEmpty(orderNo)?orderNo.trim():orderNo;
+        return StringUtils.isNotEmpty(orderNo)?orderNo.replaceAll(" ", ""):orderNo;
     }
     public void setStaffNo(String staffNo) {
-        this.staffNo = (StringUtils.isNotEmpty(staffNo)?staffNo.trim():staffNo);
+        this.staffNo = (StringUtils.isNotEmpty(staffNo)?staffNo.replaceAll(" ", ""):staffNo);
     }
 
     public String getStaffNo() {
-        return StringUtils.isNotEmpty(staffNo)?staffNo.trim():staffNo;
+        return StringUtils.isNotEmpty(staffNo)?staffNo.replaceAll(" ", ""):staffNo;
     }
     public void setStatisticsYear(Long statisticsYear) {
         this.statisticsYear = statisticsYear;
@@ -186,11 +186,11 @@ public class Attendance extends BaseEntity  implements Serializable {
         return status;
     }
     public void setStaffName(String staffName) {
-        this.staffName = (StringUtils.isNotEmpty(staffName)?staffName.trim():staffName);
+        this.staffName = (StringUtils.isNotEmpty(staffName)?staffName.replaceAll(" ", ""):staffName);
     }
 
     public String getStaffName() {
-        return StringUtils.isNotEmpty(staffName)?staffName.trim():staffName;
+        return StringUtils.isNotEmpty(staffName)?staffName.replaceAll(" ", ""):staffName;
     }
 
     @Override

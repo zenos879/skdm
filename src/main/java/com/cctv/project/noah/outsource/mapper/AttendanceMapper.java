@@ -63,6 +63,8 @@ public interface AttendanceMapper {
      */
     public int insertAttendance(Attendance attendance);
 
+    public int insertBatch(List<Attendance> attendance);
+
     /**
      * 修改【Attendance】
      *

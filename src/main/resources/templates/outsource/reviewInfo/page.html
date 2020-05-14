@@ -117,12 +117,28 @@
 				{
 					field: 'postName',
 					title: '岗位',
-					sortable: true
+					sortable: true,
+					formatter: function(value, row, index) {
+						var actions = [];
+						if (value == null){
+							value = '';
+						}
+						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','post')\">"+value+"</a>");
+						return actions.join('');
+					}
 				},
 				{
 					field: 'projectName',
 					title: '项目',
-					sortable: true
+					sortable: true,
+					formatter: function(value, row, index) {
+						var actions = [];
+						if (value == null){
+							value = '';
+						}
+						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','project')\">"+value+"</a>");
+						return actions.join('');
+					}
 				},{
 					field: 'postCount',
 					title: '岗位需求数',
@@ -233,6 +249,13 @@
 			}
 			$.table.search();
 
+		}
+		function showDetail(value,flag){
+			if (flag == 'project'){
+				$.modal.openTab("项目数据",ctx+"outsource/projectInfo?projectName="+value);
+			} else if (flag == 'post') {
+				$.modal.openTab("岗位数据",ctx+"outsource/postInfo?postName="+value);
+			}
 		}
 	</script>
 </body>
