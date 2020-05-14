@@ -54,19 +54,17 @@ public class DepartmentInfo extends BaseEntity implements Serializable {
     }
 
     public String getDepartmentName() {
-        return departmentName == null?departmentName:departmentName.trim();
+        return departmentName == null?departmentName:departmentName.replaceAll(" ", "");
     }
 
     public void setDepartmentName(String departmentName) {
-        this.departmentName = (departmentName == null?departmentName:departmentName.trim());
+        this.departmentName = (departmentName == null?departmentName:departmentName.replaceAll(" ", ""));
     }
 
-    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

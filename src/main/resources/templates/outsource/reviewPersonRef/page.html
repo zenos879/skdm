@@ -107,7 +107,8 @@
 		        {
 		            field: 'autoId',
 		            title: '评审人员ID',
-					sortable: true
+					sortable: true,
+					visible:false
 		        },
 				{
 					field: 'purchaseNo',
@@ -117,12 +118,28 @@
 				{
 					field: 'supplierName',
 					title: '供应商',
-					sortable: true
+					sortable: true,
+					formatter: function(value, row, index) {
+						var actions = [];
+						if (value == null){
+							value = '';
+						}
+						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','supplier')\">"+value+"</a>");
+						return actions.join('');
+					}
 				},
 				{
 					field: 'postName',
 					title: '岗位',
-					sortable: true
+					sortable: true,
+					formatter: function(value, row, index) {
+						var actions = [];
+						if (value == null){
+							value = '';
+						}
+						actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','post')\">"+value+"</a>");
+						return actions.join('');
+					}
 				},
 				{
 					field: 'personName',
@@ -209,6 +226,13 @@
 			}
 			$.table.search();
 
+		}
+		function showDetail(value,flag){
+			if (flag == 'supplier'){
+				$.modal.openTab("供应商数据",ctx+"outsource/supplierInfo?supplierName="+value);
+			} else if (flag == 'post') {
+				$.modal.openTab("岗位数据",ctx+"outsource/postInfo?postName="+value);
+			}
 		}
 	</script>
 </body>

@@ -71,11 +71,11 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getCategoryName() {
-        return categoryName == null?categoryName:categoryName.trim();
+        return categoryName == null?categoryName:categoryName.replaceAll(" ", "");
     }
 
     public void setCategoryName(String categoryName) {
-        this.categoryName = (categoryName == null?categoryName:categoryName.trim());
+        this.categoryName = (categoryName == null?categoryName:categoryName.replaceAll(" ", ""));
     }
 
     public Integer getPostId() {
@@ -87,11 +87,11 @@ public class PostInfo extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return postName == null?postName:postName.trim();
+        return postName == null?postName:postName.replaceAll(" ", "");
     }
 
     public void setPostName(String postName) {
-        this.postName = (postName == null?postName:postName.trim());
+        this.postName = (postName == null?postName:postName.replaceAll(" ", ""));
     }
 
     public Integer getCategoryId() {
@@ -102,12 +102,10 @@ public class PostInfo extends BaseEntity implements Serializable {
         this.categoryId = categoryId;
     }
 
-    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

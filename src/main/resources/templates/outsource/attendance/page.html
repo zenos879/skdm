@@ -13,29 +13,29 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									订单编号：<input type="text" name="orderNo"/>
+									订单编号：<input type="text" name="orderNo" id="orderNo" maxlength="64"/>
 								</li>
 								<li>
 									<!--TODO与人员表关联-->
-									考勤人id：<input type="text" name="staffNo"/>
+									考勤人id：<input type="text" name="staffNo" id="staffNo" maxlength="20"/>
 								</li>
 								<li>
-									统计年份：<input type="text" name="statisticsYear" id="statisticsYear"/>
+									统计年份：<input type="text" maxlength="4" name="statisticsYear" id="statisticsYear"/>
 								</li>
 								<li>
-									统计月份：<input type="text" name="statisticsMonth" id="statisticsMonth"/>
+									统计月份：<input type="text" maxlength="2" name="statisticsMonth" id="statisticsMonth"/>
 								</li>
 								<li>
-									应该工作天数：<input type="text" name="serveDaysExpect"/>
+									应该工作天数：<input type="text" maxlength="2" name="serveDaysExpect" id="serveDaysExpect"/>
 								</li>
 								<li>
-									实际工作天数：<input type="text" name="serveDaysActual"/>
+									实际工作天数：<input type="text" maxlength="2" name="serveDaysActual" id="serveDaysActual"/>
 								</li>
-								<li>
-									修改公共假期：<select name="updatePublicHolidays" id="updatePublicHolidays" th:with="type=${@dict.getType('updatePublicHolidays')}">
-										<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-									</select>
-								</li>
+								<!--<li>-->
+									<!--修改公共假期：<select name="updatePublicHolidays" id="updatePublicHolidays" th:with="type=${@dict.getType('updatePublicHolidays')}">-->
+										<!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+									<!--</select>-->
+								<!--</li>-->
 								<li>
 									<a class="btn btn-primary btn-rounded btn-sm" onclick="_seach()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 									<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -62,6 +62,9 @@
 					<a class="btn btn-warning" onclick="_export('core')">
 						<i class="fa fa-download"></i> 导出核心数据
 					</a>
+					<a class="btn btn-success" onclick="_copy()">
+						<i class="fa fa-download"></i> 生成考勤模板
+					</a>
 		        </div>
 		        
 		        <div class="col-sm-12 select-table table-striped">
@@ -73,6 +76,7 @@
 	
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: ztree-js" />
+	<th:block th:include="include :: zy-common" />
 	<script th:inline="javascript">
 		var prefix = ctx + "outsource/attendance";
 		$(function() {
@@ -86,10 +90,11 @@
 		        updateUrl: prefix + "/edit/{id}",
 		        removeUrl: prefix + "/remove",
 		        exportUrl: prefix + "/export",
+		        copyUrl: prefix + "/copy",
 				exportCoreUrl: prefix + "/exportCore",
 		        importUrl: prefix + "/importData",
 		        importTemplateUrl: prefix + "/importTemplate",
-		        sortName: "autoId",
+		        sortName: "createTime",
 		        sortOrder: "desc",
 		        modalName: "考勤数据",
 		        columns: [{
@@ -135,10 +140,10 @@
 					{
 						field : 'remark',
 						title : '备注'
-					},
-					{
-						field : 'publicHolidays',
-						title : '公共假期'
+					// },
+					// {
+					// 	field : 'publicHolidays',
+					// 	title : '公共假期'
 					},
 					{
 						title: '操作',
@@ -204,6 +209,11 @@
 				});
 			});
 		}
+		function _copy() {
+			$.modal.confirm("确定生成本月模板吗？", function() {
+				$.operate.submit($.table._option.copyUrl, "post", "json");
+			});
+		}
 		function _seach() {
 			if ($("#updatePublicHolidays").val() == 1){
 				var year = $("#statisticsYear").val();
@@ -213,7 +223,57 @@
 					return;
 				}
 			}
+			var statisticsYear = $("#statisticsYear").val().trim();
+			var statisticsMonth = $("#statisticsMonth").val().trim();
+			var serveDaysExpect = $("#serveDaysExpect").val().trim();
+			var serveDaysActual = $("#serveDaysActual").val().trim();
+			if (!$.common.isEmpty(statisticsYear) && !isNumber(statisticsYear)){
+				$.modal.alertError("统计年数数必须为正整数！");
+				return;
+			}
+			if (!$.common.isEmpty(statisticsMonth)){
+				if (!isNumber(statisticsMonth)){
+					$.modal.alertError("统计月数必须为正整数！");
+					return;
+				}
+				var _int = parseInt(statisticsMonth);
+				if (_int>12){
+					$.modal.alertError("统计月数不能大于12！");
+					return
+				}
+			}
+			if (!$.common.isEmpty(serveDaysExpect)){
+				if (!isNumber(serveDaysExpect)){
+					$.modal.alertError("应该工作天数必须为正整数！");
+					return;
+				}
+				var _int = parseInt(serveDaysExpect);
+				if (_int>31){
+					$.modal.alertError("应该工作天不能大于31！");
+					return;
+				}
+			}
+			if (!$.common.isEmpty(serveDaysActual)){
+				console.log("aaaaaaaaaaaaaa"+serveDaysActual);
+				if (!isNumber(serveDaysActual)){
+					$.modal.alertError("实际工作天数必须为正整数！");
+					return;
+				}
+				var _int = parseInt(serveDaysActual);
+				console.log(_int);
+				if (_int>31){
+					$.modal.alertError("实际工作天不能大于31！");
+					return;
+				}
+			}
 			$.table.search()
+		}
+		function showDetail(value,flag){
+			if (flag == 'supplier'){
+				$.modal.openTab("供应商数据",ctx+"outsource/supplierInfo?supplierName="+value);
+			} else if (flag == 'post') {
+				$.modal.openTab("岗位数据",ctx+"outsource/postInfo?postName="+value);
+			}
 		}
 	</script>
 </body>

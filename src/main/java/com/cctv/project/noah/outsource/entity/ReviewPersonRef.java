@@ -73,19 +73,19 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public String getSupplierName() {
-        return StringUtils.isNotEmpty(supplierName)?supplierName.trim():supplierName;
+        return StringUtils.isNotEmpty(supplierName)?supplierName.replaceAll(" ", ""):supplierName;
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = (StringUtils.isNotEmpty(supplierName)?supplierName.trim():supplierName);
+        this.supplierName = (StringUtils.isNotEmpty(supplierName)?supplierName.replaceAll(" ", ""):supplierName);
     }
 
     public String getPersonName() {
-        return StringUtils.isNotEmpty(personName)?personName.trim():personName;
+        return StringUtils.isNotEmpty(personName)?personName.replaceAll(" ", ""):personName;
     }
 
     public void setPersonName(String personName) {
-        this.personName = (StringUtils.isNotEmpty(personName)?personName.trim():personName);
+        this.personName = (StringUtils.isNotEmpty(personName)?personName.replaceAll(" ", ""):personName);
     }
 
     public Integer getAutoId() {
@@ -105,19 +105,19 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return StringUtils.isNotEmpty(postName)?postName.trim():postName;
+        return StringUtils.isNotEmpty(postName)?postName.replaceAll(" ", ""):postName;
     }
 
     public void setPostName(String postName) {
-        this.postName = (StringUtils.isNotEmpty(postName)?postName.trim():postName);
+        this.postName = (StringUtils.isNotEmpty(postName)?postName.replaceAll(" ", ""):postName);
     }
 
     public String getPurchaseNo() {
-        return StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo;
+        return StringUtils.isNotEmpty(purchaseNo)?purchaseNo.replaceAll(" ", ""):purchaseNo;
     }
 
     public void setPurchaseNo(String purchaseNo) {
-        this.purchaseNo = (StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo);
+        this.purchaseNo = (StringUtils.isNotEmpty(purchaseNo)?purchaseNo.replaceAll(" ", ""):purchaseNo);
     }
 
     public Integer getSupplierId() {
@@ -250,10 +250,7 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
             return new Result(0,"供应商id长度不能大于11！");
         }
         if (this.getIsNotifyInterview() !=null){
-            if(String.valueOf(this.getIsNotifyInterview()).length()>11){
-                return new Result(0,"是否通知面试长度不能大于11！");
-            }
-            if (this.getIsNotifyInterview()!=0 && this.getIsNotifyInterview()!=1){
+            if(this.getIsNotifyInterview()<0 || this.getIsNotifyInterview()>127 || (this.getIsNotifyInterview()!=0 && this.getIsNotifyInterview()!=1)){
                 return new Result(0,"是否通知面试不合法<不能为空且只能为0或1>");
             }
         }

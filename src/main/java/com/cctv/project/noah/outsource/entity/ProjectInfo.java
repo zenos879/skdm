@@ -72,11 +72,11 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getDepartmentName() {
-        return departmentName == null?departmentName:departmentName.trim();
+        return departmentName == null?departmentName:departmentName.replaceAll(" ", "");
     }
 
     public void setDepartmentName(String departmentName) {
-        this.departmentName = (departmentName == null?departmentName:departmentName.trim());
+        this.departmentName = (departmentName == null?departmentName:departmentName.replaceAll(" ", ""));
     }
 
     public Integer getProjectId() {
@@ -88,12 +88,13 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getProjectName() {
-        return projectName == null?projectName:projectName.trim();
+        return projectName == null?projectName:projectName.replaceAll(" ", "");
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = (projectName == null?projectName:projectName.trim());
+        this.projectName = (projectName == null?projectName:projectName.replaceAll(" ", ""));
     }
+
 
     public Integer getDepartmentId() {
         return departmentId;
@@ -103,12 +104,10 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         this.departmentId = departmentId;
     }
 
-    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }

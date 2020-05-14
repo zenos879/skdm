@@ -84,19 +84,19 @@ public class ReviewInfo extends BaseEntity implements Serializable {
     }
 
     public String getPostName() {
-        return StringUtils.isNotEmpty(postName)?postName.trim():postName;
+        return StringUtils.isNotEmpty(postName)?postName.replaceAll(" ", ""):postName;
     }
 
     public void setPostName(String postName) {
-        this.postName = (StringUtils.isNotEmpty(postName)?postName.trim():postName);
+        this.postName = (StringUtils.isNotEmpty(postName)?postName.replaceAll(" ", ""):postName);
     }
 
     public String getProjectName() {
-        return StringUtils.isNotEmpty(projectName)?projectName.trim():projectName;
+        return StringUtils.isNotEmpty(projectName)?projectName.replaceAll(" ", ""):projectName;
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = (StringUtils.isNotEmpty(projectName)?projectName.trim():projectName);
+        this.projectName = (StringUtils.isNotEmpty(projectName)?projectName.replaceAll(" ", ""):projectName);
     }
 
     public Integer getAutoId() {
@@ -108,11 +108,11 @@ public class ReviewInfo extends BaseEntity implements Serializable {
     }
 
     public String getPurchaseNo() {
-        return StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo;
+        return StringUtils.isNotEmpty(purchaseNo)?purchaseNo.replaceAll(" ", ""):purchaseNo;
     }
 
     public void setPurchaseNo(String purchaseNo) {
-        this.purchaseNo = (StringUtils.isNotEmpty(purchaseNo)?purchaseNo.trim():purchaseNo);
+        this.purchaseNo = (StringUtils.isNotEmpty(purchaseNo)?purchaseNo.replaceAll(" ", ""):purchaseNo);
     }
 
     public Integer getPostId() {
@@ -265,8 +265,13 @@ public class ReviewInfo extends BaseEntity implements Serializable {
         if (this.getProjectId() !=null && String.valueOf(this.getProjectId()).length()>11){
             return new Result(0,"项目id长度不能大于11！");
         }
-        if (this.getProjectId() !=null && String.valueOf(this.getProjectId()).length()>11){
-            return new Result(0,"岗位需求数长度不能大于11！");
+        if (this.getPostCount() !=null){
+            if (String.valueOf(this.getProjectId()).length()>11){
+                return new Result(0,"岗位需求数长度不能大于11！");
+            }
+            if (this.getPostCount()<0){
+                return new Result(0,"岗位需求数必须为正整数！");
+            }
         }
 
         return new Result(1);

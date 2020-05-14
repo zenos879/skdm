@@ -20,6 +20,10 @@ public interface AttendanceService {
 
     List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount);
 
+    Integer getPrevMonthYear();
+
+    Integer getPrevMonth();
+
     List<AttendanceCount> selectAttendanceCountByIds(String ids);
 
     List<Attendance> selectByIds(String ids);
@@ -31,6 +35,8 @@ public interface AttendanceService {
     List<Attendance> exportCore(List<Attendance> all);
 
     Result importAttendance(List<Attendance> attendances);
+
+    Result copyPrevMonthInfo();
 
     Result deleteByIds(String ids);
 }

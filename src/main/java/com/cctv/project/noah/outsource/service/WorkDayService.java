@@ -17,6 +17,8 @@ public interface WorkDayService {
 
     Integer getHolidaysByMonthDays(Integer year, Integer month);
 
+    List<WorkDay> getPublicHolidays(Integer year, Integer month);
+
     Integer getPublicHolidaysByMonthDays(Integer year, Integer month);
 
     Integer getWorkdaysByMonthDays(Integer year, Integer month);

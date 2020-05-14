@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class WorkDayServiceImpl implements WorkDayService {
     @Autowired
     WorkDayMapper workDayMapper;
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public List<WorkDay> findHolidays(String start, String end){
         return workDayMapper.selectHoliday(start,end);
@@ -60,20 +62,25 @@ public class WorkDayServiceImpl implements WorkDayService {
     }
     @Override
     public List<WorkDay> getHolidaysByMonth(Integer year, Integer month){
-        Date first = CommonUtil.getAppointTime(year, month, 0);
-        Date last = CommonUtil.getAppointTime(year, month, 1);
-        return findHolidays(String.valueOf(year), String.valueOf(month));
+        String first = sdf.format(CommonUtil.getAppointTime(year, month, 0));
+        String last = sdf.format(CommonUtil.getAppointTime(year, month, 1));
+        List<WorkDay> holidays = findHolidays(first, last);
+        return holidays;
     }
     @Override
     public Integer getHolidaysByMonthDays(Integer year, Integer month){
         return getHolidaysByMonth(year,month).size();
     }
     @Override
+    public List<WorkDay> getPublicHolidays(Integer year, Integer month){
+        String first = sdf.format(CommonUtil.getAppointTime(year, month, 0));
+        String last = sdf.format(CommonUtil.getAppointTime(year, month, 1));
+        List<WorkDay> workDays = selectHolidayByType(first, last, 2);
+        return workDays;
+    }
+    @Override
     public Integer getPublicHolidaysByMonthDays(Integer year, Integer month){
-        Date first = CommonUtil.getAppointTime(year, month, 0);
-        Date last = CommonUtil.getAppointTime(year, month, 1);
-        List<WorkDay> workDays = selectHolidayByType(String.valueOf(year), String.valueOf(month), 2);
-        return workDays.size();
+        return getPublicHolidays(year,month).size();
     }
 
     @Override
