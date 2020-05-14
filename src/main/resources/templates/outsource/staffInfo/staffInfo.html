@@ -31,7 +31,7 @@
                                 身份证号：<input type="text" name="idCard" id="idCard" class="idcard" autocomplete="off" maxlength="18"/>
                             </li>
                             <li>
-                                项目：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
+                                项目名称：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
                                 <option value="">全部</option>
                                 <option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectId}"></option>
                             </select>

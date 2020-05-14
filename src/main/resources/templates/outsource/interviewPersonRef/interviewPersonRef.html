@@ -27,6 +27,54 @@
                                 身份证号：<input class="idcard" type="text" name="idCard" id="idCard" autocomplete="off" maxlength="18"/>
                             </li>
                             <li>
+                                是否参加面试：<select name="isInterview" th:with="type=${@dict.getType('isNotifyInterview')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li class="select-time">
+                                <label>通知面试日期区间： </label>
+                                <input type="text" class="time-input" id="notifyStartTime" placeholder="开始时间"
+                                       name="params[notifyStartTime]" autocomplete="off" readonly="readonly"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="notifyEndTime" placeholder="结束时间"
+                                       name="params[notifyEndTime]" autocomplete="off" readonly="readonly"/>
+                            </li>
+                            <li class="select-time">
+                                <label>参加面试日期区间： </label>
+                                <input type="text" class="time-input" id="interviewStartTime" placeholder="开始时间"
+                                       name="params[interviewStartTime]" autocomplete="off" readonly="readonly"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="interviewEndTime" placeholder="结束时间"
+                                       name="params[interviewEndTime]" autocomplete="off" readonly="readonly"/>
+                            </li>
+                            <li>
+                                是否通过：<select name="isPass" th:with="type=${@dict.getType('isNotifyInterview')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                是否退回：<select name="isReject" th:with="type=${@dict.getType('isNotifyInterview')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                是否替换：<select name="isReplace" th:with="type=${@dict.getType('isReject')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li class="select-time">
+                                <label>到岗日期区间： </label>
+                                <input type="text" class="time-input" id="arriveStartTime" placeholder="开始时间"
+                                       name="params[arriveStartTime]" autocomplete="off" readonly="readonly"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="arriveEndTime" placeholder="结束时间"
+                                       name="params[arriveEndTime]" autocomplete="off" readonly="readonly"/>
+                            </li>
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.searchWithCheck()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -101,7 +149,11 @@
                 },
                 {
                     field: 'staffName',
-                    title: '人名'
+                    title: '人员名称'
+                },
+                {
+                    field: 'idCard',
+                    title: '身份证号'
                 },
                 {
                     field: 'isInterview',
@@ -137,14 +189,6 @@
                     sortable: true,
                     formatter:function(value,row,index){
                         return $.table.selectDictLabel(isReject, value);
-                    }
-                },
-                {
-                    field: 'isInterview',
-                    title: '是否参加面试',
-                    sortable: true,
-                    formatter:function(value,row,index){
-                        return $.table.selectDictLabel(isNotifyInterview, value);
                     }
                 },
                 {

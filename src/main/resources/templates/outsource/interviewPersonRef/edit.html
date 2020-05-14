@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>采购编号：</label>
                     <div class="col-sm-7">
-                        <input name="orderNo" th:value="${command.purchaseNo}" id="purchaseNo" class="form-control" type="text" required maxlength="20"/>
+                        <input name="purchaseNo" th:value="${command.purchaseNo}" id="purchaseNo" class="form-control" type="text" required maxlength="20"/>
                     </div>
                 </div>
             </div>
@@ -44,6 +44,26 @@
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>岗位名称：</label>
+                    <div class="col-sm-7">
+                        <select name="postId" id="postId" class="selectpicker form-control" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+                            <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}" th:selected="${command.postId == post.postId}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>供应商名称：</label>
+                    <div class="col-sm-7">
+                        <select name="supplierId" id="supplierId" class="selectpicker form-control" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}" th:value="${supplier.supplierId}" th:selected="${command.supplierId == supplier.supplierId}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否参加面试：</label>
                     <div class="col-sm-7">
                         <select name="isInterview" class="form-control" th:with="type=${@dict.getType('isNotifyInterview')}">
@@ -57,7 +77,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>通知面试日期：</label>
                     <div class="col-sm-7">
-                        <input type="text" class="time-input form-control" id="notifyDate" th:value="${command.notifyDate}" placeholder="通知面试日期" name="notifyDate" required/>
+                        <input type="text" class="time-input form-control" id="notifyDate" th:value="${command.getFormatNotifyDate()}" placeholder="通知面试日期" name="notifyDate" required readonly="readonly"/>
                     </div>
                 </div>
             </div>
@@ -65,7 +85,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>参加面试日期：</label>
                     <div class="col-sm-7">
-                        <input type="text" class="time-input form-control" id="interviewDate" th:value="${command.interviewDate}" placeholder="参加面试日期" name="interviewDate" required/>
+                        <input type="text" class="time-input form-control" id="interviewDate" th:value="${command.getFormatInterviewDate()}" placeholder="参加面试日期" name="interviewDate" required readonly="readonly"/>
                     </div>
                 </div>
             </div>
@@ -104,7 +124,7 @@
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>不符合岗位要求的原因及建议：</label>
+                    <label class="col-sm-4 control-label">不符合岗位要求的原因及建议：</label>
                     <div class="col-sm-7">
                         <input name="reason" th:value="${command.reason}" id="reason" class="form-control" type="text" required maxlength="256"/>
                     </div>
@@ -114,7 +134,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>到岗日期：</label>
                     <div class="col-sm-7">
-                        <input type="text" class="time-input form-control" id="arriveDate" th:value="${command.arriveDate}" placeholder="到岗日期" name="arriveDate" required/>
+                        <input type="text" class="time-input form-control" id="arriveDate" th:value="${command.getFormatArriveDate()}" placeholder="到岗日期" name="arriveDate" required readonly="readonly"/>
                     </div>
                 </div>
             </div>

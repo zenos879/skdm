@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
 import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
@@ -100,21 +101,11 @@ public class AgreementInfo extends BaseEntity implements Serializable {
     }
 
     public String getFormatStartDate() {
-        if (this.agreementStart == null) {
-            return null;
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(agreementStart);
-        return format;
+        return GeneralUtils.dateToStr(agreementStart, GeneralUtils.YMD);
     }
 
     public String getFormatEndDate() {
-        if (this.agreementEnd == null) {
-            return null;
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(agreementEnd);
-        return format;
+        return GeneralUtils.dateToStr(agreementEnd, GeneralUtils.YMD);
     }
 
 
