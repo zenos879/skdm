@@ -9,6 +9,7 @@ import com.cctv.project.noah.outsource.mapper.ProjectInfoMapper;
 import com.cctv.project.noah.outsource.service.DepartmentInfoService;
 import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.slf4j.Logger;
@@ -141,7 +142,7 @@ public class DepartmentInfoServiceImpl extends BaseService implements Department
     public Result importDepartmentInfo(List<DepartmentInfo> departmentInfos){
         try {
             if (StringUtils.isEmpty(departmentInfos)) {
-                return new Result(0,"未从文件中读取到数据！");
+                return new Result(0,"未获取到模板内数据，请检查【" + ModelClass.DEPARTMENT_INFO + "】模板格式是否正确！");
             }
             for (int i = 0; i < departmentInfos.size(); i++) {
                 DepartmentInfo departmentInfo = departmentInfos.get(i);

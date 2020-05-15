@@ -7,6 +7,7 @@ import com.cctv.project.noah.outsource.mapper.CategoryInfoMapper;
 import com.cctv.project.noah.outsource.mapper.PostInfoMapper;
 import com.cctv.project.noah.outsource.service.CategoryInfoService;
 import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.slf4j.Logger;
@@ -138,7 +139,7 @@ public class CategoryInfoServiceImpl extends BaseService implements CategoryInfo
     public Result importCategoryInfo(List<CategoryInfo> categoryInfos){
         try {
             if (StringUtils.isEmpty(categoryInfos)) {
-                return new Result(0,"未从文件中读取到数据！");
+                return new Result(0,"未获取到模板内数据，请检查【" + ModelClass.CATEGROY_INFO + "】模板格式是否正确！");
             }
             for (int i = 0; i < categoryInfos.size(); i++) {
                 CategoryInfo categoryInfo = categoryInfos.get(i);

@@ -120,7 +120,7 @@ public class SupplierBidServiceImpl implements SupplierBidService {
     public List<SupplierBid> selectList(SupplierBid record) {
         SupplierBidExample supplierBidExample = new SupplierBidExample();
         SupplierBidExample.Criteria criteria = supplierBidExample.createCriteria();
-        if (record != null){
+        if (record != null) {
             if (record.checkIllegal()) {
                 return new ArrayList<>();
             }
@@ -327,6 +327,9 @@ public class SupplierBidServiceImpl implements SupplierBidService {
 
     @Override
     public Result importSupplierBid(List<SupplierBid> records) {
+        if (records == null || records.isEmpty()) {
+            return new Result(0, "未获取到模板内数据，请检查【" + ModelClass.SUPPLIER_BID + "】模板格式是否正确！");
+        }
         int errorCount = 0;
         int addCount = 0;
         int updateCount = 0;

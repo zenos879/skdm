@@ -6,6 +6,7 @@ import com.cctv.project.noah.outsource.entity.SupplierInfoExample;
 import com.cctv.project.noah.outsource.mapper.SupplierInfoMapper;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.SupplierInfoService;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
             }
             return supplierInfoMapper.selectByPrimaryKey(supplierId);
         } catch (Exception e) {
-            logger.error("【ERROR】---"+e);
+            logger.error("【ERROR】---" + e);
             return null;
         }
     }
@@ -46,9 +47,9 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
             }
             name = name.trim();
             List<SupplierInfo> supplierInfos = supplierInfoMapper.selectByName(name);
-            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos.get(0):null;
+            return StringUtils.isNotEmpty(supplierInfos) ? supplierInfos.get(0) : null;
         } catch (Exception e) {
-            logger.error("【ERROR】------"+e);
+            logger.error("【ERROR】------" + e);
             return null;
         }
 
@@ -71,9 +72,9 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
     public List<SupplierInfo> selectAll() {
         try {
             List<SupplierInfo> supplierInfos = supplierInfoMapper.selectBySelective(new SupplierInfo());
-            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos:new ArrayList<>();
+            return StringUtils.isNotEmpty(supplierInfos) ? supplierInfos : new ArrayList<>();
         } catch (Exception e) {
-            logger.error("【ERROR】------"+e);
+            logger.error("【ERROR】------" + e);
             return new ArrayList<>();
         }
     }
@@ -88,9 +89,9 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
                 return new ArrayList<>();
             }
             List<SupplierInfo> supplierInfos = supplierInfoMapper.selectBySelective(supplierInfo);
-            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos:new ArrayList<>();
+            return StringUtils.isNotEmpty(supplierInfos) ? supplierInfos : new ArrayList<>();
         } catch (Exception e) {
-            logger.error("【ERROR】------"+e);
+            logger.error("【ERROR】------" + e);
             return new ArrayList<>();
         }
     }
@@ -100,9 +101,9 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
         try {
             List<String> list = checkIds(ids);
             List<SupplierInfo> supplierInfos = supplierInfoMapper.selectByIds(list.toArray(new String[list.size()]));
-            return StringUtils.isNotEmpty(supplierInfos)?supplierInfos:new ArrayList<>();
+            return StringUtils.isNotEmpty(supplierInfos) ? supplierInfos : new ArrayList<>();
         } catch (Exception e) {
-            logger.error("【ERROR】------"+e);
+            logger.error("【ERROR】------" + e);
             return new ArrayList<>();
         }
     }
@@ -110,15 +111,15 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
     @Override
     public Result updateBySelective(SupplierInfo supplierInfo) {
         try {
-            if (supplierInfo == null){
-                return new Result(0,"传入数据错误！");
+            if (supplierInfo == null) {
+                return new Result(0, "传入数据错误！");
             }
             Integer supplierId = supplierInfo.getSupplierId();
             if (supplierId == null) {
                 return new Result(0, "id为空,无法修改！");
             }
             Result result = supplierInfo.beforeUpdateCheck();
-            if (result.code<1){
+            if (result.code < 1) {
                 return result;
             }
             SupplierInfo supplierInfoDb = supplierInfoMapper.selectByPrimaryKey(supplierId);
@@ -126,14 +127,14 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
                 return new Result(0, "无法修改不存在的供应商！");
             }
             SupplierInfo supplierInfoByName = selectByName(supplierInfo.getSupplierName());
-            if (supplierInfoByName!=null&& !supplierInfoByName.getSupplierId().equals(supplierInfo.getSupplierId())){
+            if (supplierInfoByName != null && !supplierInfoByName.getSupplierId().equals(supplierInfo.getSupplierId())) {
                 return new Result(0, "此供应商已存在！");
             }
             int i = supplierInfoMapper.updateByPrimaryKeySelective(supplierInfo);
             return new Result(i);
         } catch (Exception e) {
-            logger.error("【ERROR】------"+e);
-            return new Result(0,"修改失败！");
+            logger.error("【ERROR】------" + e);
+            return new Result(0, "修改失败！");
         }
     }
 
@@ -141,10 +142,10 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
     public Result insertBySelective(SupplierInfo supplierInfo) {
         try {
             if (supplierInfo == null) {
-                return new Result(0,"传入数据错误！");
+                return new Result(0, "传入数据错误！");
             }
             Result result = supplierInfo.beforeUpdateCheck();
-            if (result.code<1){
+            if (result.code < 1) {
                 return result;
             }
             SupplierInfo supplierInfoDb = selectByName(supplierInfo.getSupplierName());
@@ -155,8 +156,8 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
             int i = supplierInfoMapper.insertSelective(supplierInfo);
             return new Result(i);
         } catch (Exception e) {
-            logger.error("【ERROR】---"+e);
-            return new Result(0,"插入失败");
+            logger.error("【ERROR】---" + e);
+            return new Result(0, "插入失败");
         }
 
     }
@@ -165,13 +166,13 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
     public Result importSupplierInfo(List<SupplierInfo> supplierInfos) {
         try {
             if (StringUtils.isEmpty(supplierInfos)) {
-                return new Result(0,"未从文件中读取到数据！");
+                return new Result(0, "未获取到模板内数据，请检查【" + ModelClass.SUPPLIER_INFO + "】模板格式是否正确！");
             }
             for (int i = 0; i < supplierInfos.size(); i++) {
                 SupplierInfo supplierInfo = supplierInfos.get(i);
                 Result result = supplierInfo.beforeUpdateCheck();
-                if (result.code<1){
-                    return new Result(0,"第"+(i+2)+"行的"+result.info);
+                if (result.code < 1) {
+                    return new Result(0, "第" + (i + 2) + "行的" + result.info);
                 }
                 supplierInfo.setCreateTime(new Date());
             }
@@ -195,8 +196,8 @@ public class SupplierInfoServiceImpl extends BaseService implements SupplierInfo
             warning.append("插入成功了" + success + "行，失败了" + (size - success) + "行");
             return new Result(success, warning.toString());
         } catch (Exception e) {
-            logger.error("【ERROR】---"+e);
-            return new Result(0,"导入失败");
+            logger.error("【ERROR】---" + e);
+            return new Result(0, "导入失败");
         }
     }
 

@@ -211,9 +211,10 @@ public class ExcelUtil<T> {
 
     /**
      * 对excel表单指定表格索引名转换成list
+     *
      * @param sheetName
      * @param readStartRow 从第几行开始读，从0开始
-     * @param readEndRow 内容一共几行，从1开始
+     * @param readEndRow   内容一共几行，从1开始
      * @param is
      * @return
      * @throws Exception
@@ -238,7 +239,7 @@ public class ExcelUtil<T> {
         int rows = sheet.getPhysicalNumberOfRows();
 
         if (rows > 0) {
-            if (readEndRow > 0){
+            if (readEndRow > 0) {
                 rows = readEndRow;
             }
             // 定义一个map用于存放excel列的序号和field.
@@ -273,7 +274,12 @@ public class ExcelUtil<T> {
                 Row row = sheet.getRow(i);
                 T entity = null;
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet()) {
-                    Object val = this.getCellValue(row, entry.getKey());
+                    Integer key = entry.getKey();
+                    if (key == null) {
+                        log.error("文件错误，找不到实体信息");
+                        return new ArrayList<>();
+                    }
+                    Object val = this.getCellValue(row, key);
 
                     // 如果不存在实例则新建.
                     entity = (entity == null ? clazz.newInstance() : entity);
@@ -301,7 +307,7 @@ public class ExcelUtil<T> {
                     } else if (Date.class == fieldType) {
                         if (val instanceof String) {
                             boolean b = GeneralUtils.checkDateStr(val.toString());
-                            if (b){
+                            if (b) {
                                 val = DateUtils.parseDate(val);
                             } else {
                                 throw new Exception("日期【" + val + "】格式不正确，请参照以下格式“YYYY-MM-DD HH:mm:ss”和“YYYY-MM-DD”");

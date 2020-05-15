@@ -263,6 +263,9 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
 
     @Override
     public Result importSupplierFileError(List<SupplierFileError> records) {
+        if (records == null){
+            return new Result(0, "未获取到模板内数据，请检查【" + ModelClass.SUPPLIER_ERROR_FILE + "】模板格式是否正确！");
+        }
         int errorCount = 0;
         int addCount = 0;
         int updateCount = 0;

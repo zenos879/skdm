@@ -287,7 +287,7 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     @Override
     public Result importAgreementInfo(List<AgreementInfo> agreementInfos) {
         if (agreementInfos == null || agreementInfos.isEmpty()) {
-            return new Result(0, "未从文件中读取到数据！");
+            return new Result(0, "未获取到模板内数据，请检查【" + ModelClass.AGREEMENT_INFO + "】模板格式是否正确！");
         }
         int updateCount = 0;
         int addCount = 0;
