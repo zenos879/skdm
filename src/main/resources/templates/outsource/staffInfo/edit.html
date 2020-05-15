@@ -9,6 +9,8 @@
     <form class="form-horizontal m" id="form-personInfo-edit"
           th:with="command = ${@staffInfoService.selectByPrimaryKey(id)}">
         <input type="hidden" id="autoId" name="autoId" th:value="${command.autoId}">
+        <input type="hidden" id="replaceGroup" name="replaceGroup" th:value="${command.replaceGroup}">
+        <input type="hidden" id="beReplacdStaffIdCard_old" name="beReplacdStaffIdCard_old" th:value="${command.beReplacdStaffIdCard_old}">
         <h4 class="form-header h4">人员数据</h4>
         <div class="row">
             <div class="col-sm-12">
@@ -84,12 +86,11 @@
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>被替换人员身份证号：</label>
+                    <label class="col-sm-4 control-label">被替换人员身份证号：</label>
                     <div class="col-sm-7">
                         <input name="beReplacdStaffIdCard" th:value="${command.beReplacdStaffIdCard}"
                                th:text="${command.beReplacdStaffIdCard} + ${command.beReplacdStaffName}"
-                               id="beReplacdStaffIdCard" class="form-control" type="text"
-                               required>
+                               id="beReplacdStaffIdCard" class=" idcard form-control" type="text">
                     </div>
                 </div>
             </div>
@@ -151,6 +152,7 @@
             return false;
         } else if (result == "0") {
             if (idCard != null && idCard != "" && idCard != 'undefined') {
+                idCard.val("");
                 alert("无替换，无需填写被替换人身份证号！");
                 return false;
             }

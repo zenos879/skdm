@@ -85,12 +85,14 @@ public class StaffInfo extends BaseEntity implements Serializable {
     /**
      * 是否替换（1：无缝替换，2有缝替换，0无替换）
      */
-    @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
+    @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,2=有缝替换,0=无替换")
     private Integer isReplace;
 
     private String beReplacdStaffIdCard;
 
     private String beReplacdStaffName;
+
+    private String beReplacdStaffIdCard_old;
 
     /**
      * 替换的人员分组
@@ -412,7 +414,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setBeReplacdStaffIdCard(String beReplacdStaffIdCard) {
-        this.beReplacdStaffIdCard = beReplacdStaffIdCard;
+        this.beReplacdStaffIdCard = (beReplacdStaffIdCard == null ? beReplacdStaffIdCard : beReplacdStaffIdCard.replaceAll(" ", ""));
     }
 
     public String getBeReplacdStaffName() {
@@ -470,5 +472,13 @@ public class StaffInfo extends BaseEntity implements Serializable {
             return new Result(0, "岗位名称【" + this.getPostName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
         }
         return new Result(1);
+    }
+
+    public String getBeReplacdStaffIdCard_old() {
+        return beReplacdStaffIdCard_old;
+    }
+
+    public void setBeReplacdStaffIdCard_old(String beReplacdStaffIdCard_old) {
+        this.beReplacdStaffIdCard_old = beReplacdStaffIdCard_old;
     }
 }
