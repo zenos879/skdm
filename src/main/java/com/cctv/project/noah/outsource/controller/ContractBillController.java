@@ -1,8 +1,6 @@
 package com.cctv.project.noah.outsource.controller;
 
 import com.cctv.project.noah.outsource.entity.ContractBill;
-import com.cctv.project.noah.outsource.entity.DetailedBill;
-import com.cctv.project.noah.outsource.service.BillService;
 import com.cctv.project.noah.outsource.service.ContractBillService;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
@@ -35,10 +33,10 @@ public class ContractBillController extends BaseController {
     }
 
 
-    //计算月度详细账单
-    @RequestMapping("/list")
+    //计算月度合同账单
+    @RequestMapping("/queryContractBill")
     @ResponseBody
-    public TableDataInfo list(ContractBill contractBill) {
+    public TableDataInfo queryContractBill(ContractBill contractBill) {
         startPage();
         return getDataTable(contractBillService.selectBySelective(contractBill));
     }

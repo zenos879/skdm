@@ -2,9 +2,7 @@ package com.cctv.project.noah.outsource.controller;
 
 
 import com.cctv.project.noah.outsource.entity.PostInfo;
-import com.cctv.project.noah.outsource.entity.ProjectInfo;
 import com.cctv.project.noah.outsource.service.PostInfoService;
-import com.cctv.project.noah.outsource.service.ProjectInfoService;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
@@ -13,7 +11,6 @@ import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
 import com.cctv.project.noah.system.util.StringUtils;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+//import com.sun.org.apache.xpath.internal.operations.Mod;
 
 @Controller
 @RequestMapping("/outsource/postInfo")
