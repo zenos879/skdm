@@ -81,7 +81,8 @@
 		        {
 		            field: 'autoId',
 		            title: '考勤ID',
-					sortable: true
+					sortable: true,
+					visible:false
 		        },
 				{
 					field: 'orderNo',
@@ -225,7 +226,7 @@
 				}
 			}
 			if (!$.common.isEmpty(serveDaysActual)){
-				console.log("aaaaaaaaaaaaaa"+serveDaysActual);
+				// console.log("aaaaaaaaaaaaaa"+serveDaysActual);
 				if (!isNumber(serveDaysActual)){
 					$.modal.alertError("实际工作天数必须为正整数！");
 					return;

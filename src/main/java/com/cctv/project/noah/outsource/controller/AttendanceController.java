@@ -69,7 +69,8 @@ public class AttendanceController extends BaseController {
     @ResponseBody
     public TableDataInfo attendanceCountlist(AttendanceCount attendanceCount){
         startPage();
-        return getDataTable(attendanceService.selectAttendanceCount(attendanceCount));
+        List<AttendanceCount> attendanceCounts = attendanceService.selectAttendanceCount(attendanceCount);
+        return getDataTable(attendanceCounts);
     }
 
     @PostMapping("/edit")
