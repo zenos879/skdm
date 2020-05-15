@@ -142,7 +142,7 @@ public class DepartmentInfoServiceImpl extends BaseService implements Department
     public Result importDepartmentInfo(List<DepartmentInfo> departmentInfos){
         try {
             if (StringUtils.isEmpty(departmentInfos)) {
-                return new Result(0,"未获取到模板内数据，请检查【" + ModelClass.DEPARTMENT_INFO + "】模板格式是否正确！");
+                return new Result(0,"未获取到模板内数据，请检查<" + ModelClass.DEPARTMENT_INFO + ">模板格式是否正确！");
             }
             for (int i = 0; i < departmentInfos.size(); i++) {
                 DepartmentInfo departmentInfo = departmentInfos.get(i);

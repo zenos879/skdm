@@ -237,7 +237,7 @@ public class PoiUtil {
     }
     public static AjaxResult downLoadExcelTempLate(List<String[]> keyList, String fileName) {
         Workbook wb = null;
-        fileName = encodingFilename(fileName);
+//        fileName = encodingFilename(fileName);
 
         //判断文件类型 03或是07
         if (isExcel2007(fileName)) {

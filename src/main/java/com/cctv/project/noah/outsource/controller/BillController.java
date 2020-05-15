@@ -1,6 +1,5 @@
 package com.cctv.project.noah.outsource.controller;
 
-import com.cctv.project.noah.outsource.entity.ContractBill;
 import com.cctv.project.noah.outsource.entity.DetailedBill;
 import com.cctv.project.noah.outsource.service.BillService;
 import com.cctv.project.noah.outsource.service.Result;
@@ -33,7 +32,6 @@ public class BillController extends BaseController {
         return prefix + "/page";
     }
 
-
     //计算月度详细账单
     @RequestMapping("/queryMonthBill")
     @ResponseBody
@@ -51,6 +49,14 @@ public class BillController extends BaseController {
         return getDataTable(list, dataType);
     }
 
+    @RequestMapping("/saveMonthBill")
+    @ResponseBody
+    @Log(title = "月度考勤数据保存", businessType = BusinessType.INSERT)
+    public AjaxResult saveMonthBill(DetailedBill bill) {
+        Result result = billService.saveMonthBill(bill);
+        return toAjax(result);
+    }
+
     protected TableDataInfo getDataTable(List<?> list, int msg) {
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(0);
@@ -60,21 +66,16 @@ public class BillController extends BaseController {
         return rspData;
     }
 
-    //计算月度详细账单
-    @RequestMapping("/detailedBill")
-    @ResponseBody
-    public TableDataInfo selectAllDetialBill(DetailedBill bill) {
-        startPage();
-        return getDataTable(billService.selectDetailBillBySelective(bill));
-    }
 
-    @RequestMapping("/saveMonthBill")
-    @ResponseBody
-    @Log(title = "月度考勤数据保存", businessType = BusinessType.INSERT)
-    public AjaxResult saveMonthBill(DetailedBill bill) {
-        Result result = billService.saveMonthBill(bill);
-        return toAjax(result);
-    }
+//    //计算月度详细账单
+//    @RequestMapping("/detailedBill")
+//    @ResponseBody
+//    public TableDataInfo selectAllDetialBill(DetailedBill bill) {
+//        startPage();
+//        return getDataTable(billService.selectDetailBillBySelective(bill));
+//    }
+
+
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
@@ -104,15 +105,4 @@ public class BillController extends BaseController {
         }
         return util.exportExcel(list, "合同数据");
     }
-
-
-    //计算合同账单:在月度详细账单的基础上，按照项目，供应商，合同号对人员岗位费用进行合并计算。
-    @RequestMapping("/contractBill")
-    @ResponseBody
-    public TableDataInfo listContractBill(ContractBill bill) {
-        startPage();
-        return getDataTable(billService.selectContractBillBySelective(bill));
-    }
-
-
 }

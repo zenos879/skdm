@@ -3,6 +3,7 @@ package com.cctv.project.noah.outsource.service.impl;
 import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.ReviewPersonRefMapper;
 import com.cctv.project.noah.outsource.service.*;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
 import org.slf4j.Logger;
@@ -168,7 +169,7 @@ public class ReviewPersonRefServiceImpl extends BaseService implements ReviewPer
                 start = 0;
             }
             if (StringUtils.isEmpty(reviewPersonRefs)) {
-                return new Result(0,"未从文件中读取到数据！");
+                return new Result(0, "未获取到模板内数据，请检查<" + ModelClass.REVIEWPERSON_FILE + ">模板格式是否正确！");
             }
             for (int i = 0; i < reviewPersonRefs.size(); i++) {
                 ReviewPersonRef reviewPersonRef = reviewPersonRefs.get(i);

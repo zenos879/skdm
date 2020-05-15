@@ -1,7 +1,7 @@
 package com.cctv.project.noah.outsource.utils;
 
-import io.swagger.models.auth.In;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,6 +10,19 @@ public class CommonUtil {
     public static String getDelText(String str){
         return "<s>"+str+"</s>";
     }
+
+    public static Date getAppointDate(Integer year, Integer month, Integer day){
+        Date date = getAppointTime(year,month,day);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String firstDay = sdf.format(date);
+        try {
+            return sdf.parse(firstDay);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Date getAppointTime(Integer year, Integer month, Integer day){
         //day 0:first  1:last
         Calendar cal = Calendar.getInstance();

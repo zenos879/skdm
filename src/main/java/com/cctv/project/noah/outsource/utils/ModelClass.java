@@ -28,5 +28,8 @@ public class ModelClass {
     public static final String SUPPLIER_INFO = "供应商数据";
     public static final String SUPPLIER_BID = "供应商竞标数据";
     public static final String SUPPLIER_ERROR_FILE = "供应商文件错误数据";
+    public static final String ATTENDANCE_FILE = "考勤数据";
+    public static final String REVIEW_FILE = "评审数据";
+    public static final String REVIEWPERSON_FILE = "评审人员数据";
 
 }
