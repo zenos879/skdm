@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.cctv.project.noah.outsource.entity.*;
 import com.cctv.project.noah.outsource.mapper.ReviewInfoMapper;
 import com.cctv.project.noah.outsource.service.*;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.outsource.utils.PoiUtil;
 import com.cctv.project.noah.system.core.domain.text.Convert;
 import com.cctv.project.noah.system.util.StringUtils;
@@ -257,6 +258,9 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
         List<String> excelReviewPersonList = new ArrayList<>();
         try {
             List<String[]> lines = PoiUtil.readExcel(file);
+            if (StringUtils.isEmpty(lines)){
+                return new Result(0, "未获取到模板内数据，请检查<" + ModelClass.REVIEW_FILE + ">模板格式是否正确！");
+            }
             Boolean isReviewInfo = true;
             Boolean isReviewPersonRef = false;
             String projectName = null;

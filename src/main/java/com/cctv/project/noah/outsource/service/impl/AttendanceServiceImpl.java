@@ -6,6 +6,7 @@ import com.cctv.project.noah.outsource.mapper.AttendanceMapper;
 import com.cctv.project.noah.outsource.mapper.ReviewPersonRefMapper;
 import com.cctv.project.noah.outsource.service.*;
 import com.cctv.project.noah.outsource.utils.CommonUtil;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.core.domain.page.PageDomain;
 import com.cctv.project.noah.system.core.domain.page.TableSupport;
 import com.cctv.project.noah.system.core.domain.text.Convert;
@@ -381,6 +382,9 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
     @Override
     public Result importAttendance(List<Attendance> attendances){
         try {
+            if (StringUtils.isEmpty(attendances)){
+                return new Result(0,"未从文件中读取到数据或此文件非<"+ ModelClass.ATTENDANCE_FILE +">模板");
+            }
             for (int i = 0; i < attendances.size(); i++) {
                 Attendance attendance = attendances.get(i);
                 if (attendance.getAutoId() == null) {

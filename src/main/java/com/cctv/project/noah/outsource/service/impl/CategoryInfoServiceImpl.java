@@ -139,7 +139,7 @@ public class CategoryInfoServiceImpl extends BaseService implements CategoryInfo
     public Result importCategoryInfo(List<CategoryInfo> categoryInfos){
         try {
             if (StringUtils.isEmpty(categoryInfos)) {
-                return new Result(0,"未获取到模板内数据，请检查【" + ModelClass.CATEGROY_INFO + "】模板格式是否正确！");
+                return new Result(0,"未获取到模板内数据，请检查<" + ModelClass.CATEGROY_INFO + ">模板格式是否正确！");
             }
             for (int i = 0; i < categoryInfos.size(); i++) {
                 CategoryInfo categoryInfo = categoryInfos.get(i);

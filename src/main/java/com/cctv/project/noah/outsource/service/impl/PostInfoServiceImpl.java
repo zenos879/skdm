@@ -169,7 +169,7 @@ public class PostInfoServiceImpl extends BaseService implements PostInfoService 
     public Result importPostInfo(List<PostInfo> postInfos){
         try {
             if (StringUtils.isEmpty(postInfos)) {
-                return new Result(0,"未获取到模板内数据，请检查【" + ModelClass.POST_INFO + "】模板格式是否正确！");
+                return new Result(0,"未获取到模板内数据，请检查<" + ModelClass.POST_INFO + ">模板格式是否正确！");
             }
             for (int i = 0; i < postInfos.size(); i++) {
                 PostInfo postInfo = postInfos.get(i);
