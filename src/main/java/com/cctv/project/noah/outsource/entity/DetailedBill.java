@@ -32,9 +32,9 @@ public class DetailedBill {
     private float bidPrice;
 
     @Excel(name = "应该工作日")
-    private Float serveDaysExpect;
+    private Integer serveDaysExpect;
     @Excel(name = "实际工作日")
-    private Float serveDaysActual;
+    private Integer serveDaysActual;
     //公共假期（只与离职和本月入职的人员有关）
     private int publicVacation;
 
@@ -131,19 +131,19 @@ public class DetailedBill {
         this.postExpenses = postExpenses;
     }
 
-    public Float getServeDaysExpect() {
+    public Integer getServeDaysExpect() {
         return serveDaysExpect;
     }
 
-    public void setServeDaysExpect(Float serveDaysExpect) {
+    public void setServeDaysExpect(Integer serveDaysExpect) {
         this.serveDaysExpect = serveDaysExpect;
     }
 
-    public Float getServeDaysActual() {
+    public Integer getServeDaysActual() {
         return serveDaysActual;
     }
 
-    public void setServeDaysActual(Float serveDaysActual) {
+    public void setServeDaysActual(Integer serveDaysActual) {
         this.serveDaysActual = serveDaysActual;
     }
 

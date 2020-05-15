@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.outsource.mapper.BillMapper">
+    <resultMap id="ContractBillResultMap" type="com.cctv.project.noah.outsource.entity.ContractBill">
+        <id column="auto_id" jdbcType="BIGINT" property="autoId"/>
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName"/>
+        <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="total_price" jdbcType="REAL" property="totalPrice"/>
+        <result column="statistics_year" jdbcType="SMALLINT" property="statisticsYear"/>
+        <result column="statistics_month" jdbcType="TINYINT" property="statisticsMonth"/>
+    </resultMap>
+
+    <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ContractBill"
+            resultMap="ContractBillResultMap">
+        select ag.agreement_no, bill.supplier_name, bill.project_name ,sum(bill.post_expenses) from month_bill bill
+        left join supplier_info sup on sup.supplier_name=bill.supplier_name
+        left join agreement_info ag on ag.supplier_id = sup.supplier_id
+        <where>
+            bill.statistics_year=2020 and bill.statistics_month=3 and  ag.agreement_start  &lt;='2020-3-01' and ag.agreement_end >='2020-3-01' group by  bill.supplier_name , bill.project_name
+        </where>
+    </select>
+
+</mapper>

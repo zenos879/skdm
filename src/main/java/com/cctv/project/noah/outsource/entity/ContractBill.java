@@ -6,14 +6,18 @@ import com.cctv.project.noah.system.annotation.Excel;
 public class ContractBill {
 
     private Integer autoId;
-    @Excel(name = "项目名称")
-    private String projectName;
+
+    @Excel(name = "合同号")
+    private String contractNo;
 
     @Excel(name = "供应商名称")
     private String supplierName;
 
-    @Excel(name = "合同号")
-    private String contractName;
+    @Excel(name = "项目名称")
+    private String projectName;
+
+    @Excel(name="")
+    private float totalPrice;
 
     @Excel(name = "统计年份")
     private Integer statisticsYear;
@@ -38,14 +42,6 @@ public class ContractBill {
         this.supplierName = supplierName;
     }
 
-    public String getContractName() {
-        return contractName;
-    }
-
-    public void setContractName(String contractName) {
-        this.contractName = contractName;
-    }
-
     public Integer getStatisticsYear() {
         return statisticsYear;
     }
@@ -60,5 +56,21 @@ public class ContractBill {
 
     public void setStatisticsMonth(Integer statisticsMonth) {
         this.statisticsMonth = statisticsMonth;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

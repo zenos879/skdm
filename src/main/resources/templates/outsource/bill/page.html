@@ -3,6 +3,7 @@
 <head>
     <th:block th:include="include :: header('账单查询')"/>
     <th:block th:include="include :: ztree-css"/>
+    <th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="gray-bg">
 <div class="ui-layout-center">
@@ -20,20 +21,27 @@
                                 <!--                                            th:value="${@billService.getPrevMonth()}"/>-->
                             </li>
                             <li>
-                                部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
+                                部门名称：<select name="departmentName" id="departmentName" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
                                 <option value="">全部</option>
-                                <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}"></option>
+                                <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentName}"></option>
                             </select>
                             </li>
                             <li>
-                                供应商名称：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                                项目名称：<select name="projectName" id="projectName" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
                                 <option value="">全部</option>
-                                <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
+                                <option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectName}"></option>
                             </select>
                             </li>
-<!--                            <li>-->
-<!--                                考勤人：<input type="text" name="statisticsYear" value=""/>-->
-<!--                            </li>-->
+
+                            <li>
+                                供应商名称：<select name="supplierName" id="supplierName" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierName()}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                考勤人：<input type="text" name="staffName" value=""/>
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                         class="fa fa-search"></i>&nbsp;搜索</a>
@@ -61,6 +69,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
     var prefix = ctx + "outsource/bill";
     var isShowExport = 0;
@@ -69,16 +78,8 @@
         queryMonthBill();
     });
 
-
-    //修改数据
+    //修改按钮：将当前结果保存到数据库
     function modifyDate() {
-        saveToDB();
-        //显示导出按钮
-
-    }
-
-    //将当前结果保存到数据库
-    function saveToDB() {
         var year = $("input[name='statisticsYear']").val();
         var month = $("input[name='statisticsMonth']").val();
         $.ajax({
@@ -96,7 +97,8 @@
         });
     }
 
-    function mySuccess(data) {
+    //根据返回数据，进行按钮的切换
+    function changeHideBtn(data) {
         if (isShowExport == 1) {//查询的month_bill，显示导出及编辑按钮
             $("#checkBtn").hide();
             $("#exportBtn").show();
@@ -108,7 +110,7 @@
         }
     }
 
-    function myResponse(res) {
+    function getResponseMsg(res) {
         isShowExport = res.msg;
     }
 
@@ -119,8 +121,8 @@
             updateUrl: prefix + "/edit/{id}",
             exportUrl: prefix + "/export",
             modalName: "月度考勤明细",
-            responseHandler: myResponse,
-            onLoadSuccess: mySuccess,
+            responseHandler: getResponseMsg,
+            onLoadSuccess: changeHideBtn,
             columns: [{
                 checkbox: true
             }, {
@@ -180,6 +182,10 @@
                 //     title: '离岗日期',
                 //     sortable: true
             }, {
+                field: 'publicVacation',
+                title: '公共假期',
+                sortable: true
+            }, {
                 field: 'remark',
                 title: '备注',
                 sortable: true
@@ -207,9 +213,6 @@
             return;
         }
         var statisticsYear = $.table.selectColumns(2);
-        console.log("============第2行数据=========");
-        console.log(statisticsYear);
-        console.log(rows);
         $.modal.confirm("确定导出" + rows.length + "条数据吗？", function () {
             $.modal.loading("正在导出数据，请稍后...");
             var data = {"ids": rows.join(), "statisticsYear": "", "": ""};
