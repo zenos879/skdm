@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.entity;
 
 import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.GeneralUtils;
 import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.core.domain.BaseEntity;
@@ -147,7 +148,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setPurchaseNo(String purchaseNo) {
-        this.purchaseNo = purchaseNo;
+        this.purchaseNo = (purchaseNo == null ? purchaseNo : purchaseNo.replace(" ", ""));
     }
 
     public String getOrderNo() {
@@ -155,7 +156,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+        this.orderNo = (orderNo == null ? orderNo : orderNo.replace(" ", ""));
     }
 
     public String getStaffNo() {
@@ -163,7 +164,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setStaffNo(String staffNo) {
-        this.staffNo = staffNo;
+        this.staffNo = (staffNo == null ? staffNo : staffNo.replace(" ", ""));
     }
 
     public String getStaffName() {
@@ -171,7 +172,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setStaffName(String staffName) {
-        this.staffName = staffName;
+        this.staffName = (staffName == null ? staffName : staffName.replace(" ", ""));
     }
 
     public String getIdCard() {
@@ -179,7 +180,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setIdCard(String idCard) {
-        this.idCard = idCard;
+        this.idCard = (idCard == null ? idCard : idCard.replace(" ", ""));
     }
 
     public Integer getProjectId() {
@@ -243,12 +244,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public String getFormatArriveDate() {
-        if (this.arriveDate == null) {
-            return null;
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(arriveDate);
-        return format;
+        return GeneralUtils.dateToStr(arriveDate, GeneralUtils.YMD);
     }
 
     public void setArriveDate(Date arriveDate) {
@@ -260,12 +256,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public String getFormatLeaveDate() {
-        if (this.leaveDate == null) {
-            return null;
-        }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(leaveDate);
-        return format;
+        return GeneralUtils.dateToStr(leaveDate, GeneralUtils.YMD);
     }
 
     public void setLeaveDate(Date leaveDate) {

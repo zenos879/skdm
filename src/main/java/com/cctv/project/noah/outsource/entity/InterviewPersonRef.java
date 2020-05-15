@@ -13,7 +13,8 @@ import java.util.Date;
 
 /**
  * interview_person_ref
- * @author 
+ *
+ * @author
  */
 public class InterviewPersonRef extends BaseEntity implements Serializable {
 
@@ -155,7 +156,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
      * 创建时间
      */
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     private Integer status;
@@ -175,7 +176,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public void setPurchaseNo(String purchaseNo) {
-        this.purchaseNo = purchaseNo;
+        this.purchaseNo = (purchaseNo == null ? purchaseNo : purchaseNo.replace(" ", ""));
     }
 
     public String getOrderNo() {
@@ -183,7 +184,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+        this.orderNo = (orderNo == null ? orderNo : orderNo.replace(" ", ""));
     }
 
     public String getStaffNo() {
@@ -191,7 +192,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public void setStaffNo(String staffNo) {
-        this.staffNo = staffNo;
+        this.staffNo = (staffNo == null ? staffNo : staffNo.replace(" ", ""));
     }
 
     public String getStaffName() {
@@ -199,7 +200,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public void setStaffName(String staffName) {
-        this.staffName = staffName;
+        this.staffName = (staffName == null ? staffName : staffName.replace(" ", ""));
     }
 
     public String getIdCard() {
@@ -207,7 +208,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     }
 
     public void setIdCard(String idCard) {
-        this.idCard = idCard;
+        this.idCard = (idCard == null ? idCard : idCard.replace(" ", ""));
     }
 
     public Integer getSupplierId() {
@@ -238,7 +239,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         return notifyDate;
     }
 
-    public String getFormatNotifyDate(){
+    public String getFormatNotifyDate() {
         return GeneralUtils.dateToStr(notifyDate, GeneralUtils.YMD);
     }
 
@@ -250,7 +251,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         return interviewDate;
     }
 
-    public String getFormatInterviewDate(){
+    public String getFormatInterviewDate() {
         return GeneralUtils.dateToStr(interviewDate, GeneralUtils.YMD);
     }
 
@@ -302,7 +303,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         return arriveDate;
     }
 
-    public String getFormatArriveDate(){
+    public String getFormatArriveDate() {
         return GeneralUtils.dateToStr(arriveDate, GeneralUtils.YMD);
     }
 
@@ -314,7 +315,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         return leaveDate;
     }
 
-    public String getFormatLeaveDate(){
+    public String getFormatLeaveDate() {
         return GeneralUtils.dateToStr(leaveDate, GeneralUtils.YMD);
     }
 
@@ -377,27 +378,27 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         }
         InterviewPersonRef other = (InterviewPersonRef) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
-            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
-            && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
-            && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
-            && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
-            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
-            && (this.getIsInterview() == null ? other.getIsInterview() == null : this.getIsInterview().equals(other.getIsInterview()))
-            && (this.getNotifyDate() == null ? other.getNotifyDate() == null : this.getNotifyDate().equals(other.getNotifyDate()))
-            && (this.getInterviewDate() == null ? other.getInterviewDate() == null : this.getInterviewDate().equals(other.getInterviewDate()))
-            && (this.getIsPass() == null ? other.getIsPass() == null : this.getIsPass().equals(other.getIsPass()))
-            && (this.getIsReject() == null ? other.getIsReject() == null : this.getIsReject().equals(other.getIsReject()))
-            && (this.getIsReplace() == null ? other.getIsReplace() == null : this.getIsReplace().equals(other.getIsReplace()))
-            && (this.getReplaceStaffNo() == null ? other.getReplaceStaffNo() == null : this.getReplaceStaffNo().equals(other.getReplaceStaffNo()))
-            && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
-            && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
-            && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
-            && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()));
+                && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
+                && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
+                && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
+                && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
+                && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
+                && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+                && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
+                && (this.getIsInterview() == null ? other.getIsInterview() == null : this.getIsInterview().equals(other.getIsInterview()))
+                && (this.getNotifyDate() == null ? other.getNotifyDate() == null : this.getNotifyDate().equals(other.getNotifyDate()))
+                && (this.getInterviewDate() == null ? other.getInterviewDate() == null : this.getInterviewDate().equals(other.getInterviewDate()))
+                && (this.getIsPass() == null ? other.getIsPass() == null : this.getIsPass().equals(other.getIsPass()))
+                && (this.getIsReject() == null ? other.getIsReject() == null : this.getIsReject().equals(other.getIsReject()))
+                && (this.getIsReplace() == null ? other.getIsReplace() == null : this.getIsReplace().equals(other.getIsReplace()))
+                && (this.getReplaceStaffNo() == null ? other.getReplaceStaffNo() == null : this.getReplaceStaffNo().equals(other.getReplaceStaffNo()))
+                && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
+                && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
+                && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
+                && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+                && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()));
     }
 
     @Override
@@ -492,13 +493,13 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
 
     @Override
     public Result hasNullResult() {
-        if (StringUtils.isEmpty(this.getPurchaseNo())){
+        if (StringUtils.isEmpty(this.getPurchaseNo())) {
             return new Result(0, "采购编号不能为空！");
         }
-        if (StringUtils.isEmpty(this.getOrderNo())){
+        if (StringUtils.isEmpty(this.getOrderNo())) {
             return new Result(0, "订单编号不能为空！");
         }
-        if (StringUtils.isEmpty(this.getStaffName())){
+        if (StringUtils.isEmpty(this.getStaffName())) {
             return new Result(0, "人员名称不能为空！");
         }
         if (this.getSupplierId() == null && StringUtils.isEmpty(this.getSupplierName())) {

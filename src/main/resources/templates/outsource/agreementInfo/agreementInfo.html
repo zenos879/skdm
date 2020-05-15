@@ -16,7 +16,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            合同编号：<input type="text" name="agreementNo" id="agreementNo" maxlength="20" autocomplete="off"/>
+                            合同编号：<input type="text" name="agreementNo" th:value="${agreementNo}" id="agreementNo" maxlength="20" autocomplete="off"/>
                         </li>
                         <li>
                             供应商名称：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
@@ -138,7 +138,16 @@
                 },
                 {
                     field: 'supplierName',
-                    title: '供应商名称'
+                    title: '供应商名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','supplier')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'agreementStart',
@@ -191,6 +200,11 @@
                 $.modal.closeLoading();
             });
         });
+    }
+    function showDetail(value,flag){
+        if (flag == 'supplier'){
+            $.modal.openTab("供应商数据",ctx+"outsource/supplierInfo?supplierName="+value);
+        }
     }
 </script>
 </body>

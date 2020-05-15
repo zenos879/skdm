@@ -15,13 +15,14 @@ import java.util.Date;
 
 /**
  * project_info
- * @author 
+ *
+ * @author
  */
-public class ProjectInfo extends BaseEntity implements Serializable{
+public class ProjectInfo extends BaseEntity implements Serializable {
     /**
      * 项目id
      */
-    @Excel(name = "项目ID", cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
+    @Excel(name = "项目ID", cellType = Excel.ColumnType.NUMERIC, type = Excel.Type.EXPORT)
     private Integer projectId;
 
     /**
@@ -48,7 +49,7 @@ public class ProjectInfo extends BaseEntity implements Serializable{
      * 创建时间
      */
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     private Integer status = 1;
@@ -72,11 +73,11 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getDepartmentName() {
-        return departmentName == null?departmentName:departmentName.replaceAll(" ", "");
+        return departmentName == null ? departmentName : departmentName.replaceAll(" ", "");
     }
 
     public void setDepartmentName(String departmentName) {
-        this.departmentName = (departmentName == null?departmentName:departmentName.replaceAll(" ", ""));
+        this.departmentName = (departmentName == null ? departmentName : departmentName.replaceAll(" ", ""));
     }
 
     public Integer getProjectId() {
@@ -88,11 +89,11 @@ public class ProjectInfo extends BaseEntity implements Serializable{
     }
 
     public String getProjectName() {
-        return projectName == null?projectName:projectName.replaceAll(" ", "");
+        return projectName == null ? projectName : projectName.replaceAll(" ", "");
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = (projectName == null?projectName:projectName.replaceAll(" ", ""));
+        this.projectName = (projectName == null ? projectName : projectName.replaceAll(" ", ""));
     }
 
 
@@ -126,9 +127,9 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         }
         ProjectInfo other = (ProjectInfo) that;
         return (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
-            && (this.getProjectName() == null ? other.getProjectName() == null : this.getProjectName().equals(other.getProjectName()))
-            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+                && (this.getProjectName() == null ? other.getProjectName() == null : this.getProjectName().equals(other.getProjectName()))
+                && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
@@ -156,29 +157,31 @@ public class ProjectInfo extends BaseEntity implements Serializable{
         sb.append("]");
         return sb.toString();
     }
+
     @Override
-    public Result hasNullResult(){
-        if (this.getDepartmentId() == null && StringUtils.isEmpty(this.getDepartmentName())){
-            return new Result(0,"部门不能为空！");
+    public Result hasNullResult() {
+        if (this.getDepartmentId() == null && StringUtils.isEmpty(this.getDepartmentName())) {
+            return new Result(0, "部门不能为空！");
         }
         if (StringUtils.isEmpty(this.getProjectName())) {
-            return new Result(0,"项目名称不能为空！");
+            return new Result(0, "项目名称不能为空！");
         }
         return new Result(1);
     }
+
     @Override
-    public Result checkLegitimateResult(){
+    public Result checkLegitimateResult() {
         if (!super.checkDateLegitimate()) {
-            return new Result(0,"时间格式不正确");
+            return new Result(0, "时间格式不正确");
         }
-        if (StringUtils.isNotEmpty(this.getProjectName()) && this.getProjectName().length()>64){
-           return new Result(0,"项目名称长度不能大于64！");
+        if (StringUtils.isNotEmpty(this.getProjectName()) && this.getProjectName().length() > 64) {
+            return new Result(0, "项目名称长度不能大于64！");
         }
-        if (this.getDepartmentId() != null && String.valueOf(this.getDepartmentId()).length()>11){
-            return new Result(0,"部门id长度不能大于11！");
+        if (this.getDepartmentId() != null && String.valueOf(this.getDepartmentId()).length() > 11) {
+            return new Result(0, "部门id长度不能大于11！");
         }
-        if (StringUtils.isNotEmpty(this.getDepartmentName()) && this.getDepartmentName().length()>64){
-            return new Result(0,"部门名称长度不能大于64");
+        if (StringUtils.isNotEmpty(this.getDepartmentName()) && this.getDepartmentName().length() > 64) {
+            return new Result(0, "部门名称长度不能大于64");
         }
         return new Result(1);
     }

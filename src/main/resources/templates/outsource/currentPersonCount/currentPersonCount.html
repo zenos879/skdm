@@ -125,7 +125,16 @@
                 },
                 {
                     field: 'staffName',
-                    title: '人员姓名'
+                    title: '人员姓名',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','staff')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'idCard',
@@ -133,19 +142,55 @@
                 },
                 {
                     field: 'projectName',
-                    title: '项目名称'
+                    title: '项目名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','project')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'departmentName',
-                    title: '部门名称'
+                    title: '部门名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','department')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'postName',
-                    title: '岗位名称'
+                    title: '岗位名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','post')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'supplierName',
-                    title: '供应商名称'
+                    title: '供应商名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','supplier')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'arriveDate',
@@ -177,6 +222,19 @@
                 $.modal.closeLoading();
             });
         });
+    }
+    function showDetail(value,flag){
+        if (flag == 'supplier'){
+            $.modal.openTab("供应商数据",ctx+"outsource/supplierInfo?supplierName="+value);
+        } else if (flag == 'project') {
+            $.modal.openTab("项目数据",ctx+"outsource/projectInfo?projectName="+value);
+        } else if (flag == 'department') {
+            $.modal.openTab("部门数据",ctx+"outsource/departmentInfo?departmentName="+value);
+        } else if (flag == 'post') {
+            $.modal.openTab("岗位数据",ctx+"outsource/postInfo?postName="+value);
+        } else if (flag == 'staff') {
+            $.modal.openTab("人员数据",ctx+"outsource/staffInfo?staffName="+value);
+        }
     }
 	</script>
 </body>

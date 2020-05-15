@@ -9,6 +9,7 @@ import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,26 +31,31 @@ public class StaffInfoController extends BaseController {
     @Autowired
     StaffInfoService staffInfoService;
 
-    /** 页面跳转 */
+    /**
+     * 页面跳转
+     */
     @GetMapping()
-    public String page() {
+    public String page(String staffName, Model model) {
+        if (StringUtils.isNotEmpty(staffName)) {
+            model.addAttribute("staffName", staffName);
+        }
         return prefix + "/staffInfo";
     }
 
     @GetMapping("/add")
-    public String add(){
-        return prefix+"/add";
+    public String add() {
+        return prefix + "/add";
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
+    public String edit(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("id", id);
-        return prefix+"/edit";
+        return prefix + "/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(StaffInfo projectInfo){
+    public TableDataInfo list(StaffInfo projectInfo) {
         startPage();
         return getDataTable(staffInfoService.selectList(projectInfo));
     }
@@ -57,7 +63,7 @@ public class StaffInfoController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(StaffInfo projectInfo){
+    public AjaxResult edit(StaffInfo projectInfo) {
         Result result = staffInfoService.updateByPrimaryKeySelective(projectInfo);
         return toAjax(result);
     }
@@ -65,7 +71,7 @@ public class StaffInfoController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(StaffInfo projectInfo){
+    public AjaxResult add(StaffInfo projectInfo) {
         Result result = staffInfoService.insert(projectInfo);
         return toAjax(result);
     }
@@ -73,12 +79,12 @@ public class StaffInfoController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(StaffInfo projectInfo,String ids){
+    public AjaxResult export(StaffInfo projectInfo, String ids) {
         ExcelUtil<StaffInfo> util = new ExcelUtil<>(StaffInfo.class);
         List<StaffInfo> list;
-        if (ids != null){
+        if (ids != null) {
             list = staffInfoService.selectByIds(ids);
-        }else {
+        } else {
             list = staffInfoService.selectList(projectInfo);
         }
         return util.exportExcel(list, "人员数据");
@@ -105,10 +111,9 @@ public class StaffInfoController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     @Log(title = "人员数据", businessType = BusinessType.DELETE)
-    public AjaxResult remove(String ids){
+    public AjaxResult remove(String ids) {
         return toAjax(staffInfoService.deleteByIds(ids));
     }
-
 
 
 }

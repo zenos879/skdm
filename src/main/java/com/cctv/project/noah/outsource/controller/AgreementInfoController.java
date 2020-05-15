@@ -9,6 +9,7 @@ import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.cctv.project.noah.system.util.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,55 +33,60 @@ public class AgreementInfoController extends BaseController {
     @Autowired
     AgreementInfoService agreementInfoService;
 
-    /** 页面跳转 */
+    /**
+     * 页面跳转
+     */
     @GetMapping()
-    public String page() {
+    public String page(String agreementNo, Model model) {
+        if (StringUtils.isNotEmpty(agreementNo)) {
+            model.addAttribute("agreementNo", agreementNo);
+        }
         return prefix + "/agreementInfo";
     }
 
     @GetMapping("/add")
-    public String add(){
-        return prefix+"/add";
+    public String add() {
+        return prefix + "/add";
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model){
+    public String edit(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("id", id);
-        return prefix+"/edit";
+        return prefix + "/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(AgreementInfo projectInfo){
+    public TableDataInfo list(AgreementInfo record) {
         startPage();
-        return getDataTable(agreementInfoService.selectList(projectInfo));
+        return getDataTable(agreementInfoService.selectList(record));
     }
 
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "合同数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(AgreementInfo projectInfo){
-        Result result = agreementInfoService.updateByPrimaryKeySelective(projectInfo);
+    public AjaxResult edit(AgreementInfo record) {
+        Result result = agreementInfoService.updateByPrimaryKeySelective(record);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "合同数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(AgreementInfo projectInfo){
-        Result result = agreementInfoService.insert(projectInfo);
+    public AjaxResult add(AgreementInfo record) {
+        Result result = agreementInfoService.insert(record);
         return toAjax(result);
     }
 
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "合同数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(AgreementInfo agreementInfo,String ids){
+    public AjaxResult export(AgreementInfo agreementInfo, String ids) {
         ExcelUtil<AgreementInfo> util = new ExcelUtil<>(AgreementInfo.class);
         List<AgreementInfo> list;
-        if (ids != null){
+        if (ids != null) {
             list = agreementInfoService.selectByIds(ids);
-        }else {
+        } else {
             list = agreementInfoService.selectList(agreementInfo);
         }
         return util.exportExcel(list, "合同数据");
@@ -107,10 +113,9 @@ public class AgreementInfoController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     @Log(title = "合同数据", businessType = BusinessType.DELETE)
-    public AjaxResult remove(String ids){
+    public AjaxResult remove(String ids) {
         return toAjax(agreementInfoService.deleteByIds(ids));
     }
-
 
 
 }

@@ -77,7 +77,7 @@ public class AgreementInfo extends BaseEntity implements Serializable {
     }
 
     public void setAgreementNo(String agreementNo) {
-        this.agreementNo = agreementNo;
+        this.agreementNo = (agreementNo == null ? agreementNo : agreementNo.replace(" ", ""));
     }
 
     public Integer getSupplierId() {

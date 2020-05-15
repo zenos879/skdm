@@ -138,15 +138,42 @@
                 },
                 {
                     field: 'supplierName',
-                    title: '供应商名称'
+                    title: '供应商名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','supplier')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'agreementNo',
-                    title: '合同号'
+                    title: '合同号',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','agreement')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'postName',
-                    title: '岗位名称'
+                    title: '岗位名称',
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (value == null){
+                            value = '';
+                        }
+                        actions.push("<a href=\"javascript:void(0)\" onclick=\"showDetail('"+value+"','post')\">"+value+"</a>");
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'bidPrice',
@@ -192,6 +219,15 @@
                 $.modal.closeLoading();
             });
         });
+    }
+    function showDetail(value,flag){
+        if (flag == 'supplier'){
+            $.modal.openTab("供应商数据",ctx+"outsource/supplierInfo?supplierName="+value);
+        } else if (flag == 'post') {
+            $.modal.openTab("岗位数据",ctx+"outsource/postInfo?postName="+value);
+        } else if (flag == 'agreement') {
+            $.modal.openTab("合同数据",ctx+"outsource/agreementInfo?agreementNo="+value);
+        }
     }
 </script>
 </body>

@@ -79,7 +79,7 @@ public class SupplierFileError extends BaseEntity implements Serializable {
     }
 
     public void setPurcharNo(String purcharNo) {
-        this.purcharNo = purcharNo;
+        this.purcharNo = (purcharNo == null ? purcharNo : purcharNo.replace(" ", ""));
     }
 
     public Integer getSupplierId() {
