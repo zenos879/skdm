@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('在岗人员')" />
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
     <!-- 主体内容开始 -->
@@ -15,22 +16,42 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                订单编号：<input type="text" name="orderNo" id="orderNo" autocomplete="off"/>
+                                订单编号：<input type="text" name="orderNo" id="orderNo" autocomplete="off" maxlength="20"/>
                             </li>
                             <li>
-                                项目名称：<input type="text" name="projectName" id="projectName" autocomplete="off"/>
+                                人员姓名：<input type="text" name="staffName" id="staffName" autocomplete="off" maxlength="8"/>
                             </li>
                             <li>
-                                部门名称：<input type="text" name="departmentName" id="departmentName" autocomplete="off"/>
+                                项目名称：<select name="projectId" id="projectId" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectId}"></option>
+                            </select>
                             </li>
                             <li>
-                                供应商名称：<input type="text" name="supplierName" id="supplierName" autocomplete="off"/>
+                                部门名称：<select name="departmentId" id="departmentId" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentId}"></option>
+                            </select>
                             </li>
                             <li>
-                                岗位名称：<input type="text" name="postName" id="postName" autocomplete="off"/>
+                                岗位名称：<select name="postId" id="postId" class="selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="post : ${posts}" th:text="${post.postName}" th:value="${post.postId}"></option>
+                            </select>
                             </li>
                             <li>
-                                人名：<input type="text" name="candidateName" id="candidateName" autocomplete="off"/>
+                                供应商名称：<select name="supplierId" id="supplierId" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                                <option value="">全部</option>
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
+                            </select>
+                            </li>
+                            <li class="select-time">
+                                <label>到岗日期区间： </label>
+                                <input type="text" class="time-input" id="arriveStartTime" placeholder="开始时间"
+                                       name="params[arriveStartTime]" autocomplete="off" readonly="readonly"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="arriveEndTime" placeholder="结束时间"
+                                       name="params[arriveEndTime]" autocomplete="off" readonly="readonly"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -67,7 +88,8 @@
         </div>
     </div>
     <!-- 主体内容结束 -->
-<th:block th:include="include :: footer" />
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
     var isReject = [[${@dict.getType('isReject')}]];
@@ -102,16 +124,20 @@
                     title: '订单编号'
                 },
                 {
+                    field: 'staffName',
+                    title: '人员姓名'
+                },
+                {
+                    field: 'idCard',
+                    title: '身份证号'
+                },
+                {
                     field: 'projectName',
                     title: '项目名称'
                 },
                 {
                     field: 'departmentName',
                     title: '部门名称'
-                },
-                {
-                    field: 'staffName',
-                    title: '人名'
                 },
                 {
                     field: 'postName',
@@ -126,10 +152,6 @@
                     title: '到岗日期',
                     align: 'center',
                     sortable: true
-                },
-                {
-                    field: 'idCard',
-                    title: '身份证号'
                 }]
         };
         $.table.init(options);

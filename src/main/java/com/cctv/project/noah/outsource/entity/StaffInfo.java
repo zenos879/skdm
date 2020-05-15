@@ -1,18 +1,24 @@
 package com.cctv.project.noah.outsource.entity;
 
+import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Excel;
+import com.cctv.project.noah.system.core.domain.BaseEntity;
+import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 /**
  * staff_info
- * @author 
+ *
+ * @author
  */
-public class StaffInfo implements Serializable {
+public class StaffInfo extends BaseEntity implements Serializable {
     /**
      * 自增主键
      */
@@ -121,7 +127,7 @@ public class StaffInfo implements Serializable {
      * 创建时间
      */
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     private Integer status;
@@ -236,8 +242,8 @@ public class StaffInfo implements Serializable {
         return arriveDate;
     }
 
-    public String getFormatArriveDate(){
-        if (this.arriveDate == null){
+    public String getFormatArriveDate() {
+        if (this.arriveDate == null) {
             return null;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -253,8 +259,8 @@ public class StaffInfo implements Serializable {
         return leaveDate;
     }
 
-    public String getFormatLeaveDate(){
-        if (this.leaveDate == null){
+    public String getFormatLeaveDate() {
+        if (this.leaveDate == null) {
             return null;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -274,10 +280,12 @@ public class StaffInfo implements Serializable {
         this.leaveReason = leaveReason;
     }
 
+    @Override
     public Date getCreateTime() {
         return createTime;
     }
 
+    @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -303,23 +311,23 @@ public class StaffInfo implements Serializable {
         }
         StaffInfo other = (StaffInfo) that;
         return (this.getAutoId() == null ? other.getAutoId() == null : this.getAutoId().equals(other.getAutoId()))
-            && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
-            && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
-            && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
-            && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
-            && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
-            && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
-            && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
-            && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
-            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
-            && (this.getIsReplace() == null ? other.getIsReplace() == null : this.getIsReplace().equals(other.getIsReplace()))
-            && (this.getReplaceGroup() == null ? other.getReplaceGroup() == null : this.getReplaceGroup().equals(other.getReplaceGroup()))
-            && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
-            && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
-            && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
-            && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+                && (this.getPurchaseNo() == null ? other.getPurchaseNo() == null : this.getPurchaseNo().equals(other.getPurchaseNo()))
+                && (this.getOrderNo() == null ? other.getOrderNo() == null : this.getOrderNo().equals(other.getOrderNo()))
+                && (this.getStaffNo() == null ? other.getStaffNo() == null : this.getStaffNo().equals(other.getStaffNo()))
+                && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
+                && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
+                && (this.getProjectId() == null ? other.getProjectId() == null : this.getProjectId().equals(other.getProjectId()))
+                && (this.getSupplierId() == null ? other.getSupplierId() == null : this.getSupplierId().equals(other.getSupplierId()))
+                && (this.getPostId() == null ? other.getPostId() == null : this.getPostId().equals(other.getPostId()))
+                && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
+                && (this.getIsReplace() == null ? other.getIsReplace() == null : this.getIsReplace().equals(other.getIsReplace()))
+                && (this.getReplaceGroup() == null ? other.getReplaceGroup() == null : this.getReplaceGroup().equals(other.getReplaceGroup()))
+                && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
+                && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
+                && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
+                && (this.getLeaveReason() == null ? other.getLeaveReason() == null : this.getLeaveReason().equals(other.getLeaveReason()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -422,5 +430,54 @@ public class StaffInfo implements Serializable {
 
     public void setBeReplacdStaffName(String beReplacdStaffName) {
         this.beReplacdStaffName = beReplacdStaffName;
+    }
+
+    @Override
+    public Result hasNullResult() {
+        if (StringUtils.isEmpty(this.getPurchaseNo())) {
+            return new Result(0, "采购编号不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getOrderNo())) {
+            return new Result(0, "订单编号不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getSupplierName())) {
+            return new Result(0, "供应商名称不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getDepartmentName())) {
+            return new Result(0, "部门名称不能为空！");
+        }
+        if (StringUtils.isEmpty(this.getPostName())) {
+            return new Result(0, "岗位名称时间不能为空！");
+        }
+        return new Result(1);
+    }
+
+    @Override
+    public Result checkLegitimateResult() {
+        if (!super.checkDateLegitimate()) {
+            return new Result(0, "时间格式不正确");
+        }
+        if (StringUtils.isNotEmpty(this.getPurchaseNo()) && this.getPurchaseNo().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "采购编号【" + this.getPurchaseNo() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "！");
+        }
+        if (this.getSupplierId() != null && String.valueOf(this.getSupplierId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "供应商id【" + this.getSupplierId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getSupplierName()) && this.getSupplierName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "供应商名称【" + this.getSupplierName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        if (this.getDepartmentId() != null && String.valueOf(this.getDepartmentId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "部门id【" + this.getDepartmentId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getDepartmentName()) && this.getDepartmentName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "部门名称【" + this.getDepartmentName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        if (this.getPostId() != null && String.valueOf(this.getPostId()).length() > ModelClass.ATTR_ID_LENGTH) {
+            return new Result(0, "岗位id【" + this.getPostId() + "】长度不能大于" + ModelClass.ATTR_ID_LENGTH + "！");
+        }
+        if (StringUtils.isNotEmpty(this.getPostName()) && this.getPostName().length() > ModelClass.ATTR_NAME_LENGTH) {
+            return new Result(0, "岗位名称【" + this.getPostName() + "】长度不能大于" + ModelClass.ATTR_NAME_LENGTH + "!");
+        }
+        return new Result(1);
     }
 }

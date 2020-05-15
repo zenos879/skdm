@@ -24,7 +24,9 @@ public class GeneralUtils {
 
     private static Pattern MATCH_DATE = Pattern.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s(((0?[0-9])|([1][0-9])|([2][0-4]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$");
 
-    /** 0-7位非负整数 */
+    /**
+     * 0-7位非负整数
+     */
     private static Pattern MATCH_MONEY = Pattern.compile("^\\d{0,7}$");
 
     /**
@@ -155,11 +157,60 @@ public class GeneralUtils {
         return result;
     }
 
-    public static String dateToStr(Date date, String format) {
-        DateFormat df = new SimpleDateFormat(format);
-        return df.format(date);
+    /**
+     * 去掉实体内字符串属性的空格
+     *
+     * @param object
+     * @return
+     */
+    public static Object replaceBlankSpace(Object object) {
+        //获取该类中所有的域(属性)
+        Field[] fields = object.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            //对所有的属性判断是否为String类型
+            if (field.getType().equals(String.class)) {
+                //将私有属性设置为可访问状态
+                field.setAccessible(true);
+                try {
+                    String string = (String) field.get(object);
+                    if (string != null){
+                        //将所有的空格字符用""替换
+                        string = string.replaceAll(" ", "");
+                        //相当于调用了set方法设置属性
+                        field.set(object, string);
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return object;
     }
 
+    /**
+     * 时间戳 → 时间字符串
+     *
+     * @param datetime
+     * @param pattern
+     * @return
+     */
+    public static String dateToStr(Date datetime, String pattern) {
+        if (datetime == null) {
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String format = simpleDateFormat.format(datetime);
+        return format;
+    }
+
+    /**
+     * 时间字符串 → 时间戳
+     *
+     * @param date
+     * @param format
+     * @return
+     */
     public static Date strToDate(String date, String format) {
         DateFormat df = new SimpleDateFormat(format);
         Date parse = null;
@@ -171,10 +222,24 @@ public class GeneralUtils {
         return parse;
     }
 
+    /**
+     * 比较字符串时间大小
+     *
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
     public static boolean compareStrDate(String beginTime, String endTime) {
         return strToDate(beginTime, YMD).getTime() > strToDate(endTime, YMD).getTime();
     }
 
+    /**
+     * 比较时间戳大小
+     *
+     * @param d1
+     * @param d2
+     * @return
+     */
     public static boolean compareDate(Date d1, Date d2) {
         boolean b = d1.getTime() >= d2.getTime();
         return b;
@@ -196,6 +261,7 @@ public class GeneralUtils {
 
     /**
      * 验证金额格式（0-7位非负整数）是否正确
+     *
      * @param money
      * @return
      */
@@ -205,26 +271,31 @@ public class GeneralUtils {
     }
 
     public static void main(String[] args) {
-        /** 1 */
-        for (int i = 0; i < 100; i++) {
-            System.out.println(GeneralUtils.generateStaffNo());
-        }
+        /** 1、 */
+//        for (int i = 0; i < 100; i++) {
+//            System.out.println(GeneralUtils.generateStaffNo());
+//        }
 
-        /** 2 */
+        /** 2、 */
 //        List<StaffInfo> personList = null;
 //        StaffInfo person = new StaffInfo();
 //        person.setAutoId(1);
 //        person.setStaffNo(11111L);
-
 //        StaffInfo person2 = new StaffInfo();
 //        person2.setAutoId(2);
 //        person2.setStaffNo(22222L);
-
 //        personList.add(person);
 //        personList.add(person2);
-
 //        System.out.println(getIntList(personList, StaffInfo.class, "autoId"));
 
+        /** 3、 */
+        StaffInfo staffInfo = new StaffInfo();
+        staffInfo.setStaffNo(null);
+        staffInfo.setStaffName("");
+        staffInfo.setOrderNo("12     3");
 
+        System.out.println(staffInfo.toString());
+        StaffInfo s = (StaffInfo) replaceBlankSpace(staffInfo);
+        System.out.println(s.toString());
     }
 }

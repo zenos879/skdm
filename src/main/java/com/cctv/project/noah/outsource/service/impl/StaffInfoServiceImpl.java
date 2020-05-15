@@ -104,45 +104,50 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     public List<StaffInfo> selectList(StaffInfo record) {
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-        String purchaseNo = record.getPurchaseNo();
-        if (StringUtils.isNotEmpty(purchaseNo)) {
-            criteria.andPurchaseNoLike("%" + purchaseNo + "%");
-        }
-        String orderNo = record.getOrderNo();
-        if (StringUtils.isNotEmpty(orderNo)) {
-            criteria.andOrderNoLike("%" + orderNo + "%");
-        }
-        String staffNo = record.getStaffNo();
-        if (StringUtils.isNotEmpty(staffNo)) {
-            criteria.andStaffNoEqualTo(staffNo);
-        }
-        String staffName = record.getStaffName();
-        if (StringUtils.isNotEmpty(staffName)) {
-            criteria.andStaffNameLike(staffName);
-        }
-        String idCard = record.getIdCard();
-        if (StringUtils.isNotEmpty(idCard)) {
-            criteria.andIdCardLike(idCard);
-        }
-        Integer projectId = record.getProjectId();
-        if (projectId != null) {
-            criteria.andProjectIdEqualTo(projectId);
-        }
-        Integer supplierId = record.getSupplierId();
-        if (supplierId != null) {
-            criteria.andSupplierIdEqualTo(supplierId);
-        }
-        Integer departmentId = record.getDepartmentId();
-        if (departmentId != null) {
-            criteria.andDepartmentIdEqualTo(departmentId);
-        }
-        Integer postId = record.getPostId();
-        if (postId != null) {
-            criteria.andPostIdEqualTo(postId);
-        }
-        Integer isReplace = record.getIsReplace();
-        if (isReplace != null) {
-            criteria.andIsReplaceEqualTo(isReplace);
+        if (record != null) {
+            if (record.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            String purchaseNo = record.getPurchaseNo();
+            if (StringUtils.isNotEmpty(purchaseNo)) {
+                criteria.andPurchaseNoLike("%" + purchaseNo + "%");
+            }
+            String orderNo = record.getOrderNo();
+            if (StringUtils.isNotEmpty(orderNo)) {
+                criteria.andOrderNoLike("%" + orderNo + "%");
+            }
+            String staffNo = record.getStaffNo();
+            if (StringUtils.isNotEmpty(staffNo)) {
+                criteria.andStaffNoEqualTo(staffNo);
+            }
+            String staffName = record.getStaffName();
+            if (StringUtils.isNotEmpty(staffName)) {
+                criteria.andStaffNameLike(staffName);
+            }
+            String idCard = record.getIdCard();
+            if (StringUtils.isNotEmpty(idCard)) {
+                criteria.andIdCardLike(idCard);
+            }
+            Integer projectId = record.getProjectId();
+            if (projectId != null) {
+                criteria.andProjectIdEqualTo(projectId);
+            }
+            Integer supplierId = record.getSupplierId();
+            if (supplierId != null) {
+                criteria.andSupplierIdEqualTo(supplierId);
+            }
+            Integer departmentId = record.getDepartmentId();
+            if (departmentId != null) {
+                criteria.andDepartmentIdEqualTo(departmentId);
+            }
+            Integer postId = record.getPostId();
+            if (postId != null) {
+                criteria.andPostIdEqualTo(postId);
+            }
+            Integer isReplace = record.getIsReplace();
+            if (isReplace != null) {
+                criteria.andIsReplaceEqualTo(isReplace);
+            }
         }
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
         for (StaffInfo staffInfo : staffInfos) {
@@ -153,8 +158,19 @@ public class StaffInfoServiceImpl implements StaffInfoService {
 
     @Override
     public List<CurrentPersonCount> selectCurrentStaff(CurrentPersonCount record) {
-        List<CurrentPersonCount> currentPersonCounts = staffInfoMapper.selectCurrentStaff(record);
-        return currentPersonCounts;
+        if (record != null) {
+            String orderNo = record.getOrderNo();
+            if (orderNo != null) {
+                record.setOrderNo(orderNo.trim());
+            }
+            String staffName = record.getStaffName();
+            if (staffName != null) {
+                record.setStaffName(staffName.trim());
+            }
+            List<CurrentPersonCount> currentPersonCounts = staffInfoMapper.selectCurrentStaff(record);
+            return currentPersonCounts;
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -164,9 +180,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
 
     @Override
     public List<StaffInfo> selectAll() {
-        StaffInfoExample staffInfoExample = new StaffInfoExample();
-        StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-        return staffInfoMapper.selectByExample(staffInfoExample);
+        return staffInfoMapper.selectByExample(new StaffInfoExample());
     }
 
     @Override

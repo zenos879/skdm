@@ -50,37 +50,37 @@ public class InterviewPersonRefController extends BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(InterviewPersonRef projectInfo){
+    public TableDataInfo list(InterviewPersonRef record){
         startPage();
-        return getDataTable(interviewPersonRefService.selectList(projectInfo));
+        return getDataTable(interviewPersonRefService.selectList(record));
     }
 
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "面试人员数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(InterviewPersonRef projectInfo){
-        Result result = interviewPersonRefService.updateByPrimaryKeySelective(projectInfo);
+    public AjaxResult edit(InterviewPersonRef record){
+        Result result = interviewPersonRefService.updateByPrimaryKeySelective(record);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "面试人员数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(InterviewPersonRef projectInfo){
-        Result result = interviewPersonRefService.insert(projectInfo);
+    public AjaxResult add(InterviewPersonRef record){
+        Result result = interviewPersonRefService.insert(record);
         return toAjax(result);
     }
 
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "面试人员数据", businessType = BusinessType.EXPORT)
-    public AjaxResult export(InterviewPersonRef projectInfo,String ids){
+    public AjaxResult export(InterviewPersonRef record,String ids){
         ExcelUtil<InterviewPersonRef> util = new ExcelUtil<>(InterviewPersonRef.class);
         List<InterviewPersonRef> list;
         if (ids != null){
             list = interviewPersonRefService.selectByIds(ids);
         }else {
-            list = interviewPersonRefService.selectList(projectInfo);
+            list = interviewPersonRefService.selectList(record);
         }
         return util.exportExcel(list, "面试人员数据");
     }

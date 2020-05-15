@@ -7,15 +7,19 @@ import com.cctv.project.noah.outsource.service.*;
 import com.cctv.project.noah.outsource.utils.GeneralUtils;
 import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service("interviewPersonRefService")
 public class InterviewPersonRefServiceImpl implements InterviewPersonRefService {
+    Logger logger = LoggerFactory.getLogger(InterviewPersonRefServiceImpl.class);
 
     @Autowired
     InterviewPersonRefMapper interviewPersonRefMapper;
@@ -126,37 +130,85 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             if (record.checkIllegal()) {
                 return new ArrayList<>();
             }
+            // 采购编号
             String purchaseNo = record.getPurchaseNo();
             if (StringUtils.isNotEmpty(purchaseNo)) {
                 criteria.andPurchaseNoLike("%" + purchaseNo + "%");
             }
+            // 订单编号
             String orderNo = record.getOrderNo();
             if (StringUtils.isNotEmpty(orderNo)) {
                 criteria.andOrderNoLike("%" + orderNo + "%");
             }
+            // 人员姓名
             String staffName = record.getStaffName();
             if (StringUtils.isNotEmpty(staffName)) {
                 criteria.andStaffNameEqualTo(staffName);
             }
+            // 身份证号
             String idCard = record.getIdCard();
             if (StringUtils.isNotEmpty(idCard)) {
                 criteria.andIdCardEqualTo(idCard);
             }
+            // 是否面试
             Integer isInterview = record.getIsInterview();
-            if (isInterview != null){
+            if (isInterview != null) {
                 criteria.andIsInterviewEqualTo(isInterview);
             }
-            // todo
-            // todo
-            // todo
-            // todo
-            // todo
-            // todo
+            // 通知面试时间
+            Map<String, Object> params = record.getParams();
+            Object notifyStartTime = params.get("notifyStartTime");
+            if (notifyStartTime != null && !"".equals(notifyStartTime.toString())) {
+                Date date = GeneralUtils.strToDate(notifyStartTime.toString(), GeneralUtils.YMD);
+                criteria.andNotifyDateGreaterThanOrEqualTo(date);
+            }
+            Object notifyEndTime = params.get("notifyEndTime");
+            if (notifyEndTime != null && !"".equals(notifyEndTime.toString())) {
+                Date date = GeneralUtils.strToDate(notifyEndTime.toString(), GeneralUtils.YMD);
+                criteria.andNotifyDateLessThanOrEqualTo(date);
+            }
+            // 参加面试时间
+            Object interviewStartTime = params.get("interviewStartTime");
+            if (interviewStartTime != null && !"".equals(interviewStartTime.toString())) {
+                Date date = GeneralUtils.strToDate(interviewStartTime.toString(), GeneralUtils.YMD);
+                criteria.andInterviewDateGreaterThanOrEqualTo(date);
+            }
+            Object interviewEndTime = params.get("interviewEndTime");
+            if (interviewEndTime != null && !"".equals(interviewEndTime.toString())) {
+                Date date = GeneralUtils.strToDate(interviewEndTime.toString(), GeneralUtils.YMD);
+                criteria.andInterviewDateLessThanOrEqualTo(date);
+            }
+            // 是否通过
+            Integer isPass = record.getIsPass();
+            if (isPass != null) {
+                criteria.andIsPassEqualTo(isPass);
+            }
+            // 是否退回
+            Integer isReject = record.getIsReject();
+            if (isReject != null){
+                criteria.andIsRejectEqualTo(isReject);
+            }
+            // 是否替换
+            Integer isReplace = record.getIsReplace();
+            if (isReplace != null){
+                criteria.andIsReplaceEqualTo(isReplace);
+            }
+            // 到岗日期
+            Object arriveStartTime = params.get("arriveStartTime");
+            if (arriveStartTime != null && !"".equals(arriveStartTime.toString())) {
+                Date date = GeneralUtils.strToDate(arriveStartTime.toString(), GeneralUtils.YMD);
+                criteria.andArriveDateGreaterThanOrEqualTo(date);
+            }
+            Object arriveEndTime = params.get("arriveEndTime");
+            if (arriveEndTime != null && !"".equals(arriveEndTime.toString())) {
+                Date date = GeneralUtils.strToDate(arriveEndTime.toString(), GeneralUtils.YMD);
+                criteria.andArriveDateLessThanOrEqualTo(date);
+            }
         }
         List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
-        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
-            completionCandidateName(interviewPersonRef);
-        }
+//        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
+//            completionCandidateName(interviewPersonRef);
+//        }
         return interviewPersonRefs;
     }
 
@@ -197,9 +249,9 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
         criteria.andAutoIdIn(idList);
         List<InterviewPersonRef> interviewPersonRefs = interviewPersonRefMapper.selectByExample(interviewPersonRefExample);
         // 补全
-        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
-            completionCandidateName(interviewPersonRef);
-        }
+//        for (InterviewPersonRef interviewPersonRef : interviewPersonRefs) {
+//            completionCandidateName(interviewPersonRef);
+//        }
         return interviewPersonRefs;
     }
 
@@ -211,14 +263,11 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
      */
     private InterviewPersonRef completionCandidateName(InterviewPersonRef record) {
         Integer supplierId = record.getSupplierId();
-//        Integer departmentId = record.getDepartmentId();
         Integer postId = record.getPostId();
         SupplierInfo supplierInfo = supplierInfoService.selectByPrimaryKey(supplierId);
         if (supplierInfo != null) {
             record.setSupplierName(supplierInfo.getSupplierName());
         }
-//        DepartmentInfo departmentInfo = departmentInfoService.selectByPrimaryKey(departmentId);
-//        record.setDepartmentName(departmentInfo.getDepartmentName());
         PostInfo postInfo = postInfoService.selectByPrimaryKey(postId);
         if (postInfo != null) {
             record.setPostName(postInfo.getPostName());
@@ -254,27 +303,43 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
 
     @Override
     public Result updateByPrimaryKeySelective(InterviewPersonRef record) {
-        if (record == null) {
-            return new Result(0, "传入数据为null！");
-        }
-        Integer id = record.getAutoId();
-        if (id == 0) {
-            return new Result(0, "主键不存在，不能更新！");
-        }
-        Result result = record.beforeUpdateCheck();
-        if (result.code < 1) {
+        try {
+            if (record == null) {
+                return new Result(0, "传入数据为null！");
+            }
+            Integer id = record.getAutoId();
+            if (id == 0) {
+                return new Result(0, "主键不存在，不能更新！");
+            }
+            Result result = record.beforeUpdateCheck();
+            if (result.code < 1) {
+                return result;
+            }
+            Integer resId = selectBeanExist(record, false);
+            // 查到有值，并且不相等，则重复，不更新
+            if (resId > 0 && !id.equals(resId)) {
+                result.setCode(0);
+                result.setInfo("人员已经存在，请调整后再提交！");
+                return result;
+            }
+            /** 专属业务逻辑，根据采购编号查询项目编号  begin*/
+            ReviewInfo reviewInfo = new ReviewInfo();
+            reviewInfo.setPurchaseNo(record.getPurchaseNo());
+            List<ReviewInfo> reviewInfos = reviewInfoService.selectBySelective(reviewInfo);
+            if (reviewInfos.size() > 0) {
+                reviewInfo = reviewInfos.get(0);
+                record.setProjectId(reviewInfo.getProjectId());
+            } else {
+                return new Result(0, "根据采购编号未能查询到对应的项目信息！");
+            }
+            /** end */
+            int i = interviewPersonRefMapper.updateByPrimaryKeySelective(record);
+            result.setCode(i);
             return result;
+        } catch (Exception e) {
+            logger.error("[ERROR]---" + e);
+            return new Result(0, "修改失败");
         }
-        Integer resId = selectBeanExist(record, false);
-        // 查到有值，并且不相等，则重复，不更新
-        if (resId > 0 && !id.equals(resId)) {
-            result.setCode(0);
-            result.setInfo("人员已经存在，请调整后再提交！");
-            return result;
-        }
-        int i = interviewPersonRefMapper.updateByPrimaryKeySelective(record);
-        result.setCode(i);
-        return result;
     }
 
     @Override
@@ -426,7 +491,6 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             temp.setPostId(postInfo.getPostId());
             temp.setSupplierId(supplierInfo.getSupplierId());
             temp.setProjectId(reviewInfo.getProjectId());
-            temp.setDepartmentId(projectInfo.getDepartmentId());
         }
 
         StringBuffer msg = new StringBuffer();

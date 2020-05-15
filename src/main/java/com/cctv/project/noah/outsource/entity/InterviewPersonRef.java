@@ -238,12 +238,20 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         return notifyDate;
     }
 
+    public String getFormatNotifyDate(){
+        return GeneralUtils.dateToStr(notifyDate, GeneralUtils.YMD);
+    }
+
     public void setNotifyDate(Date notifyDate) {
         this.notifyDate = notifyDate;
     }
 
     public Date getInterviewDate() {
         return interviewDate;
+    }
+
+    public String getFormatInterviewDate(){
+        return GeneralUtils.dateToStr(interviewDate, GeneralUtils.YMD);
     }
 
     public void setInterviewDate(Date interviewDate) {
@@ -294,12 +302,20 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         return arriveDate;
     }
 
+    public String getFormatArriveDate(){
+        return GeneralUtils.dateToStr(arriveDate, GeneralUtils.YMD);
+    }
+
     public void setArriveDate(Date arriveDate) {
         this.arriveDate = arriveDate;
     }
 
     public Date getLeaveDate() {
         return leaveDate;
+    }
+
+    public String getFormatLeaveDate(){
+        return GeneralUtils.dateToStr(leaveDate, GeneralUtils.YMD);
     }
 
     public void setLeaveDate(Date leaveDate) {
