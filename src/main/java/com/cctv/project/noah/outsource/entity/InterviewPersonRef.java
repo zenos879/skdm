@@ -78,13 +78,13 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 身份证号
      */
-    @Excel(name = "身份证号")
+    @Excel(name = "身份证号（必须提供）")
     private String idCard;
 
     /**
      * 是否参加面试
      */
-    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否")
+    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否", inputConverterExp = "1=是,0=否")
     private Integer isInterview;
 
     /**
@@ -112,20 +112,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
      */
     @Excel(name = "是否退回", readConverterExp = "1=是,0=否")
     private Integer isReject;
-
-    /**
-     * 是否替换（1：无缝替换，2:有缝替换，0:无替换）
-     */
-    @Excel(name = "是否替换（1：无缝替换；2有缝替换，0 无替换）", readConverterExp = "1=无缝替换,1=有缝替换,0=无替换")
-    private Integer isReplace;
-
-    /**
-     * 替换人的员工编号
-     */
-    private String replaceStaffNo;
-
-    @Excel(name = "替换人员身份证号（非替换则为空）")
-    private String replacdStaffIdCard;
 
     /**
      * 不符合岗位要求的原因及建议
@@ -276,22 +262,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         this.isReject = isReject;
     }
 
-    public Integer getIsReplace() {
-        return isReplace;
-    }
-
-    public void setIsReplace(Integer isReplace) {
-        this.isReplace = isReplace;
-    }
-
-    public String getReplaceStaffNo() {
-        return replaceStaffNo;
-    }
-
-    public void setReplaceStaffNo(String replaceStaffNo) {
-        this.replaceStaffNo = replaceStaffNo;
-    }
-
     public String getReason() {
         return reason;
     }
@@ -391,8 +361,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
                 && (this.getInterviewDate() == null ? other.getInterviewDate() == null : this.getInterviewDate().equals(other.getInterviewDate()))
                 && (this.getIsPass() == null ? other.getIsPass() == null : this.getIsPass().equals(other.getIsPass()))
                 && (this.getIsReject() == null ? other.getIsReject() == null : this.getIsReject().equals(other.getIsReject()))
-                && (this.getIsReplace() == null ? other.getIsReplace() == null : this.getIsReplace().equals(other.getIsReplace()))
-                && (this.getReplaceStaffNo() == null ? other.getReplaceStaffNo() == null : this.getReplaceStaffNo().equals(other.getReplaceStaffNo()))
                 && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
                 && (this.getArriveDate() == null ? other.getArriveDate() == null : this.getArriveDate().equals(other.getArriveDate()))
                 && (this.getLeaveDate() == null ? other.getLeaveDate() == null : this.getLeaveDate().equals(other.getLeaveDate()))
@@ -419,8 +387,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         result = prime * result + ((getInterviewDate() == null) ? 0 : getInterviewDate().hashCode());
         result = prime * result + ((getIsPass() == null) ? 0 : getIsPass().hashCode());
         result = prime * result + ((getIsReject() == null) ? 0 : getIsReject().hashCode());
-        result = prime * result + ((getIsReplace() == null) ? 0 : getIsReplace().hashCode());
-        result = prime * result + ((getReplaceStaffNo() == null) ? 0 : getReplaceStaffNo().hashCode());
         result = prime * result + ((getReason() == null) ? 0 : getReason().hashCode());
         result = prime * result + ((getArriveDate() == null) ? 0 : getArriveDate().hashCode());
         result = prime * result + ((getLeaveDate() == null) ? 0 : getLeaveDate().hashCode());
@@ -452,9 +418,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         sb.append(", interviewDate=").append(interviewDate);
         sb.append(", isPass=").append(isPass);
         sb.append(", isReject=").append(isReject);
-        sb.append(", isReplace=").append(isReplace);
-        sb.append(", replaceStaffNo=").append(replaceStaffNo);
-        sb.append(", replacdStaffIdCard=").append(replacdStaffIdCard);
         sb.append(", reason=").append(reason);
         sb.append(", arriveDate=").append(arriveDate);
         sb.append(", leaveDate=").append(leaveDate);
@@ -482,14 +445,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
 
     public void setPostName(String postName) {
         this.postName = postName;
-    }
-
-    public String getReplacdStaffIdCard() {
-        return replacdStaffIdCard;
-    }
-
-    public void setReplacdStaffIdCard(String replacdStaffIdCard) {
-        this.replacdStaffIdCard = replacdStaffIdCard;
     }
 
     @Override
@@ -540,9 +495,6 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
         }
         if (this.getIdCard() != null && this.getIdCard().length() > ModelClass.ATTR_ID_CARD_LENGTH) {
             return new Result(0, "身份证号【" + this.getIdCard() + "】长度不能大于" + ModelClass.ATTR_ID_CARD_LENGTH + "！");
-        }
-        if (this.getReplacdStaffIdCard() != null && this.getReplacdStaffIdCard().length() > ModelClass.ATTR_ID_CARD_LENGTH) {
-            return new Result(0, "替换人员身份证号【" + this.getReplacdStaffIdCard() + "】长度不能大于" + ModelClass.ATTR_ID_CARD_LENGTH + "！");
         }
         if (this.getReason() != null && this.getReason().length() > ModelClass.ATTR_TEXT_LENGTH) {
             return new Result(0, "不符合原因【" + this.getReason() + "】长度不能大于" + ModelClass.ATTR_TEXT_LENGTH + "！");

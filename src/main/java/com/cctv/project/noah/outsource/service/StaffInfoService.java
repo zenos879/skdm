@@ -13,9 +13,9 @@ public interface StaffInfoService {
 
     Result deleteByIds(String ids);
 
-    Result insert(StaffInfo record);
+//    Result insert(StaffInfo record);
 
-//    Result insertSelective(StaffInfo record);
+    Result insertSelective(StaffInfo record);
 
     List<StaffInfo> selectList(StaffInfo record);
 

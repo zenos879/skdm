@@ -185,13 +185,8 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             }
             // 是否退回
             Integer isReject = record.getIsReject();
-            if (isReject != null){
+            if (isReject != null) {
                 criteria.andIsRejectEqualTo(isReject);
-            }
-            // 是否替换
-            Integer isReplace = record.getIsReplace();
-            if (isReplace != null){
-                criteria.andIsReplaceEqualTo(isReplace);
             }
             // 到岗日期
             Object arriveStartTime = params.get("arriveStartTime");
@@ -333,7 +328,6 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 return new Result(0, "根据采购编号未能查询到对应的项目信息！");
             }
             /** end */
-            String replacdStaffIdCard = record.getReplacdStaffIdCard();
             int i = interviewPersonRefMapper.updateByPrimaryKeySelective(record);
             result.setCode(i);
             return result;
@@ -379,19 +373,17 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
      */
     public StaffInfo generateStaffInfo(InterviewPersonRef record) {
         StaffInfo staffInfo = new StaffInfo();
+        staffInfo.setPurchaseNo(record.getPurchaseNo());
         staffInfo.setOrderNo(record.getOrderNo());
         staffInfo.setStaffNo(record.getStaffNo());
         staffInfo.setStaffName(record.getStaffName());
         staffInfo.setIdCard(record.getIdCard());
+        staffInfo.setProjectId(record.getProjectId());
         staffInfo.setSupplierId(record.getSupplierId());
         staffInfo.setPostId(record.getPostId());
         staffInfo.setDepartmentId(record.getDepartmentId());
-        staffInfo.setIsReplace(record.getIsReplace());
-//        staffInfo.setReplaceGroup();
         staffInfo.setReason(record.getReason());
         staffInfo.setArriveDate(record.getArriveDate());
-//        staffInfo.setLeaveDate(record.getLeaveDate());
-//        staffInfo.setLeaveReason(record.getLeaveReason());
         return staffInfo;
     }
 
@@ -432,6 +424,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             if (isInterview == null) {
                 return new Result(0, "第" + (i + 2) + "行的是否参加面试为空!");
             }
+            Date notifyDate = temp.getNotifyDate();
             Integer isPass = temp.getIsPass();
             if (isPass == null) {
                 return new Result(0, "第" + (i + 2) + "行的是否通过为空!");
@@ -439,20 +432,6 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             Integer isReject = temp.getIsReject();
             if (isReject == null) {
                 return new Result(0, "第" + (i + 2) + "行的是否退回为空!");
-            }
-            Integer isReplace = temp.getIsReplace();
-            if (isReplace == null) {
-                return new Result(0, "第" + (i + 2) + "行的是否替换为空!");
-            }
-            String replacdStaffIdCard = temp.getReplacdStaffIdCard();
-            if (StringUtils.isEmpty(replacdStaffIdCard)) {
-                if (isReplace != 0) {
-                    return new Result(0, "第" + (i + 2) + "行有替换人员时，替换人员证件号必须填写!");
-                }
-            } else {
-                if (isReplace == 0 || isPass == 0) {
-                    return new Result(0, "第" + (i + 2) + "行,面试未通过或者无替换人员时，无需填写替换人员证件号!");
-                }
             }
             String reason = temp.getReason();
             if (StringUtils.isEmpty(reason)) {
@@ -492,6 +471,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             temp.setPostId(postInfo.getPostId());
             temp.setSupplierId(supplierInfo.getSupplierId());
             temp.setProjectId(reviewInfo.getProjectId());
+            temp.setDepartmentId(projectInfo.getDepartmentId());
         }
 
         StringBuffer msg = new StringBuffer();
@@ -504,34 +484,20 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
             InterviewPersonRef record = records.get(i);
             // 判断数据库是否存在该信息
             Integer autoId = selectBeanExist(record, true);
-            Integer isReplace = record.getIsReplace();
-            String replacdStaffIdCard = record.getReplacdStaffIdCard();
             if (autoId == 0) {
-                // 不存在，则新增,同时生成员工编号，需要先确定【是否替换】字段为0
-                if (isReplace != 0) {
+                record.setStaffNo(GeneralUtils.generateStaffNo());
+                record.setCreateTime(new Date());
+                interviewPersonRefMapper.insertSelective(record);
+                addCount++;
+            } else {
+                // 存在，则补全信息，根据身份证号，查找员工编号
+                String aLong = selectNoByIdCard(record.getIdCard());
+                if (StringUtils.isEmpty(aLong) || "0".equals(aLong)) {
                     errorCount++;
-                    msg.append("第" + i + "行未执行，原因【" + record.getStaffName() + "的信息不存在，为新增人员，不能添加替换人员！】</br>");
+                    msg.append("第" + i + "行未执行，原因【身份证号" + record.getIdCard() + "未找到对应员工编号，请检查后重试！】</br>");
                     continue;
                 } else {
-                    record.setStaffNo(GeneralUtils.generateStaffNo());
-                    record.setCreateTime(new Date());
-                    interviewPersonRefMapper.insertSelective(record);
-                    addCount++;
-                }
-            } else {
-                // 存在，则补全替换人员信息，替换人身份证号转为员工编号
-                if (isReplace == 0) {
-                    record.setReplaceStaffNo("0");
-                } else {
-                    // 根据替换人身份证号，查找员工编号
-                    String aLong = selectNoByIdCard(replacdStaffIdCard);
-                    if (StringUtils.isEmpty(aLong) || "0".equals(aLong)) {
-                        errorCount++;
-                        msg.append("第" + i + "行未执行，原因【替换人员身份证号" + record.getReplacdStaffIdCard() + "未找到对应员工编号，请检查后重试！】</br>");
-                        continue;
-                    } else {
-                        record.setReplaceStaffNo(aLong);
-                    }
+                    record.setStaffNo(aLong);
                 }
                 // 查询主键，然后更新实体
                 Integer id = selectBeanExist(record, false);
@@ -545,7 +511,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
                 if (staffInfos.size() == 0) {
                     staffInfo.setCreateTime(new Date());
-                    staffInfoService.insert(staffInfo);
+                    staffInfoService.insertSelective(staffInfo);
                     addStaffCount++;
                 } else {
                     Integer staffAutoId = staffInfos.get(0).getAutoId();
@@ -553,28 +519,8 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                     staffInfoService.updateByPrimaryKeySelective(staffInfo);
                     updateStaffCount++;
                 }
-                //如果存在替换人员，还要维护staffInfo表中对应的replaceGroup字段
-                if (record.getIsReplace() != 0) {
-                    Integer staffAutoId = staffInfo.getAutoId();
-                    if (staffAutoId == null) {
-                        staffInfos = staffInfoService.selectList(staffInfo);
-                        staffAutoId = staffInfos.get(0).getAutoId();
-                        staffInfo.setAutoId(staffAutoId);
-                    }
-                    String idCard = record.getIdCard();
-                    String replaceIdCard = record.getReplacdStaffIdCard();
-                    List<String> tempList = new ArrayList<>();
-                    tempList.add(idCard);
-                    tempList.add(replaceIdCard);
-                    staffInfoService.updateGroupByStaffNo(staffAutoId + 1, tempList);
-                }
             }
         }
-//        if (msg.length() > 0) {
-//            msg.append("当前共计导入" + (size - errorCount) + "条！其中新增" + addCount + "条、更新" + updateCount + "条！");
-//        } else {
-//            msg.append("导入成功，共计导入" + size + "条");
-//        }
         return GeneralUtils.getAllMsg(msg, size, errorCount, addCount, updateCount);
     }
 }

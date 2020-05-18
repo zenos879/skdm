@@ -74,7 +74,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
     @Override
-    public Result insert(StaffInfo record) {
+    public Result insertSelective(StaffInfo record) {
         Result result = new Result();
         // 插入时判断是否存在
         Integer b = selectBeanExist(record, false);
@@ -85,7 +85,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             return result;
         }
         record.setCreateTime(new Date());
-        int insert = staffInfoMapper.insert(record);
+        int insert = staffInfoMapper.insertSelective(record);
         if (insert < 0) {
             result.setCode(0);
             result.setInfo("人员数据新增失败，请重试！");
@@ -94,7 +94,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
 //    @Override
-//    public Result insertSelective(StaffInfo record) {
+//    public Result insert(StaffInfo record) {
 //        // todo 扩展方法，暂时不用，用时需要注意去重
 //        int i = staffInfoMapper.insertSelective(record);
 //        return new Result(i);
@@ -311,7 +311,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         // 判断被替换人员有变更,才不维护replaceGroup字段
         String beReplacdStaffIdCard = record.getBeReplacdStaffIdCard();
         String beReplacdStaffIdCard_old = record.getBeReplacdStaffIdCard_old();
-        if (!beReplacdStaffIdCard.equals(beReplacdStaffIdCard_old)) {
+        if (StringUtils.isNotEmpty(beReplacdStaffIdCard) && StringUtils.isNotEmpty(beReplacdStaffIdCard_old) && !beReplacdStaffIdCard.equals(beReplacdStaffIdCard_old)) {
             Integer oldReplaceGroup = record.getReplaceGroup();
             // 原来有分组的，先清空
             if (oldReplaceGroup != 0) {

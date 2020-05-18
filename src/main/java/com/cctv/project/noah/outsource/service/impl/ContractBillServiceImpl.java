@@ -23,5 +23,5 @@ public class ContractBillServiceImpl implements ContractBillService {
     public List<ContractBill> selectbyIds(String ids){
        return contractBillMapper.selectByIds(ids.split(","));
     }
-
+    
 }

@@ -25,3 +25,6 @@ mybatis:
 server:
   port: 8080
 
+#  noah:
+#    profile: classpath:/templates/
+
