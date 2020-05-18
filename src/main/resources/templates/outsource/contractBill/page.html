@@ -59,6 +59,10 @@
         queryContractBill();
     });
 
+    function getResponseMsg(res) {
+        isShowExport = res.msg;
+    }
+
     //默认查询账单表中的现有数据
     function queryContractBill() {
         var options = {
@@ -67,7 +71,6 @@
             exportUrl: prefix + "/export",
             modalName: "月度考勤总表",
             responseHandler: getResponseMsg,
-            onLoadSuccess: changeHideBtn,
             columns: [{
                 checkbox: true
             }, {
