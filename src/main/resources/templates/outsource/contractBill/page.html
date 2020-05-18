@@ -17,14 +17,7 @@
                                 统计年份：<input type="text" name="statisticsYear" th:value="${@billService.getNowYear()}"/>
                             </li>
                             <li>
-                                统计月份：<input type="text" name="statisticsMonth" value="3"/>
-                                <!--                                            th:value="${@billService.getPrevMonth()}"/>-->
-                            </li>
-                            <li>
-                                部门名称：<select name="departmentName" id="departmentName" class="selectpicker" data-live-search="true" th:with="departs=${@departmentInfoService.selectAll()}">
-                                <option value="">全部</option>
-                                <option th:each="depart : ${departs}" th:text="${depart.departmentName}" th:value="${depart.departmentName}"></option>
-                            </select>
+                                统计月份：<input type="text" name="statisticsMonth" th:value="${@billService.getPrevMonth()}"/>
                             </li>
                             <li>
                                 项目名称：<select name="projectName" id="projectName" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
@@ -38,15 +31,6 @@
                                 <option value="">全部</option>
                                 <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierName()}"></option>
                             </select>
-                            </li>
-                            <li>
-                                考勤人：<input type="text" name="staffName" value=""/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                        class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                        class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                     </div>

@@ -15,14 +15,11 @@
         <result column="interview_date" jdbcType="DATE" property="interviewDate"/>
         <result column="is_pass" jdbcType="INTEGER" property="isPass"/>
         <result column="is_reject" jdbcType="INTEGER" property="isReject"/>
-        <result column="is_replace" jdbcType="INTEGER" property="isReplace"/>
-        <result column="replace_staff_no" jdbcType="VARCHAR" property="replaceStaffNo"/>
         <result column="reason" jdbcType="VARCHAR" property="reason"/>
         <result column="arrive_date" jdbcType="DATE" property="arriveDate"/>
         <result column="leave_date" jdbcType="DATE" property="leaveDate"/>
         <result column="leave_reason" jdbcType="VARCHAR" property="leaveReason"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="project_id" jdbcType="INTEGER" property="projectId"/>
     </resultMap>
     <sql id="Example_Where_Clause">
@@ -87,8 +84,7 @@
     </sql>
     <sql id="Base_Column_List">
     auto_id, purchase_no, order_no, staff_no, staff_name, id_card, supplier_id, post_id,
-    project_id, is_interview, notify_date, interview_date, is_pass, is_reject, is_replace,
-    replace_staff_no, reason, arrive_date, leave_date, leave_reason, create_time, `status`
+    project_id, is_interview, notify_date, interview_date, is_pass, is_reject, reason, arrive_date, leave_date, leave_reason, create_time, `status`
   </sql>
     <sql id="selectJoin">
         ipr.auto_id,
@@ -105,8 +101,6 @@
         ipr.interview_date,
         ipr.is_pass,
         ipr.is_reject,
-        ipr.is_replace,
-        ipr.replace_staff_no,
         ipr.reason,
         ipr.arrive_date,
         ipr.leave_date,
@@ -165,7 +159,7 @@
       staff_name, id_card, supplier_id,
       post_id, project_id, is_interview,
       notify_date, interview_date, is_pass,
-      is_reject, is_replace, replace_staff_no,
+      is_reject,
       reason, arrive_date, leave_date,
       leave_reason, create_time, `status`
       )
@@ -173,7 +167,7 @@
       #{staffName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{supplierId,jdbcType=INTEGER},
       #{postId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{isInterview,jdbcType=INTEGER},
       #{notifyDate,jdbcType=DATE}, #{interviewDate,jdbcType=DATE}, #{isPass,jdbcType=INTEGER},
-      #{isReject,jdbcType=INTEGER}, #{isReplace,jdbcType=INTEGER}, #{replaceStaffNo,jdbcType=VARCHAR},
+      #{isReject,jdbcType=INTEGER},
       #{reason,jdbcType=VARCHAR}, #{arriveDate,jdbcType=DATE}, #{leaveDate,jdbcType=DATE},
       #{leaveReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
       )
@@ -217,12 +211,6 @@
             </if>
             <if test="isReject != null">
                 is_reject,
-            </if>
-            <if test="isReplace != null">
-                is_replace,
-            </if>
-            <if test="replaceStaffNo != null">
-                replace_staff_no,
             </if>
             <if test="reason != null">
                 reason,
@@ -282,12 +270,6 @@
             </if>
             <if test="isReject != null">
                 #{isReject,jdbcType=INTEGER},
-            </if>
-            <if test="isReplace != null">
-                #{isReplace,jdbcType=INTEGER},
-            </if>
-            <if test="replaceStaffNo != null">
-                #{replaceStaffNo,jdbcType=VARCHAR},
             </if>
             <if test="reason != null">
                 #{reason,jdbcType=VARCHAR},
@@ -361,12 +343,6 @@
             <if test="record.isReject != null">
                 is_reject = #{record.isReject,jdbcType=INTEGER},
             </if>
-            <if test="record.isReplace != null">
-                is_replace = #{record.isReplace,jdbcType=INTEGER},
-            </if>
-            <if test="record.replaceStaffNo != null">
-                replace_staff_no = #{record.replaceStaffNo,jdbcType=VARCHAR},
-            </if>
             <if test="record.reason != null">
                 reason = #{record.reason,jdbcType=VARCHAR},
             </if>
@@ -408,8 +384,6 @@
         interview_date = #{record.interviewDate,jdbcType=DATE},
         is_pass = #{record.isPass,jdbcType=INTEGER},
         is_reject = #{record.isReject,jdbcType=INTEGER},
-        is_replace = #{record.isReplace,jdbcType=INTEGER},
-        replace_staff_no = #{record.replaceStaffNo,jdbcType=VARCHAR},
         reason = #{record.reason,jdbcType=VARCHAR},
         arrive_date = #{record.arriveDate,jdbcType=DATE},
         leave_date = #{record.leaveDate,jdbcType=DATE},
@@ -460,12 +434,6 @@
             <if test="isReject != null">
                 is_reject = #{isReject,jdbcType=INTEGER},
             </if>
-            <if test="isReplace != null">
-                is_replace = #{isReplace,jdbcType=INTEGER},
-            </if>
-            <if test="replaceStaffNo != null">
-                replace_staff_no = #{replaceStaffNo,jdbcType=VARCHAR},
-            </if>
             <if test="reason != null">
                 reason = #{reason,jdbcType=VARCHAR},
             </if>
@@ -504,8 +472,6 @@
       interview_date = #{interviewDate,jdbcType=DATE},
       is_pass = #{isPass,jdbcType=INTEGER},
       is_reject = #{isReject,jdbcType=INTEGER},
-      is_replace = #{isReplace,jdbcType=INTEGER},
-      replace_staff_no = #{replaceStaffNo,jdbcType=VARCHAR},
       reason = #{reason,jdbcType=VARCHAR},
       arrive_date = #{arriveDate,jdbcType=DATE},
       leave_date = #{leaveDate,jdbcType=DATE},

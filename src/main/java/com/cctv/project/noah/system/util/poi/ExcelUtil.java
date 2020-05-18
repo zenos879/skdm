@@ -274,11 +274,11 @@ public class ExcelUtil<T> {
                 Row row = sheet.getRow(i);
                 T entity = null;
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet()) {
-                    Integer key = entry.getKey();
-                    if (key == null) {
-                        log.error("文件错误，找不到实体信息");
+                    if (entry == null) {
+                        log.error("文件错误，找不到实体信息，错误信息：" + entry.toString());
                         return new ArrayList<>();
                     }
+                    Integer key = entry.getKey();
                     Object val = this.getCellValue(row, key);
 
                     // 如果不存在实例则新建.
@@ -287,6 +287,19 @@ public class ExcelUtil<T> {
                     Field field = fieldsMap.get(entry.getKey());
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
+                    /** 先翻译，再赋值 2020.5.18修改（bug:导出翻译正常，导入值为空） */
+                    Excel attr;
+                    String propertyName = null;
+                    if (StringUtils.isNotNull(fieldType)) {
+                        attr = field.getAnnotation(Excel.class);
+                        propertyName = field.getName();
+                        if (StringUtils.isNotEmpty(attr.targetAttr())) {
+                            propertyName = field.getName() + "." + attr.targetAttr();
+                        } else if (StringUtils.isNotEmpty(attr.readConverterExp())) {
+                            val = reverseByExp(String.valueOf(val), attr.readConverterExp());
+                        }
+                    }
+                    /** end */
                     if (String.class == fieldType) {
                         String s = Convert.toStr(val);
                         if (StringUtils.endsWith(s, ".0")) {
@@ -317,13 +330,6 @@ public class ExcelUtil<T> {
                         }
                     }
                     if (StringUtils.isNotNull(fieldType)) {
-                        Excel attr = field.getAnnotation(Excel.class);
-                        String propertyName = field.getName();
-                        if (StringUtils.isNotEmpty(attr.targetAttr())) {
-                            propertyName = field.getName() + "." + attr.targetAttr();
-                        } else if (StringUtils.isNotEmpty(attr.readConverterExp())) {
-                            val = reverseByExp(String.valueOf(val), attr.readConverterExp());
-                        }
                         ReflectUtils.invokeSetter(entity, propertyName, val);
                     }
                 }
