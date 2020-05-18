@@ -1,6 +1,7 @@
 package com.cctv.project.noah.outsource.mapper;
 
 import com.cctv.project.noah.outsource.entity.Attendance;
+import com.cctv.project.noah.outsource.entity.AttendanceAll;
 import com.cctv.project.noah.outsource.entity.AttendanceCount;
 import com.cctv.project.noah.outsource.entity.AttendanceExample;
 
@@ -23,9 +24,17 @@ public interface AttendanceMapper {
 
     List<Attendance> selectBySelective(Attendance attendance);
 
+    List<Attendance> selectCoreBySelective(Attendance attendance);
+
+    List<AttendanceAll> selectAllBySelective(Attendance attendance);
+
     List<Attendance> selectPublicHolidaysInfo(Date firstDay,Date lastDay);
 
     List<Attendance> selectByIds(String[] ids);
+
+    List<Attendance> selectCoreByIds(String[] ids);
+
+    List<AttendanceAll> selectAllByIds(String[] ids);
 
     List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount);
 

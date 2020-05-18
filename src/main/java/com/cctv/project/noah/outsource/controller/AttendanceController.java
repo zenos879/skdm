@@ -2,9 +2,11 @@ package com.cctv.project.noah.outsource.controller;
 
 
 import com.cctv.project.noah.outsource.entity.Attendance;
+import com.cctv.project.noah.outsource.entity.AttendanceAll;
 import com.cctv.project.noah.outsource.entity.AttendanceCount;
 import com.cctv.project.noah.outsource.service.Result;
 import com.cctv.project.noah.outsource.service.AttendanceService;
+import com.cctv.project.noah.outsource.utils.ModelClass;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
@@ -93,12 +95,12 @@ public class AttendanceController extends BaseController {
     @ResponseBody
     @Log(title = "考勤数据", businessType = BusinessType.EXPORT)
     public AjaxResult export(Attendance attendance, String ids){
-        ExcelUtil<Attendance> util = new ExcelUtil<Attendance>(Attendance.class);
-        List<Attendance> list;
+        ExcelUtil<AttendanceAll> util = new ExcelUtil<AttendanceAll>(AttendanceAll.class);
+        List<AttendanceAll> list;
         if (ids !=null){
-            list = attendanceService.selectByIds(ids);
+            list = attendanceService.selectAllByIds(ids);
         }else {
-            list = attendanceService.selectBySelective(attendance);
+            list = attendanceService.selectAllBySelective(attendance);
         }
         AjaxResult ajaxResult = util.exportExcel(list, "考勤数据");
         return ajaxResult;
@@ -111,11 +113,10 @@ public class AttendanceController extends BaseController {
         ExcelUtil<Attendance> util = new ExcelUtil<Attendance>(Attendance.class);
         List<Attendance> list;
         if (ids !=null){
-            list = attendanceService.selectByIds(ids);
+            list = attendanceService.selectByIds(ids, ModelClass.ATTENDANCE_SELECT_FLAG_CORE);
         }else {
-            list = attendanceService.selectBySelective(attendance);
+            list = attendanceService.selectBySelective(attendance,ModelClass.ATTENDANCE_SELECT_FLAG_CORE);
         }
-        attendanceService.exportCore(list);
         return util.exportExcel(list, "考勤数据");
     }
 

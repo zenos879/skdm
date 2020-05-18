@@ -105,19 +105,20 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return null;
         }
     }
-
     @Override
     public List<Attendance> selectBySelective(Attendance attendance){
+        return selectBySelective(attendance,ModelClass.ATTENDANCE_SELECT_FLAG_COMMON);
+    }
+    @Override
+    public List<AttendanceAll> selectAllBySelective(Attendance attendance){
         try {
             if (attendance == null) {
-                return selectAll();
+                attendance = new Attendance();
             }
             if (attendance.checkIllegal()) {
                 return new ArrayList<>();
             }
-            boolean equals = attendance.equals(new Attendance());
-            List<Attendance> attendances = attendanceMapper.selectBySelective(attendance);
-//        List<Attendance> attendances = selectAll();
+            List<AttendanceAll> attendances = attendanceMapper.selectAllBySelective(attendance);
             return StringUtils.isNotEmpty(attendances)? attendances:new ArrayList<>();
         } catch (Exception e) {
             logger.error("【ERROR】------"+e);
@@ -125,6 +126,39 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         }
 
     }
+
+    @Override
+    public List<Attendance> selectBySelective(Attendance attendance,Integer flag){
+        try {
+            if (attendance == null) {
+                return selectAll();
+            }
+            if (attendance.checkIllegal()) {
+                return new ArrayList<>();
+            }
+            List<Attendance> attendances = null;
+            switch (flag){
+                case ModelClass.ATTENDANCE_SELECT_FLAG_COMMON:{
+                   attendances = attendanceMapper.selectBySelective(attendance);
+                   break;
+                }
+                case ModelClass.ATTENDANCE_SELECT_FLAG_CORE:{
+                    attendances = attendanceMapper.selectCoreBySelective(attendance);
+                    break;
+                }
+                default:{
+                    attendances = new ArrayList<>();
+                }
+            }
+
+            return StringUtils.isNotEmpty(attendances)? attendances:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
+
+    }
+
 
     /**
      * 已废弃
@@ -237,7 +271,6 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
     public List<AttendanceCount> selectAttendanceCountByIds(String ids){
         try {
             List<String> list = checkIds(ids);
-
             List<AttendanceCount> attendanceCounts = attendanceMapper.selectAttendanceCountByIds(list.toArray(new String[list.size()]));
             return StringUtils.isNotEmpty(attendanceCounts)?attendanceCounts:new ArrayList<>();
         } catch (Exception e) {
@@ -245,12 +278,42 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new ArrayList<>();
         }
     }
-
     @Override
     public List<Attendance> selectByIds(String ids){
+        return selectByIds(ids,ModelClass.ATTENDANCE_SELECT_FLAG_COMMON);
+    }
+    @Override
+    public List<AttendanceAll> selectAllByIds(String ids){
         try {
             List<String> list = checkIds(ids);
-            List<Attendance> attendances = attendanceMapper.selectByIds(list.toArray(new String[list.size()]));
+            List<AttendanceAll> attendances = null;
+            String[] idArray = list.toArray(new String[list.size()]);
+            attendances = attendanceMapper.selectAllByIds(idArray);
+            return StringUtils.isNotEmpty(attendances)?attendances:new ArrayList<>();
+        } catch (Exception e) {
+            logger.error("【ERROR】------"+e);
+            return new ArrayList<>();
+        }
+    }
+    @Override
+    public List<Attendance> selectByIds(String ids, int flag){
+        try {
+            List<String> list = checkIds(ids);
+            List<Attendance> attendances = null;
+            String[] idArray = list.toArray(new String[list.size()]);
+            switch (flag){
+                case ModelClass.ATTENDANCE_SELECT_FLAG_COMMON:{
+                    attendances = attendanceMapper.selectByIds(idArray);
+                    break;
+                }
+                case ModelClass.ATTENDANCE_SELECT_FLAG_CORE:{
+                    attendances = attendanceMapper.selectCoreByIds(idArray);
+                    break;
+                }
+                default:{
+                    attendances = new ArrayList<>();
+                }
+            }
             return StringUtils.isNotEmpty(attendances)?attendances:new ArrayList<>();
         } catch (Exception e) {
             logger.error("【ERROR】------"+e);

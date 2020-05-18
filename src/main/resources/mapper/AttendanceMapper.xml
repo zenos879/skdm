@@ -83,12 +83,59 @@
         a.serve_days_expect,
         a.serve_days_actual,
         a.create_time,
-        a. STATUS,
         s.staff_name,
         a.remark
         FROM
         attendance a
         LEFT JOIN staff_info s ON s.staff_no = a.staff_no
+    </sql>
+    <sql id="selectAttendanceCoreVo">
+        SELECT
+        a.auto_id,
+        a.order_no,
+        a.staff_no,
+        a.statistics_year,
+        a.statistics_month,
+        a.serve_days_expect,
+        a.create_time,
+        s.staff_name,
+        a.remark
+        FROM
+        attendance a
+        LEFT JOIN staff_info s ON s.staff_no = a.staff_no
+    </sql>
+    <sql id="selectAttendanceAllVo">
+        SELECT
+            a.auto_id autoId,
+            a.order_no orderNo,
+            a.staff_no staffNo,
+            a.statistics_year statisticsYear,
+            a.statistics_month statisticsMonth,
+            a.serve_days_expect serveDaysExpect,
+            a.serve_days_actual serveDaysActual,
+            s.staff_name staffName,
+            d.department_name departmentName,
+            p1.post_name postName,
+            su.supplier_name supplierName,
+            s.is_replace isReplace,
+            (
+                SELECT
+                    staff_no
+                FROM
+                    staff_info s2
+                WHERE
+                    s2.auto_id = s.replace_group - 1
+            ) replaceNo,
+            s.arrive_date arriveDate,
+            s.leave_date leaveDate,
+            s.leave_reason leaveReason,
+            a.remark
+        FROM
+            attendance a
+        LEFT JOIN staff_info s ON s.staff_no = a.staff_no
+        LEFT JOIN department_info d ON d.department_id = s.department_id
+        LEFT JOIN post_info p1 ON p1.post_id = s.post_id
+        LEFT JOIN supplier_info su ON su.supplier_id = s.supplier_id
     </sql>
     <select id="selectPublicHolidaysInfo" resultMap="BaseResultMap">
         <include refid="selectAttendanceVo"/>
@@ -181,7 +228,7 @@
         FROM
         attendance a
         LEFT JOIN `staff_info` sta ON sta.staff_no = a.staff_no
-        LEFT JOIN interview_info inter ON inter.order_no = sta.order_no
+        LEFT JOIN interview_person_ref inter ON inter.order_no = sta.order_no
         LEFT JOIN review_info re ON re.purchase_no = inter.purchase_no
         AND re.post_id = sta.post_id
         LEFT JOIN project_info pro ON pro.project_id = re.project_id
@@ -254,16 +301,34 @@
           <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
           <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
           <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
-          <if test="status != null "> and a.status = #{status}</if>
-          <if test="staffName != null  and staffName != ''"> and a.staff_name like concat('%', #{staffName}, '%')</if>
-          <if test="params!=null and params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-              AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-          </if>
-          <if test="params!=null and params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-              AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-          </if>
       </where>
   </select>
+    <select id="selectCoreBySelective" parameterType="com.cctv.project.noah.outsource.entity.Attendance" resultMap="BaseResultMap">
+
+        <include refid="selectAttendanceCoreVo"/>
+        <where>
+            <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
+            <if test="orderNo != null  and orderNo != ''"> and a.order_no like concat('%', #{orderNo}, '%')</if>
+            <if test="staffNo != null and staffNo != ''"> and a.staff_no like concat('%', #{staffNo}, '%')</if>
+            <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
+            <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
+            <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
+            <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
+        </where>
+    </select>
+    <select id="selectAllBySelective" parameterType="com.cctv.project.noah.outsource.entity.Attendance" resultType="com.cctv.project.noah.outsource.entity.AttendanceAll">
+
+        <include refid="selectAttendanceAllVo"/>
+        <where>
+            <if test="departmentId != null "> and s.department_id = #{departmentId}</if>
+            <if test="orderNo != null  and orderNo != ''"> and a.order_no like concat('%', #{orderNo}, '%')</if>
+            <if test="staffNo != null and staffNo != ''"> and a.staff_no like concat('%', #{staffNo}, '%')</if>
+            <if test="statisticsYear != null "> and a.statistics_year = #{statisticsYear}</if>
+            <if test="statisticsMonth != null "> and a.statistics_month = #{statisticsMonth}</if>
+            <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
+            <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>
+        </where>
+    </select>
   <select id="selectByIds" resultMap="BaseResultMap">
 
       <include refid="selectAttendanceVo"/>
@@ -273,6 +338,20 @@
       #{id}
     </foreach>
   </select>
+    <select id="selectCoreByIds" resultMap="BaseResultMap">
+        <include refid="selectAttendanceCoreVo"/>
+        where a.auto_id in
+        <foreach collection="array" item="id"  open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectAllByIds" resultType="com.cctv.project.noah.outsource.entity.AttendanceAll">
+        <include refid="selectAttendanceAllVo"/>
+        where a.auto_id in
+        <foreach collection="array" item="id"  open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from attendance
     where auto_id = #{autoId,jdbcType=BIGINT}
