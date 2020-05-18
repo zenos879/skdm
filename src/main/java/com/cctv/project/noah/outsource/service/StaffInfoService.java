@@ -27,7 +27,9 @@ public interface StaffInfoService {
 
     List<StaffInfo> selectByName(String record);
 
-    String selectByIdCard(String record);
+    List<StaffInfo> selectByReplaceGroupAll(int record);
+
+    List<StaffInfo> selectByReplaceGroupWithoutSelf(int record);
 
     List<StaffInfo> selectByIds(String ids);
 
@@ -38,6 +40,8 @@ public interface StaffInfoService {
     Result updateByPrimaryKey(StaffInfo record);
 
     Result updateGroupByStaffNo(Integer groupId, List<String> staffNo);
+
+    Result updateGroupToZero(Integer groupId);
 
 //    Result importStaffInfo(List<StaffInfo> records);
 }

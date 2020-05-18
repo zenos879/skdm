@@ -29,6 +29,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 采购编号
      */
+    @Excel(name = "采购编号")
     private String purchaseNo;
 
     /**
@@ -142,14 +143,14 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 离岗日期
      */
-    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+//    @Excel(name = "离岗日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date leaveDate;
 
     /**
      * 离岗原因
      */
-    @Excel(name = "离岗原因", type = Excel.Type.EXPORT)
+//    @Excel(name = "离岗原因", type = Excel.Type.EXPORT)
     private String leaveReason;
 
     /**

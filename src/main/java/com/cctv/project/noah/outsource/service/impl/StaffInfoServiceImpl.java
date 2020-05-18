@@ -196,25 +196,34 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
     @Override
-    public String selectByIdCard(String idCard) {
-        if (StringUtils.isNotEmpty(idCard)) {
-            StaffInfoExample staffInfoExample = new StaffInfoExample();
-            StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-            criteria.andIdCardEqualTo(idCard);
-            List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
-            if (staffInfos.size() > 0) {
-                return staffInfos.get(0).getStaffName();
-            } else {
-                return "未找到该身份证号对应的人员信息";
-            }
+    public List<StaffInfo> selectByReplaceGroupAll(int record) {
+        StaffInfoExample staffInfoExample = new StaffInfoExample();
+        StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        criteria.andReplaceGroupEqualTo(record);
+        List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+        for (StaffInfo staffInfo : staffInfos) {
+            completionCandidateName(staffInfo, false);
         }
-        return "";
+        return staffInfos;
+    }
+
+    @Override
+    public List<StaffInfo> selectByReplaceGroupWithoutSelf(int record) {
+        selectByReplaceGroupAll(record);
+        StaffInfoExample staffInfoExample = new StaffInfoExample();
+        StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        criteria.andReplaceGroupEqualTo(record);
+        List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
+        for (StaffInfo staffInfo : staffInfos) {
+            completionCandidateName(staffInfo, false);
+        }
+        return staffInfos;
     }
 
     @Override
     public StaffInfo selectByPrimaryKey(Integer id) {
         StaffInfo staffInfo = staffInfoMapper.selectByPrimaryKey(id);
-        completionCandidateName(staffInfo, false);
+        completionCandidateName(staffInfo, true);
         return staffInfo;
     }
 
@@ -237,7 +246,7 @@ public class StaffInfoServiceImpl implements StaffInfoService {
      * @param record
      * @return
      */
-    private StaffInfo completionCandidateName(StaffInfo record, boolean withList) {
+    private StaffInfo completionCandidateName(StaffInfo record, boolean withOld) {
         Integer projectId = record.getProjectId();
         Integer supplierId = record.getSupplierId();
         Integer departmentId = record.getDepartmentId();
@@ -258,8 +267,8 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         if (postInfo != null) {
             record.setPostName(postInfo.getPostName());
         }
-        String beReId = "无";
-        String beReName = "（无）";
+        String beReId = "";
+        String beReName = "";
         if (record.getIsReplace() > 0) {
             // 根据分组编号查询被替换人身份证号
             Integer autoId = record.getAutoId();
@@ -277,6 +286,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         }
         record.setBeReplacdStaffIdCard(beReId);
         record.setBeReplacdStaffName(beReName);
+        if (withOld) {
+            record.setBeReplacdStaffIdCard_old(beReId);
+        }
         return record;
     }
 
@@ -296,21 +308,32 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             result.setInfo("人员（身份证号）已经存在，请调整后再提交！");
             return result;
         }
-        // 验证传进来的替换人员身份证号是否都存在
-        String beReplacdStaffIdCard = record.getBeReplacdStaffIdCard().trim();
-        StaffInfo tempBean = new StaffInfo();
-        tempBean.setIdCard(beReplacdStaffIdCard);
-        Integer integer = selectBeanExist(tempBean, false);
-        if (integer == 0) {
-            result.setCode(0);
-            result.setInfo("被替换人员身份证号未找到匹配的信息！");
-            return result;
-        } else {
-            // 更新分组
-            List<String> templist = new ArrayList<>();
-            templist.add(record.getIdCard());
-            templist.add(beReplacdStaffIdCard);
-            updateGroupByStaffNo(integer + 1, templist);
+        // 判断被替换人员有变更,才不维护replaceGroup字段
+        String beReplacdStaffIdCard = record.getBeReplacdStaffIdCard();
+        String beReplacdStaffIdCard_old = record.getBeReplacdStaffIdCard_old();
+        if (!beReplacdStaffIdCard.equals(beReplacdStaffIdCard_old)) {
+            Integer oldReplaceGroup = record.getReplaceGroup();
+            // 原来有分组的，先清空
+            if (oldReplaceGroup != 0) {
+                updateGroupToZero(oldReplaceGroup);
+            }
+            // 被替换人员身份证号不为空，则验证是否存在
+            if (StringUtils.isNotEmpty(beReplacdStaffIdCard)) {
+                StaffInfo tempBean = new StaffInfo();
+                tempBean.setIdCard(beReplacdStaffIdCard);
+                Integer integer = selectBeanExist(tempBean, false);
+                if (integer == 0) {
+                    return new Result(0, "被替换人员身份证号【" + beReplacdStaffIdCard + "】未找到匹配的信息！");
+                } else if (integer == -1) {
+                    return new Result(0, "被替换人员身份证号【" + beReplacdStaffIdCard + "】找到多于一条匹配的信息，请核实数据库是否有脏数据！");
+                } else {
+                    // 更新分组
+                    List<String> templist = new ArrayList<>();
+                    templist.add(record.getIdCard());
+                    templist.add(beReplacdStaffIdCard);
+                    updateGroupByStaffNo(integer + 1, templist);
+                }
+            }
         }
         int i = staffInfoMapper.updateByPrimaryKeySelective(record);
         return new Result(i);
@@ -323,18 +346,35 @@ public class StaffInfoServiceImpl implements StaffInfoService {
     }
 
     /**
-     * 更新替换分组信息
+     * 被替换人变更，更新替换分组信息
      *
      * @param idCards 被替换人和替换人的身份证号
      * @return
      */
     @Override
-    public Result updateGroupByStaffNo(Integer groupId, List<String> idCards) {
+    public Result updateGroupByStaffNo(Integer replaceGroup, List<String> idCards) {
         StaffInfo staffInfo = new StaffInfo();
-        staffInfo.setReplaceGroup(groupId);
+        staffInfo.setReplaceGroup(replaceGroup);
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
         criteria.andIdCardIn(idCards);
+        int i = staffInfoMapper.updateByExampleSelective(staffInfo, staffInfoExample);
+        return new Result(i);
+    }
+
+    /**
+     * 被替换人置空，更新替换人组信息
+     *
+     * @param replaceGroup
+     * @return
+     */
+    @Override
+    public Result updateGroupToZero(Integer replaceGroup) {
+        StaffInfo staffInfo = new StaffInfo();
+        staffInfo.setReplaceGroup(0);
+        StaffInfoExample staffInfoExample = new StaffInfoExample();
+        StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
+        criteria.andReplaceGroupEqualTo(replaceGroup);
         int i = staffInfoMapper.updateByExampleSelective(staffInfo, staffInfoExample);
         return new Result(i);
     }
@@ -346,19 +386,23 @@ public class StaffInfoServiceImpl implements StaffInfoService {
      * @return 返回主键
      */
     private Integer selectBeanExist(StaffInfo staffInfo, boolean other) {
-//        String staffNo = staffInfo.getStaffNo();
         String idCard = staffInfo.getIdCard();
+        if (StringUtils.isEmpty(idCard)) {
+            return 0;
+        }
         StaffInfoExample staffInfoExample = new StaffInfoExample();
         StaffInfoExample.Criteria criteria = staffInfoExample.createCriteria();
-//        criteria.andStaffNoEqualTo(staffNo);
         criteria.andIdCardEqualTo(idCard);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
-        if (staffInfos.size() > 0) {
+        if (staffInfos.size() < 0) {
+            return 0;
+        } else if (staffInfos.size() == 1) {
             StaffInfo temp = staffInfos.get(0);
             Integer id = temp.getAutoId();
             return id;
+        } else {
+            return -1;
         }
-        return 0;
     }
 
 }

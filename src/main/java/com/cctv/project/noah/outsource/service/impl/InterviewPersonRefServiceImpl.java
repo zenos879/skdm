@@ -333,6 +333,7 @@ public class InterviewPersonRefServiceImpl implements InterviewPersonRefService 
                 return new Result(0, "根据采购编号未能查询到对应的项目信息！");
             }
             /** end */
+            String replacdStaffIdCard = record.getReplacdStaffIdCard();
             int i = interviewPersonRefMapper.updateByPrimaryKeySelective(record);
             result.setCode(i);
             return result;
