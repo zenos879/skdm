@@ -23,8 +23,8 @@
 									统计年份：<input type="text" name="statisticsYear" id="statisticsYear" maxlength="4" th:value="${@attendanceService.getPrevMonthYear()}"/>
 								</li>
 								<li>
-									<!--统计月份：<input type="text" name="statisticsMonth" th:value="${@attendanceService.getPrevMonth()}"/>-->
-									统计月份：<input type="text" name="statisticsMonth" id="statisticsMonth" maxlength="2" value="3"/>
+									统计月份：<input type="text" name="statisticsMonth" id="statisticsMonth" th:value="${@attendanceService.getPrevMonth()}"/>
+									<!--统计月份：<input type="text" name="statisticsMonth" id="statisticsMonth" maxlength="2" value="3"/>-->
 								</li>
 								<li>
 									应该工作天数：<input type="text" maxlength="2" name="serveDaysExpect" id="serveDaysExpect"/>
@@ -195,10 +195,15 @@
 					return;
 				}
 			}
-			var statisticsYear = $("#statisticsYear").val().trim();
+			// console.log("$(#statisticsYear) = "+$("#statisticsYear").val())
+			// console.log("$(#statisticsMonth) = "+$("#statisticsMonth").val())
+			// console.log("$(#serveDaysExpect) = "+$("#serveDaysExpect").val())
+			// console.log("$(#serveDaysActual) = "+$("#serveDaysActual").val())
+			var statisticsYear =  $("#statisticsYear").val().trim();
 			var statisticsMonth = $("#statisticsMonth").val().trim();
 			var serveDaysExpect = $("#serveDaysExpect").val().trim();
 			var serveDaysActual = $("#serveDaysActual").val().trim();
+
 			if (!$.common.isEmpty(statisticsYear) && !isNumber(statisticsYear)){
 				$.modal.alertError("统计年数数必须为正整数！");
 				return;

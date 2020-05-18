@@ -45,7 +45,7 @@ public interface AttendanceService {
 
     Result importAttendance(List<Attendance> attendances);
 
-    Result copyPrevMonthInfo();
+    Result copyPrevMonthInfo(Integer statisticsYear,Integer statisticsMonth);
 
     Result deleteByIds(String ids);
 }

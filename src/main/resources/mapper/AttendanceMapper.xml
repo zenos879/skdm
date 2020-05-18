@@ -213,7 +213,7 @@
     <sql id="selectCount">
         SELECT
         pro.project_name projectName,
-        inter.order_no orderNo,
+        sta.order_no orderNo,
         dep.department_name departmentName,
         sta.staff_name staffName,
         sta.staff_no staffNo,
@@ -228,8 +228,7 @@
         FROM
         attendance a
         LEFT JOIN `staff_info` sta ON sta.staff_no = a.staff_no
-        LEFT JOIN interview_person_ref inter ON inter.order_no = sta.order_no
-        LEFT JOIN review_info re ON re.purchase_no = inter.purchase_no
+        LEFT JOIN review_info re ON re.purchase_no = sta.purchase_no
         AND re.post_id = sta.post_id
         LEFT JOIN project_info pro ON pro.project_id = re.project_id
         LEFT JOIN department_info dep ON dep.department_id = sta.department_id
@@ -245,7 +244,7 @@
     <select id="selectAttendanceCountBySelective" parameterType="com.cctv.project.noah.outsource.entity.AttendanceCount" resultType="com.cctv.project.noah.outsource.entity.AttendanceCount">
         <include refid="selectCount"/>
         <where>
-            <if test="orderNo != null and orderNo != ''"> and inter.order_no like concat('%', #{orderNo}, '%')</if>
+            <if test="orderNo != null and orderNo != ''"> and sta.order_no like concat('%', #{orderNo}, '%')</if>
             <if test="staffNo != null and staffNo != ''"> and sta.staff_no like concat('%', #{staffNo}, '%')</if>
             <if test="serveDaysExpect != null "> and a.serve_days_expect = #{serveDaysExpect}</if>
             <if test="serveDaysActual != null "> and a.serve_days_actual = #{serveDaysActual}</if>

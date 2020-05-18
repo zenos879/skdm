@@ -52,7 +52,8 @@ public class ReviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 是否通知参加面试
      */
-    @Excel(name = "是否通知面试")
+//    @Excel(name = "是否通知面试")
+    @Excel(name = "是否通知面试（1：是；0：否）", readConverterExp = "1=是,0=否")
     private Integer isNotifyInterview;
 
     /**

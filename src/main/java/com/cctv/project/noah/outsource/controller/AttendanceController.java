@@ -154,8 +154,16 @@ public class AttendanceController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/copy")
-    public AjaxResult copy() {
-        return toAjax(attendanceService.copyPrevMonthInfo());
+    public AjaxResult copy(Integer statisticsYear,Integer statisticsMonth) {
+        Result result = attendanceService.copyPrevMonthInfo(statisticsYear, statisticsMonth);
+        if (result.code<0){
+            return toAjax(result);
+        }
+        if (result.code>0 && result.warning){
+            AjaxResult ajaxResult = new AjaxResult(AjaxResult.Type.WARN, result.info);
+            return ajaxResult;
+        }
+        return toAjax(result);
     }
 
     @RequestMapping("/remove")

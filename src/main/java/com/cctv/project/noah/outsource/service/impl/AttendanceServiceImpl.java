@@ -499,19 +499,37 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         return StringUtils.isNotEmpty(attendances)?attendances:new ArrayList<>();
     }
     @Override
-    public Result copyPrevMonthInfo(){
+    public Result copyPrevMonthInfo(Integer statisticsYear,Integer statisticsMonth){
         try {
-            Integer nowYear = getNowYear();
-            Integer nowMonth = getNowMonth();
-            List<Attendance> attendances = selectPrevMonthInfo(nowYear, nowMonth);
+//            Integer nowYear = getNowYear();
+//            Integer nowMonth = getNowMonth();
+            Integer prevMonthYear;
+            Integer prevMonth;
+            if (statisticsYear != null && statisticsMonth!=null){
+                prevMonthYear = statisticsYear;
+                prevMonth = statisticsMonth;
+            }else {
+                prevMonthYear = getPrevMonthYear();
+                prevMonth = getPrevMonth();
+            }
+
+            List<Attendance> attendances = selectPrevMonthInfo(prevMonthYear, prevMonth);
             int success = 0;
             int repeat = 0;
             int errorInt = 0;
             int size = attendances.size();
             StringBuffer error = new StringBuffer();
+            Boolean hasWarning = false;
+            StringBuffer warning = new StringBuffer();
             for (Attendance attendance : attendances) {
                 Result result = insertBySelective(attendance);
                 if (result.warning){
+                    if (!hasWarning){
+                        hasWarning = true;
+                    }
+                    warning.append("重复数据订单编号为:").append(attendance.getOrderNo())
+                            .append(",重复数据员工编号为：").append(attendance.getStaffNo())
+                            .append("></br></br>");
                     repeat ++;
                     continue;
                 }
@@ -519,12 +537,30 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
                     success++;
                 }else {
                     errorInt++;
-                    error.append("错误订单编号为:").append(attendance.getOrderNo())
-                            .append(",错误员工编号为：").append(attendance.getStaffNo())
-                            .append(",错误原因为<").append(result.info).append("></br>");
+                    error.append("错误数据订单编号为:").append(attendance.getOrderNo())
+                            .append(",错误数据员工编号为：").append(attendance.getStaffNo())
+                            .append(",错误原因为<").append(result.info).append("></br></br>");
                 }
             }
-            return new Result(success,"总共搜索出"+size+"条考勤模板,成功插入了"+success+"条，有"+repeat+"条重复"+",有"+errorInt+"条错误，错误原因为：</br>"+error.toString());
+            Result result;
+            StringBuffer resultInfo = new StringBuffer();
+            resultInfo.append("总共搜索出").append(size).append("条考勤模板,成功插入了").
+                    append(success).append("条，有").append(repeat).append("条重复").
+                    append(",有").append(errorInt).append("条错误</br></br>");
+            if (errorInt >0 ){
+                resultInfo.append("错误原因为：</br></br>").append(error.toString());
+                if (hasWarning){
+                    resultInfo.append("警告原因为：</br></br>").append(warning.toString());
+                    return new Result(0, resultInfo.toString(),true);
+                }
+                return new Result(0, resultInfo.toString());
+            }else {
+                if (hasWarning){
+                    resultInfo.append("警告原因为：</br></br>").append(warning.toString());
+                    return new Result(success, resultInfo.toString(),true);
+                }
+                return new Result(success, resultInfo.toString());
+            }
         } catch (Exception e) {
             logger.error("【ERROR】---"+e);
             return new Result(0,"复制考勤模板失败！");
