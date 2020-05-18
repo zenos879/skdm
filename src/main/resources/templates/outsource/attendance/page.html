@@ -210,9 +210,17 @@
 			});
 		}
 		function _copy() {
-			$.modal.confirm("确定生成本月模板吗？", function() {
-				$.operate.submit($.table._option.copyUrl, "post", "json");
-			});
+			var statisticsYear = $("#statisticsYear").val();
+			var statisticsMonth = $("#statisticsMonth").val();
+			if (!$.common.isEmpty(statisticsYear) && !$.common.isEmpty(statisticsMonth)){
+				$.modal.confirm("确定生成"+statisticsYear+"年"+statisticsMonth+"月的模板吗？", function() {
+					$.operate.submit($.table._option.copyUrl, "post", "json",{"statisticsYear":statisticsYear,"statisticsMonth":statisticsMonth});
+				});
+			} else {
+				$.modal.confirm("确定生成上月的模板吗？", function() {
+					$.operate.submit($.table._option.copyUrl, "post", "json");
+				});
+			}
 		}
 		function _seach() {
 			if ($("#updatePublicHolidays").val() == 1){

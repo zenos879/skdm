@@ -48,7 +48,8 @@ public class SupplierInfo extends BaseEntity implements Serializable {
     /**
      * 是否是附属公司
      */
-    @Excel(name = "是否是附属公司",cellType = Excel.ColumnType.NUMERIC)
+//    @Excel(name = "是否是附属公司",cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "是否是附属公司（1：是；0：否）", readConverterExp = "1=是,0=否")
     private Integer isSubsidiary;
 
     /**

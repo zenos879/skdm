@@ -237,15 +237,16 @@ public class PoiUtil {
     }
     public static AjaxResult downLoadExcelTempLate(List<String[]> keyList, String fileName) {
         Workbook wb = null;
-//        fileName = encodingFilename(fileName);
+//        fileName = fileName+".xlsx";
 
+        wb = new SXSSFWorkbook();
         //判断文件类型 03或是07
-        if (isExcel2007(fileName)) {
-            wb = new SXSSFWorkbook();
-        }
-        if (isExcel2003(fileName)) {
-            wb = new HSSFWorkbook();
-        }
+//        if (isExcel2007(fileName)) {
+//            wb = new SXSSFWorkbook();
+//        }
+//        if (isExcel2003(fileName)) {
+//            wb = new HSSFWorkbook();
+//        }
         //创建sheet
         Sheet sheet = wb.createSheet();
 

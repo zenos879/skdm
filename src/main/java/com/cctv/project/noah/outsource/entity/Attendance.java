@@ -27,14 +27,18 @@ public class Attendance extends BaseEntity  implements Serializable {
     @Excel(name = "考勤编号")
     private Long autoId;
 
+    /** 临时使用：考勤人名称 */
+    @Excel(name = "人名")
+    private String staffName;
+
     /** 订单编号：与一次面试对应 */
-    @Excel(name = "订单编号")
-    private String orderNo = "";
+//    @Excel(name = "订单编号")
+    private String orderNo;
 
     /** 考勤人id */
-    @Excel(name = "考勤人id")
+    @Excel(name = "员工编号")
 //    @JsonSerialize(using = JsonLongSerializer.class)
-    private String staffNo = "";
+    private String staffNo;
 
     /** 统计年份 */
     @Excel(name = "统计年份")
@@ -54,9 +58,7 @@ public class Attendance extends BaseEntity  implements Serializable {
 
     private Integer status;
 
-    /** 临时使用：考勤人名称 */
-    @Excel(name = "考勤人名称")
-    private String staffName;
+
 
     public String remark;
 
@@ -69,7 +71,7 @@ public class Attendance extends BaseEntity  implements Serializable {
     /**
      * 创建时间
      */
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+//    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
