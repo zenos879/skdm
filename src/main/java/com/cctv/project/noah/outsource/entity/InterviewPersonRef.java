@@ -84,7 +84,7 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 是否参加面试
      */
-    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否", inputConverterExp = "1=是,0=否")
+    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否")
     private Integer isInterview;
 
     /**
