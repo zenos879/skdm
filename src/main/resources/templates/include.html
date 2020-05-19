@@ -121,7 +121,6 @@
     <script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
     <script th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
     <script th:src="@{/js/plugins/validate/jquery.validate.extend.js}"></script>
-    <script th:src="@{/js/plugins/validate/jquery.validate.methods.js}"></script>
 
     <!-- jquery-validate 表单树插件 -->
     <script th:src="@{/js/plugins/bootstrap-treetable/bootstrap-treetable.js}"></script>
@@ -145,6 +144,10 @@
     <script th:src="@{/js/plugins/bootstrap-select/bootstrap-select.js}"></script>
     <script th:inline="javascript"> var ctx = [[@{/}]]; </script>
 
+</div>
+
+<div th:fragment="check">
+    <script th:src="@{/js/plugins/validate/jquery.validate.methods.js}"></script>
 </div>
 
 <!-- 表格拖拽插件 -->

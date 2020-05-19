@@ -3,7 +3,7 @@
 <head>
     <th:block th:include="include :: header('合同账单查询')"/>
     <th:block th:include="include :: ztree-css"/>
-    <th:block th:include="include :: bootstrap-select-css" />
+    <th:block th:include="include :: bootstrap-select-css"/>
 </head>
 <body class="gray-bg">
 <div class="ui-layout-center">
@@ -14,23 +14,36 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                统计年份：<input type="text" name="statisticsYear" th:value="${@billService.getNowYear()}"/>
+                                统计年份：<input class="number" type="text" name="statisticsYear" th:value="${@billService.getNowYear()}" maxlength="4" required/>
                             </li>
                             <li>
-                                统计月份：<input type="text" name="statisticsMonth" th:value="${@billService.getPrevMonth()}"/>
+                                统计月份：<input class="number" type="text" name="statisticsMonth"
+                                            th:value="${@billService.getPrevMonth()}" maxlength="1" required/>
                             </li>
                             <li>
-                                项目名称：<select name="projectName" id="projectName" class="selectpicker" data-live-search="true" th:with="projects=${@projectInfoService.selectAll()}">
+                                项目名称：<select name="projectName" id="projectName" class="selectpicker"
+                                             data-live-search="true"
+                                             th:with="projects=${@projectInfoService.selectAll()}">
                                 <option value="">全部</option>
-                                <option th:each="project : ${projects}" th:text="${project.projectName}" th:value="${project.projectName}"></option>
+                                <option th:each="project : ${projects}" th:text="${project.projectName}"
+                                        th:value="${project.projectName}"></option>
                             </select>
                             </li>
 
                             <li>
-                                供应商名称：<select name="supplierName" id="supplierName" class="selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                                供应商名称：<select name="supplierName" id="supplierName" class="selectpicker"
+                                              data-live-search="true"
+                                              th:with="suppliers=${@supplierInfoService.selectAll()}">
                                 <option value="">全部</option>
-                                <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierName()}"></option>
+                                <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}"
+                                        th:value="${supplier.getSupplierName()}"></option>
                             </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.searchWithCheck()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                     </div>
@@ -38,7 +51,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-warning" id="exportBtn"  onclick="_export()">
+                <a class="btn btn-warning" id="exportBtn" onclick="_export()">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -49,8 +62,9 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: check"/>
 <th:block th:include="include :: ztree-js"/>
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var prefix = ctx + "outsource/contractBill";
     var isShowExport = 0;
@@ -66,38 +80,50 @@
     //默认查询账单表中的现有数据
     function queryContractBill() {
         var options = {
-            url: prefix + "/queryContractBill",
-            // updateUrl: prefix + "/edit/{id}",
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
             exportUrl: prefix + "/export",
             modalName: "月度考勤总表",
             responseHandler: getResponseMsg,
-            columns: [{
-                checkbox: true
-            }, {
-                field: 'statisticsYear',
-                title: '统计年份',
-                sortable: true
-            }, {
-                field: 'statisticsMonth',
-                title: '统计月份',
-                sortable: true
-            }, {
-                field: 'contractNo',
-                title: '合同号',
-                sortable: true
-            }, {
-                field: 'supplierName',
-                title: '供应商名称',
-                sortable: true
-            }, {
-                field: 'projectName',
-                title: '项目名称',
-                sortable: true
-            }, {
-                field: 'totalPrice',
-                title: '账单金额',
-                sortable: true
-            }]
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'autoId',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'statisticsYear',
+                    title: '统计年份',
+                    sortable: true
+                },
+                {
+                    field: 'statisticsMonth',
+                    title: '统计月份',
+                    sortable: true
+                },
+                {
+                    field: 'contractNo',
+                    title: '合同号',
+                    sortable: true
+                },
+                {
+                    field: 'supplierName',
+                    title: '供应商名称',
+                    sortable: true
+                },
+                {
+                    field: 'projectName',
+                    title: '项目名称',
+                    sortable: true
+                },
+                {
+                    field: 'totalPrice',
+                    title: '账单金额',
+                    sortable: true
+                }]
         };
         $.table.init(options);
     }

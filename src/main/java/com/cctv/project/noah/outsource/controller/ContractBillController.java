@@ -34,7 +34,7 @@ public class ContractBillController extends BaseController {
 
 
     //计算月度合同账单
-    @RequestMapping("/queryContractBill")
+    @RequestMapping("/list")
     @ResponseBody
     public TableDataInfo queryContractBill(ContractBill contractBill) {
         startPage();
