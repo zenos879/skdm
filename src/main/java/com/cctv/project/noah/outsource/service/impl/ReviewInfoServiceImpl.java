@@ -168,6 +168,11 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
 
     }
 
+    /**
+     * 导入评审数据
+     * @param reviewInfos
+     * @return
+     */
     @Override
     public Result importReviewInfo(List<ReviewInfo> reviewInfos){
         try {
@@ -247,7 +252,11 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
     String[] reviewInfoHeaders = {"项目名称","采购编号","岗位","岗位需求数","评审日期"};
     String[] reviewPersonRefHeaders = {"人名","岗位","供应商名称","是否通知面试"};
 
-
+    /**
+     * 同时导入评审数据和评审人员数据
+     * @param file
+     * @return
+     */
     @Override
     public Result importJion(MultipartFile file){
         List<String> reviewInfoHeadersList = new ArrayList<>(Arrays.asList(reviewInfoHeaders));
