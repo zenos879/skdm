@@ -8,7 +8,7 @@ public class ContractBill {
     private Integer autoId;
 
     @Excel(name = "合同号")
-    private String contractNo;
+    private String agreementNo;
 
     @Excel(name = "供应商名称")
     private String supplierName;
@@ -16,10 +16,7 @@ public class ContractBill {
     @Excel(name = "项目名称")
     private String projectName;
 
-    @Excel(name = "部门名称")
-    private String departmentName;
-
-    @Excel(name="")
+    @Excel(name="合同账单")
     private float totalPrice;
 
     @Excel(name = "统计年份")
@@ -61,13 +58,6 @@ public class ContractBill {
         this.statisticsMonth = statisticsMonth;
     }
 
-    public String getContractNo() {
-        return contractNo;
-    }
-
-    public void setContractNo(String contractNo) {
-        this.contractNo = contractNo;
-    }
 
     public float getTotalPrice() {
         return totalPrice;
@@ -77,11 +67,11 @@ public class ContractBill {
         this.totalPrice = totalPrice;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public String getAgreementNo() {
+        return agreementNo;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setAgreementNo(String agreementNo) {
+        this.agreementNo = agreementNo;
     }
 }

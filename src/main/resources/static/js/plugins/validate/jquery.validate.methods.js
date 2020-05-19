@@ -1,5 +1,5 @@
 /**
- * @requires jquery.validate.js
+ * @requires jquery.validate.methods.js
  * @author HuberyYan
  */
 (function ($) {
@@ -86,7 +86,13 @@
             postcode: {postcode: true},
             idcard: {idcard: true}
         });
-        $.validator.setDefaults({errorElement: "span"});
+        $.validator.setDefaults({
+            errorElement: "span",
+            errorClass: "alert-danger",
+            errorPlacement: function (error, element) {
+                $(element).after(error);
+            }
+        });
         $.validator.autoCreateRanges = true;
     }
 

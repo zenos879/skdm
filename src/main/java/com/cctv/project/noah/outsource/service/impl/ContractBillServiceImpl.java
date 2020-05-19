@@ -23,5 +23,11 @@ public class ContractBillServiceImpl implements ContractBillService {
     public List<ContractBill> selectbyIds(String ids){
        return contractBillMapper.selectByIds(ids.split(","));
     }
-    
+
+    @Override
+    public ContractBill selectByPrimaryKey(Integer id) {
+        return null;
+    }
+
+
 }

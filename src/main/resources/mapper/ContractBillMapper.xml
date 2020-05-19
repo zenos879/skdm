@@ -3,7 +3,7 @@
 <mapper namespace="com.cctv.project.noah.outsource.mapper.ContractBillMapper">
     <resultMap id="ContractBillResultMap" type="com.cctv.project.noah.outsource.entity.ContractBill">
         <id column="auto_id" jdbcType="BIGINT" property="autoId"/>
-        <result column="department_name" jdbcType="VARCHAR" property="departmentName"/>
+        <result column="agreement_no" jdbcType="VARCHAR" property="agreementNo"/>
         <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
         <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
         <result column="total_price" jdbcType="REAL" property="totalPrice"/>
@@ -13,11 +13,27 @@
 
     <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ContractBill"
             resultMap="ContractBillResultMap">
-        select ag.agreement_no, bill.supplier_name, bill.project_name ,sum(bill.post_expenses) from month_bill bill
-        left join supplier_info sup on sup.supplier_name=bill.supplier_name
-        left join agreement_info ag on ag.supplier_id = sup.supplier_id
+        select ai.agreement_no, mb.supplier_name, mb.project_name ,sum(mb.post_expenses) from month_bill mb
+        left join supplier_info si on si.supplier_name = mb.supplier_name
+        left join agreement_info ai on ai.supplier_id = si.supplier_id
         <where>
-            bill.statistics_year=2020 and bill.statistics_month=3 and  ag.agreement_start  &lt;='2020-3-01' and ag.agreement_end >='2020-3-01' group by  bill.supplier_name , bill.project_name
+            <if test="statisticsYear != null">
+                and mb.statistics_year = #{statisticsYear,jdbcType=SMALLINT}
+            </if>
+            <if test="statisticsMonth != null">
+                and mb.statistics_month = #{statisticsMonth,jdbcType=TINYINT}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                AND mb.project_name = #{projectName,jdbcType=VARCHAR}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                AND mb.supplier_name = #{supplierName,jdbcType=VARCHAR}
+            </if>
+            and ai.agreement_start &lt;= CONCAT(#{statisticsYear,jdbcType=SMALLINT}, '-',
+            #{statisticsMonth,jdbcType=TINYINT}, '-01')
+            and ai.agreement_end &gt;= CONCAT(#{statisticsYear,jdbcType=SMALLINT}, '-',
+            #{statisticsMonth,jdbcType=TINYINT}, '-01')
+            group by mb.supplier_name , mb.project_name
         </where>
     </select>
 
