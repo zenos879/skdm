@@ -156,6 +156,9 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
     @Override
     public AgreementInfo selectByPrimaryKey(Integer agreementId) {
         AgreementInfo agreementInfo = agreementInfoMapper.selectByPrimaryKey(agreementId);
+        if (agreementInfo == null){
+            return new AgreementInfo();
+        }
         // 补全
         completionSupplierName(agreementInfo);
         return agreementInfo;

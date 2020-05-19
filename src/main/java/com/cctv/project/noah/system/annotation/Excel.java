@@ -28,11 +28,6 @@ public @interface Excel {
     public String readConverterExp() default "";
 
     /**
-     * 导入内容转表达式 (如: 0=男,1=女,2=未知)
-     */
-    public String inputConverterExp() default "";
-
-    /**
      * 导出类型（0数字 1字符串）
      */
     public ColumnType cellType() default ColumnType.STRING;

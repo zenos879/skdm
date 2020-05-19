@@ -32,22 +32,6 @@
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                             </select>
                             </li>
-                            <li class="select-time">
-                                <label>通知面试日期区间： </label>
-                                <input type="text" class="time-input" id="notifyStartTime" placeholder="开始时间"
-                                       name="params[notifyStartTime]" autocomplete="off" readonly="readonly"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="notifyEndTime" placeholder="结束时间"
-                                       name="params[notifyEndTime]" autocomplete="off" readonly="readonly"/>
-                            </li>
-                            <li class="select-time">
-                                <label>参加面试日期区间： </label>
-                                <input type="text" class="time-input" id="interviewStartTime" placeholder="开始时间"
-                                       name="params[interviewStartTime]" autocomplete="off" readonly="readonly"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="interviewEndTime" placeholder="结束时间"
-                                       name="params[interviewEndTime]" autocomplete="off" readonly="readonly"/>
-                            </li>
                             <li>
                                 是否通过：<select name="isPass" th:with="type=${@dict.getType('isNotifyInterview')}">
                                 <option value="">所有</option>
@@ -56,12 +40,6 @@
                             </li>
                             <li>
                                 是否退回：<select name="isReject" th:with="type=${@dict.getType('isNotifyInterview')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
-                            </li>
-                            <li>
-                                是否替换：<select name="isReplace" th:with="type=${@dict.getType('isReject')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                             </select>
@@ -167,13 +145,15 @@
                     field: 'notifyDate',
                     title: '通知面试日期',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    visible: false
                 },
                 {
                     field: 'interviewDate',
                     title: '参加面试日期',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    visible: false
                 },
                 {
                     field: 'isPass',
@@ -181,14 +161,6 @@
                     sortable: true,
                     formatter:function(value,row,index){
                         return $.table.selectDictLabel(isNotifyInterview, value);
-                    }
-                },
-                {
-                    field: 'isReplace',
-                    title: '是否替换',
-                    sortable: true,
-                    formatter:function(value,row,index){
-                        return $.table.selectDictLabel(isReject, value);
                     }
                 },
                 {

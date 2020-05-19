@@ -75,17 +75,17 @@
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>通知面试日期：</label>
+                    <label class="col-sm-4 control-label">通知面试日期：</label>
                     <div class="col-sm-7">
-                        <input type="text" class="time-input form-control" id="notifyDate" th:value="${command.getFormatNotifyDate()}" placeholder="通知面试日期" name="notifyDate" required readonly="readonly"/>
+                        <input type="text" class="time-input form-control" id="notifyDate" th:value="${command.getFormatNotifyDate()}" placeholder="通知面试日期" name="notifyDate" readonly="readonly"/>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>参加面试日期：</label>
+                    <label class="col-sm-4 control-label">参加面试日期：</label>
                     <div class="col-sm-7">
-                        <input type="text" class="time-input form-control" id="interviewDate" th:value="${command.getFormatInterviewDate()}" placeholder="参加面试日期" name="interviewDate" required readonly="readonly"/>
+                        <input type="text" class="time-input form-control" id="interviewDate" th:value="${command.getFormatInterviewDate()}" placeholder="参加面试日期" name="interviewDate" readonly="readonly"/>
                     </div>
                 </div>
             </div>
@@ -106,17 +106,6 @@
                     <div class="col-sm-7">
                         <select name="isReject" class="form-control" th:with="type=${@dict.getType('isNotifyInterview')}">
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:selected="${dict.dictValue == (command.isReject + '')}"
-                                    th:value="${dict.dictValue}"></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否替换：</label>
-                    <div class="col-sm-7">
-                        <select name="isReplace" class="form-control" th:with="type=${@dict.getType('isReject')}">
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:selected="${dict.dictValue == (command.isReplace + '')}"
                                     th:value="${dict.dictValue}"></option>
                         </select>
                     </div>

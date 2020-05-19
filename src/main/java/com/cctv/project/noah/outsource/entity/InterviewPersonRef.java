@@ -84,20 +84,20 @@ public class InterviewPersonRef extends BaseEntity implements Serializable {
     /**
      * 是否参加面试
      */
-    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否", inputConverterExp = "1=是,0=否")
+    @Excel(name = "是否参加面试", readConverterExp = "1=是,0=否")
     private Integer isInterview;
 
     /**
      * 通知面试日期
      */
-    @Excel(name = "通知面试日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @Excel(name = "通知面试日期", width = 30, dateFormat = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date notifyDate;
 
     /**
      * 参加面试日期
      */
-    @Excel(name = "参加面试日期", width = 30, dateFormat = "yyyy-MM-dd", type = Excel.Type.EXPORT)
+    @Excel(name = "参加面试日期", width = 30, dateFormat = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date interviewDate;
 
