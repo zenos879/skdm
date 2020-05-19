@@ -16,6 +16,9 @@ public class ContractBill {
     @Excel(name = "项目名称")
     private String projectName;
 
+    @Excel(name = "部门名称")
+    private String departmentName;
+
     @Excel(name="")
     private float totalPrice;
 
@@ -72,5 +75,13 @@ public class ContractBill {
 
     public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }
