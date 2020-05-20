@@ -182,7 +182,7 @@ public class SupplierBid extends BaseEntity implements Serializable {
     }
 
     public void setAgreementNo(String agreementNo) {
-        this.agreementNo = agreementNo;
+        this.agreementNo = (agreementNo == null ? agreementNo : agreementNo.replace(" ", ""));
     }
 
     public String getPostName() {
@@ -190,7 +190,7 @@ public class SupplierBid extends BaseEntity implements Serializable {
     }
 
     public void setPostName(String postName) {
-        this.postName = postName;
+        this.postName = (postName == null ? postName : postName.replaceAll(" ", ""));
     }
 
     public String getSupplierName() {
@@ -198,7 +198,7 @@ public class SupplierBid extends BaseEntity implements Serializable {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (supplierName == null ? supplierName : supplierName.replaceAll(" ", ""));
     }
 
     @Override

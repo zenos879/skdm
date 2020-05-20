@@ -81,19 +81,19 @@
     function queryContractBill() {
         var options = {
             url: prefix + "/list",
-            updateUrl: prefix + "/edit/{id}",
+            // updateUrl: prefix + "/edit/{id}",
             exportUrl: prefix + "/export",
             modalName: "月度考勤总表",
             responseHandler: getResponseMsg,
             columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'autoId',
-                    title: 'ID',
-                    visible: false
-                },
+                // {
+                //     checkbox: true
+                // },
+                // {
+                //     field: 'autoId',
+                //     title: 'ID',
+                //     visible: false
+                // },
                 {
                     field: 'statisticsYear',
                     title: '统计年份',
@@ -105,7 +105,7 @@
                     sortable: true
                 },
                 {
-                    field: 'contractNo',
+                    field: 'agreementNo',
                     title: '合同号',
                     sortable: true
                 },

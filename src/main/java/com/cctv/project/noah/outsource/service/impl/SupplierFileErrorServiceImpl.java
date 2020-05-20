@@ -291,7 +291,7 @@ public class SupplierFileErrorServiceImpl implements SupplierFileErrorService {
             }
             Date happenDate = supplierFileError.getHappenDate();
             if (happenDate == null) {
-                return new Result(0, "第" + (i + 2) + "行的发生日期为空!");
+                return new Result(0, "第" + (i + 2) + "行的发生日期为空或输入格式有误!");
             }
             Result result = supplierFileError.beforeUpdateCheck();
             if (result.getCode() < 1) {

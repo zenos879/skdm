@@ -287,7 +287,7 @@ public class ExcelUtil<T> {
                     Field field = fieldsMap.get(entry.getKey());
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
-                    /** 先翻译，再赋值 2020.5.18修改（bug:导出翻译正常，导入值为空） */
+                    /** 先翻译，再赋值 2020.5.18修改（bug:导出翻译正常，导入值为空） begin */
                     Excel attr;
                     String propertyName = null;
                     if (StringUtils.isNotNull(fieldType)) {
@@ -322,9 +322,10 @@ public class ExcelUtil<T> {
                             boolean b = GeneralUtils.checkDateStr(val.toString());
                             if (b) {
                                 val = DateUtils.parseDate(val);
-                            } else {
-                                throw new Exception("日期【" + val + "】格式不正确，请参照以下格式“YYYY-MM-DD HH:mm:ss”和“YYYY-MM-DD”");
                             }
+//                            else {
+//                                throw new Exception("日期【" + val + "】格式不正确，请参照以下格式“YYYY-MM-DD HH:mm:ss”和“YYYY-MM-DD”");
+//                            }
                         } else if (val instanceof Double) {
                             val = DateUtil.getJavaDate((Double) val);
                         }
