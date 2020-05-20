@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>供应商：</label>
                         <div class="col-sm-8">
-                            <select name="supplierId" id="supplierId" class="form-control" th:with="suppliers=${@supplierInfoService.selectAll()}">
+                            <select name="supplierId" id="supplierId" class="form-control selectpicker" data-live-search="true" th:with="suppliers=${@supplierInfoService.selectAll()}">
                                 <option th:each="supplier : ${suppliers}" th:text="${supplier.getSupplierName()}" th:value="${supplier.getSupplierId()}"></option>
                             </select>
                         </div>
@@ -30,7 +30,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span></span>岗位：</label>
                         <div class="col-sm-8">
-                            <select name="postId" id="postId" class="form-control" th:with="posts=${@postInfoService.selectAll()}">
+                            <select name="postId" id="postId" class="form-control selectpicker" data-live-search="true" th:with="posts=${@postInfoService.selectAll()}">
                                 <option th:each="post : ${posts}" th:text="${post.getPostName()}" th:value="${post.getPostId()}"></option>
                             </select>
                         </div>

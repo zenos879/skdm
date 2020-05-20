@@ -168,6 +168,11 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
 
     }
 
+    /**
+     * 导入评审数据
+     * @param reviewInfos
+     * @return
+     */
     @Override
     public Result importReviewInfo(List<ReviewInfo> reviewInfos){
         try {
@@ -210,7 +215,7 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                 success++;
             }
             int size = reviewInfos.size();
-            warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+            warning.append("导入成功了"+success+"行，失败了"+(size-success)+"行");
             return new Result(success,warning.toString());
         } catch (Exception e) {
             logger.error("【ERROR】---"+e);
@@ -247,7 +252,11 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
     String[] reviewInfoHeaders = {"项目名称","采购编号","岗位","岗位需求数","评审日期"};
     String[] reviewPersonRefHeaders = {"人名","岗位","供应商名称","是否通知面试"};
 
-
+    /**
+     * 同时导入评审数据和评审人员数据
+     * @param file
+     * @return
+     */
     @Override
     public Result importJion(MultipartFile file){
         List<String> reviewInfoHeadersList = new ArrayList<>(Arrays.asList(reviewInfoHeaders));
@@ -296,10 +305,10 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                     if (StringUtils.isEmpty(project_name)){
                         return new Result(0,"第"+(i+1)+"行的项目名称不能为空！");
                     }
-                    ProjectInfo projectInfo = projectInfoService.selectByName(project_name);
-                    if (projectInfo == null){
-                        return new Result(0,"第"+(i+1)+"行的项目不存在！");
-                    }
+//                    ProjectInfo projectInfo = projectInfoService.selectByName(project_name);
+//                    if (projectInfo == null){
+//                        return new Result(0,"第"+(i+1)+"行的项目不存在！");
+//                    }
                     if (projectName == null){
                         projectName = project_name;
                     }else {
@@ -307,7 +316,7 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                             return new Result(0,"第"+(i+1)+"行的项目名称与上面不同！");
                         }
                     }
-                    reviewInfo.setProjectId(projectInfo.getProjectId());
+//                    reviewInfo.setProjectId(projectInfo.getProjectId());
                     reviewInfo.setProjectName(projectName);
                     String purchase_no = lineList.get(excelReviewList.indexOf("采购编号"));
                     if (StringUtils.isEmpty(purchase_no)){
@@ -325,11 +334,11 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                     if (StringUtils.isEmpty(postName)){
                         return new Result(0,"第"+(i+1)+"行的岗位不能为空！");
                     }
-                    PostInfo postInfo = postInfoService.selectByName(postName);
-                    if (postInfo == null){
-                        return new Result(0,"第"+(i+1)+"行的岗位不存在！");
-                    }
-                    reviewInfo.setPostId(postInfo.getPostId());
+//                    PostInfo postInfo = postInfoService.selectByName(postName);
+//                    if (postInfo == null){
+//                        return new Result(0,"第"+(i+1)+"行的岗位不存在！");
+//                    }
+//                    reviewInfo.setPostId(postInfo.getPostId());
                     reviewInfo.setPostName(postName);
                     String postCount = lineList.get(excelReviewList.indexOf("岗位需求数"));
                     if (StringUtils.isEmpty(postCount)){
@@ -338,7 +347,7 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                     try {
                         reviewInfo.setPostCount(Integer.valueOf(postCount));
                     } catch (NumberFormatException e) {
-                        return new Result(0,"第"+(i+1)+"行的岗位需求数必须是数字！");
+                        return new Result(0,"第"+(i+1)+"行的岗位需求数必须是正整数！");
                     }
                     String reviewDate = lineList.get(excelReviewList.indexOf("评审日期"));
                     if (StringUtils.isEmpty(postCount)){
@@ -366,27 +375,27 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                     if (StringUtils.isEmpty(postName)){
                         return new Result(0,"第"+(i+1)+"行的岗位不能为空！");
                     }
-                    PostInfo postInfo = postInfoService.selectByName(postName);
-                    if (postInfo == null){
-                        return new Result(0,"第"+(i+1)+"行的岗位不存在！");
-                    }
-                    reviewPersonRef.setPostId(postInfo.getPostId());
+//                    PostInfo postInfo = postInfoService.selectByName(postName);
+//                    if (postInfo == null){
+//                        return new Result(0,"第"+(i+1)+"行的岗位不存在！");
+//                    }
+//                    reviewPersonRef.setPostId(postInfo.getPostId());
                     reviewPersonRef.setPostName(postName);
                     String supplierName = lineList.get(excelReviewPersonList.indexOf("供应商名称"));
                     if (StringUtils.isEmpty(supplierName)){
                         return new Result(0,"第"+(i+1)+"行的供应商名称不能为空！");
                     }
-                    SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
-                    if (supplierInfo == null){
-                        return new Result(0,"第"+(i+1)+"行的供应商不存在！");
-                    }
-                    reviewPersonRef.setSupplierId(supplierInfo.getSupplierId());
+//                    SupplierInfo supplierInfo = supplierInfoService.selectByName(supplierName);
+//                    if (supplierInfo == null){
+//                        return new Result(0,"第"+(i+1)+"行的供应商不存在！");
+//                    }
+//                    reviewPersonRef.setSupplierId(supplierInfo.getSupplierId());
                     reviewPersonRef.setSupplierName(supplierName);
                     String isNotifyInterview = lineList.get(excelReviewPersonList.indexOf("是否通知面试"));
                     if (StringUtils.isEmpty(isNotifyInterview)){
                         return new Result(0,"第"+(i+1)+"行的<是否通知面试>不能为空！");
                     }
-                    switch (isNotifyInterview){
+                    switch (isNotifyInterview.trim()){
                         case "是":{
                             reviewPersonRef.setIsNotifyInterview(1);
                             break;
@@ -424,6 +433,8 @@ public class ReviewInfoServiceImpl extends BaseService implements ReviewInfoServ
                         .append("</br><评审人员数据></br>").append(resultreviewPersonRef.info);
                 result.setInfo(message.toString());
             }else {
+                resultReviewInfo.info = resultReviewInfo.info+"</br></br>未读取到评审人员数据相关的表头";
+                resultReviewInfo.warning = true;
                 return resultReviewInfo;
             }
 

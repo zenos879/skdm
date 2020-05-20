@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"></span>联系电话：</label>
                         <div class="col-sm-8">
-                            <input name="contactTel" id="contactTel" placeholder="请输入联系电话" class="form-control" type="text" maxlength="64">
+                            <input name="contactTel" id="contactTel" placeholder="请输入联系电话" class="form-control" type="text" maxlength="11">
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
             focusCleanup: true,
             rules:{
                 contactTel:{
-                    digits:true,
+                    isPhone:true,
                 },
                 contactEmail:{
                     email:true

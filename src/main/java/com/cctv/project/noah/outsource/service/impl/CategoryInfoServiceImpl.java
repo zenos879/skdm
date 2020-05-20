@@ -166,7 +166,7 @@ public class CategoryInfoServiceImpl extends BaseService implements CategoryInfo
                 success++;
             }
             int size = categoryInfos.size();
-            warning.append("插入成功了"+success+"行，失败了"+(size-success)+"行");
+            warning.append("导入成功了"+success+"行，失败了"+(size-success)+"行");
             return new Result(success,warning.toString());
         } catch (Exception e) {
             logger.error("【ERROR】---"+e);

@@ -78,6 +78,10 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         }
     }
 
+    /**
+     * 根据当前登录用户的username获取其所属的部门id
+     * @return
+     */
     @Override
     public Integer getDepartmentId(){
         SysUser sysUser = ShiroUtils.getSysUser();
@@ -105,10 +109,13 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return null;
         }
     }
-    @Override
-    public List<Attendance> selectBySelective(Attendance attendance){
-        return selectBySelective(attendance,ModelClass.ATTENDANCE_SELECT_FLAG_COMMON);
-    }
+
+
+    /**
+     * 查询所有数据
+     * @param attendance
+     * @return
+     */
     @Override
     public List<AttendanceAll> selectAllBySelective(Attendance attendance){
         try {
@@ -127,6 +134,25 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
 
     }
 
+    /**
+     * 查询考勤的数据
+     * @param attendance
+     * @return
+     */
+    @Override
+    public List<Attendance> selectBySelective(Attendance attendance){
+        return selectBySelective(attendance,ModelClass.ATTENDANCE_SELECT_FLAG_COMMON);
+    }
+
+    /**
+     * 查询考勤的数据
+     * flag:
+     *      0:所有
+     *      1:核心
+     * @param attendance
+     * @param flag
+     * @return
+     */
     @Override
     public List<Attendance> selectBySelective(Attendance attendance,Integer flag){
         try {
@@ -179,6 +205,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
 
         return attendanceMapper.selectPublicHolidaysInfo(firstDay,lastDay);
     }
+
+    /**
+     * 查询考勤统计的数据
+     * @param attendanceCount
+     * @return
+     */
     @Override
     public List<AttendanceCount> selectAttendanceCount(AttendanceCount attendanceCount){
         try {
@@ -197,6 +229,10 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         }
     }
 
+    /**
+     * 查询上个月的年份
+     * @return
+     */
     @Override
     public Integer getPrevMonthYear(){
         Date m = getPrevMonthTime();
@@ -204,6 +240,11 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         String year = format.format(m);
         return Integer.valueOf(year);
     }
+
+    /**
+     * 查询上个月的月份
+     * @return
+     */
     @Override
     public Integer getPrevMonth(){
         Date m = getPrevMonthTime();
@@ -211,12 +252,22 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         String year = format.format(m);
         return Integer.valueOf(year);
     }
+
+    /**
+     * 查询现在的月份
+     * @return
+     */
     public Integer getNowMonth(){
         Date m = new Date();
         SimpleDateFormat format = new SimpleDateFormat("MM");
         String month = format.format(m);
         return Integer.valueOf(month);
     }
+
+    /**
+     * 查询现在的年份
+     * @return
+     */
     public Integer getNowYear(){
         Date m = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy");
@@ -224,12 +275,27 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         return Integer.valueOf(year);
     }
 
+    /**
+     * 查询上个月的时间
+     * @return
+     */
     private Date getPrevMonthTime(){
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.MONTH, -1);
         return c.getTime();
     }
+
+    /**
+     * 获取指定月份的第一天和最后一天
+     *  day:
+     *      0:第一天
+     *      1:最后一天
+     * @param year
+     * @param month
+     * @param day
+     * @return
+     */
     public Date getAppointTime(Integer year,Integer month,Integer day){
         //day 0:first  1:last
         Calendar cal = Calendar.getInstance();
@@ -266,7 +332,11 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
     }
 
 
-
+    /**
+     * 根据id查询考勤统计数据
+     * @param ids
+     * @return
+     */
     @Override
     public List<AttendanceCount> selectAttendanceCountByIds(String ids){
         try {
@@ -278,10 +348,22 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new ArrayList<>();
         }
     }
+
+    /**
+     * 根据id查询考勤数据
+     * @param ids
+     * @return
+     */
     @Override
     public List<Attendance> selectByIds(String ids){
         return selectByIds(ids,ModelClass.ATTENDANCE_SELECT_FLAG_COMMON);
     }
+
+    /**
+     * 根据id查询所有考勤数据
+     * @param ids
+     * @return
+     */
     @Override
     public List<AttendanceAll> selectAllByIds(String ids){
         try {
@@ -295,6 +377,14 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new ArrayList<>();
         }
     }
+    /**
+     * 根据id查询考勤数据
+     *      flag:
+     *          0:通常
+     *          1:核心
+     * @param ids
+     * @return
+     */
     @Override
     public List<Attendance> selectByIds(String ids, int flag){
         try {
@@ -320,6 +410,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new ArrayList<>();
         }
     }
+
+    /**
+     * 检测数据是否合法
+     * @param attendance
+     * @return
+     */
     private Result checkLegitimateResult(Attendance attendance){
         List<Attendance> attendances = attendanceMapper.selectByRepeat(attendance);
         if (StringUtils.isNotEmpty(attendances)){
@@ -337,10 +433,21 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         }
         return new Result(1);
     }
+
+    /**
+     * 检测数据是否不合法
+     * @param attendance
+     * @return
+     */
     private Boolean checkIllegal(Attendance attendance){
         Result result = checkLegitimateResult(attendance);
         return result.code == 0;
     }
+
+    /**
+     * 检测当前登录用户是否有对应的权限
+     * @return
+     */
     private Result checkJurisdiction(){
         Integer departmentId = getDepartmentId();
         if (departmentId == null){
@@ -353,7 +460,14 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             }
         }
         return new Result(1);
-    }    @Override
+    }
+
+    /**
+     * 修改考勤数据
+     * @param attendance
+     * @return
+     */
+    @Override
     public Result updateBySelective(Attendance attendance){
         try {
             if (attendance == null){
@@ -399,6 +513,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new Result(0,"修改失败！");
         }
     }
+
+    /**
+     * 新增考勤数据
+     * @param attendance
+     * @return
+     */
     @Override
     public Result insertBySelective(Attendance attendance){
         try {
@@ -426,6 +546,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new Result(0,"插入失败");
         }
     }
+
+    /**
+     * 已废弃
+     * @param all
+     * @return
+     */
     @Override
     public List<Attendance> exportCore(List<Attendance> all){
         try {
@@ -442,6 +568,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new ArrayList<>();
         }
     }
+
+    /**
+     * 导入考勤数据
+     * @param attendances
+     * @return
+     */
     @Override
     public Result importAttendance(List<Attendance> attendances){
         try {
@@ -489,6 +621,13 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new Result(0,"导入失败");
         }
     }
+
+    /**
+     * 获取指定月份的考勤模板
+     * @param year
+     * @param month
+     * @return
+     */
     public List<Attendance> selectPrevMonthInfo(Integer year,Integer month){
         Date first = CommonUtil.getAppointTime(year, month, 0);
         Date last = CommonUtil.getAppointTime(year, month, 1);
@@ -498,6 +637,13 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
 //        }
         return StringUtils.isNotEmpty(attendances)?attendances:new ArrayList<>();
     }
+
+    /**
+     * 生成指定月份的考勤模板，若未指定，生成上月的考勤模板
+     * @param statisticsYear
+     * @param statisticsMonth
+     * @return
+     */
     @Override
     public Result copyPrevMonthInfo(Integer statisticsYear,Integer statisticsMonth){
         try {
@@ -566,6 +712,12 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
             return new Result(0,"复制考勤模板失败！");
         }
     }
+
+    /**
+     * 已废弃
+     * @param ids
+     * @return
+     */
     @Override
     public Result deleteByIds(String ids) {
         Integer[] idArray = Convert.toIntArray(ids);
@@ -581,6 +733,11 @@ public class AttendanceServiceImpl extends BaseService implements AttendanceServ
         return new Result(success,"删除成功了"+success+"条，失败了"+faild+"条！");
     }
 
+    /**
+     * 已废弃
+     * @param id
+     * @return
+     */
     private Result deleteById(Integer id){
         if (id == null){
             return new Result(0,"id不能为空！");

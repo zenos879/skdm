@@ -12,7 +12,11 @@ import java.util.List;
 public class BaseService {
     Logger logger = LoggerFactory.getLogger(BaseService.class);
 
-
+    /**
+     * 清除不合法id
+     * @param ids
+     * @return
+     */
     public List<String> checkIds(String ids){
         if (StringUtils.isEmpty(ids)){
             return new ArrayList<>();

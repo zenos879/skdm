@@ -210,8 +210,8 @@ public class SupplierInfo extends BaseEntity implements Serializable {
             return new Result(0,"联系人名称长度不能大于64！");
         }
         if (StringUtils.isNotEmpty(this.getContactTel())){
-            if (this.getContactTel().length()>64) {
-                return new Result(0,"联系人电话长度不能大于64！");
+            if (this.getContactTel().length()>11) {
+                return new Result(0,"联系人电话长度不能大于11！");
             }
             if (!StringUtils.isInteger(this.getContactTel())){
                 return new Result(0,"联系人电话必须为正整数！");
@@ -222,7 +222,7 @@ public class SupplierInfo extends BaseEntity implements Serializable {
                 new Result(0,"是否为附属公司的长度不能大于11！");
             }
             if (this.getIsSubsidiary()!=0 && this.getIsSubsidiary() != 1){
-                return new Result(0,"是否为附属公司的值只能为0或1！");
+                return new Result(0,"是否为附属公司的值只能为是或否！");
             }
         }
         return new Result(1);
