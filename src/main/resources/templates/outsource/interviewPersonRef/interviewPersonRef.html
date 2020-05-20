@@ -88,6 +88,7 @@
     </div>
     <!-- 主体内容结束 -->
 <th:block th:include="include :: footer" />
+<th:block th:include="include :: check" />
 <script th:inline="javascript">
     var isNotifyInterview = [[${@dict.getType('isNotifyInterview')}]];
     var isReject = [[${@dict.getType('isReject')}]];
