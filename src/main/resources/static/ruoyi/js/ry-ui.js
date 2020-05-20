@@ -1369,11 +1369,12 @@
             // 获取form下所有的字段并转换为json对象
             formToJSONWithCheck: function (formId) {
                 var json = {};
-                if ($.validate.form()) {
-                    $.each($("#" + formId).serializeArray(), function (i, field) {
-                        json[field.name] = field.value;
-                    });
+                if (!$.validate.form()) {
+                    return;
                 }
+                $.each($("#" + formId).serializeArray(), function (i, field) {
+                    json[field.name] = field.value;
+                });
                 return json;
             }
         }
