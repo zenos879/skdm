@@ -113,6 +113,11 @@ public class AjaxResult extends HashMap<String, Object>
         return AjaxResult.success(msg, null);
     }
 
+    public static AjaxResult warning(String msg)
+    {
+        return AjaxResult.warning(msg, null);
+    }
+
     /**
      * 返回成功消息
      * 
@@ -123,6 +128,11 @@ public class AjaxResult extends HashMap<String, Object>
     public static AjaxResult success(String msg, Object data)
     {
         return new AjaxResult(Type.SUCCESS, msg, data);
+    }
+
+    public static AjaxResult warning(String msg, Object data)
+    {
+        return new AjaxResult(Type.WARN, msg, data);
     }
 
     /**

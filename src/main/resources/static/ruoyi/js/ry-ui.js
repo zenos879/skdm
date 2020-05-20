@@ -353,7 +353,9 @@
                                 } else if (result.code == web_status.WARNING) {
                                     layer.close(index);
                                     $.modal.enable();
+                                    $.modal.closeAll();
                                     $.modal.alertWarning(result.msg)
+                                    $.table.refresh();
                                 } else {
                                     layer.close(index);
                                     $.modal.enable();

@@ -357,6 +357,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return contains;
     }
 
+    public static <T> Boolean partContains(List<T> parent,List<T> child){
+        Boolean partContains = false;
+        for (T t : child) {
+            if (parent.indexOf(t) != -1) {
+                partContains = true;
+                break;
+            }
+        }
+        return partContains;
+    }
     static Pattern isInteger = Pattern.compile("^[-\\+]?[\\d]*$");
     static Pattern isNumeric = Pattern.compile("[0-9]*");
     static Pattern isEmail = Pattern.compile("^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$");

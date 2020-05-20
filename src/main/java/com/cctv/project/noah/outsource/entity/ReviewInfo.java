@@ -266,10 +266,10 @@ public class ReviewInfo extends BaseEntity implements Serializable {
             return new Result(0,"项目id长度不能大于11！");
         }
         if (this.getPostCount() !=null){
-            if (String.valueOf(this.getProjectId()).length()>11){
-                return new Result(0,"岗位需求数长度不能大于11！");
+            if (String.valueOf(this.getProjectId()).length()>4){
+                return new Result(0,"岗位需求数长度不能大于4！");
             }
-            if (this.getPostCount()<0){
+            if (this.getPostCount()<1){
                 return new Result(0,"岗位需求数必须为正整数！");
             }
         }

@@ -117,14 +117,29 @@ public class BaseController {
         return rows > 0 ? success(msg) : error(msg);
     }
 
+    protected AjaxResult toAjax(int rows, String msg,Boolean warning) {
+        if (rows<=0){
+            return error(msg);
+        }else if (warning){
+            return warning(msg);
+        } else if (rows>0){
+            return success(msg);
+        }
+        return error();
+    }
+
     /**
      *
      * @param result
      * @return
      */
     protected AjaxResult toAjax(Result result) {
-        return toAjax(result.getCode(),result.getInfo());
+        return toAjax(result.getCode(),result.getInfo(),result.warning);
     }
+
+
+
+
     /**
      * 响应返回结果
      *
@@ -164,6 +179,10 @@ public class BaseController {
      */
     public AjaxResult success(String message) {
         return AjaxResult.success(message);
+    }
+
+    public AjaxResult warning(String message) {
+        return AjaxResult.warning(message);
     }
 
     /**

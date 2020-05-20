@@ -193,7 +193,7 @@ public class ProjectInfoServiceImpl extends BaseService implements ProjectInfoSe
             }
 
             int size = projectInfos.size();
-            warning.append("插入成功了" + success + "行，失败了" + (size - success) + "行</br>");
+            warning.append("导入成功了" + success + "行，失败了" + (size - success) + "行</br>");
             return new Result(success, warning.toString());
         } catch (Exception e) {
             logger.error("[ERROR]---" + e);
