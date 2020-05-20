@@ -390,7 +390,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (supplierName == null ? supplierName : supplierName.replaceAll(" ", ""));
     }
 
     public String getPostName() {
@@ -398,7 +398,7 @@ public class StaffInfo extends BaseEntity implements Serializable {
     }
 
     public void setPostName(String postName) {
-        this.postName = postName;
+        this.postName = (postName == null ? postName : postName.replaceAll(" ", ""));
     }
 
     public String getDepartmentName() {

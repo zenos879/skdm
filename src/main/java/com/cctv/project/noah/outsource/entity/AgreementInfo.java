@@ -189,7 +189,7 @@ public class AgreementInfo extends BaseEntity implements Serializable {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (supplierName == null ? supplierName : supplierName.replaceAll(" ", ""));
     }
 
     @Override

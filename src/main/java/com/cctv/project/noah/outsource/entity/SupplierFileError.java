@@ -204,7 +204,7 @@ public class SupplierFileError extends BaseEntity implements Serializable {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = (supplierName == null ? supplierName : supplierName.replaceAll(" ", ""));
     }
 
     @Override
@@ -221,7 +221,7 @@ public class SupplierFileError extends BaseEntity implements Serializable {
         if (StringUtils.isEmpty(this.getRemark())) {
             return new Result(0, "错误描述不能为空！");
         }
-        if (this.getHappenDate() == null){
+        if (this.getHappenDate() == null) {
             return new Result(0, "发生日期不能为空！");
         }
         return new Result(1);

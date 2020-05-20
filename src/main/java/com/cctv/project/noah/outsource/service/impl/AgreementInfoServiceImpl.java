@@ -307,11 +307,11 @@ public class AgreementInfoServiceImpl implements AgreementInfoService {
             }
             Date agreementStart = agreementInfo.getAgreementStart();
             if (agreementStart == null) {
-                return new Result(0, "第" + (i + 2) + "行的合同开始日期不存在!");
+                return new Result(0, "第" + (i + 2) + "行的合同开始日期为空或输入格式不正确!");
             }
             Date agreementEnd = agreementInfo.getAgreementEnd();
             if (agreementEnd == null) {
-                return new Result(0, "第" + (i + 2) + "行的合同结束日期不存在!");
+                return new Result(0, "第" + (i + 2) + "行的合同结束日期为空或输入格式不正确!");
             }
             Result result = agreementInfo.beforeUpdateCheck();
             if (result.getCode() < 1) {
