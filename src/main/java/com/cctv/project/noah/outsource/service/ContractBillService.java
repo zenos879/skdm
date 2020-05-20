@@ -7,7 +7,7 @@ import java.util.List;
 public interface ContractBillService {
     List<ContractBill> selectBySelective(ContractBill contractBill);
 
-    List<ContractBill> selectbyIds(String ids);
+//    List<ContractBill> selectbyIds(String ids);
 
     ContractBill selectByPrimaryKey(Integer id);
 }

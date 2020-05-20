@@ -8,5 +8,5 @@ import java.util.List;
 @Service
 public interface ContractBillMapper {
     List<ContractBill> selectBySelective(ContractBill bill);
-    List<ContractBill> selectByIds(String[] ids);
+//    List<ContractBill> selectByIds(String[] ids);
 }

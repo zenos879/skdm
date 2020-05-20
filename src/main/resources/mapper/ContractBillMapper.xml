@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cctv.project.noah.outsource.mapper.ContractBillMapper">
-    <resultMap id="ContractBillResultMap" type="com.cctv.project.noah.outsource.entity.ContractBill">
+    <resultMap id="BaseResultMap" type="com.cctv.project.noah.outsource.entity.ContractBill">
         <id column="auto_id" jdbcType="BIGINT" property="autoId"/>
         <result column="agreement_no" jdbcType="VARCHAR" property="agreementNo"/>
         <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
@@ -11,11 +11,15 @@
         <result column="statistics_month" jdbcType="TINYINT" property="statisticsMonth"/>
     </resultMap>
 
-    <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ContractBill"
-            resultMap="ContractBillResultMap">
-        select ai.agreement_no, mb.supplier_name, mb.project_name ,sum(mb.post_expenses) from month_bill mb
+    <sql id="selectJoin">
+        select mb.statistics_year, mb.statistics_month, ai.agreement_no, mb.supplier_name, mb.project_name ,sum(mb.post_expenses) from month_bill mb
         left join supplier_info si on si.supplier_name = mb.supplier_name
         left join agreement_info ai on ai.supplier_id = si.supplier_id
+    </sql>
+
+    <select id="selectBySelective" parameterType="com.cctv.project.noah.outsource.entity.ContractBill"
+            resultMap="BaseResultMap">
+        <include refid="selectJoin"/>
         <where>
             <if test="statisticsYear != null">
                 and mb.statistics_year = #{statisticsYear,jdbcType=SMALLINT}
@@ -29,12 +33,18 @@
             <if test="projectName != null and projectName != ''">
                 AND mb.supplier_name = #{supplierName,jdbcType=VARCHAR}
             </if>
-            and ai.agreement_start &lt;= CONCAT(#{statisticsYear,jdbcType=SMALLINT}, '-',
+            and ai.agreement_start &lt;= CONCAT(#{statisticsYear,jdbcType=SMALLINT}, '-0',
             #{statisticsMonth,jdbcType=TINYINT}, '-01')
-            and ai.agreement_end &gt;= CONCAT(#{statisticsYear,jdbcType=SMALLINT}, '-',
+            and ai.agreement_end &gt;= CONCAT(#{statisticsYear,jdbcType=SMALLINT}, '-0',
             #{statisticsMonth,jdbcType=TINYINT}, '-01')
             group by mb.supplier_name , mb.project_name
         </where>
     </select>
-
+<!--    <select id="selectByIds" parameterType="java.lang.Integer" resultMap="BaseResultMap">-->
+<!--        <include refid="selectJoin"></include>-->
+<!--        where r.auto_id in-->
+<!--        <foreach collection="array" item="id" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </select>-->
 </mapper>

@@ -289,13 +289,22 @@ public class GeneralUtils {
 //        System.out.println(getIntList(personList, StaffInfo.class, "autoId"));
 
         /** 3、 */
-        StaffInfo staffInfo = new StaffInfo();
-        staffInfo.setStaffNo(null);
-        staffInfo.setStaffName("");
-        staffInfo.setOrderNo("12     3");
+//        StaffInfo staffInfo = new StaffInfo();
+//        staffInfo.setStaffNo(null);
+//        staffInfo.setStaffName("");
+//        staffInfo.setOrderNo("12     3");
+//
+//        System.out.println(staffInfo.toString());
+//        StaffInfo s = (StaffInfo) replaceBlankSpace(staffInfo);
+//        System.out.println(s.toString());
 
-        System.out.println(staffInfo.toString());
-        StaffInfo s = (StaffInfo) replaceBlankSpace(staffInfo);
-        System.out.println(s.toString());
+
+        /** 4、 */
+        System.out.println(checkDateStr("2014-05-05"));
+        System.out.println(checkDateStr("2014/05/05"));
+        System.out.println(checkDateStr("2014-05-55"));
+        System.out.println(checkDateStr("2014-05-555555"));
+        System.out.println(checkDateStr("42014-05-555555"));
+        System.out.println(checkDateStr("42014-05-01"));
     }
 }

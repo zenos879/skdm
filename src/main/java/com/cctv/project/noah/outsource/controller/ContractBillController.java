@@ -33,7 +33,11 @@ public class ContractBillController extends BaseController {
     }
 
 
-    //计算月度合同账单
+    /**
+     * 计算月度合同账单
+     * @param contractBill
+     * @return
+     */
     @RequestMapping("/list")
     @ResponseBody
     public TableDataInfo queryContractBill(ContractBill contractBill) {
@@ -44,14 +48,14 @@ public class ContractBillController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     @Log(title = "合同账单", businessType = BusinessType.EXPORT)
-    public AjaxResult export(ContractBill bill, String ids){
+    public AjaxResult export(ContractBill bill, String ids) {
         ExcelUtil<ContractBill> util = new ExcelUtil<>(ContractBill.class);
         List<ContractBill> list;
-        if (ids != null){
-            list = contractBillService.selectbyIds(ids);
-        }else {
-            list = contractBillService.selectBySelective(bill);
-        }
+//        if (ids != null){
+//            list = contractBillService.selectbyIds(ids);
+//        }else {
+        list = contractBillService.selectBySelective(bill);
+//        }
         return util.exportExcel(list, "合同账单");
     }
 
