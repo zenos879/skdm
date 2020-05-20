@@ -10,7 +10,8 @@
           th:with="command = ${@staffInfoService.selectByPrimaryKey(id)}">
         <input type="hidden" id="autoId" name="autoId" th:value="${command.autoId}">
         <input type="hidden" id="replaceGroup" name="replaceGroup" th:value="${command.replaceGroup}">
-        <input type="hidden" id="beReplacdStaffIdCard_old" name="beReplacdStaffIdCard_old" th:value="${command.beReplacdStaffIdCard_old}">
+        <input type="hidden" id="beReplacdStaffIdCard_old" name="beReplacdStaffIdCard_old"
+               th:value="${command.beReplacdStaffIdCard_old}">
         <h4 class="form-header h4">人员数据</h4>
         <div class="row">
             <div class="col-sm-12">
@@ -26,7 +27,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>身份证号：</label>
                     <div class="col-sm-7">
-                        <input name="idCard" th:value="${command.idCard}" id="idCard" class="idcard form-control" type="text"
+                        <input name="idCard" th:value="${command.idCard}" id="idCard" class="idcard form-control"
+                               type="text"
                                required maxlength="18">
                     </div>
                 </div>
@@ -153,12 +155,12 @@
             return false;
         } else if (result == "0") {
             if (idCard != null && idCard != "" && idCard != 'undefined') {
-                idCard.val("");
+                $("#beReplacdStaffIdCard").val('');
                 alert("无替换，无需填写被替换人身份证号！");
                 return false;
             }
         } else {
-            if (idCard == null && idCard == "" && idCard == 'undefined') {
+            if (idCard == null || idCard == '' || idCard == 'undefined') {
                 alert("有替换时，被替换人身份证号必填");
                 return false;
             }

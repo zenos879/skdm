@@ -150,9 +150,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
             }
         }
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
-        for (StaffInfo staffInfo : staffInfos) {
-            completionCandidateName(staffInfo, false);
-        }
+//        for (StaffInfo staffInfo : staffInfos) {
+//            completionCandidateName(staffInfo, false);
+//        }
         return staffInfos;
     }
 
@@ -234,9 +234,9 @@ public class StaffInfoServiceImpl implements StaffInfoService {
         List<Integer> idList = GeneralUtils.strArrToList(ids);
         criteria.andAutoIdIn(idList);
         List<StaffInfo> staffInfos = staffInfoMapper.selectByExample(staffInfoExample);
-        for (StaffInfo staffInfo : staffInfos) {
-            completionCandidateName(staffInfo, false);
-        }
+//        for (StaffInfo staffInfo : staffInfos) {
+//            completionCandidateName(staffInfo, false);
+//        }
         return staffInfos;
     }
 
