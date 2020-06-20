@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('岗位分类数据列表')"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="post-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                文章标题：<input type="text" th:value="${title}" name="catName" maxlength="64"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="_search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: zy-common"/>
+<script th:inline="javascript">
+    var prefix = ctx + "skdm/articleInfo";
+
+    $(function () {
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "文章数据",
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'artId',
+                title: '文章ID',
+                sortable: true,
+                visible: false
+            }, {
+                field: 'title',
+                title: '文章标题',
+                sortable: true
+            }, {
+                field: 'artNo',
+                title: '文号',
+                sortable: true
+            }, {
+                field: 'publishDate',
+                title: '发布日期',
+                sortable: true
+            }, {
+                field: 'implDate',
+                title: '实时日期',
+                sortable: true
+            }, {
+                field: 'createTime',
+                title: '创建时间',
+                sortable: true
+            }, {
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.artId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+                    return actions.join('');
+                }
+            }]
+        };
+        $.table.init(options);
+    }
+
+    function _delete(id) {
+        $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？删除此信息会将与其相关的岗位信息删除！", function () {
+            var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+            if ($.table._option.type == table_type.bootstrapTreeTable) {
+                $.operate.get(url);
+            } else {
+                var data = {"ids": id};
+                $.operate.submit(url, "post", "json", data);
+            }
+        });
+    }
+
+    function _search() {
+        // var projectName = $("#projectName").val();
+        // var departmentId = $("#departmentId").val();
+        $.table.search();
+    }
+</script>
+</body>
+</html>

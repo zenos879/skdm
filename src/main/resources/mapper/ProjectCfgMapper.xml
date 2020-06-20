@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.safetyknowledge.mapper.ProjectCfgMapper">
+  <resultMap id="BaseResultMap" type="com.cctv.project.noah.safetyknowledge.entity.ProjectCfg">
+    <id column="auto_id" jdbcType="INTEGER" property="autoId" />
+    <result column="about_us" jdbcType="VARCHAR" property="aboutUs" />
+    <result column="contact_us" jdbcType="VARCHAR" property="contactUs" />
+    <result column="homepage_img1" jdbcType="VARCHAR" property="homepageImg1" />
+    <result column="homepage_img2" jdbcType="VARCHAR" property="homepageImg2" />
+    <result column="homepage_img3" jdbcType="VARCHAR" property="homepageImg3" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    auto_id, about_us, contact_us, homepage_img1, homepage_img2, homepage_img3, update_time, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_cfg
+    where auto_id = #{autoId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from project_cfg
+
+  </select>
+
+</mapper>

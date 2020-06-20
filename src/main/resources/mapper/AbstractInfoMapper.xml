@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cctv.project.noah.safetyknowledge.mapper.AbstractInfoMapper">
+    <resultMap id="BaseResultMap" type="com.cctv.project.noah.safetyknowledge.entity.AbstractInfo">
+        <id column="auto_id" jdbcType="INTEGER" property="autoId"/>
+        <result column="cat_id" jdbcType="INTEGER" property="catId"/>
+        <result column="art_id" jdbcType="INTEGER" property="artId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    auto_id, cat_id, art_id, create_time
+  </sql>
+
+    <delete id="deleteCateRelative">
+        delete from abstract_info
+        where cat_id in
+        <foreach collection="array" item="catId" open="(" separator="," close=")">
+            #{catId}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.cctv.project.noah.safetyknowledge.entity.AbstractInfo"
+            useGeneratedKeys="true">
+    insert into abstract_info (cat_id, art_id, create_time
+      )
+    values (#{catId,jdbcType=INTEGER}, #{artId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+</mapper>

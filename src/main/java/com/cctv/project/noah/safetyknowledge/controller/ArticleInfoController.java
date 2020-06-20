@@ -1,8 +1,8 @@
 package com.cctv.project.noah.safetyknowledge.controller;
 
 
-import com.cctv.project.noah.safetyknowledge.entity.CategoryInfo;
-import com.cctv.project.noah.safetyknowledge.service.CategoryInfoService;
+import com.cctv.project.noah.safetyknowledge.entity.ArticleInfo;
+import com.cctv.project.noah.safetyknowledge.service.ArticleInfoService;
 import com.cctv.project.noah.safetyknowledge.service.Result;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.controller.BaseController;
@@ -15,21 +15,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-
 @Controller
-@RequestMapping("/skdm/categroyInfo")
-public class CategoryInfoController extends BaseController {
-    private String prefix = "skdm/categoryInfo";
+@RequestMapping("/skdm/articleInfo")
+public class ArticleInfoController extends BaseController {
+    private String prefix = "skdm/articleInfo";
 
     @Autowired
-    CategoryInfoService service;
+    ArticleInfoService service;
 
     /** 页面跳转 */
     @GetMapping()
-    public String page(String categoryName,Model model) {
-        if (StringUtils.isNotEmpty(categoryName)) {
-            model.addAttribute("categoryName",categoryName);
+    public String page(String title,Model model) {
+        if (StringUtils.isNotEmpty(title)) {
+            model.addAttribute("title",title);
         }
         return prefix + "/page";
     }
@@ -41,38 +39,37 @@ public class CategoryInfoController extends BaseController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model){
-        model.addAttribute("catId",id);
+        model.addAttribute("categroyId",id);
         return prefix+"/edit";
     }
 
     @RequestMapping("/list")
     @ResponseBody
-    public TableDataInfo list(CategoryInfo categoryInfo){
+    public TableDataInfo list(ArticleInfo articleInfo){
         startPage();
-        return getDataTable(service.selectBySelective(categoryInfo));
+        return getDataTable(service.selectBySelective(articleInfo));
     }
 
     @PostMapping("/edit")
     @ResponseBody
     @Log(title = "岗位分类数据", businessType = BusinessType.UPDATE)
-    public AjaxResult edit(CategoryInfo categoryInfo){
-        Result result = service.updateBySelective(categoryInfo);
+    public AjaxResult edit(ArticleInfo articleInfo){
+        Result result = service.updateBySelective(articleInfo);
         return toAjax(result);
     }
 
     @PostMapping("/add")
     @ResponseBody
     @Log(title = "岗位分类数据", businessType = BusinessType.INSERT)
-    public AjaxResult add(CategoryInfo categoryInfo){
-        categoryInfo.setCreateTime(new Date());
-        Result result = service.insertBySelective(categoryInfo);
+    public AjaxResult add(ArticleInfo articleInfo){
+        Result result = service.insertBySelective(articleInfo);
         return toAjax(result);
     }
 
 
     @RequestMapping("/remove")
     @ResponseBody
-    @Log(title = "分类数据", businessType = BusinessType.DELETE)
+    @Log(title = "岗位分类数据", businessType = BusinessType.DELETE)
     public AjaxResult remove(String ids){
         return toAjax(service.deleteByIds(ids));
     }
