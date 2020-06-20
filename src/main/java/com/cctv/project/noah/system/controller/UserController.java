@@ -1,14 +1,11 @@
 package com.cctv.project.noah.system.controller;
 
 import com.cctv.project.noah.ShiroUtils;
-import com.cctv.project.noah.outsource.entity.StaffInfo;
-import com.cctv.project.noah.outsource.service.StaffInfoService;
 import com.cctv.project.noah.system.annotation.Log;
 import com.cctv.project.noah.system.constant.UserConstants;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;
 import com.cctv.project.noah.system.enmus.BusinessType;
-import com.cctv.project.noah.system.entity.SysRole;
 import com.cctv.project.noah.system.entity.SysUser;
 import com.cctv.project.noah.system.service.PasswordService;
 import com.cctv.project.noah.system.service.RoleService;
@@ -43,7 +40,7 @@ public class UserController extends BaseController {
     private PasswordService passwordService;
 
     @Autowired
-    StaffInfoService staffInfoService;
+//    StaffInfoService staffInfoService;
 
     /** 页面跳转 */
     @GetMapping()
@@ -132,18 +129,19 @@ public class UserController extends BaseController {
     }
 
     private Boolean hasStaffInfo(String userName){
-        try {
-            StaffInfo staffInfo = new StaffInfo();
-            staffInfo.setStaffNo(userName);
-            List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
-            if (StringUtils.isEmpty(staffInfos)){
-                return false;
-            }else {
-                return true;
-            }
-        } catch (NumberFormatException e) {
-            return false;
-        }
+//        try {
+//            StaffInfo staffInfo = new StaffInfo();
+//            staffInfo.setStaffNo(userName);
+//            List<StaffInfo> staffInfos = staffInfoService.selectList(staffInfo);
+//            if (StringUtils.isEmpty(staffInfos)){
+//                return false;
+//            }else {
+//                return true;
+//            }
+//        } catch (NumberFormatException e) {
+//            return false;
+//        }
+        return true;
     }
     /**
      * 修改用户

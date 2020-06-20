@@ -6,16 +6,9 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://10.64.0.101:3306/outsource?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: vdn123
-        password: vdn321
-      # 从库数据源
-      slave:
-        # 从数据源开关/默认关闭
-        enabled: true
-        url: jdbc:mysql://10.64.0.101:3306/outsource?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: vdn123
-        password: vdn321
+        url: jdbc:mysql://localhost:3306/safetyknowledge?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: GAOgao%2019
       # 初始连接数
       initialSize: 5
       # 最小连接池数量

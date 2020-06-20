@@ -1,6 +1,6 @@
 package com.cctv.project.noah.system.controller;
 
-import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.safetyknowledge.service.Result;
 import com.cctv.project.noah.system.core.domain.AjaxResult;
 import com.cctv.project.noah.system.core.domain.page.PageDomain;
 import com.cctv.project.noah.system.core.domain.page.TableDataInfo;

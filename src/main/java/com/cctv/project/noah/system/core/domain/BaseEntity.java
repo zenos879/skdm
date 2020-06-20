@@ -1,6 +1,6 @@
 package com.cctv.project.noah.system.core.domain;
 
-import com.cctv.project.noah.outsource.service.Result;
+import com.cctv.project.noah.safetyknowledge.service.Result;
 import com.cctv.project.noah.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Entity基类

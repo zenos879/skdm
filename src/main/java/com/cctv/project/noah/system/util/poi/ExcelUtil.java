@@ -1,6 +1,6 @@
 package com.cctv.project.noah.system.util.poi;
 
-import com.cctv.project.noah.outsource.utils.GeneralUtils;
+import com.cctv.project.noah.safetyknowledge.utils.GeneralUtils;
 import com.cctv.project.noah.system.annotation.Excel;
 import com.cctv.project.noah.system.annotation.Excels;
 import com.cctv.project.noah.system.config.Global;
